@@ -1,0 +1,69 @@
+    Object.defineProperty(window, '__SIGE_RUNTIME_POLICY_EVENTS__', {
+      value: [], writable: false, configurable: false, enumerable: false,
+    });
+    document.addEventListener('securitypolicyviolation', (event) => {
+      window.__SIGE_RUNTIME_POLICY_EVENTS__.push({
+        effectiveDirective: String(event.effectiveDirective || ''),
+        violatedDirective: String(event.violatedDirective || ''),
+        disposition: String(event.disposition || ''),
+        sourceFile: String(event.sourceFile || '').replace(/[?#].*$/, ''),
+        lineNumber: Number(event.lineNumber || 0),
+      });
+    }, true);
+  });
+}
+
+async function inspect(page, expectedDigest, isStandalone) {
+  return await page.evaluate(({ expectedDigest, isStandalone }) => {
+    const scripts = Array.from(document.querySelectorAll('script:not([src])')).map((node) => ({
+      id: String(node.id || ''),
+      nonce: String(node.nonce || ''),
+    }));
+    const manifestDescriptor = Object.getOwnPropertyDescriptor(window, '__SIGE_ALLOWED_ACTIONS__');
+    const digestDescriptor = Object.getOwnPropertyDescriptor(window, '__SIGE_ACTION_MANIFEST_SHA256__');
+    const stateDescriptor = Object.getOwnPropertyDescriptor(window, '__SIGE_ACTION_MANIFEST_STATE__');
+    const dispatchDescriptor = Object.getOwnPropertyDescriptor(window, '__SIGE_ACTION_DISPATCH_STATE__');
+    const immutable = (descriptor) => !!descriptor && descriptor.writable === false && descriptor.configurable === false;
+    const manifestValue = manifestDescriptor && manifestDescriptor.value;
+    const manifestReady = isStandalone || (
+      immutable(manifestDescriptor) && immutable(digestDescriptor) && immutable(stateDescriptor)
+      && manifestValue && typeof manifestValue === 'object'
+      && Object.getPrototypeOf(manifestValue) === null && Object.isFrozen(manifestValue)
+      && digestDescriptor.value === expectedDigest
+      && stateDescriptor.value === 'ready:' + expectedDigest
+    );
+    const dispatcherReady = isStandalone || (
+      immutable(dispatchDescriptor) && dispatchDescriptor.value === 'ready:' + expectedDigest
+    );
+    return {
+      scripts,
+      events: Array.isArray(window.__SIGE_RUNTIME_POLICY_EVENTS__) ? window.__SIGE_RUNTIME_POLICY_EVENTS__.slice() : [],
+      manifestReady,
+      dispatcherReady,
+    };
+  }, { expectedDigest, isStandalone });
+}
+
+function analyse(view, phase, isStandalone, response, headers, dom, pageErrors, consoleEvents) {
+  const enforce = headerValues(headers, 'content-security-policy');
+  const report = headerValues(headers, 'content-security-policy-report-only');
+  const conflicts = headerValues(headers, 'x-sige-csp-conflict');
+  const expected = isStandalone ? enforce : report;
+  const unexpected = isStandalone ? report : enforce;
+  const policy = expected.join(', ');
+  const nonces = Array.from(new Set(Array.from(policy.matchAll(/'nonce-([^']+)'/g), (match) => match[1])));
+  const nonce = nonces.length === 1 ? nonces[0] : '';
+  const scriptEvents = dom.events.filter((event) => /^(script-src|script-src-elem|script-src-attr)$/.test(event.effectiveDirective));
+  const wrongNonce = dom.scripts.filter((script) => !script.nonce || script.nonce !== nonce).map((script) => script.id || '(sem id)');
+  const finalUrl = response ? response.url() : '';
+  const status = response ? response.status() : 0;
+  const failures = [];
+  if (!response || status < 200 || status >= 400) failures.push('resposta principal inválida');
+  if (/\/wp-login\.php(?:$|[?#])/.test(finalUrl)) failures.push('sessão redireccionada para login');
+  if (!finalUrl.includes('page=sige-app') || !finalUrl.includes('view=' + encodeURIComponent(view))) failures.push('rota final divergente');
+  if (expected.length !== 1 || unexpected.length !== 0) failures.push('modo ou quantidade de headers CSP divergente');
+  if (conflicts.length) failures.push('conflito de autoridade CSP');
+  if (!/script-src\s/.test(policy) || !/script-src-elem\s/.test(policy) || !/script-src-attr\s+'none'/.test(policy)) failures.push('directivas script-src incompletas');
+  if (nonces.length !== 1 || !nonce) failures.push('nonce final ausente ou ambíguo');
+  if (scriptEvents.length) failures.push('violação script-src observada');
+  if (consoleEvents.length) failures.push('consola reportou evento CSP de script');
