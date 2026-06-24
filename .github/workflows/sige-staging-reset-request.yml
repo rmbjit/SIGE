@@ -1,0 +1,38 @@
+name: SIGE staging password reset request
+
+on:
+  push:
+    branches:
+      - SIGE-Mozambique
+    paths:
+      - .github/workflows/sige-staging-reset-request.yml
+
+permissions:
+  contents: read
+
+jobs:
+  request:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Request native WordPress reset on staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          jar="$RUNNER_TEMP/cookies.txt"
+          body="$RUNNER_TEMP/body.html"
+          curl --fail-with-body -sS -L \
+            --connect-timeout 15 --max-time 60 \
+            -c "$jar" -b "$jar" \
+            --data-urlencode 'user_login=admin_7ub6a12i' \
+            --data-urlencode 'redirect_to=' \
+            --data-urlencode 'wp-submit=Obter nova senha' \
+            'https://teste.softgenial.edu.mz/wp-login.php?action=lostpassword' \
+            -o "$body"
+          grep -Eqi 'checkemail=confirm|Verifique o seu email|Check your email|mensagem de confirmação' "$body" || {
+            echo 'O staging não confirmou o pedido de redefinição.' >&2
+            sed -E 's/<[^>]+>/ /g;s/[[:space:]]+/ /g' "$body" | head -c 500 >&2
+            exit 1
+          }
+          echo 'Pedido nativo de redefinição confirmado pelo staging.'
+          shred -u "$jar" "$body" 2>/dev/null || true
