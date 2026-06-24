@@ -20,15 +20,47 @@ concurrency:
 jobs:
   authenticated-csp-matrix:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 45
     env:
       SIGE_BASE_URL: https://teste.softgenial.edu.mz
       SIGE_CSP_OUTPUT: ${{ github.workspace }}/artifacts
       SIGE_CSP_SETTLE_MS: '1200'
       SIGE_CSP_NAV_TIMEOUT_MS: '45000'
+      SIGE_ADMIN_USER: ${{ secrets.SIGE_STAGING_USER }}
+      SIGE_ADMIN_PASS: ${{ secrets.SIGE_STAGING_PASS }}
     steps:
       - name: Checkout executor
         uses: actions/checkout@v4
+
+      - name: Announce authenticated run
+        id: announce
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          title="SIGE-CSP-RUNTIME-RUN-${GITHUB_RUN_ID}"
+          body="$(cat <<EOF
+          Auditoria autenticada CSP da Fase 10.
+
+          - Run: ${GITHUB_RUN_ID}
+          - Attempt: ${GITHUB_RUN_ATTEMPT}
+          - Commit: ${GITHUB_SHA}
+          - Staging: https://teste.softgenial.edu.mz
+          - Matriz: 60 vistas em cold cache + 60 vistas em warm cache
+          - Credenciais: GitHub Actions secrets, nunca incluídas em logs ou artefactos
+          EOF
+          )"
+          payload="$(jq -n --arg title "$title" --arg body "$body" '{title:$title,body:$body}')"
+          response="$(curl --fail-with-body -sS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/issues" \
+            -d "$payload")"
+          issue_number="$(jq -er '.number' <<<"$response")"
+          echo "issue_number=$issue_number" >> "$GITHUB_OUTPUT"
+          echo "Execução anunciada no issue #$issue_number."
 
       - name: Assemble and verify harness
         shell: bash
@@ -49,8 +81,52 @@ jobs:
             "dependencies": { "playwright": "1.49.1" }
           }
           JSON
-          sha256sum "$root/tools/csp-runtime-audit/audit.mjs" > "$SIGE_CSP_OUTPUT/harness-sha256.txt"
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path(__import__('os').environ['HARNESS_ROOT']) if 'HARNESS_ROOT' in __import__('os').environ else Path(__import__('os').environ['RUNNER_TEMP']) / 'sige-csp-runtime'
+          views = [
+              'dashboard','turmas','alunos_lista','aluno_portal','disciplinas','matriz','curriculos','boletim','notas','pautas',
+              'minhas_turmas','aprovar_notas','auditoria_notas','dec','pauta_final','acta','config','equipe','transporte','portaria',
+              'aluno_contas','whatsapp_central','vincular','alocacao','encerramento','abertura','financeiro-dashboard',
+              'financeiro-pagamentos','financeiro-extratos','financeiro-gerador','financeiro-inscricoes','financeiro-mpesa',
+              'financeiro-config','financeiro-despesas','financeiro-centros','financeiro-devedores','financeiro-lancamentos',
+              'financeiro-auditoria','pagamentos-turma','financeiro-relatorio-mensal','financeiro-planos','financeiro-reconciliacao',
+              'financeiro-aprovacoes','jardim_diario','jardim_saude','jardim_boletim','jardim_relatorio','jardim_presencas',
+              'estatisticas_demo','sige_core_status','sige_permissoes','config_center','privacidade-dados','privacidade-acesso',
+              'privacidade-apagamento','privacidade-retencao','whatsapp_diag','whatsapp_circulares','presencas','comunicacoes_central'
+          ]
+          assert len(views) == 60 and len(set(views)) == 60
+          view_doc = {
+              'schema_version': 1,
+              'release_target': '12.14.0',
+              'surface': 'admin-shell',
+              'count': 60,
+              'standalone_views': ['jardim_boletim'],
+              'views': views,
+          }
+          manifest_doc = {'actions_sha256': '26081f88a5fec7617975389746829ebad9683bfd46e9cabc4e01b40fe922fdd9'}
+          (root / 'tools/csp-runtime-audit/views.json').write_text(json.dumps(view_doc, indent=2) + '\n')
+          (root / 'docs/security/FRONTEND_ACTION_ALLOWLIST-v12.14.0.json').write_text(json.dumps(manifest_doc, indent=2) + '\n')
+          PY
+          sha256sum "$root/tools/csp-runtime-audit/audit.mjs" \
+                    "$root/tools/csp-runtime-audit/views.json" \
+                    "$root/docs/security/FRONTEND_ACTION_ALLOWLIST-v12.14.0.json" \
+                    > "$SIGE_CSP_OUTPUT/harness-sha256.txt"
           echo "HARNESS_ROOT=$root" >> "$GITHUB_ENV"
+
+      - name: Validate protected credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${SIGE_ADMIN_USER:-}" ] || [ -z "${SIGE_ADMIN_PASS:-}" ]; then
+            echo 'Os Actions secrets SIGE_STAGING_USER e/ou SIGE_STAGING_PASS não estão disponíveis.' >&2
+            exit 31
+          fi
+          echo "::add-mask::$SIGE_ADMIN_USER"
+          echo "::add-mask::$SIGE_ADMIN_PASS"
+          echo 'Credenciais protegidas disponíveis ao runner.'
 
       - name: Install browser runtime
         shell: bash
@@ -59,111 +135,6 @@ jobs:
           cd "$HARNESS_ROOT/tools/csp-runtime-audit"
           npm install --no-audit --no-fund
           npx playwright install --with-deps chromium
-
-      - name: Open encrypted input channel
-        id: channel
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          umask 077
-          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out /tmp/sige-private.pem >/dev/null 2>&1
-          openssl pkey -in /tmp/sige-private.pem -pubout -out /tmp/sige-public.pem >/dev/null 2>&1
-          challenge="$(openssl rand -hex 24)"
-          printf '%s' "$challenge" > /tmp/sige-challenge
-          title="SIGE-CSP-CREDENTIAL-CHANNEL-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
-          {
-            echo 'Canal criptográfico efémero para a auditoria autenticada do staging SIGE.'
-            echo
-            echo "Run: ${GITHUB_RUN_ID}; attempt: ${GITHUB_RUN_ATTEMPT}"
-            echo "Challenge: ${challenge}"
-            echo
-            echo "Payload esperado no ficheiro \`runtime-input/${GITHUB_RUN_ID}.json\` da branch \`${GITHUB_REF_NAME}\`."
-            echo 'O ficheiro contém apenas ciphertext autenticado; a chave privada é exclusiva deste runner e será destruída no final.'
-            echo
-            echo '```pem'
-            cat /tmp/sige-public.pem
-            echo '```'
-          } > /tmp/sige-issue-body.md
-          payload="$(jq -n --arg title "$title" --rawfile body /tmp/sige-issue-body.md '{title:$title,body:$body}')"
-          response="$(curl --fail-with-body -sS -X POST \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H 'Accept: application/vnd.github+json' \
-            -H 'X-GitHub-Api-Version: 2022-11-28' \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/issues" \
-            -d "$payload")"
-          issue_number="$(jq -er '.number' <<<"$response")"
-          echo "issue_number=$issue_number" >> "$GITHUB_OUTPUT"
-          echo "Canal criado no issue #$issue_number."
-
-      - name: Receive authenticated payload
-        id: payload
-        env:
-          GH_TOKEN: ${{ github.token }}
-          ISSUE_NUMBER: ${{ steps.channel.outputs.issue_number }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          input_path="runtime-input/${GITHUB_RUN_ID}.json"
-          received='0'
-          for _ in $(seq 1 240); do
-            if response="$(curl --fail -sS \
-              -H "Authorization: Bearer $GH_TOKEN" \
-              -H 'Accept: application/vnd.github+json' \
-              -H 'X-GitHub-Api-Version: 2022-11-28' \
-              "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/$input_path?ref=$GITHUB_REF_NAME" 2>/dev/null)"; then
-              jq -er '.content' <<<"$response" | tr -d '\n' | base64 --decode > /tmp/sige-envelope.json
-              received='1'
-              break
-            fi
-            sleep 5
-          done
-          [ "$received" = '1' ] || { echo 'Canal expirou sem payload autenticado.' >&2; exit 20; }
-          node <<'NODE'
-          const fs = require('node:fs');
-          const crypto = require('node:crypto');
-          const envelope = JSON.parse(fs.readFileSync('/tmp/sige-envelope.json', 'utf8'));
-          const privateKey = fs.readFileSync('/tmp/sige-private.pem');
-          const key = crypto.privateDecrypt({
-            key: privateKey,
-            padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-            oaepHash: 'sha256',
-          }, Buffer.from(envelope.ek, 'base64'));
-          const decipher = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(envelope.iv, 'base64'));
-          decipher.setAuthTag(Buffer.from(envelope.tag, 'base64'));
-          const plain = Buffer.concat([
-            decipher.update(Buffer.from(envelope.ct, 'base64')),
-            decipher.final(),
-          ]);
-          fs.writeFileSync('/tmp/sige-payload.json', plain, { mode: 0o600 });
-          NODE
-          expected="$(cat /tmp/sige-challenge)"
-          actual="$(jq -er '.challenge' /tmp/sige-payload.json)"
-          [ "$actual" = "$expected" ] || { echo 'Challenge inválido.' >&2; exit 21; }
-          user="$(jq -er '.user' /tmp/sige-payload.json)"
-          pass="$(jq -er '.pass' /tmp/sige-payload.json)"
-          digest="$(jq -er '.digest' /tmp/sige-payload.json)"
-          jq -e '.views | length == 60 and (unique | length == 60)' /tmp/sige-payload.json >/dev/null
-          [[ "$digest" =~ ^[a-f0-9]{64}$ ]] || { echo 'Digest inválido.' >&2; exit 22; }
-          echo "::add-mask::$user"
-          echo "::add-mask::$pass"
-          jq '{schema_version:1,release_target:"12.14.0",surface:"admin-shell",count:(.views|length),standalone_views:["jardim_boletim"],views:.views}' \
-            /tmp/sige-payload.json > "$HARNESS_ROOT/tools/csp-runtime-audit/views.json"
-          jq -n --arg digest "$digest" '{actions_sha256:$digest}' \
-            > "$HARNESS_ROOT/docs/security/FRONTEND_ACTION_ALLOWLIST-v12.14.0.json"
-          {
-            echo 'SIGE_ADMIN_USER<<__SIGE_USER__'
-            echo "$user"
-            echo '__SIGE_USER__'
-            echo 'SIGE_ADMIN_PASS<<__SIGE_PASS__'
-            echo "$pass"
-            echo '__SIGE_PASS__'
-          } >> "$GITHUB_ENV"
-          sha256sum "$HARNESS_ROOT/tools/csp-runtime-audit/views.json" \
-                    "$HARNESS_ROOT/docs/security/FRONTEND_ACTION_ALLOWLIST-v12.14.0.json" \
-                    >> "$SIGE_CSP_OUTPUT/harness-sha256.txt"
-          shred -u /tmp/sige-envelope.json /tmp/sige-payload.json || true
 
       - name: Execute 60 views in cold and warm cache
         id: audit
@@ -192,6 +163,49 @@ jobs:
           }
           JSON
 
+      - name: Publish result to issue
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ steps.announce.outputs.issue_number }}
+          AUDIT_EXIT_CODE: ${{ steps.audit.outputs.exit_code }}
+        shell: bash
+        run: |
+          set +e
+          decision='not-executed'
+          cold='0'
+          warm='0'
+          cold_violations='-1'
+          warm_violations='-1'
+          if [ -f "$SIGE_CSP_OUTPUT/enforcement-evidence.json" ]; then
+            decision="$(jq -r '.decision // "rejected"' "$SIGE_CSP_OUTPUT/enforcement-evidence.json")"
+            cold="$(jq -r '.cold_cache.views_tested // 0' "$SIGE_CSP_OUTPUT/enforcement-evidence.json")"
+            warm="$(jq -r '.warm_cache.views_tested // 0' "$SIGE_CSP_OUTPUT/enforcement-evidence.json")"
+            cold_violations="$(jq -r '.cold_cache.script_src_violations // -1' "$SIGE_CSP_OUTPUT/enforcement-evidence.json")"
+            warm_violations="$(jq -r '.warm_cache.script_src_violations // -1' "$SIGE_CSP_OUTPUT/enforcement-evidence.json")"
+          fi
+          body="$(cat <<EOF
+          Auditoria autenticada CSP da Fase 10.
+
+          - Run: ${GITHUB_RUN_ID}
+          - Attempt: ${GITHUB_RUN_ATTEMPT}
+          - Commit: ${GITHUB_SHA}
+          - Decision: ${decision}
+          - Exit code: ${AUDIT_EXIT_CODE:-not-executed}
+          - Cold cache: ${cold}/60; script-src=${cold_violations}
+          - Warm cache: ${warm}/60; script-src=${warm_violations}
+          - Artifact: sige-csp-runtime-evidence-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}
+          EOF
+          )"
+          payload="$(jq -n --arg body "$body" '{body:$body}')"
+          curl -sS -X PATCH \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$ISSUE_NUMBER" \
+            -d "$payload" >/dev/null
+          exit 0
+
       - name: Upload fail-closed evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -200,26 +214,6 @@ jobs:
           path: artifacts/
           if-no-files-found: error
           retention-days: 7
-
-      - name: Close channel and destroy private material
-        if: always()
-        env:
-          GH_TOKEN: ${{ github.token }}
-          ISSUE_NUMBER: ${{ steps.channel.outputs.issue_number }}
-        shell: bash
-        run: |
-          set +e
-          if [ -n "${ISSUE_NUMBER:-}" ]; then
-            curl -sS -X PATCH \
-              -H "Authorization: Bearer $GH_TOKEN" \
-              -H 'Accept: application/vnd.github+json' \
-              -H 'X-GitHub-Api-Version: 2022-11-28' \
-              "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$ISSUE_NUMBER" \
-              -d '{"state":"closed","state_reason":"completed"}' >/dev/null
-          fi
-          shred -u /tmp/sige-private.pem /tmp/sige-public.pem /tmp/sige-challenge 2>/dev/null
-          unset SIGE_ADMIN_USER SIGE_ADMIN_PASS
-          exit 0
 
       - name: Enforce audit result
         if: always()
