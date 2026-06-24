@@ -1,0 +1,109 @@
+    return text.replace(/[?#].*$/, '').slice(0, 240);
+  }
+}
+
+function sanitizeMessage(value) {
+  return String(value || '')
+    .replace(/https?:\/\/[^\s"')]+/g, (url) => sanitizeUrl(url))
+    .replace(/[\r\n\t]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .slice(0, 500);
+}
+
+function sanitizePolicy(value) {
+  return String(value || '')
+    .replace(/'nonce-[^']+'/g, "'nonce-[redacted]'")
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function headerValues(headersArray, name) {
+  const wanted = name.toLowerCase();
+  return headersArray
+    .filter((entry) => String(entry.name || '').toLowerCase() === wanted)
+    .map((entry) => String(entry.value || ''));
+}
+
+function scriptViolationCount(violations) {
+  return violations.filter((item) => /^(script-src|script-src-elem|script-src-attr)$/.test(String(item.effectiveDirective || ''))).length;
+}
+
+function unique(values) {
+  return Array.from(new Set(values));
+}
+
+function validateStaticInputs(viewsDoc, manifestDoc) {
+  const views = Array.isArray(viewsDoc.views) ? viewsDoc.views : [];
+  const uniqueViews = unique(views);
+  const standalone = Array.isArray(viewsDoc.standalone_views) ? viewsDoc.standalone_views : [];
+  const digest = String(manifestDoc.actions_sha256 || '').toLowerCase();
+  const errors = [];
+  if (viewsDoc.schema_version !== 1 || viewsDoc.release_target !== '12.14.0') errors.push('views.json com metadados invalidos');
+  if (viewsDoc.count !== 60 || views.length !== 60 || uniqueViews.length !== 60) errors.push('views.json deve conter exactamente 60 views unicas');
+  if (standalone.some((view) => !uniqueViews.includes(view))) errors.push('standalone_views contem rota fora da allowlist');
+  if (!/^[a-f0-9]{64}$/.test(digest)) errors.push('digest do manifesto nominal invalido');
+  if (errors.length) throw new Error(errors.join('; '));
+  return { views, standalone: new Set(standalone), digest };
+}
+
+async function obtainStorageState(browser) {
+  if (STORAGE_STATE_PATH) {
+    const resolved = path.resolve(STORAGE_STATE_PATH);
+    if (!fs.existsSync(resolved)) throw new Error('SIGE_STORAGE_STATE nao existe');
+    return readJson(resolved);
+  }
+  if (!ADMIN_USER || !ADMIN_PASS) {
+    throw new Error('Defina SIGE_STORAGE_STATE ou SIGE_ADMIN_USER e SIGE_ADMIN_PASS');
+  }
+
+  const context = await browser.newContext({ ignoreHTTPSErrors: true, serviceWorkers: 'block' });
+  const page = await context.newPage();
+  try {
+    page.setDefaultTimeout(NAV_TIMEOUT_MS);
+    await page.goto(BASE_URL + LOGIN_PATH, { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT_MS });
+    await page.fill('#user_login', ADMIN_USER);
+    await page.fill('#user_pass', ADMIN_PASS);
+    await Promise.all([
+      page.waitForLoadState('domcontentloaded').catch(() => {}),
+      page.click('#wp-submit'),
+    ]);
+    await page.waitForTimeout(800);
+    const stillLogin = /\/wp-login\.php(?:$|[?#])/.test(page.url()) || await page.locator('#loginform').count() > 0;
+    if (stillLogin) {
+      throw new Error('Login nao concluido. Para MFA use uma sessao SIGE_STORAGE_STATE criada no staging');
+    }
+    return await context.storageState();
+  } finally {
+    await page.close().catch(() => {});
+    await context.close().catch(() => {});
+  }
+}
+
+async function installViolationCapture(page) {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, '__SIGE_CSP_RUNTIME_VIOLATIONS__', {
+      value: [], writable: false, configurable: false, enumerable: false,
+    });
+    document.addEventListener('securitypolicyviolation', (event) => {
+      window.__SIGE_CSP_RUNTIME_VIOLATIONS__.push({
+        effectiveDirective: String(event.effectiveDirective || ''),
+        violatedDirective: String(event.violatedDirective || ''),
+        blockedURI: String(event.blockedURI || ''),
+        sourceFile: String(event.sourceFile || ''),
+        lineNumber: Number(event.lineNumber || 0),
+        columnNumber: Number(event.columnNumber || 0),
+        disposition: String(event.disposition || ''),
+        statusCode: Number(event.statusCode || 0),
+      });
+    }, true);
+  });
+}
+
+async function inspectDom(page, expectedDigest, standalone) {
+  return await page.evaluate(({ expectedDigest, standalone }) => {
+    const eventAttributes = [];
+    const javascriptUrls = [];
+    const inlineScripts = [];
+    const urlAttrs = new Set(['href', 'src', 'action', 'formaction']);
+    const elements = Array.from(document.querySelectorAll('*'));
+    elements.forEach((element) => {
