@@ -1,0 +1,118 @@
+#!/usr/bin/env node
+/**
+ * SIGE SoftGenial v12.14.0 - auditoria runtime CSP autenticada.
+ *
+ * Gera duas passagens para as 60 views allowlisted:
+ * - cold: limpa a cache de rede antes da primeira navegacao;
+ * - warm: recarrega a mesma view sem limpar a cache.
+ *
+ * O processo falha fechado. O ficheiro enforcement-evidence.json so recebe
+ * decision=approved quando todas as views e todos os controlos passam.
+ */
+'use strict';
+
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import process from 'node:process';
+import { fileURLToPath } from 'node:url';
+
+let chromium;
+
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const PLUGIN_ROOT = path.resolve(HERE, '..', '..');
+const VIEWS_PATH = path.join(HERE, 'views.json');
+const MANIFEST_PATH = path.join(PLUGIN_ROOT, 'docs', 'security', 'FRONTEND_ACTION_ALLOWLIST-v12.14.0.json');
+const DEFAULT_OUTPUT = path.join(HERE, 'artifacts');
+const OUTPUT_DIR = path.resolve(process.env.SIGE_CSP_OUTPUT || DEFAULT_OUTPUT);
+const BASE_URL = String(process.env.SIGE_BASE_URL || '').replace(/\/+$/, '');
+const APP_PATH = String(process.env.SIGE_APP_PATH || '/wp-admin/admin.php?page=sige-app');
+const LOGIN_PATH = String(process.env.SIGE_LOGIN_PATH || '/wp-login.php');
+const STORAGE_STATE_PATH = String(process.env.SIGE_STORAGE_STATE || '');
+const ADMIN_USER = String(process.env.SIGE_ADMIN_USER || '');
+const ADMIN_PASS = String(process.env.SIGE_ADMIN_PASS || '');
+const HEADLESS = String(process.env.SIGE_HEADLESS || '1') !== '0';
+const SETTLE_MS = boundedInt(process.env.SIGE_CSP_SETTLE_MS, 1200, 250, 10000);
+const NAV_TIMEOUT_MS = boundedInt(process.env.SIGE_CSP_NAV_TIMEOUT_MS, 30000, 5000, 120000);
+
+function boundedInt(raw, fallback, min, max) {
+  const value = Number.parseInt(String(raw || ''), 10);
+  return Number.isFinite(value) ? Math.max(min, Math.min(max, value)) : fallback;
+}
+
+function readJson(file) {
+  return JSON.parse(fs.readFileSync(file, 'utf8'));
+}
+
+function sha256(value) {
+  return crypto.createHash('sha256').update(value).digest('hex');
+}
+
+function ensureDir(dir) {
+  fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
+}
+
+function writeArtifactSet(detail, evidence) {
+  ensureDir(OUTPUT_DIR);
+  const detailRaw = JSON.stringify(detail, null, 2) + '\n';
+  const evidenceRaw = JSON.stringify(evidence, null, 2) + '\n';
+  const detailPath = path.join(OUTPUT_DIR, 'runtime-detail.json');
+  const evidencePath = path.join(OUTPUT_DIR, 'enforcement-evidence.json');
+  const hashPath = path.join(OUTPUT_DIR, 'enforcement-evidence.sha256');
+  fs.writeFileSync(detailPath, detailRaw, { mode: 0o600 });
+  fs.writeFileSync(evidencePath, evidenceRaw, { mode: 0o600 });
+  const evidenceHash = sha256(evidenceRaw);
+  fs.writeFileSync(hashPath, evidenceHash + '  enforcement-evidence.json\n', { mode: 0o600 });
+  return { detailPath, evidencePath, hashPath, evidenceHash };
+}
+
+function readableManifestDigest() {
+  try {
+    if (!fs.existsSync(MANIFEST_PATH)) return '';
+    const manifest = readJson(MANIFEST_PATH);
+    const digest = String(manifest.actions_sha256 || '').toLowerCase();
+    return /^[a-f0-9]{64}$/.test(digest) ? digest : '';
+  } catch {
+    return '';
+  }
+}
+
+function writeRejectedEvidence(error, stage = 'preflight') {
+  const generatedAt = new Date().toISOString();
+  const reason = sanitizeMessage(error && error.message ? error.message : error);
+  const failedRun = { passed: false, script_src_violations: -1, views_tested: 0 };
+  const evidence = {
+    schema_version: 1,
+    release_target: '12.14.0',
+    surface: 'admin-shell',
+    decision: 'rejected',
+    generated_at: generatedAt,
+    base_origin: safeOrigin(BASE_URL),
+    final_headers_verified: false,
+    csp_header_conflicts: -1,
+    action_manifest_sha256: readableManifestDigest(),
+    cold_cache: { ...failedRun },
+    warm_cache: { ...failedRun },
+  };
+  const detail = {
+    ...evidence,
+    failure_stage: stage,
+    failure_reason: reason,
+    results: [],
+  };
+  return writeArtifactSet(detail, evidence);
+}
+
+function safeOrigin(value) {
+  try { return new URL(value).origin; } catch { return ''; }
+}
+
+function sanitizeUrl(value) {
+  const text = String(value || '');
+  if (!text) return '';
+  if (['inline', 'eval', 'self', 'data', 'blob'].includes(text.toLowerCase())) return text.toLowerCase();
+  try {
+    const url = new URL(text, BASE_URL || 'https://invalid.example');
+    return url.origin + url.pathname;
+  } catch {
