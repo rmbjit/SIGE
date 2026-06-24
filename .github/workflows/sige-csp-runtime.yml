@@ -15,7 +15,7 @@ permissions:
 
 concurrency:
   group: sige-csp-runtime-authenticated
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   authenticated-csp-matrix:
@@ -79,8 +79,8 @@ jobs:
             echo "Run: ${GITHUB_RUN_ID}; attempt: ${GITHUB_RUN_ATTEMPT}"
             echo "Challenge: ${challenge}"
             echo
-            echo 'Aceita apenas um comentário do proprietário com prefixo `CSP_PAYLOAD_V2:`.'
-            echo 'A chave privada é exclusiva deste runner e será destruída no final.'
+            echo "Payload esperado no ficheiro \`runtime-input/${GITHUB_RUN_ID}.json\` da branch \`${GITHUB_REF_NAME}\`."
+            echo 'O ficheiro contém apenas ciphertext autenticado; a chave privada é exclusiva deste runner e será destruída no final.'
             echo
             echo '```pem'
             cat /tmp/sige-public.pem
@@ -105,23 +105,21 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          envelope=''
+          input_path="runtime-input/${GITHUB_RUN_ID}.json"
+          received='0'
           for _ in $(seq 1 240); do
-            response="$(curl --fail-with-body -sS \
+            if response="$(curl --fail -sS \
               -H "Authorization: Bearer $GH_TOKEN" \
               -H 'Accept: application/vnd.github+json' \
               -H 'X-GitHub-Api-Version: 2022-11-28' \
-              "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$ISSUE_NUMBER/comments?per_page=100")"
-            body="$(jq -r --arg owner "$GITHUB_REPOSITORY_OWNER" \
-              '[.[] | select(.user.login == $owner and (.body | startswith("CSP_PAYLOAD_V2:")))] | last // empty | .body // empty' <<<"$response")"
-            if [ -n "$body" ]; then
-              envelope="${body#CSP_PAYLOAD_V2:}"
+              "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/$input_path?ref=$GITHUB_REF_NAME" 2>/dev/null)"; then
+              jq -er '.content' <<<"$response" | tr -d '\n' | base64 --decode > /tmp/sige-envelope.json
+              received='1'
               break
             fi
             sleep 5
           done
-          [ -n "$envelope" ] || { echo 'Canal expirou sem payload autenticado.' >&2; exit 20; }
-          printf '%s' "$envelope" | base64 --decode > /tmp/sige-envelope.json
+          [ "$received" = '1' ] || { echo 'Canal expirou sem payload autenticado.' >&2; exit 20; }
           node <<'NODE'
           const fs = require('node:fs');
           const crypto = require('node:crypto');
