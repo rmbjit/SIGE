@@ -1,0 +1,88 @@
+#!/usr/bin/env node
+'use strict';
+
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
+import { fileURLToPath } from 'node:url';
+import { chromium } from 'playwright';
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+const root = path.resolve(here, '..', '..');
+const output = path.resolve(process.env.SIGE_CSP_OUTPUT || path.join(here, 'artifacts'));
+const base = String(process.env.SIGE_BASE_URL || '').replace(/\/+$/, '');
+const user = String(process.env.SIGE_ADMIN_USER || '');
+const pass = String(process.env.SIGE_ADMIN_PASS || '');
+const settle = Math.max(250, Math.min(10000, Number(process.env.SIGE_CSP_SETTLE_MS || 1200)));
+const timeout = Math.max(5000, Math.min(120000, Number(process.env.SIGE_CSP_NAV_TIMEOUT_MS || 45000)));
+const viewsDoc = JSON.parse(fs.readFileSync(path.join(here, 'views.json'), 'utf8'));
+const manifest = JSON.parse(fs.readFileSync(path.join(root, 'docs/security/FRONTEND_ACTION_ALLOWLIST-v12.14.0.json'), 'utf8'));
+const views = Array.isArray(viewsDoc.views) ? viewsDoc.views : [];
+const standalone = new Set(Array.isArray(viewsDoc.standalone_views) ? viewsDoc.standalone_views : []);
+const digest = String(manifest.actions_sha256 || '');
+
+function ensureDir() { fs.mkdirSync(output, { recursive: true, mode: 0o700 }); }
+function sha256(raw) { return crypto.createHash('sha256').update(raw).digest('hex'); }
+function safeOrigin(raw) { try { return new URL(raw).origin; } catch { return ''; } }
+function redactPolicy(raw) { return String(raw || '').replace(/'nonce-[^']+'/g, "'nonce-[redacted]'").replace(/\s+/g, ' ').trim(); }
+function headerValues(rows, name) {
+  const wanted = name.toLowerCase();
+  return rows.filter((row) => String(row.name || '').toLowerCase() === wanted).map((row) => String(row.value || ''));
+}
+function write(detail, evidence) {
+  ensureDir();
+  const detailRaw = JSON.stringify(detail, null, 2) + '\n';
+  const evidenceRaw = JSON.stringify(evidence, null, 2) + '\n';
+  fs.writeFileSync(path.join(output, 'runtime-detail.json'), detailRaw, { mode: 0o600 });
+  fs.writeFileSync(path.join(output, 'enforcement-evidence.json'), evidenceRaw, { mode: 0o600 });
+  fs.writeFileSync(path.join(output, 'enforcement-evidence.sha256'), sha256(evidenceRaw) + '  enforcement-evidence.json\n', { mode: 0o600 });
+}
+function rejected(reason) {
+  const run = { passed: false, script_src_violations: -1, views_tested: 0 };
+  const evidence = {
+    schema_version: 1,
+    release_target: '12.14.0',
+    surface: 'admin-shell',
+    decision: 'rejected',
+    generated_at: new Date().toISOString(),
+    base_origin: safeOrigin(base),
+    final_headers_verified: false,
+    csp_header_conflicts: -1,
+    action_manifest_sha256: digest,
+    cold_cache: run,
+    warm_cache: run,
+  };
+  write({ ...evidence, failure_reason: String(reason || '').slice(0, 500), results: [] }, evidence);
+}
+function validateInputs() {
+  if (base !== 'https://teste.softgenial.edu.mz') throw new Error('origem de staging não autorizada');
+  if (!user || !pass) throw new Error('credenciais administrativas ausentes');
+  if (viewsDoc.count !== 60 || views.length !== 60 || new Set(views).size !== 60) throw new Error('matriz de vistas inválida');
+  if (!/^[a-f0-9]{64}$/.test(digest)) throw new Error('digest do manifesto inválido');
+}
+
+async function authenticate(browser) {
+  const context = await browser.newContext({ ignoreHTTPSErrors: true, serviceWorkers: 'block' });
+  const page = await context.newPage();
+  try {
+    page.setDefaultTimeout(timeout);
+    await page.goto(base + '/wp-login.php', { waitUntil: 'domcontentloaded', timeout });
+    await page.fill('#user_login', user);
+    await page.fill('#user_pass', pass);
+    await Promise.all([
+      page.waitForLoadState('domcontentloaded').catch(() => {}),
+      page.click('#wp-submit'),
+    ]);
+    await page.waitForTimeout(900);
+    if (/\/wp-login\.php(?:$|[?#])/.test(page.url()) || await page.locator('#loginform').count()) {
+      throw new Error('autenticação administrativa não concluída');
+    }
+    return await context.storageState();
+  } finally {
+    await context.close().catch(() => {});
+  }
+}
+
+async function initCapture(page) {
+  await page.addInitScript(() => {
