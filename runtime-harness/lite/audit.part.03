@@ -1,0 +1,39 @@
+      const result = await runView(context, view);
+      results.push(result);
+      console.log(result.cold.passed && result.warm.passed ? 'OK' : 'FALHOU');
+    }
+    const cold = summarize(results, 'cold');
+    const warm = summarize(results, 'warm');
+    const conflicts = results.reduce((sum, row) => sum + Number(row.cold.headers?.conflict_count || 0) + Number(row.warm.headers?.conflict_count || 0), 0);
+    const headersVerified = results.every((row) => row.cold.headers?.policy && row.warm.headers?.policy && !row.cold.headers.conflict_count && !row.warm.headers.conflict_count);
+    const approved = cold.passed && warm.passed && headersVerified && conflicts === 0;
+    const evidence = {
+      schema_version: 1,
+      release_target: '12.14.0',
+      surface: 'admin-shell',
+      decision: approved ? 'approved' : 'rejected',
+      generated_at: new Date().toISOString(),
+      base_origin: safeOrigin(base),
+      final_headers_verified: headersVerified,
+      csp_header_conflicts: conflicts,
+      action_manifest_sha256: digest,
+      cold_cache: { passed: cold.passed, script_src_violations: cold.script_src_violations, views_tested: cold.views_tested },
+      warm_cache: { passed: warm.passed, script_src_violations: warm.script_src_violations, views_tested: warm.views_tested },
+    };
+    write({ ...evidence, cold_cache_detail: cold, warm_cache_detail: warm, results }, evidence);
+    console.log(`Decisão: ${evidence.decision.toUpperCase()}`);
+    console.log(`Cold: ${cold.views_tested}, falhas=${cold.views_failed.length}, script-src=${cold.script_src_violations}`);
+    console.log(`Warm: ${warm.views_tested}, falhas=${warm.views_failed.length}, script-src=${warm.script_src_violations}`);
+    process.exitCode = approved ? 0 : 1;
+  } finally {
+    if (context) await context.close().catch(() => {});
+    await browser.close().catch(() => {});
+  }
+}
+
+main().catch((error) => {
+  const message = String(error && error.message ? error.message : error).replace(/[\r\n\t]+/g, ' ').slice(0, 500);
+  console.error('AUDITORIA CSP RUNTIME FALHOU: ' + message);
+  try { rejected(message); } catch {}
+  process.exitCode = 2;
+});
