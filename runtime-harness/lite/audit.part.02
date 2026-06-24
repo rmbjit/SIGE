@@ -1,0 +1,88 @@
+  if (wrongNonce.length) failures.push('script inline sem nonce final correspondente');
+  if (!dom.manifestReady || !dom.dispatcherReady) failures.push('manifesto ou dispatcher não está pronto');
+  if (pageErrors.length) failures.push('erro JavaScript não tratado');
+  return {
+    view,
+    pass: phase,
+    standalone: isStandalone,
+    final_url_path: (() => { try { return new URL(finalUrl).pathname + new URL(finalUrl).search; } catch { return ''; } })(),
+    http_status: status,
+    passed: failures.length === 0,
+    failures,
+    headers: {
+      enforcement_count: enforce.length,
+      report_only_count: report.length,
+      conflict_count: conflicts.length,
+      policy: redactPolicy(policy),
+    },
+    script_src_violations: scriptEvents.length,
+    inline_script_count: dom.scripts.length,
+    inline_nonce_mismatch: wrongNonce,
+    manifest_ready: dom.manifestReady,
+    dispatcher_ready: dom.dispatcherReady,
+    page_errors: pageErrors.slice(0, 20),
+    console_script_policy_events: consoleEvents.slice(0, 20),
+  };
+}
+
+async function runView(context, view) {
+  const isStandalone = standalone.has(view);
+  const requested = base + '/wp-admin/admin.php?page=sige-app&view=' + encodeURIComponent(view);
+  const page = await context.newPage();
+  const cdp = await context.newCDPSession(page);
+  let pageErrors = [];
+  let consoleEvents = [];
+  page.setDefaultTimeout(timeout);
+  page.setDefaultNavigationTimeout(timeout);
+  page.on('pageerror', (error) => pageErrors.push(String(error && error.message ? error.message : error).slice(0, 400)));
+  page.on('console', (message) => {
+    const text = message.text();
+    if (/content security policy/i.test(text) && /script-src/i.test(text)) consoleEvents.push(text.slice(0, 500));
+  });
+  await initCapture(page);
+  await cdp.send('Network.enable');
+  await cdp.send('Network.clearBrowserCache');
+  try {
+    const coldResponse = await page.goto(requested, { waitUntil: 'domcontentloaded', timeout });
+    await page.waitForLoadState('networkidle', { timeout: Math.min(timeout, 10000) }).catch(() => {});
+    await page.waitForTimeout(settle);
+    const cold = analyse(view, 'cold', isStandalone, coldResponse, coldResponse ? await coldResponse.headersArray() : [], await inspect(page, digest, isStandalone), pageErrors, consoleEvents);
+    pageErrors = [];
+    consoleEvents = [];
+    const warmResponse = await page.reload({ waitUntil: 'domcontentloaded', timeout });
+    await page.waitForLoadState('networkidle', { timeout: Math.min(timeout, 10000) }).catch(() => {});
+    await page.waitForTimeout(settle);
+    const warm = analyse(view, 'warm', isStandalone, warmResponse, warmResponse ? await warmResponse.headersArray() : [], await inspect(page, digest, isStandalone), pageErrors, consoleEvents);
+    return { cold, warm };
+  } catch (error) {
+    const reason = String(error && error.message ? error.message : error).slice(0, 500);
+    const failed = (phase) => ({ view, pass: phase, standalone: isStandalone, passed: false, failures: ['excepção do arnés: ' + reason], script_src_violations: -1 });
+    return { cold: failed('cold'), warm: failed('warm') };
+  } finally {
+    await cdp.detach().catch(() => {});
+    await page.close().catch(() => {});
+  }
+}
+
+function summarize(results, phase) {
+  const rows = results.map((result) => result[phase]);
+  return {
+    passed: rows.length === 60 && rows.every((row) => row.passed),
+    script_src_violations: rows.reduce((sum, row) => sum + Math.max(0, Number(row.script_src_violations || 0)), 0),
+    views_tested: rows.length,
+    views_failed: rows.filter((row) => !row.passed).map((row) => row.view),
+  };
+}
+
+async function main() {
+  validateInputs();
+  ensureDir();
+  const browser = await chromium.launch({ headless: true, args: ['--disable-extensions', '--disable-background-networking', '--no-default-browser-check'] });
+  let context;
+  try {
+    const storageState = await authenticate(browser);
+    context = await browser.newContext({ storageState, ignoreHTTPSErrors: true, serviceWorkers: 'block', viewport: { width: 1440, height: 900 } });
+    const results = [];
+    for (let index = 0; index < views.length; index++) {
+      const view = views[index];
+      process.stdout.write(`[${String(index + 1).padStart(2, '0')}/60] ${view} ... `);
