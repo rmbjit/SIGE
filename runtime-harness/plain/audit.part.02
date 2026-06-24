@@ -1,0 +1,81 @@
+      Array.from(element.attributes || []).forEach((attribute) => {
+        const name = String(attribute.name || '').toLowerCase();
+        const value = String(attribute.value || '');
+        if (/^on[a-z0-9_-]+$/.test(name)) {
+          eventAttributes.push({ tag: element.tagName.toLowerCase(), attribute: name });
+        }
+        if (urlAttrs.has(name) && /^\s*javascript\s*:/i.test(value)) {
+          javascriptUrls.push({ tag: element.tagName.toLowerCase(), attribute: name });
+        }
+      });
+    });
+
+    Array.from(document.querySelectorAll('script:not([src])')).forEach((script) => {
+      inlineScripts.push({
+        id: String(script.id || ''),
+        hasNonce: !!script.nonce,
+        nonce: String(script.nonce || ''),
+      });
+    });
+
+    const policy = performance.getEntriesByType('navigation')[0] || null;
+    const manifestDescriptor = Object.getOwnPropertyDescriptor(window, '__SIGE_ALLOWED_ACTIONS__');
+    const digestDescriptor = Object.getOwnPropertyDescriptor(window, '__SIGE_ACTION_MANIFEST_SHA256__');
+    const stateDescriptor = Object.getOwnPropertyDescriptor(window, '__SIGE_ACTION_MANIFEST_STATE__');
+    const dispatchDescriptor = Object.getOwnPropertyDescriptor(window, '__SIGE_ACTION_DISPATCH_STATE__');
+    const manifest = manifestDescriptor && manifestDescriptor.value;
+    const manifestState = stateDescriptor && typeof stateDescriptor.value === 'string'
+      ? stateDescriptor.value
+      : '';
+    const manifestDigest = digestDescriptor && typeof digestDescriptor.value === 'string'
+      ? digestDescriptor.value
+      : '';
+    const immutable = (descriptor) => !!descriptor
+      && descriptor.writable === false && descriptor.configurable === false;
+    const manifestReady = standalone || (immutable(manifestDescriptor)
+      && immutable(digestDescriptor) && immutable(stateDescriptor)
+      && manifest && typeof manifest === 'object'
+      && Object.getPrototypeOf(manifest) === null && Object.isFrozen(manifest)
+      && manifestDigest === expectedDigest && manifestState === 'ready:' + expectedDigest);
+    const dispatcherReady = standalone || (immutable(dispatchDescriptor)
+      && dispatchDescriptor.value === 'ready:' + expectedDigest);
+    const bodyText = String(document.body ? document.body.innerText : '').slice(0, 4000);
+    return {
+      eventAttributes,
+      javascriptUrls,
+      inlineScripts,
+      violations: Array.isArray(window.__SIGE_CSP_RUNTIME_VIOLATIONS__)
+        ? window.__SIGE_CSP_RUNTIME_VIOLATIONS__.slice()
+        : [],
+      manifestState,
+      manifestDigest,
+      manifestReady,
+      dispatcherReady,
+      accessDenied: /Acesso restrito|Sem permiss[aã]o|n[aã]o tem permiss[aã]o/i.test(bodyText),
+      navigationType: policy ? String(policy.type || '') : '',
+    };
+  }, { expectedDigest, standalone });
+}
+
+function analysePass({ view, pass, standalone, response, headersArray, dom, consoleEntries, pageErrors, requestedUrl }) {
+  const enforcement = headerValues(headersArray, 'content-security-policy');
+  const reportOnly = headerValues(headersArray, 'content-security-policy-report-only');
+  const conflicts = headerValues(headersArray, 'x-sige-csp-conflict');
+  const expectedPolicies = standalone ? enforcement : reportOnly;
+  const unexpectedPolicies = standalone ? reportOnly : enforcement;
+  const policy = expectedPolicies.join(', ');
+  const nonceValues = unique(Array.from(policy.matchAll(/'nonce-([^']+)'/g), (match) => match[1]));
+  const expectedNonce = nonceValues.length === 1 ? nonceValues[0] : '';
+  const inlineMissingNonce = dom.inlineScripts.filter((item) => !item.hasNonce).map((item) => item.id || '(sem id)');
+  const inlineWrongNonce = expectedNonce
+    ? dom.inlineScripts.filter((item) => item.hasNonce && item.nonce !== expectedNonce).map((item) => item.id || '(sem id)')
+    : dom.inlineScripts.filter((item) => item.hasNonce).map((item) => item.id || '(sem id)');
+  const scriptViolations = scriptViolationCount(dom.violations);
+  const consoleScriptPolicyErrors = consoleEntries.filter((entry) =>
+    /(?:script-src|script-src-elem|script-src-attr)/i.test(String(entry.text || ''))
+    && /(?:refused|violation|violated|content security policy)/i.test(String(entry.text || '')));
+  const finalUrl = response ? response.url() : '';
+  const status = response ? response.status() : 0;
+  const failures = [];
+
+  if (!response || status < 200 || status >= 400) failures.push('resposta principal ausente ou HTTP fora de 2xx/3xx');
