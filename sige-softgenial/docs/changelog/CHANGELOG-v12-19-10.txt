@@ -1,0 +1,21 @@
+SIGE SoftGenial v12.19.10 - Badges BETA no financeiro
+Data: 2026-06-29
+Tipo: apresentacao (barra lateral).
+
+MUDANCA (includes/admin-shell.php)
+- Selo "BETA" (igual ao de Curriculos) adicionado a:
+  - Pagamentos Moveis
+  - Reconciliacao
+  - Aprovacoes
+- O badge passa a usar border-radius:var(--radius-pill) em vez de 999px literal;
+  tokenizou-se tambem o badge de Curriculos por consistencia.
+
+FRONTEIRA
+- So apresentacao. Sem alteracao de gating, logica, SQL, schema, CSP nem regras.
+
+VALIDACAO
+- php -l admin-shell.php: sem erros.
+- Gate de design tokens: 1925 (nova baseline; -1 face a 1926, por tokenizar o
+  raio dos badges).
+- 4 selos BETA no menu (Curriculos + os 3 financeiros), todos tokenizados.
+- DEPLOY: docs/deploy/DEPLOY-v12.19.10-badges-beta.md
