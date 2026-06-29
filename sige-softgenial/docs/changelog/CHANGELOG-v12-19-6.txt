@@ -1,0 +1,32 @@
+SIGE SoftGenial v12.19.6 - Navegacao: grupo COMUNICACAO com gating proprio
+Data: 2026-06-29
+Tipo: arquitectura de informacao + correccao de acesso (barra lateral).
+
+PROBLEMA (M1/M1b do rediagnostico)
+- WhatsApp e Central de Comunicacoes eram mostrados dentro de TESOURARIA, sem
+  verificacao de permissao propria, surgindo por permissao financeira. O guarda
+  de rota exige comunicacao.*, pelo que menu e rota discordavam.
+
+MUDANCA (includes/admin-shell.php)
+- Novo grupo COMUNICACAO, fora do bloco financeiro, com:
+  - Central de Comunicacoes (gated comunicacao.central_ver)
+  - Operacao WhatsApp (gated comunicacao.whatsapp_ver)
+  - Circulares (gated sige_circular_pode_enviar, mantido)
+- Grupo visivel se houver qualquer uma destas. Gating coincide com o mapa de rota.
+- Removidos os 3 itens de comunicacao de TESOURARIA (mantem todo o financeiro).
+- Decisao do utilizador: mostrar a quem tiver comunicacao.*, independente de financas.
+
+EFEITO
+- Utilizador de comunicacao sem financas passa a ver o grupo.
+- Utilizador de financas sem comunicacao deixa de ver os links (que a rota ja
+  bloqueava).
+
+FRONTEIRA
+- Sem alteracao de logica de negocio, SQL, formulas, schema, CSP nem nomes de
+  permissoes. Alterou-se quem ve os links (correccao de acesso pedida).
+
+VALIDACAO
+- php -l admin-shell.php: sem erros. Gate de tokens: 1929 (estavel, sem hex novo).
+- Menu concordante com o guarda de rota.
+- LIVE-TEST: docs/qa/LIVE-TEST-shell-comunicacao-v12.19.6.md (matriz por perfil).
+- DEPLOY:    docs/deploy/DEPLOY-v12.19.6-menu-comunicacao.md
