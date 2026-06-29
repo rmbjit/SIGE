@@ -1,0 +1,56 @@
+SIGE SoftGenial v12.20.0 - Barra lateral reordenada pelo fluxo do ano lectivo
+Data: 2026-06-29
+Tipo: arquitectura de informacao (barra lateral), so apresentacao.
+
+ORDEM (de cima para baixo = ciclo da escola)
+0  Painel Principal
+1  ESTRUTURA ACADEMICA   (Abertura, Disciplinas, Matriz, Curriculos[BETA], Encerramento)
+2  EQUIPA                (Equipa e Professores)
+3  SECRETARIA            (Alunos, Turmas, Contas de Alunos)
+4  FATURACAO             (Lancar Mensalidades, Lancamentos, Inscricoes, Planos)
+5  TESOURARIA            (Registar Pagamento, Pagamentos Moveis[BETA], Extractos e Caixa, Cobrancas, Despesas)
+6  SALA DE AULA          (Minhas Turmas, Lancar Notas, Pautas, Presencas)
+7  AVALIACAO & DOCUMENTOS(Aproveitamento, Aprovar Notas, Pauta Final, Acta, DEC)
+8  JARDIM DE INFANCIA    (Diario, Presencas, Saude, Boletim, Analises) - regime pre-escolar
+9  OPERACAO ESCOLAR      (Portaria, Transporte)
+10 COMUNICACAO           (Central de Comunicacoes, WhatsApp, Circulares)
+11 RELATORIOS & ANALISE  (Painel Financeiro, Relatorio Mensal, Pagamentos/Turma, Reconciliacao[BETA], Aprovacoes[BETA], Auditoria Financeira, Auditoria de Notas, Estatisticas)
+12 CONFIGURACAO          (Precos e Servicos, Centros de Custo, Saude do Sistema, Perfis e Permissoes, Centro de Configuracao)
+13 PRIVACIDADE E DADOS
+
+MUDANCAS DE FUNDO (M4 + reordenacao)
+- O antigo grupo ACADEMICO (saco) foi desfeito: cadastro -> SECRETARIA; estrutura
+  e ano -> ESTRUTURA ACADEMICA.
+- O antigo DOCENTES foi dividido em SALA DE AULA (diario) e AVALIACAO & DOCUMENTOS.
+- GESTAO ESCOLAR e os relatorios financeiros foram unificados em RELATORIOS &
+  ANALISE.
+- CONFIGURACAO unifica configuracao financeira (Precos, Centros) e de sistema.
+- CONSULTA removida (coberta pela SECRETARIA).
+- Jardim deixou de estar em "apoio"; e um regime academico paralelo, na zona de
+  ensino/avaliacao.
+- Turmas passou para SECRETARIA (a sua feature e cadastro_base, nao academico),
+  evitando ficar escondida em escolas so-cadastro.
+
+GATING / CORRECCOES (classe T1/M1b)
+- Cada item passa a ter a sua propria guarda de permissao (e, nos grupos
+  transversais, a sua feature), concordante com o mapa de rota. Itens que antes
+  apareciam por can_any do bloco (Pautas, DEC, Pauta Final, Acta, Aprovar Notas,
+  itens de jardim) passam a respeitar a permissao exacta.
+
+FRONTEIRA
+- So apresentacao/IA. Sem alteracao de logica, SQL, formulas, schema, CSP nem
+  nomes de permissoes. Selos BETA mantidos (Curriculos, Pagamentos Moveis,
+  Reconciliacao, Aprovacoes), agora via helper unico.
+
+VALIDACAO
+- php -l admin-shell.php: sem erros. Gate de tokens estavel (1925).
+- Codigo fora do <nav> identico (verificado por diff). Cada view aparece 1x.
+  Rotulos antigos ausentes. 13 grupos na ordem do ciclo.
+- LIVE-TEST: docs/qa/LIVE-TEST-nav-fluxo-v12.20.0.md (matriz por perfil).
+- DEPLOY:    docs/deploy/DEPLOY-v12.20.0-nav-fluxo.md
+
+NOTA (edge case)
+- A CONSULTA cobria um professor com escopo que tivesse alunos.ver; agora o
+  cadastro (SECRETARIA) exclui o professor com escopo. Caso raro e mais correcto
+  (o professor com escopo nao deve ver a lista completa de alunos). Confirmar no
+  teste por perfil.
