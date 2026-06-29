@@ -2035,58 +2035,7 @@ function sige_render_software_interface()
                     ?>
                 </small>
             </div>
-            <?php
-            // [v12.16.0 RC3] Navegação institucional de topo: read-only, filtrada pelo mapa operacional.
-            $sige_v121600_nav_groups = function_exists('sige_institutional_navigation_groups_v121600') ? sige_institutional_navigation_groups_v121600(3, 3) : [];
-            $sige_v121600_primary_nav = (!empty($sige_v121600_nav_groups) && is_array($sige_v121600_nav_groups[0])) ? $sige_v121600_nav_groups[0] : [];
-            ?>
-            <?php if (!empty($sige_v121600_primary_nav['actions']) && is_array($sige_v121600_primary_nav['actions'])): ?>
-                <style id="sige-v121600-operational-rail-style">
-                    .sg-operational-nav-rail{margin:var(--space-3) var(--space-4) var(--space-3);padding:var(--space-3);border-radius:var(--radius-xl);border:1px solid var(--color-slate-700);background:var(--sg-theme-primary-900);box-shadow:var(--shadow-inner)}
-                    .sg-operational-nav-rail-kicker{display:block;margin-bottom:var(--space-1);font-size:var(--fs-xs);line-height:var(--lh-tight);text-transform:uppercase;letter-spacing:.13em;font-weight:950;color:var(--color-slate-200)}
-                    .sg-operational-nav-rail strong{display:block;font-size:var(--fs-sm);line-height:var(--lh-tight);font-weight:950;color:var(--color-white);letter-spacing:-.02em}
-                    .sg-operational-nav-rail small{display:block;margin-top:var(--space-1);color:var(--color-slate-200);font-size:var(--fs-xs);line-height:var(--lh-normal);font-weight:650}
-                    .sg-operational-nav-links{display:grid;gap:var(--space-2);margin-top:var(--space-3)}
-                    .sg-operational-nav-link{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);min-height:var(--space-8);padding:var(--space-2) var(--space-3);border-radius:var(--radius-lg);text-decoration:none;color:var(--color-slate-100);background:var(--color-slate-700);font-size:var(--fs-xs);line-height:var(--lh-tight);font-weight:850}
-                    .sg-operational-nav-link:hover,.sg-operational-nav-link:focus{color:var(--color-white);background:var(--sg-theme-primary);outline:0}
-                    .sg-operational-nav-link.is-active{color:var(--color-white);background:var(--sg-theme-primary);box-shadow:var(--shadow-inner)}
-                    .sg-operational-nav-link span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-                    .sg-operational-nav-link svg{width:var(--space-4);height:var(--space-4);flex:0 0 auto;opacity:.72;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-                    .sg-operational-nav-more{margin-top:var(--space-2);color:var(--color-slate-200);font-size:var(--fs-xs);line-height:var(--lh-normal);font-weight:750}
-                </style>
-                <section class="sg-operational-nav-rail" aria-label="Navegação operacional prioritária">
-                    <span class="sg-operational-nav-rail-kicker">Comece aqui</span>
-                    <strong><?php echo esc_html((string)($sige_v121600_primary_nav['label'] ?? 'Rotina operacional')); ?></strong>
-                    <?php if (!empty($sige_v121600_primary_nav['focus'])): ?>
-                        <small><?php echo esc_html((string)$sige_v121600_primary_nav['focus']); ?></small>
-                    <?php endif; ?>
-                    <div class="sg-operational-nav-links">
-                        <?php foreach ((array)$sige_v121600_primary_nav['actions'] as $sige_v121600_nav_action): ?>
-                            <?php
-                            $sige_v121600_nav_view = (string)($sige_v121600_nav_action['view'] ?? '');
-                            $sige_v121600_nav_href = (string)($sige_v121600_nav_action['href'] ?? '');
-                            $sige_v121600_nav_label = (string)($sige_v121600_nav_action['label'] ?? 'Abrir área');
-                            if ($sige_v121600_nav_view === '' || $sige_v121600_nav_href === '') { continue; }
-                            ?>
-                            <a class="sg-operational-nav-link <?php echo $view === $sige_v121600_nav_view ? 'is-active' : ''; ?>" href="<?php echo esc_url($sige_v121600_nav_href); ?>">
-                                <span><?php echo esc_html($sige_v121600_nav_label); ?></span>
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
-                            </a>
-                        <?php endforeach; ?>
-                    </div>
-                    <?php if (count($sige_v121600_nav_groups) > 1): ?>
-                        <div class="sg-operational-nav-more">
-                            Outras áreas disponíveis: <?php
-                            $sige_v121600_other_labels = [];
-                            foreach (array_slice($sige_v121600_nav_groups, 1) as $sige_v121600_other_group) {
-                                if (!empty($sige_v121600_other_group['label'])) { $sige_v121600_other_labels[] = (string)$sige_v121600_other_group['label']; }
-                            }
-                            echo esc_html(implode(' · ', array_slice($sige_v121600_other_labels, 0, 2)));
-                            ?>
-                        </div>
-                    <?php endif; ?>
-                </section>
-            <?php endif; ?>
+            <?php // M5 (v12.19.8): rail operacional "Comece aqui" removido. Duplicava os links do menu abaixo e adicionava ruido; coerente com a remocao da camada de coaching do painel. Funcao sige_institutional_navigation_groups_v121600() mantida (so deixou de ser renderizada aqui). ?>
             <nav class="sg-app-nav">
                 <!-- Dashboard - apenas gestão -->
                 <?php if (!empty($show_main_dashboard) && $sige_menu_can_any((array)($sige_view_permission_map['dashboard'] ?? []))): ?>
@@ -2113,7 +2062,7 @@ function sige_render_software_interface()
                     <?php if ($sige_menu_can_any(['academico.matriz_ver','configuracoes.ver'])): ?><a href="?page=sige-app&view=curriculos" class="sige-menu-item <?php echo $view === 'curriculos' ? 'active' : ''; ?>"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sige-u-shrink-0"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 6h8"/><path d="M8 10h8"/></svg> Currículos <span style="margin-left:auto;font-size:9px;font-weight:900;background:rgba(255,255,255,.16);padding:2px 6px;border-radius:999px;">BETA</span></a><?php endif; ?>
                     <?php if ($sige_menu_can_any(['academico.turmas_ver'])): ?><a href="?page=sige-app&view=turmas" class="sige-menu-item <?php echo $view == 'turmas' ? 'active' : ''; ?>"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sige-u-shrink-0"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Turmas</a><?php endif; ?>
                     <?php if ($sige_menu_can_any(['alunos.ver'])): ?><a href="?page=sige-app&view=alunos_lista" class="sige-menu-item <?php echo $view == 'alunos_lista' ? 'active' : ''; ?>"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sige-u-shrink-0"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Alunos</a><?php endif; ?>
-                    <?php if ($sige_menu_can_any(['academico.boletins_ver'])): ?><a href="?page=sige-app&view=boletim" class="sige-menu-item <?php echo $view == 'boletim' ? 'active' : ''; ?>"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sige-u-shrink-0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Aproveitamento</a><?php endif; ?>
+                    <?php // M2 (v12.19.8): "Aproveitamento" removido daqui para nao duplicar; permanece no grupo DOCENTES, visivel a quem tem academico.boletins_ver. ?>
                     <?php if ($sige_menu_can_any((array)($sige_view_permission_map['encerramento'] ?? []))): ?>
                         <a href="?page=sige-app&view=encerramento" class="sige-menu-item <?php echo $view == 'encerramento' ? 'active' : ''; ?>"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sige-u-shrink-0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Encerramento</a>
                         <a href="?page=sige-app&view=abertura" class="sige-menu-item <?php echo $view == 'abertura' ? 'active' : ''; ?>"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sige-u-shrink-0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg> Abertura</a>

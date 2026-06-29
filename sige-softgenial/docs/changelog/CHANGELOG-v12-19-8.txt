@@ -1,0 +1,27 @@
+SIGE SoftGenial v12.19.8 - Navegacao mais limpa (M2 + M5)
+Data: 2026-06-29
+Tipo: arquitectura de informacao / apresentacao (barra lateral).
+
+M2 - Aproveitamento duplicado
+- "Aproveitamento" aparecia em dois grupos (ACADEMICO e DOCENTES) e via-se duas
+  vezes para director/pedagogico.
+- Removido do grupo ACADEMICO. Permanece em DOCENTES, gated por
+  academico.boletins_ver. Como essa permissao ja activa o grupo DOCENTES,
+  ninguem com boletins_ver perde o acesso (continua a ver uma vez).
+
+M5 - Rail "Comece aqui"
+- Removido o bloco do rail operacional (section .sg-operational-nav-rail e o
+  <style id="sige-v121600-operational-rail-style">), que duplicava links do menu
+  e adicionava ruido. Coerente com a remocao da camada de coaching do painel.
+- A funcao sige_institutional_navigation_groups_v121600() e mantida; apenas
+  deixou de ser renderizada na barra lateral.
+
+FRONTEIRA
+- So apresentacao. Sem alteracao de gating/permissoes (M2 nao remove acesso),
+  logica, SQL, formulas, schema, CSP nem nomes de permissoes.
+
+VALIDACAO
+- php -l admin-shell.php: sem erros. Gate de tokens estavel.
+- "view=boletim" no menu: 1 ocorrencia (antes 2). Markup do rail: 0.
+- LIVE-TEST: docs/qa/LIVE-TEST-shell-nav-limpeza-v12.19.8.md
+- DEPLOY:    docs/deploy/DEPLOY-v12.19.8-nav-limpeza.md
