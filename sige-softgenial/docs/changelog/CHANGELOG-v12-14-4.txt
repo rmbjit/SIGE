@@ -1,0 +1,25 @@
+SIGE SoftGenial v12.14.4 - CSP Regression Closure: Documents & Buttons
+Data: 2026-06-25
+Base: v12.14.3
+
+OBJECTIVO
+Fechar regressões operacionais reportadas após CSP enforcement/zero-inline: alguns botões deixaram de responder e o documento de histórico financeiro/PDF passou a aparecer sem formatação profissional.
+
+CAUSA RAIZ
+1. O documento financeiro ainda emitia CSS em bloco `<style>` inline e botões `onclick`. Com CSP zero-inline enforcement, o navegador bloqueia este tipo de dependência quando não existe nonce/asset externo.
+2. O hidratador de handlers legados cobria os padrões principais, mas ainda faltavam alguns eventos/padrões usados em módulos antigos ou HTML gerado dinamicamente.
+
+ALTERAÇÕES
+- Criado `assets/documents/financeiro-historico-aluno.css` com o CSS oficial do documento financeiro.
+- Criado `assets/sige-document-actions.js` para acções documentais: imprimir, fechar, voltar/fechar.
+- Alterado `includes/financeiro-historico-aluno-pro.php` para usar `<link rel="stylesheet">` e `<script defer src="...">` externos.
+- Botões do histórico financeiro migrados para `data-sige-print` e `data-sige-close-back`.
+- Expandido `assets/sige-ui.js` com acções documentais globais e suporte adicional para eventos/padrões legados.
+
+SEGURANÇA
+- Não foi reintroduzido `unsafe-inline`.
+- Não foi introduzido `eval` nem `new Function`.
+- A política zero-inline permanece como orientação de enforcement.
+
+RISCO RESIDUAL
+Outros modelos documentais antigos podem ainda conter CSS/JS inline. Devem ser migrados por vagas para assets externos. Motor PDF server-side self-hosted deve ser fase separada.

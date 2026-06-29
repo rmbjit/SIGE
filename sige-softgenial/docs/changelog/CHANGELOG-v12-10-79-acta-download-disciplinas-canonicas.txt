@@ -1,0 +1,19 @@
+SIGE SoftGenial v12.10.79 - Acta do Conselho: Download com Disciplinas Canónicas
+
+Objectivo
+- Corrigir o download/impressão da ACTA para respeitar efectivamente as disciplinas da turma/classe seleccionada.
+- Eliminar a possibilidade de o documento descarregado voltar a mostrar disciplinas fixas/hardcoded ou registos antigos como fonte da lista.
+
+Correcções aplicadas
+- A função central de disciplinas da ACTA passa a usar a mesma lógica turma/classe da pauta: disciplinas vinculadas à turma + matriz curricular da classe como fallback controlado.
+- A estatística por disciplina do documento descarregado deixa de usar a ordem/lista institucional fixa antiga.
+- As colunas da estatística por disciplina passam a ser geradas a partir das disciplinas reais da turma/classe.
+- O bloco Cumprimento dos Programas no PDF/HTML descarregado passa a usar exclusivamente a lista canónica turma/classe.
+- Registos antigos de cumprimento dos programas passam a servir apenas para preencher “Último Tema”, “Aulas em Atraso” e “Razões”, sem poder reintroduzir disciplinas antigas/hardcoded.
+- Se não houver disciplinas vinculadas/matriz para a turma/classe, o documento mostra mensagem clara em vez de apresentar disciplinas erradas.
+
+Garantias
+- Sem alteração no fluxo de nota votada.
+- Sem alteração na aprovação pelo Director Pedagógico.
+- Sem alteração em fórmulas, pautas, DEC, pauta final, boletins ou regras académicas.
+- Sem alteração em pagamentos, multas, mensalidades ou base de dados financeira.

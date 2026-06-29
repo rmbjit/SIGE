@@ -1,0 +1,193 @@
+/* ════════════════════════════════════════════════════════════════════════
+   SIGE SoftGenial - UI Kit v1 (Sprint UX-1, v12.11.9.94)
+   Tokens da marca + componentes canónicos do programa de UX.
+   TUDO namespaced (.sg-*): zero impacto visual em views não tocadas.
+   Carrega DEPOIS de style.css (dependência declarada em ui-kit.php).
+   Cânone de uso: docs/dev/UI-GUIA.md
+   ════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Cores da marca (extraídas do design system existente) */
+  --sgk-primario: #0d1259;
+  --sgk-primario-escuro: #090d40;
+  --sgk-primario-claro: #eef0fb;
+  --sgk-acento: #f59e0b;
+  --sgk-ok: #16a34a;
+  --sgk-ok-fundo: #ecfdf5;
+  --sgk-ok-borda: #a7f3d0;
+  --sgk-ok-texto: #065f46;
+  --sgk-erro: #b91c1c;
+  --sgk-erro-fundo: #fef2f2;
+  --sgk-erro-borda: #fecaca;
+  --sgk-erro-texto: #991b1b;
+  --sgk-aviso: #b45309;
+  --sgk-aviso-fundo: #fffbeb;
+  --sgk-aviso-borda: #fde68a;
+  --sgk-aviso-texto: #92400e;
+  --sgk-info: #1d4ed8;
+  --sgk-info-fundo: #eff6ff;
+  --sgk-info-borda: #bfdbfe;
+  --sgk-info-texto: #1e40af;
+  /* Neutros */
+  --sgk-texto: #0f172a;
+  --sgk-texto-suave: #64748b;
+  --sgk-borda: #cbd5e1;
+  --sgk-fundo: #f8fafc;
+  --sgk-branco: #ffffff;
+  /* Geometria e profundidade */
+  --sgk-radius: 10px;
+  --sgk-radius-s: 7px;
+  --sgk-sombra: 0 2px 10px rgba(0, 0, 0, .06);
+  --sgk-sombra-alta: 0 10px 30px rgba(0, 0, 0, .18);
+  --sgk-foco: 0 0 0 3px rgba(13, 18, 89, .25);
+}
+
+/* ── Botões ────────────────────────────────────────────────────────────── */
+.sgk-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border-radius: var(--sgk-radius-s);
+  border: 1px solid transparent;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.sgk-btn:focus-visible { outline: none; box-shadow: var(--sgk-foco); }
+.sgk-btn:disabled, .sgk-btn[aria-disabled="true"] { opacity: .55; cursor: not-allowed; pointer-events: none; }
+.sgk-btn-primario { background: var(--sgk-primario); color: #fff; }
+.sgk-btn-primario:hover { background: var(--sgk-primario-escuro); color: #fff; }
+.sgk-btn-sec { background: var(--sgk-branco); color: var(--sgk-primario); border-color: var(--sgk-borda); }
+.sgk-btn-sec:hover { border-color: var(--sgk-primario); color: var(--sgk-primario); }
+.sgk-btn-perigo { background: var(--sgk-erro); color: #fff; }
+.sgk-btn-perigo:hover { background: #991b1b; color: #fff; }
+.sgk-btn-ghost { background: transparent; color: var(--sgk-texto-suave); }
+.sgk-btn-ghost:hover { color: var(--sgk-texto); background: var(--sgk-fundo); }
+.sgk-btn-sm { padding: 6px 11px; font-size: 12.5px; }
+
+/* ── Banners de feedback (resultado de acções, avisos de ecrã) ─────────── */
+.sgk-banner {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 16px;
+  border-radius: var(--sgk-radius);
+  border: 1px solid var(--sgk-borda);
+  font-size: 13.5px;
+  margin: 12px 0;
+  background: var(--sgk-branco);
+  color: var(--sgk-texto);
+}
+.sgk-banner-ok { background: var(--sgk-ok-fundo); border-color: var(--sgk-ok-borda); color: var(--sgk-ok-texto); }
+.sgk-banner-erro { background: var(--sgk-erro-fundo); border-color: var(--sgk-erro-borda); color: var(--sgk-erro-texto); }
+.sgk-banner-aviso { background: var(--sgk-aviso-fundo); border-color: var(--sgk-aviso-borda); color: var(--sgk-aviso-texto); }
+.sgk-banner-info { background: var(--sgk-info-fundo); border-color: var(--sgk-info-borda); color: var(--sgk-info-texto); }
+
+/* ── Cartões e badges ──────────────────────────────────────────────────── */
+.sgk-card {
+  background: var(--sgk-branco);
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: var(--sgk-sombra);
+}
+.sgk-badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+.sgk-badge-ok { background: var(--sgk-ok-fundo); color: var(--sgk-ok-texto); }
+.sgk-badge-erro { background: var(--sgk-erro-fundo); color: var(--sgk-erro-texto); }
+.sgk-badge-aviso { background: var(--sgk-aviso-fundo); color: var(--sgk-aviso-texto); }
+.sgk-badge-info { background: var(--sgk-info-fundo); color: var(--sgk-info-texto); }
+.sgk-badge-neutro { background: var(--sgk-fundo); color: var(--sgk-texto-suave); }
+
+/* ── Estado vazio com próxima acção ────────────────────────────────────── */
+.sgk-empty {
+  text-align: center;
+  padding: 36px 20px;
+  color: var(--sgk-texto-suave);
+}
+.sgk-empty .sgk-empty-icone { font-size: 34px; line-height: 1; margin-bottom: 10px; }
+.sgk-empty .sgk-empty-titulo { font-size: 15px; font-weight: 700; color: var(--sgk-texto); margin: 0 0 4px; }
+.sgk-empty .sgk-empty-texto { font-size: 13px; margin: 0 0 14px; }
+
+/* ── Modal de confirmação (sigeUi.confirm) ─────────────────────────────── */
+.sgk-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, .55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100000;
+  padding: 16px;
+}
+.sgk-modal {
+  background: var(--sgk-branco);
+  border-radius: 14px;
+  box-shadow: var(--sgk-sombra-alta);
+  width: 100%;
+  max-width: 440px;
+  padding: 22px;
+}
+.sgk-modal .sgk-modal-titulo { margin: 0 0 8px; font-size: 16px; font-weight: 700; color: var(--sgk-texto); }
+.sgk-modal .sgk-modal-texto { margin: 0 0 18px; font-size: 13.5px; color: var(--sgk-texto-suave); line-height: 1.5; }
+.sgk-modal .sgk-modal-accoes { display: flex; gap: 10px; justify-content: flex-end; }
+
+/* ── Toasts (feedback não bloqueante) ──────────────────────────────────── */
+.sgk-toast-zona {
+  position: fixed;
+  top: 46px;
+  right: 16px;
+  z-index: 100001;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: min(380px, calc(100vw - 32px));
+}
+.sgk-toast {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  padding: 11px 14px;
+  border-radius: var(--sgk-radius);
+  border: 1px solid var(--sgk-borda);
+  background: var(--sgk-branco);
+  color: var(--sgk-texto);
+  font-size: 13px;
+  box-shadow: var(--sgk-sombra-alta);
+  animation: sgkToastEntra .18s ease-out;
+}
+.sgk-toast-ok { background: var(--sgk-ok-fundo); border-color: var(--sgk-ok-borda); color: var(--sgk-ok-texto); }
+.sgk-toast-erro { background: var(--sgk-erro-fundo); border-color: var(--sgk-erro-borda); color: var(--sgk-erro-texto); }
+.sgk-toast-aviso { background: var(--sgk-aviso-fundo); border-color: var(--sgk-aviso-borda); color: var(--sgk-aviso-texto); }
+.sgk-toast-info { background: var(--sgk-info-fundo); border-color: var(--sgk-info-borda); color: var(--sgk-info-texto); }
+@keyframes sgkToastEntra { from { transform: translateY(-6px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ── Carregamento ──────────────────────────────────────────────────────── */
+.sgk-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: sgkGira .7s linear infinite;
+  vertical-align: -2px;
+}
+@keyframes sgkGira { to { transform: rotate(360deg); } }
+
+/* ── Utilidades ────────────────────────────────────────────────────────── */
+.sgk-table-wrap { overflow-x: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sgk-toast, .sgk-spinner { animation: none; }
+}

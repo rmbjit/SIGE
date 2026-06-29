@@ -1,0 +1,25 @@
+DEPLOY - SIGE SoftGenial v12.12.21
+Fase 7 incremento 2: regra de quatro-olhos (dupla aprovacao) para estornos e reaberturas
+Base: v12.12.20
+
+O QUE MUDA
+- O estorno de pagamento e a reabertura de caixa passam a ser a DOIS passos: um utilizador pede, outro utilizador diferente aprova. So depois de aprovado a operacao executa. Ninguem pode aprovar o seu proprio pedido.
+- Novo ecra "Aprovacoes Pendentes" no menu financeiro (Tesouraria), por baixo de "Reconciliacao". Acesso: quem detem permissao de estorno ou de reabertura de caixa. Lista os pedidos a aguardar decisao e as decisoes recentes.
+- No ecra de Extratos, o botao de anular recibo (estorno) e o de reabrir caixa deixam de executar de imediato: passam a submeter um pedido para aprovacao.
+
+PASSOS (Hostinger File Manager, sem SSH)
+1. Salvaguardar a pasta actual do plugin (wp-content/plugins/sige-softgenial) por precaucao.
+2. Substituir a pasta sige-softgenial/ pela do ZIP v12.12.21 (instalacao completa).
+3. Confirmar versao em Plugins: deve ler 12.12.21.
+4. Abrir uma pagina do plugin para disparar a migracao (cria a tabela de aprovacoes). Em alternativa, desactivar e reactivar o plugin.
+5. Abrir o menu financeiro e confirmar a nova entrada "Aprovacoes".
+
+NOTAS
+- CORRE MIGRACAO DE BASE DE DADOS: cria a tabela sige_fin_aprovacoes. SCHEMA_VERSION sobe para 20260621.1; a migracao e automatica e idempotente.
+- Para o quatro-olhos funcionar, a escola precisa de pelo menos DOIS utilizadores autorizados para a operacao (por exemplo, Direccao e um segundo responsavel, ou o administrador). Com um so utilizador autorizado, os estornos e reaberturas ficam a aguardar um segundo aprovador (isto e o comportamento pretendido).
+- Na aprovacao pode ser pedida a confirmacao de identidade (MFA) do aprovador antes de a operacao executar.
+- Novo endpoint de decisao governado no Security Kernel em enforce; manifesto de accoes sobe de 196 para 197; enforce de 30 para 31.
+- Sem alteracao das regras de calculo financeiro (md5 bloqueados intactos). Sem regressao de design (estilo so com tokens).
+
+REVERSAO
+- Repor a pasta salvaguardada do plugin. A tabela sige_fin_aprovacoes pode permanecer sem efeito (nao afecta os fluxos antigos); se necessario, pode ser removida manualmente. Ao reverter, o estorno e a reabertura voltam a executar num so passo.

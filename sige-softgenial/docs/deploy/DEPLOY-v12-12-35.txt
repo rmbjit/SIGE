@@ -1,0 +1,80 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.35
+Data: 2026-06-22
+Titulo: Armazenamento privado dos documentos sensiveis
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+Os documentos sensiveis dos alunos (BI, certidao, vacinas) e da equipa (BI, CV,
+certificados) deixam de estar acessiveis pela sua URL publica directa. Passam
+para um directorio privado, negado ao acesso web, e sao servidos apenas pelo
+botao seguro de sempre. A foto NAO muda: continua a aparecer em linha
+normalmente. Nao ha alteracao a base de dados.
+
+A migracao dos documentos ja existentes corre sozinha, por lotes, a medida que
+navega pelas paginas do SIGE. Os documentos novos entram ja privados.
+
+================================================================
+INSTALACAO (CloudPanel / Hostinger, LiteSpeed)
+================================================================
+1. Faca uma copia de seguranca do plugin actual e da base de dados, como
+   habitual. (Esta versao tambem move ficheiros dentro de wp-content/uploads;
+   uma copia da pasta uploads e prudente.)
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+5. Navegue por algumas paginas do SIGE (Alunos, Equipa). E nessas paginas que a
+   migracao corre, em lotes de ate 150 documentos por carregamento. Em escolas
+   grandes, percorra varias paginas ao longo do dia ate concluir.
+
+================================================================
+VERIFICACAO
+================================================================
+1. Confirme que passou a existir o directorio:
+   wp-content/uploads/sige-private/docs
+   com um .htaccess (deve conter "Require all denied" e o marcador
+   "SIGE-PRIVATE-DOCS v1"), web.config e index.php.
+2. Escolha um aluno que ja tenha o BI carregado e que ja tenha sido alcancado
+   pela migracao (abra a ficha pelo menos uma vez navegando nas paginas). Copie a
+   antiga URL publica do BI e abra-a no navegador: deve devolver 403 (acesso
+   negado) ou 404. Pelo botao seguro, o documento continua a abrir normalmente.
+3. Carregue um novo documento de aluno (ou de equipa). A sua URL directa tambem
+   deve devolver 403, mas abre pelo botao seguro.
+4. Confirme que a foto do aluno continua a aparecer em linha, sem alteracao.
+
+================================================================
+NGINX (apenas se o servidor for Nginx, nao LiteSpeed nem Apache)
+================================================================
+O .htaccess so e lido por Apache e LiteSpeed. Em Nginx, negue o directorio
+privado acrescentando ao bloco do site (pelo administrador do servidor):
+
+  location ~* /wp-content/uploads/sige-private/ {
+      deny all;
+      return 403;
+  }
+
+Sem esta regra, o ficheiro privado poderia ainda ser servido directamente pelo
+Nginx. O acesso pelo botao seguro funciona em qualquer caso.
+
+================================================================
+NOTAS IMPORTANTES
+================================================================
+- Seguranca do movimento: cada documento so e dado como movido depois de a copia
+  ser verificada e o original removido com sucesso; se algo falhar, o sistema
+  mantem o documento onde estava e tenta de novo mais tarde. Nenhum documento e
+  perdido.
+- A foto permanece publica por desenho (e mostrada em linha). A decisao sobre a
+  foto fica para fora desta fase.
+- Proximo incremento desta fase: links com expiracao, reforco do registo de
+  download, limpeza de ficheiros orfaos e confirmacao do QR local.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter o plugin, reinstale a versao anterior. Atencao: os documentos que
+ja tiverem sido movidos para wp-content/uploads/sige-private continuam a ser
+servidos pelo botao seguro mesmo na versao anterior (o endpoint resolve ficheiros
+sob o directorio de uploads). Nao apague o directorio sige-private sem antes
+confirmar que nao ha documentos la referenciados.

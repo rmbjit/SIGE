@@ -1,0 +1,26 @@
+SIGE SoftGenial v12.10.24 - Preços e Serviços: Harmonia Visual
+
+Objectivo
+- Harmonizar o módulo Preços e Serviços com o padrão visual aprovado no Painel Principal, Centro de Configuração e módulos financeiros já validados.
+
+Alterações visuais
+- Novo hero amplo e claro para Preços e Serviços.
+- KPIs de leitura rápida para serviços activos, mensalidades activas, níveis de multa e serviços por classificar.
+- Cartões, formulários, botões, campos, tabelas e badges ajustados ao padrão visual aprovado.
+- Catálogo de Serviços e Preços reorganizado visualmente, sem rótulos técnicos internos para o utilizador final.
+- Regras do Transporte Escolar mantidas com leitura mais limpa e integrada.
+- Lista de serviços com tabela mais consistente e mobile-friendly.
+
+Confirmações e experiência
+- Remoção/desactivação de serviços passa a usar pop-up real de confirmação.
+- Mantidas as protecções existentes para serviços com lançamentos associados.
+
+Integração de navegação
+- Planos de Pagamento fica integrado de forma limpa no menu e no roteamento do App Shell, mantendo a área dentro do padrão validado.
+- Preços e Serviços passa a usar cabeçalho próprio, sem duplicação visual de header.
+
+Garantias
+- Sem alteração em fórmulas financeiras.
+- Sem alteração em mensalidades, multas, descontos, pagamentos, recibos, estornos ou base de dados.
+- Sem alteração em notas, pautas, DEC, boletins ou actas.
+- Alterações concentradas em layout, linguagem visual, navegação e experiência de utilização.

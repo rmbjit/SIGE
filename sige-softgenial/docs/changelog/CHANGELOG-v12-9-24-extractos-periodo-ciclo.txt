@@ -1,0 +1,22 @@
+SIGE SoftGenial v12.9.24 - Extractos por período e ciclo
+
+Base validada: v12.9.23-filtros-pagamentos
+
+Alterações incrementais:
+- Adicionado filtro de Período no módulo financeiro-extratos: Diário, Mensal e Anual.
+- Adicionado filtro de Ciclo: Todos, Creche, Ensino Primário e Ensino Secundário.
+- A tabela do extracto passa a respeitar o intervalo seleccionado para exportação em Excel.
+- O Excel profissional passa a indicar período, ciclo, intervalo de datas e nome de ficheiro segmentado.
+- Para períodos mensais/anuais, a coluna de tempo mostra Data/Hora.
+- Os cartões financeiros passam a reflectir o extracto exibido quando há filtro por período/ciclo, sem alterar pagamentos, lançamentos, estornos ou fórmulas financeiras.
+- Acções sensíveis de caixa/estorno continuam limitadas ao modo diário.
+
+Garantias de segurança:
+- Nenhuma fórmula financeira foi alterada.
+- Nenhuma fórmula académica foi alterada.
+- Nenhuma tabela ou migração de base de dados foi adicionada.
+- Alteração restrita ao ficheiro admin/finance/financeiro-extratos.php e versionamento.
+
+Validação técnica:
+- php -l executado com sucesso em admin/finance/financeiro-extratos.php.
+- php -l executado com sucesso em sige-softgenial.php.

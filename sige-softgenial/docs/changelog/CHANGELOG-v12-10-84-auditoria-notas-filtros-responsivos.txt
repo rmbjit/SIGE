@@ -1,0 +1,22 @@
+SIGE SoftGenial v12.10.84 - Auditoria Académica: Filtros Responsivos
+
+Objectivo
+- Corrigir a responsividade do bloco de filtros do módulo &view=auditoria_notas.
+- Garantir que os botões Filtrar e Limpar fiquem sempre dentro do cartão e que a página se adapte melhor a diferentes larguras.
+
+Ajustes aplicados
+- Reorganizado o grid do formulário de filtros para reduzir tensão horizontal.
+- Botões Filtrar e Limpar convertidos para um sub-grid próprio, com largura total e sem fuga visual.
+- Adicionadas regras de quebra inteligente:
+  - 5 colunas em telas largas;
+  - 4 colunas em larguras intermédias;
+  - 3 colunas em resoluções médias;
+  - 2 colunas em tablet;
+  - 1 coluna em mobile.
+- Em larguras intermédias e menores, a área de acções passa automaticamente para uma nova linha, evitando corte lateral.
+- Campos passam a respeitar min-width: 0 para encolhimento seguro.
+
+Garantias
+- Sem alteração nos filtros lógicos, exportação, queries ou permissões.
+- Sem alteração em logs, notas, aprovação, ACTA, pautas, DEC, pauta final, boletins ou regras académicas.
+- Sem alteração em pagamentos, multas, mensalidades ou base de dados financeira.

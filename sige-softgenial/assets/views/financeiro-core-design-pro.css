@@ -1,0 +1,375 @@
+/*
+ * SIGE SoftGenial v12.15.12 - Design System PRO: Financeiro Core
+ * Escopo: camada visual conservadora e reversivel para views financeiras.
+ * Regra de ouro: nao altera PHP financeiro, queries, formulas, valores,
+ * lancamentos, recibos, Finance Score, reconciliacao ou regras de negocio.
+ * Opt-out: option sige_design_financeiro_core_v121512_enabled = 0.
+ */
+
+body.sige-admin-app:is(
+  .sige-view-financeiro-dashboard,
+  .sige-view-financeiro-pagamentos,
+  .sige-view-financeiro-devedores,
+  .sige-view-financeiro-extratos,
+  .sige-view-financeiro-lancamentos,
+  .sige-view-financeiro-relatorio-mensal,
+  .sige-view-financeiro-centros,
+  .sige-view-financeiro-config,
+  .sige-view-financeiro-planos,
+  .sige-view-financeiro-despesas,
+  .sige-view-financeiro-auditoria,
+  .sige-view-financeiro-inscricoes,
+  .sige-view-financeiro-gerador,
+  .sige-view-pagamentos-turma,
+  .sige-view-mpesa,
+  .sige-view-reconciliacao,
+  .sige-view-aprovacoes
+) {
+  --sg-fin-core-card-radius: var(--radius-xl);
+  --sg-fin-core-field-radius: var(--radius-lg);
+  --sg-fin-core-gap: var(--space-4);
+  --sg-fin-core-shadow: var(--shadow-md);
+  --sg-fin-core-border: 1px solid rgba(31, 32, 55, .07);
+  --sg-fin-core-focus: 0 0 0 4px rgba(37, 99, 235, .16);
+}
+
+/* Contrato de pagina: nao bloquear scroll principal e nao mexer em formulas. */
+body.sige-admin-app:is(
+  .sige-view-financeiro-dashboard,
+  .sige-view-financeiro-pagamentos,
+  .sige-view-financeiro-devedores,
+  .sige-view-financeiro-extratos,
+  .sige-view-financeiro-lancamentos,
+  .sige-view-financeiro-relatorio-mensal,
+  .sige-view-financeiro-centros,
+  .sige-view-financeiro-config,
+  .sige-view-financeiro-planos,
+  .sige-view-financeiro-despesas,
+  .sige-view-financeiro-auditoria,
+  .sige-view-financeiro-inscricoes,
+  .sige-view-financeiro-gerador,
+  .sige-view-pagamentos-turma,
+  .sige-view-mpesa,
+  .sige-view-reconciliacao,
+  .sige-view-aprovacoes
+) .sg-app-content {
+  overflow-x: hidden;
+}
+
+body.sige-admin-app:is(
+  .sige-view-financeiro-dashboard,
+  .sige-view-financeiro-pagamentos,
+  .sige-view-financeiro-devedores,
+  .sige-view-financeiro-extratos,
+  .sige-view-financeiro-lancamentos,
+  .sige-view-financeiro-relatorio-mensal,
+  .sige-view-financeiro-centros,
+  .sige-view-financeiro-config,
+  .sige-view-financeiro-planos,
+  .sige-view-financeiro-despesas,
+  .sige-view-financeiro-auditoria,
+  .sige-view-financeiro-inscricoes,
+  .sige-view-financeiro-gerador,
+  .sige-view-pagamentos-turma,
+  .sige-view-mpesa,
+  .sige-view-reconciliacao,
+  .sige-view-aprovacoes
+) :where(
+  .sg-finpro-wrap,
+  .sg-paypro-wrap,
+  .sg-debtpro-wrap,
+  .sg-extracts-wrap,
+  .sg-finreport-wrap,
+  .sg-fincfg-wrap,
+  .sg-plans-wrap,
+  .sg-classpay-wrap,
+  .sg-auditpro-wrap,
+  .sg-centers-wrap,
+  .sg-despesas-wrap,
+  .sg-lancpro-wrap,
+  .fc-page,
+  .pl-wrap
+) {
+  width: 100%;
+  max-width: min(100%, 1440px);
+  margin-inline: auto;
+}
+
+/* Superficies financeiras: aplicar tokens sem alterar hierarquia funcional. */
+body.sige-admin-app:is(
+  .sige-view-financeiro-dashboard,
+  .sige-view-financeiro-pagamentos,
+  .sige-view-financeiro-devedores,
+  .sige-view-financeiro-extratos,
+  .sige-view-financeiro-lancamentos,
+  .sige-view-financeiro-relatorio-mensal,
+  .sige-view-financeiro-centros,
+  .sige-view-financeiro-config,
+  .sige-view-financeiro-planos,
+  .sige-view-financeiro-despesas,
+  .sige-view-financeiro-auditoria,
+  .sige-view-financeiro-inscricoes,
+  .sige-view-financeiro-gerador,
+  .sige-view-pagamentos-turma,
+  .sige-view-mpesa,
+  .sige-view-reconciliacao,
+  .sige-view-aprovacoes
+) :where(
+  .sg-finpro-card,
+  .sg-paypro-search-card,
+  .sg-paypro-student-card,
+  .sg-paypro-debt-panel,
+  .sg-paypro-summary,
+  .sg-finreport-card,
+  .fc-card,
+  .pl-card,
+  .sgk-card,
+  .sige-recon-card,
+  .sg-centers-form-card,
+  .sg-centers-guide-card,
+  .sg-centers-table-card,
+  .sg-classpay-status-card,
+  .sg-classpay-table-card
+) {
+  border-radius: var(--sg-fin-core-card-radius);
+  border: var(--sg-fin-core-border);
+  box-shadow: var(--sg-fin-core-shadow);
+}
+
+/* Filtros e formularios financeiros: legibilidade e alvos tacteis, sem mexer em name/value. */
+body.sige-admin-app:is(
+  .sige-view-financeiro-dashboard,
+  .sige-view-financeiro-pagamentos,
+  .sige-view-financeiro-devedores,
+  .sige-view-financeiro-extratos,
+  .sige-view-financeiro-lancamentos,
+  .sige-view-financeiro-relatorio-mensal,
+  .sige-view-financeiro-centros,
+  .sige-view-financeiro-config,
+  .sige-view-financeiro-planos,
+  .sige-view-financeiro-despesas,
+  .sige-view-financeiro-auditoria,
+  .sige-view-financeiro-inscricoes,
+  .sige-view-financeiro-gerador,
+  .sige-view-pagamentos-turma,
+  .sige-view-mpesa,
+  .sige-view-reconciliacao,
+  .sige-view-aprovacoes
+) :where(input, select, textarea, .sige-input, .fc-input, .pl-input) {
+  min-height: 44px;
+  border-radius: var(--sg-fin-core-field-radius);
+}
+
+body.sige-admin-app:is(
+  .sige-view-financeiro-dashboard,
+  .sige-view-financeiro-pagamentos,
+  .sige-view-financeiro-devedores,
+  .sige-view-financeiro-extratos,
+  .sige-view-financeiro-lancamentos,
+  .sige-view-financeiro-relatorio-mensal,
+  .sige-view-financeiro-centros,
+  .sige-view-financeiro-config,
+  .sige-view-financeiro-planos,
+  .sige-view-financeiro-despesas,
+  .sige-view-financeiro-auditoria,
+  .sige-view-financeiro-inscricoes,
+  .sige-view-financeiro-gerador,
+  .sige-view-pagamentos-turma,
+  .sige-view-mpesa,
+  .sige-view-reconciliacao,
+  .sige-view-aprovacoes
+) :where(input, select, textarea, button, a):focus-visible {
+  outline: 2px solid transparent;
+  box-shadow: var(--sg-fin-core-focus);
+}
+
+/* Accoes financeiras: alvos tacteis sem transformar handlers existentes. */
+body.sige-admin-app:is(
+  .sige-view-financeiro-dashboard,
+  .sige-view-financeiro-pagamentos,
+  .sige-view-financeiro-devedores,
+  .sige-view-financeiro-extratos,
+  .sige-view-financeiro-lancamentos,
+  .sige-view-financeiro-relatorio-mensal,
+  .sige-view-financeiro-centros,
+  .sige-view-financeiro-config,
+  .sige-view-financeiro-planos,
+  .sige-view-financeiro-despesas,
+  .sige-view-financeiro-auditoria,
+  .sige-view-financeiro-inscricoes,
+  .sige-view-financeiro-gerador,
+  .sige-view-pagamentos-turma,
+  .sige-view-mpesa,
+  .sige-view-reconciliacao,
+  .sige-view-aprovacoes
+) :where(
+  .sige-btn,
+  .sg-finpro-btn,
+  .sg-paypro-btn,
+  .fc-btn,
+  .pl-btn,
+  .sg-classpay-action,
+  button[type="submit"],
+  button[type="button"]
+) {
+  min-height: 42px;
+  align-items: center;
+}
+
+/* Tabelas: preservar dados e oferecer scroll horizontal previsivel. */
+body.sige-admin-app:is(
+  .sige-view-financeiro-dashboard,
+  .sige-view-financeiro-pagamentos,
+  .sige-view-financeiro-devedores,
+  .sige-view-financeiro-extratos,
+  .sige-view-financeiro-lancamentos,
+  .sige-view-financeiro-relatorio-mensal,
+  .sige-view-financeiro-centros,
+  .sige-view-financeiro-config,
+  .sige-view-financeiro-planos,
+  .sige-view-financeiro-despesas,
+  .sige-view-financeiro-auditoria,
+  .sige-view-financeiro-inscricoes,
+  .sige-view-financeiro-gerador,
+  .sige-view-pagamentos-turma,
+  .sige-view-mpesa,
+  .sige-view-reconciliacao,
+  .sige-view-aprovacoes
+) :where(
+  .sige-table-wrap,
+  .sige-table-responsive,
+  .sg-finpro-scroll-table,
+  .sg-finreport-scroll-table,
+  .sg-auditpro-table-wrap,
+  .sg-centers-table-wrap,
+  .sgk-table-wrap,
+  .fc-table-wrap
+) {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+body.sige-admin-app:is(
+  .sige-view-financeiro-dashboard,
+  .sige-view-financeiro-pagamentos,
+  .sige-view-financeiro-devedores,
+  .sige-view-financeiro-extratos,
+  .sige-view-financeiro-lancamentos,
+  .sige-view-financeiro-relatorio-mensal,
+  .sige-view-financeiro-centros,
+  .sige-view-financeiro-config,
+  .sige-view-financeiro-planos,
+  .sige-view-financeiro-despesas,
+  .sige-view-financeiro-auditoria,
+  .sige-view-financeiro-inscricoes,
+  .sige-view-financeiro-gerador,
+  .sige-view-pagamentos-turma,
+  .sige-view-mpesa,
+  .sige-view-reconciliacao,
+  .sige-view-aprovacoes
+) :where(table) {
+  max-width: 100%;
+}
+
+/* Modais financeiros: manter acima do shell sem portal/move-DOM. */
+body.sige-admin-app:is(
+  .sige-view-financeiro-pagamentos,
+  .sige-view-financeiro-extratos,
+  .sige-view-financeiro-planos,
+  .sige-view-financeiro-config,
+  .sige-view-financeiro-centros,
+  .sige-view-financeiro-auditoria
+) :where(.sige-modal, .sige-modal-overlay, .sg-modal-backdrop, .sg-plans-modal, .sg-fincfg-modal, .sg-fincfg-service-modal) {
+  z-index: calc(var(--z-modal, 1050) + 200);
+}
+
+/* Desktop/laptop estreito: filtros e accoes nao devem quebrar a pagina. */
+@media (max-width: 1180px) {
+  body.sige-admin-app:is(
+    .sige-view-financeiro-pagamentos,
+    .sige-view-financeiro-extratos,
+    .sige-view-financeiro-devedores,
+    .sige-view-financeiro-lancamentos,
+    .sige-view-financeiro-relatorio-mensal,
+    .sige-view-pagamentos-turma
+  ) :where(.sg-paypro-search-form, .sige-toolbar-left form, .sige-filter-form, .sg-finpro-filter-grid) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sg-fin-core-gap);
+  }
+}
+
+/* Tablet/mobile: todos os controlos financeiros devem ser tocaveis e legiveis. */
+@media (max-width: 760px) {
+  body.sige-admin-app:is(
+    .sige-view-financeiro-dashboard,
+    .sige-view-financeiro-pagamentos,
+    .sige-view-financeiro-devedores,
+    .sige-view-financeiro-extratos,
+    .sige-view-financeiro-lancamentos,
+    .sige-view-financeiro-relatorio-mensal,
+    .sige-view-financeiro-centros,
+    .sige-view-financeiro-config,
+    .sige-view-financeiro-planos,
+    .sige-view-financeiro-despesas,
+    .sige-view-financeiro-auditoria,
+    .sige-view-financeiro-inscricoes,
+    .sige-view-financeiro-gerador,
+    .sige-view-pagamentos-turma,
+    .sige-view-mpesa,
+    .sige-view-reconciliacao,
+    .sige-view-aprovacoes
+  ) :where(.sg-finpro-btn, .sg-paypro-btn, .sige-btn, .fc-btn, .pl-btn, button[type="submit"], button[type="button"]) {
+    min-height: 46px;
+  }
+
+  body.sige-admin-app:is(
+    .sige-view-financeiro-pagamentos,
+    .sige-view-financeiro-extratos,
+    .sige-view-financeiro-devedores,
+    .sige-view-financeiro-lancamentos,
+    .sige-view-financeiro-relatorio-mensal,
+    .sige-view-pagamentos-turma
+  ) :where(.sg-paypro-search-form, .sige-toolbar-left form, .sige-filter-form, .sg-finpro-filter-grid) {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  body.sige-admin-app:is(
+    .sige-view-financeiro-pagamentos,
+    .sige-view-financeiro-extratos,
+    .sige-view-financeiro-devedores,
+    .sige-view-financeiro-lancamentos,
+    .sige-view-financeiro-relatorio-mensal,
+    .sige-view-pagamentos-turma
+  ) :where(.sg-paypro-search-form > *, .sige-toolbar-left form > *, .sige-filter-form > *, .sg-finpro-filter-grid > *) {
+    min-width: 0;
+    width: 100%;
+  }
+
+  body.sige-admin-app:is(
+    .sige-view-financeiro-dashboard,
+    .sige-view-financeiro-pagamentos,
+    .sige-view-financeiro-devedores,
+    .sige-view-financeiro-extratos,
+    .sige-view-financeiro-lancamentos,
+    .sige-view-financeiro-relatorio-mensal,
+    .sige-view-financeiro-centros,
+    .sige-view-financeiro-config,
+    .sige-view-financeiro-planos,
+    .sige-view-financeiro-despesas,
+    .sige-view-financeiro-auditoria,
+    .sige-view-financeiro-inscricoes,
+    .sige-view-financeiro-gerador,
+    .sige-view-pagamentos-turma,
+    .sige-view-mpesa,
+    .sige-view-reconciliacao,
+    .sige-view-aprovacoes
+  ) :where(.sige-modal-content, .sige-modal-box, .sige-lanc-modal, .sg-plans-modal-card, .sg-fincfg-modal-card) {
+    max-width: calc(100vw - 24px);
+    max-height: calc(100vh - 24px);
+    overflow: auto;
+  }
+}

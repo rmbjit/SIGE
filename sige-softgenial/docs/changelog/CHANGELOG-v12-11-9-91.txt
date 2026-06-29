@@ -1,0 +1,80 @@
+SIGE SoftGenial v12.11.9.91
+============================
+
+Sprint 2 - Presenças Académicas derivadas da Portaria e Pagamentos M-Pesa com conciliação automática
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+DETALHE COMPLETO DO SPRINT 2
+============================
+
+ACADÉMICO - PRESENÇAS DERIVADAS DA PORTARIA (NOVO)
+- includes/presencas-engine.php: o mapa de assiduidade nasce do log
+  IMUTÁVEL da Portaria (sige_acessos): presente = pelo menos uma entrada
+  no dia; atraso = primeira entrada depois da hora de corte (option
+  sige_presencas_hora_corte, defeito 07:30, inclusiva).
+- Excepções humanas em tabela própria (sige_presencas_excecoes): falta
+  justificada, presença manual e dispensa VENCEM a derivação sem nunca
+  reescrever o log do scanner. UNIQUE por escola+aluno+data.
+- Estados de célula: P presente, AT atraso, F falta, J justificada,
+  PM presente manual, D dispensado (fora do denominador da percentagem).
+- admin/academic/presencas-view.php: mapa mensal por turma com navegação
+  de mês, células clicáveis para correcção (modal com motivo auditado),
+  totais por aluno (P/AT/F/J e % de presença), legenda, impressão com CSS
+  próprio e exportação CSV (BOM UTF-8, separador ;).
+- Dias futuros ficam em branco; fins-de-semana fora do mapa (v1).
+- Permissões: ver/editar para Director, Secretaria Geral, Secretário e
+  Professor; menu "Presenças" no bloco académico a seguir às Pautas.
+- AJAX sige_presencas_grid e sige_presencas_marcar com nonce, whitelist
+  de estados, bloqueio de dias futuros e registo em auditoria.
+- tools/smoke-presencas.php: 21 verificações funcionais do núcleo puro
+  (corte inclusivo, primeira entrada decide, excepções vencem, dias
+  lectivos com bissexto, totais com dispensa fora do denominador).
+
+FINANCEIRO - PAGAMENTOS M-PESA (NOVO, OFF POR DEFEITO)
+- Canal completo de pagamentos móveis em includes/payments/:
+  mpesa-config.php (options por escola: ambiente off|sandbox|producao,
+  api_key, public_key, provider_code, webhook_token auto-gerado),
+  mpesa-client.php (bearer RSA PKCS1 sobre a public key da Vodacom,
+  cobrança push c2bPayment/singleStage, consulta de estado),
+  mpesa-webhook.php (rota REST sige/v1/mpesa/callback com token validado
+  por hash_equals, idempotência por UNIQUE escola+referência, payload
+  integral guardado para auditoria),
+  mpesa-conciliacao.php (motor de matching).
+- REGRA DE OURO PROVADA POR GATE: a conciliação NUNCA escreve nas tabelas
+  financeiras; todo o registo passa por sige_fin_registar_pagamento, com
+  todas as guardas canónicas (caixa fechada, em_plano, parciais). O recibo
+  WhatsApp sai pelo caminho normal.
+- Política de matching conservadora: a referência do pagamento é o
+  numero_processo do aluno (o mesmo do crachá); o valor liquida o
+  lançamento em aberto mais antigo; tolerância de 0,50 MT; valores que
+  excedem o mais antigo vão a pendente_manual (o sistema nunca divide
+  dinheiro sozinho); caixa fechada deixa a transacção 'recebida' e o cron
+  diário retenta (até 50/dia).
+- admin/finance/mpesa-view.php: estado do canal, webhook com botão
+  copiar, formulário de credenciais (campos sensíveis vazios = manter),
+  tabela das últimas 50 transacções com badges de estado, conciliação
+  manual em modal (lista os lançamentos abertos do aluno) e rejeição com
+  motivo. Menu "Pagamentos M-Pesa" no bloco financeiro.
+- tools/smoke-mpesa.php: 21 verificações incluindo prova criptográfica do
+  bearer (decifra com chave privada gerada no momento), normalização de
+  public key em base64 nu, MSISDN, mapeador tolerante de payload e os 6
+  casos do algoritmo de escolha de lançamento.
+
+SCHEMA
+- SCHEMA_VERSION 20260611.1: tabelas sige_presencas_excecoes e
+  sige_mpesa_transacoes criadas via dbDelta na primeira visita admin após
+  a actualização. Integridade FK das presenças incluída na verificação de
+  órfãos. Zero alterações a tabelas existentes.
+
+QUALIDADE
+- tools/smoke-regression-pack.php: 29 -> 41 invariantes. Novos: presenças
+  nunca escrevem em sige_acessos; conciliação M-Pesa chama a função
+  canónica e NUNCA insere directamente em sige_fin_*; webhook usa
+  hash_equals; UNIQUEs de idempotência presentes no schema.
+- tools/smoke-release-gate.php: rotas 'presencas' e 'financeiro-mpesa'
+  cobertas; allowlist x mapa x ficheiros verificada automaticamente.

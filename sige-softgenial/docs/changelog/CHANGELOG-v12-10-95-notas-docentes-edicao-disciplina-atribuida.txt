@@ -1,0 +1,33 @@
+SIGE SoftGenial v12.10.95 - Notas Docentes: Edição por Disciplina Atribuída
+
+Base
+- Construído por cima da v12.10.94 - Merge Malisa: Transferidos PRO Académico-Financeiro.
+
+Objectivo
+- Corrigir o ponto das actualizações Malisa v12.9.92 sobre professores que não conseguiam editar notas das disciplinas atribuídas.
+- Manter os bloqueios legítimos e a aprovação pedagógica.
+
+Correções aplicadas
+- Professor com turma e disciplina atribuídas pode corrigir/actualizar notas dessa disciplina.
+- A permissão contextual passa a considerar:
+  - utilizador é professor scoped;
+  - tem permissão de lançar notas;
+  - turma está atribuída;
+  - disciplina está atribuída.
+- O professor não precisa de permissão global academico.editar_notas para corrigir a sua própria disciplina atribuída.
+- Campos com notas já lançadas deixam de ficar readonly indevidamente quando o professor tem essa disciplina atribuída.
+- Mantido bloqueio quando:
+  - turma não está atribuída ao professor;
+  - disciplina não está atribuída ao professor;
+  - Pauta Final está activa;
+  - ano lectivo está encerrado;
+  - o utilizador não tem permissão para lançar notas.
+- Restaurado bloco robusto de notas_lock_status/notas_lock_message para evitar aviso Undefined variable $notas_lock_message.
+- Mensagem de bloqueio passa a explicar melhor a razão.
+
+Garantias
+- Sem alterar fórmulas de notas.
+- Sem alterar aprovação pedagógica.
+- Sem alterar Pauta, DEC, Pauta Final, ACTA ou boletins.
+- Sem alterar pagamentos, mensalidades, multas ou regras financeiras.
+- Sem regressão ao fluxo de transferidos/desistentes/inactivos da v12.10.94.

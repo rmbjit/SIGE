@@ -1,0 +1,36 @@
+SIGE SoftGenial v12.11.9.145 - AUDITORIA DE DESIGN (financeiro-lancamentos)
+==========================================================================
+
+Lançamentos financeiros (1510 linhas). O penúltimo ecrã da auditoria.
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 6 pesos, 850 (3x). Distribuição já mais leve. Zero pesos
+  inline fora do <style> (verificado).
+- RAIOS: 9 valores. SOMBRAS: 8. CORES: 26 hex (poucas).
+- ESTRUTURA: <script> 910 vem ANTES do <style> 1175-1511 (CSS é a parte
+  final do ficheiro).
+
+CORRECÇÃO (bloco <style> 1175-1511; JS preservado)
+1. Hierarquia de 3 níveis: 6 pesos -> 600/700 (nem precisou de 500).
+2. Raios da escala: 9 -> 4. Sombras da escala: 8 -> 6.
+3. 42 cores migradas (CSS). O CSS tem inputs e botões genéricos, sem
+   classes de crédito/débito específicas (verificado). Sem cores no corpo
+   HTML nem no JS. ZERO hex restantes em todo o ficheiro.
+
+PROVA VISUAL
+- financeiro-lancamentos-antes-depois.png: livro de lançamentos.
+  Hierarquia: descrição e valor destacam-se, detalhe recua.
+
+GATES
+- smoke-regression-pack: 294 -> 297 invariantes.
+- financeiro-lancamentos adicionado aos ecrãs auditados.
+- Baseline de mágicos: 4173 -> 4131 (-42).
+- Baseline de tipografia: 5 -> 1 (-4). Falta APENAS 1 ecrã para zerar!
+- 12 gates verdes.
+
+MARCO: 35 ecrãs auditados. Desde o início: mágicos 9925 -> 4131; pesos
+não-canónicos 665 -> 1.
+
+PRÓXIMO
+- financeiro-config (1 peso) - o ÚLTIMO ecrã. Depois: baseline de pesos
+  não-canónicos a ZERO e auditoria de design COMPLETA.

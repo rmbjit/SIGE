@@ -1,0 +1,72 @@
+SIGE SoftGenial v12.10.115 - Página do Aluno Integrada PRO
+
+Base
+- Construído por cima da v12.10.114 - Jardim: Sono sem Minutos Incoerentes.
+
+Objectivo
+- Criar uma Página do Aluno independente e integrada no sistema.
+- Eliminar a dependência do modelo antigo de criar uma página manual no WordPress e colar código.
+- Dar ao aluno uma visão única, moderna e com aparência de web-app PRO dentro do próprio SIGE.
+
+Novo módulo
+- View integrada: &view=aluno_portal
+- Ficheiro: admin/academic/aluno-portal-view.php
+- Rota adicionada ao App Shell.
+- View adicionada à whitelist de segurança.
+- Permissão associada: alunos.ver.
+- Header genérico removido para manter hero próprio Produto PRO.
+
+Funcionalidades da Página do Aluno
+- Hero com foto, nome, processo, turma, ano lectivo, status e estado financeiro.
+- Menu interno:
+  - Resumo
+  - Académico ou Jardim, conforme a turma/classe
+  - Financeiro
+  - Documentos
+  - Contactos
+- Resumo com identificação e matrícula actual.
+- Área académica:
+  - para ensino regular: tabela de notas por disciplina/trimestre;
+  - para Jardim de Infância: atalhos para Diário, Saúde e Boletim do Jardim, além de últimos registos do Diário.
+- Área financeira:
+  - total lançado;
+  - total pago;
+  - dívida;
+  - vencido;
+  - pagamentos recentes;
+  - lançamentos recentes;
+  - ligação para Conta do Aluno.
+- Área documental:
+  - BI/documento;
+  - certidão;
+  - boletim de vacinas;
+  - atalhos para boletim/DEC.
+- Área de contactos:
+  - pai;
+  - mãe;
+  - contacto principal;
+  - WhatsApp;
+  - e-mail;
+  - saúde e emergência.
+- Link directo adicionado no menu de acções da Gestão de Alunos.
+
+Boas práticas aplicadas
+- Página nativa do SIGE/App Shell, sem shortcode e sem página WordPress manual.
+- Wide layout real.
+- Visual alinhado ao Painel Principal / Dashboard V2 MJS-grade.
+- Menu interno responsivo.
+- Conteúdo adaptado ao tipo de turma:
+  - Jardim/Pré-escolar;
+  - Ensino regular.
+- Sem alterar base de dados.
+- Sem alterar regras de negócio.
+- Sem alterar cálculos de notas, mensalidades, multas, Pauta, DEC, ACTA ou boletins.
+- Sem alterar Permission Engine, apenas reaproveita alunos.ver.
+
+Garantias
+- Sem alteração de handlers.
+- Sem alteração de tabelas.
+- Sem alteração de pagamentos.
+- Sem alteração de notas.
+- Sem alteração de fórmulas académicas.
+- Sem alteração em permissões existentes.

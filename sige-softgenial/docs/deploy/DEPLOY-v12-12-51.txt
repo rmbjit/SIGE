@@ -1,0 +1,54 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.51
+Data: 2026-06-23
+Titulo: Fase 4 incr 2 - Onclick complexos para data-sige-args (despachante mais rico)
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+Mudanca interna, sem alterar a forma de trabalhar. Continuamos a preparar o reforco
+de seguranca do navegador (CSP), que exige tirar os cliques escritos directamente nas
+etiquetas (onclick) e liga-los de outra forma, sem mudar o que cada botao faz.
+
+Nesta versao tratamos os botoes mais complexos, cujos cliques levam valores (um numero
+de aluno, um nome, um sim ou nao). Oito ecrans (entre eles contas de aluno, alocacao,
+disciplinas, matriz, planos, centros de custo e pagamentos) passaram a usar o novo
+metodo para 20 botoes. O funcionamento e exactamente o mesmo. Nao ha qualquer
+alteracao visivel.
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+
+================================================================
+VERIFICACAO
+================================================================
+Confirme que os botoes destes ecrans continuam a responder como antes:
+1. Contas de aluno: aprovisionar, repor senha e enviar credenciais a um aluno.
+2. Alocacao de alunos: alocar e remover um aluno de uma turma.
+3. Disciplinas: gerir criterios, apagar disciplina e fechar a confirmacao.
+4. Matriz: carregar a matriz de uma classe ao escolher a classe.
+5. Planos: abrir o formulario de novo plano e marcar ou desmarcar todos os lancamentos.
+6. Centros de custo: eliminar um centro de custo.
+7. Pagamentos: marcar ou desmarcar todas as dividas e fechar os avisos de sucesso.
+
+Em todos os casos, em especial com nomes que tenham apostrofo ou acentos, o
+comportamento deve ser exactamente o mesmo de antes.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera o
+esquema da base de dados, pelo que a reversao e directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Converter os cliques que ainda sao instrucoes embutidas (imprimir, mostrar ou
+  esconder, abrir recibo) em funcoes nomeadas, depois os blocos de script, e por fim
+  impor a politica de seguranca de conteudo (CSP).

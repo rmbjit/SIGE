@@ -1,0 +1,59 @@
+CHANGELOG - SIGE SoftGenial v12.12.61
+Fase 4 (CSP e front-end seguro) - incremento 2
+uploadDoc e fecho de modais das vistas admin em data-sige-act
+Data: 2026-06-23
+
+RESUMO
+Mais onclick seguros das vistas admin para o despachante data-sige-act,
+continuando a preparar o CSP enforce do shell admin. Apos a v12.12.60 (52 sem-arg
+mais 4 inteiro), esta vaga converte mais dois padroes inequivocamente seguros.
+
+CONVERSAO (14 onclick, 3 vistas)
+- 6 onclick uploadDoc com argumento string estatico passam a data-sige-act mais
+  data-sige-arg: uploadDoc('bi'), 'cert', 'vacina', 'doc_bi', 'doc_cert', 'doc_cv'.
+- 8 onclick de fecho de modais jQuery passam a data-sige-act mais data-sige-arg com
+  o novo wrapper global sigeFecharModalJq.
+Por vista:
+- alunos_lista: 3 uploadDoc
+- equipe-view: 3 uploadDoc
+- turmas-view: 8 fecho de modais (#modal-turma, #modal-docentes, #modal-horario,
+  #modal-alunos)
+
+NOVO WRAPPER
+- window.sigeFecharModalJq = function (sel) { if (window.jQuery && sel)
+  window.jQuery(sel).fadeOut(200); }; em assets/sige-ui.js. Fiel a
+  jQuery(sel).fadeOut(200), com guarda de jQuery, seguindo o padrao das funcoes
+  globais ja expostas para o despachante.
+
+COMPORTAMENTO
+- Identico: uploadDoc recebe a mesma cadeia; o fecho de modal faz o mesmo fadeOut.
+
+NOTAS
+- Nao ha onclick window.print() nas vistas admin fora de blocos script (zero).
+- O switchTab(event, ...) fica para incremento proprio, por usar event.target e
+  exigir refactor da assinatura.
+- O conversor mascara os blocos script, poupando os onclick gerados por JavaScript.
+
+VERIFICADORES DE JAVASCRIPT EMBEBIDO E DESPACHANTE
+- As vistas admin sao varridas e mantem-se verdes; o sige-ui.js passa node -c.
+- smoke-inline-frontend confirma o contrato do despachante; o wrapper novo nao o
+  quebra.
+
+CATRACA
+- check-inline-frontend: maximo de onclick de 93 para 79 (sem folga).
+- style mantem-se em 2051; blocos script mantem-se em 7.
+
+NOTA SOBRE O ENFORCE DO SHELL ADMIN
+- Esta vaga NAO acrescenta cabecalho CSP. O enforce do shell admin so vem depois de
+  tratados os onclick restantes (79) e os estilos inline (2051).
+
+INVARIANTES
+- Superficie de accao 199 (enforce 33), vistas 60, opcoes 132, dependencias
+  externas 9. Sem alteracao de esquema. Calculo financeiro byte-identico.
+- Corredor 99. Release gate verde a partir de pasta limpa.
+- Rediagnostico adversarial: Zero P0 e Zero P1.
+
+VERSAO
+- Cinco fontes sincronizadas em 12.12.61 (cabecalho do plugin, SIGE_VERSION,
+  BUILD.json, SIGE_GOV_VERSION, base da superficie de inventario).
+- Zero travessoes em todo o codigo, documentacao e changelog.

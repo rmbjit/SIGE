@@ -1,0 +1,26 @@
+# Changelog - v12.17.1 Alunos Mobile Header Hotfix
+
+## Alteracao principal
+
+- Corrigida regressao visual localizada no cabecalho mobile do modulo Alunos.
+- O chip do ano lectivo passa a ficar escondido no header mobile de Alunos.
+- A foto de perfil passa a ter coluna fixa dedicada, sem disputar espaco com o ano lectivo.
+- O avatar recebe dimensao, borda, box sizing e overflow controlados dentro do escopo mobile.
+
+## Escopo preservado
+
+- Sem alteracao em financeiro.
+- Sem alteracao em academico.
+- Sem alteracao em permissoes reais.
+- Sem alteracao em schema.
+- Sem alteracao em dados historicos.
+- Sem alteracao em Portaria.
+- Sem alteracao em admin-shell.php.
+
+## Validacao requerida em staging
+
+- Abrir Alunos em mobile.
+- Confirmar avatar inteiro e circular.
+- Confirmar ausencia do chip do ano lectivo no header mobile de Alunos.
+- Confirmar que menu, logo e titulo SoftGenial continuam alinhados.
+- Confirmar que desktop e tablet nao foram prejudicados.

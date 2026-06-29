@@ -1,0 +1,9 @@
+SIGE SoftGenial v12.15.4 - Standalone UI/CSP Recovery
+
+- Corrige Portaria Digital / Leitor de QR renderizado como HTML cru sob CSP.
+- Adiciona nonce helper para <style>.
+- Cobre paginas autonomas em template_redirect: sige_portaria_camera, sige_print, sige_dev_print e sige_desp_print.
+- Rearma buffer CSP quando renderers antigos limpam buffers.
+- Exclui formatos binarios/Excel do buffer HTML.
+- Protege window.open + document.write em popups de impressao.
+- Adiciona smoke/gate de regressao standalone UI/CSP.

@@ -1,0 +1,27 @@
+DEPLOY - SIGE SoftGenial v12.12.18 (Ledger incr 3: lancamentos)
+===============================================================
+
+O QUE MUDA
+- A criacao e a alteracao de valor de cobrancas (lancamentos) passam a ser
+  registadas no livro-razao imutavel, por cobranca.
+- A gravacao das cobrancas e diferida para o fim do pedido (escrita em lote), para
+  nao atrasar a geracao mensal de propinas.
+
+PASSOS
+1. Backup da base de dados e da pasta do plugin (rotina normal).
+2. Substituir a pasta do plugin pelo conteudo deste ZIP.
+3. Abrir o wp-admin uma vez como administrador (sem nova tabela nesta versao).
+4. Gerar cobrancas de um mes (gerador) ou criar uma cobranca avulsa. Abrir
+   Definicoes > Integridade do Ledger: a escola mostra os novos eventos e
+   "Cadeia integra", com a ancora "Confirmada".
+
+NOTAS
+- Nenhuma regra de calculo muda; a geracao e a criacao de cobrancas funcionam como
+  antes. O registo no ledger e diferido e best-effort: nunca quebra a operacao.
+- Os eventos de cobranca sao gravados no fim do pedido (no shutdown). Pagamentos e
+  ajustes continuam gravados de imediato.
+- A ancora continua em wp-content/uploads/sige-private/ledger; inclua uploads nos
+  backups.
+
+REVERSAO
+- Repor o ZIP anterior. Sem alteracao de esquema nesta versao.

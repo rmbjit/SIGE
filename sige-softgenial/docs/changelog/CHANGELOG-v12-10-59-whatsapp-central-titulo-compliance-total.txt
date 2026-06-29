@@ -1,0 +1,13 @@
+SIGE SoftGenial v12.10.59 - Central WhatsApp: Título em Compliance Total
+
+Objectivo
+- Corrigir especificamente o título principal do módulo &view=whatsapp_central para ficar no mesmo padrão visual e tipográfico do Painel Principal.
+
+Ajustes aplicados
+- Reforçado o estilo do título principal com a mesma hierarquia do dashboard: tamanho, peso, cor, line-height e letter-spacing.
+- Reforçado também o subtítulo para manter a mesma leitura visual do Painel Principal.
+- Mantido o header único já validado na v12.10.58.
+
+Garantias
+- Sem alteração em lógica do WhatsApp, fila, cron, limites, templates, guardrails ou regras anti-bloqueio.
+- Correcção restrita ao refinamento visual do hero.

@@ -1,0 +1,24 @@
+SIGE SoftGenial v12.11.9.11 - Transportes Harmonia Visual PRO (TEST)
+
+Escopo
+- Melhorar visualmente o módulo de Transportes, alinhando-o ao padrão Produto PRO do Painel Principal.
+
+Alterações realizadas
+- Ficheiro alterado: admin/logistics/transporte-view.php.
+- Adicionado hero moderno com linguagem de produto e ilustração CSS de transporte escolar.
+- Adicionados cartões KPI: rotas activas, alunos transportados, ocupação média e potencial mensal.
+- Modernizado o formulário de criação/edição de rotas com cards, ícones, inputs arredondados e acções premium.
+- Substituída a tabela simples por cartões de rotas com preço, motorista, viatura, lotação visual, estado e acções.
+- Mantida a edição segura por id + escola_id, nonce e permissões granulares.
+- Mantida a protecção visual para utilizadores com permissão apenas de consulta.
+
+Não alterado
+- Não foram alteradas fórmulas financeiras.
+- Não foram alteradas regras de cobrança, mensalidades, multas, pagamentos ou recibos.
+- Não foram alteradas notas, pautas, DEC, RH, WhatsApp ou base de dados.
+
+Testes
+- php -l no ficheiro principal do plugin.
+- php -l no módulo de Transportes.
+- Smoke test estático de Transportes v12.11.9.11.
+- Smoke test RH v12.11.9.9 para preservar a base validada.

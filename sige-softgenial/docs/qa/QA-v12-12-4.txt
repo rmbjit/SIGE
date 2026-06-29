@@ -1,0 +1,14 @@
+SIGE SoftGenial v12.12.4 - Security Kernel Foundation
+
+Resultado QA:
+- Gates oficiais: 33/33 verdes por execução segmentada do runner oficial tools/run-gates.php, devido a limite de recursos do ambiente em execução única longa.
+- Manifesto de superfície: 174 superfícies declaradas e alinhadas com extractor primário + extractor independente.
+- Security Kernel rules: 174 regras; enforce=4; observe=170.
+- Security Kernel smoke: 46 verificações OK.
+- Testes negativos: OK; gates falham quando regras obrigatórias são removidas ou enfraquecidas.
+- PHP lint: 341 ficheiros PHP, 0 falhas.
+- Schema: sem alteração.
+- P0/P1: 0 aberto.
+
+Nota de execução:
+A execução única completa de tools/run-gates.php pode ser abortada no sandbox por limite de recursos; a evidência formal usa execução segmentada do mesmo runner oficial, cobrindo integralmente os 33 gates.

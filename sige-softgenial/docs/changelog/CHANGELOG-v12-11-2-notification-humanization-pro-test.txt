@@ -1,0 +1,25 @@
+SIGE SoftGenial v12.11.2 - Notification Humanization PRO (TEST)
+
+Objectivo
+- Reforçar a humanização das notificações WhatsApp/e-mail.
+- Remover sinais visíveis de envio automático/SIGE/bot nas mensagens externas.
+- Aproximar o tom de comunicação de uma secretaria escolar real em Moçambique.
+- Manter o modelo seguro por fila, sem envio agressivo nem alteração das regras de negócio.
+
+Alterações principais
+- Novo ficheiro includes/notification-humanization-pro.php.
+- Sanitizador transversal antes da fila WhatsApp.
+- Saudações formais e contextuais: Bom dia / Boa tarde / Boa noite.
+- Tratamento B2C: Sr./Sra. + primeiro nome quando possível.
+- Remoção de expressões como SIGE, SoftGenial, automático, bot, não responda e rodapés mecânicos.
+- Templates WhatsApp financeiros reescritos em tom mais humano e moçambicano.
+- E-mails financeiros e de recibo com rodapés de secretaria, não de sistema automático.
+- Correção de lacuna nos alertas: variáveis de valor, vencimento, mês e aluno agora são lidas correctamente no renderer v2.
+- Limpeza de mensagens pendentes ainda não enviadas na fila WhatsApp.
+- Limpeza controlada de templates de e-mail/alertas já gravados nas opções da escola.
+- Mantém a política de fila, espaçamento e guardrails de WhatsApp já implementados.
+
+Sem alterações
+- Não altera mensalidades, multas, pagamentos, recibos, notas, pautas, DEC, boletins, currículos ou base de dados de negócio.
+- Não reactiva webhook.
+- Não altera permissões nem fórmulas.

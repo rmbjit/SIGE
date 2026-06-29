@@ -1,0 +1,33 @@
+SIGE SoftGenial v12.10.107 - Jardim: Transferido Reactivado Visível
+
+Base
+- Construído por cima da v12.10.106 - Jardim: Critérios e Alunos Reactivados.
+
+Problema corrigido
+- Um aluno que tinha sido transferido e depois reactivado na ficha do aluno continuava sem aparecer no Jardim de Infância.
+- A causa era a matrícula do ano continuar com status_matricula transferido/transferido_saida.
+- A v12.10.106 corrigia alguns estados inactivos, mas não incluía os estados transferido/transferido_saida na reparação segura.
+
+Correção aplicada
+- A reparação de matrículas reactivadas passa a incluir:
+  - transferido
+  - transferida
+  - transferido_saida
+  - transferido saida
+  - transferido saída
+- A reparação deixa de usar transient de 10 minutos, para que a correcção seja imediata depois da reactivação.
+- A operação é idempotente: pode correr várias vezes sem duplicar nem alterar dados desnecessários.
+
+Regra de segurança mantida
+- Só reactiva a matrícula se o status principal do aluno já estiver activo/ativo/activa/ativa.
+- Não reactiva aluno que continua transferido, desistente ou inactivo.
+- Só actua quando não existe outra matrícula activa no mesmo ano.
+- Apenas a matrícula mais recente do ano é reactivada.
+
+Garantias
+- Sem alterar cálculos MB/B/S/NS.
+- Sem alterar critérios, respostas ou avaliações já gravadas.
+- Sem alterar design validado.
+- Sem alterar notas, Pauta, DEC, ACTA ou boletins principais.
+- Sem alterar pagamentos, mensalidades, multas ou base de dados financeira.
+- Sem alteração em Permission Engine, perfis ou permissões.

@@ -1,0 +1,36 @@
+SIGE SoftGenial v12.11.9.133 - AUDITORIA DE DESIGN (jardim_presencas)
+====================================================================
+
+Registo de presenças do jardim de infância (578 linhas).
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 6 pesos, 850 dominante (10x). Zero pesos inline fora do
+  <style> (verificado, lição da abertura).
+- RAIOS: 8 valores. SOMBRAS: 14. CORES: 58 hex.
+
+CORRECÇÃO (bloco <style> 75-498; sem JS/template)
+1. Hierarquia de 3 níveis: 6 pesos -> 500/600/700.
+2. Raios da escala: 8 -> 4. Sombras da escala: 14 -> 5.
+3. 77 cores migradas (CSS + mapa de presença). Inclui o MAPA PHP de
+   estado de presença ($status_cfg: presente verde, atraso laranja, falta
+   vermelho, falta_justificada azul) migrado para tokens semânticos
+   preservando o significado. Classes .sige-jpres-alert.ok/.erro também.
+   ZERO hex restantes.
+
+PROVA VISUAL
+- jardim-presencas-antes-depois.png: marcação de presença. Estado
+  preservado (presente verde, atraso laranja, falta vermelho, justificada
+  azul); nome domina, estado ênfase.
+
+GATES
+- smoke-regression-pack: 243 -> 247 invariantes.
+- jardim_presencas adicionado aos ecrãs auditados.
+- Baseline de mágicos: 5784 -> 5707 (-77).
+- Baseline de tipografia: 156 -> 141 (-15).
+- 12 gates verdes.
+
+MARCO: 23 ecrãs auditados. Desde o início: mágicos 9925 -> 5707; pesos
+não-canónicos 665 -> 141.
+
+PRÓXIMO
+- pauta-final (15 pesos), whatsapp_central (14), notas (14)...

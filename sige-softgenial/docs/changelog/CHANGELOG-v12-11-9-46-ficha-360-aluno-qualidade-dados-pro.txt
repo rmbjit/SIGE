@@ -1,0 +1,84 @@
+SIGE SoftGenial v12.11.9.46 - Ficha 360º do Aluno e Qualidade dos Dados PRO
+
+Objectivo
+- Iniciar a evolução do módulo Alunos para um verdadeiro cadastro mestre do estudante.
+- Adicionar Ficha 360º do Aluno com Índice de Qualidade dos Dados.
+- Manter padrão Produto PRO, segurança forte e zero regressão nas regras existentes.
+
+Ficheiros alterados
+- admin/academic/alunos_lista.php
+- includes/aluno-fetch-ajax.php
+- sige-softgenial.php
+- BUILD.json
+
+Funcionalidades implementadas
+1. Ficha 360º do Aluno
+- Novo botão no menu de acções do card do aluno.
+- Novo badge de qualidade dos dados no card do aluno.
+- Novo modal visual no padrão Produto PRO.
+- Visão integrada por aluno:
+  - identificação;
+  - matrícula e percurso;
+  - encarregados e comunicação;
+  - documentos;
+  - saúde e emergência;
+  - finanças;
+  - académico/notas;
+  - portaria;
+  - comunicações WhatsApp.
+
+2. Índice de Qualidade dos Dados
+- Cálculo operacional apenas em memória, sem criar ou alterar tabelas.
+- Pontuação percentual por ficha.
+- Classificação visual:
+  - Completa;
+  - Com pendências;
+  - Crítica.
+- Pendências priorizadas por impacto: alto, médio e baixo.
+- Critérios considerados:
+  - nome completo;
+  - número de processo;
+  - data de nascimento válida;
+  - género;
+  - turma no ano lectivo activo;
+  - situação do aluno;
+  - dados do pai;
+  - telefone válido do pai;
+  - dados da mãe;
+  - telefone válido da mãe;
+  - WhatsApp/contacto principal;
+  - documento de identificação;
+  - documento digital essencial;
+  - foto;
+  - morada/nacionalidade;
+  - contacto de emergência.
+
+3. Segurança e integridade
+- Novo endpoint AJAX: sige_get_aluno_360.
+- Endpoint protegido por nonce global do módulo Alunos.
+- Endpoint protegido por permissões existentes do módulo Alunos.
+- Todas as consultas respeitam escola_id.
+- Consultas auxiliares verificam existência das tabelas antes de ler.
+- Ficha 360º é apenas leitura; não grava dados.
+- Acesso à ficha é registado em auditoria quando sige_audit_log está disponível.
+
+Preservado sem alteração
+- Importação de alunos em duas etapas.
+- Histórico de lotes.
+- Anulação segura de lote.
+- Modelo Excel controlado.
+- Pautas, boletins e DEC.
+- Fórmulas académicas.
+- Pagamentos, mensalidades, multas e recibos.
+- Estrutura principal da base de dados.
+- Permissões e nonces existentes.
+
+Testes executados
+- php -l em includes/aluno-fetch-ajax.php.
+- php -l em admin/academic/alunos_lista.php.
+- Smoke test estático v12.11.9.46.
+- Verificação de presença do endpoint sige_get_aluno_360.
+- Verificação de presença da função de Índice de Qualidade dos Dados.
+- Verificação de presença do modal Ficha 360º.
+- Verificação de presença do botão/badge visual no card do aluno.
+- Verificação de preservação dos endpoints de importação e anulação de lote.

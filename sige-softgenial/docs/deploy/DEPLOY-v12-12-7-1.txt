@@ -1,0 +1,46 @@
+DEPLOY - SIGE SoftGenial v12.12.7.1 (Mapa de Cobranca em PDF)
+============================================================
+
+RESUMO
+Adiciona o botao Imprimir lista (PDF) na Central de Cobrancas. Tarefa
+extraordinaria sobre a baseline v12.12.7 (congelada). Sem migracao de base
+de dados. Sem alteracao de regras financeiras. Leitura pura.
+
+FICHEIROS NOVOS
+- includes/finance-devedores-pdf.php (handler + dataset + documento)
+- tools/smoke-devedores-pdf-v12-12-7-1.php (gate dedicado)
+- docs/governance/*-v12.12.7.1.md e docs/security/*-v12.12.7.1.(md|json)
+- docs/changelog/CHANGELOG-v12-12-7-1.txt, este ficheiro de deploy
+
+FICHEIROS ALTERADOS
+- sige-softgenial.php (Version, SIGE_VERSION, require do novo ficheiro)
+- admin/finance/financeiro-devedores-view.php (botao Imprimir lista PDF)
+- includes/security-kernel-rules.php (regra query_handler:sige_dev_print)
+- tools/governance-lib.php (SIGE_GOV_VERSION = 12.12.7.1)
+- tools/inventory-surface.php (base_version e purpose do manifesto)
+- tools/run-gates.php (novo gate ligado ao corredor)
+- BUILD.json, CHANGELOG.md
+
+PASSOS DE DEPLOY
+1. Fazer backup do plugin actual (pasta wp-content/plugins/sige-softgenial).
+2. Substituir a pasta do plugin pelo conteudo deste pacote.
+3. Confirmar no WordPress que a versao do plugin mostra 12.12.7.1.
+4. Limpar cache de objecto/opcode se existir (ex.: OPcache).
+5. Nenhuma activacao especial: nao ha migracao de base de dados.
+
+DICAS DE TESTE (STAGING, POR PERFIL E ESCOLA)
+- Abrir ?page=sige-app&view=financeiro-devedores e clicar Imprimir lista (PDF).
+  O documento deve abrir em nova aba com a lista da escola corrente.
+- Confirmar que o total do documento e igual a Divida total acumulada do ecra.
+- Confirmar que Alunos com divida no documento e igual ao do ecra.
+- No documento, usar Imprimir / Guardar PDF do browser e validar o PDF.
+- Testar com os perfis: direccao, tesouraria, secretaria e financeiro (acesso
+  permitido) e com um perfil sem permissao de cobranca (deve receber 403).
+- Multi-escola: entrar como utilizador de outra escola e confirmar que o
+  documento mostra apenas devedores dessa escola.
+- Adulterar o link (remover ou trocar o _wpnonce) e confirmar 403.
+- Escola nao resolvida: confirmar 403 com auditoria devedores_lista_tenant_invalido.
+
+ROLLBACK
+- Restaurar a pasta do plugin a partir do backup do passo 1. Sem efeitos em
+  base de dados porque a versao e leitura pura.

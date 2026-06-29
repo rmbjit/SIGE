@@ -1,0 +1,26 @@
+SIGE SoftGenial v12.10.6 - Produto PRO: Painel Financeiro MJS-grade
+
+Objectivo
+- Aplicar o padrão visual Produto PRO aprovado ao Painel Financeiro / Resumo Financeiro.
+- Manter o mesmo ADN visual do Dashboard V2 e do Centro de Configuração Wide.
+- Não alterar fórmulas, regras financeiras, mensalidades, multas, pagamentos, cobranças, estornos ou base de dados.
+
+Alterações visuais
+- Novo hero financeiro com linguagem de produto e acções principais.
+- KPIs financeiros redesenhados com cartões premium, ícones consistentes e melhor hierarquia visual.
+- Área de receitas/despesas reorganizada com gráfico principal e mini indicadores.
+- Carteira em aberto com leitura visual da taxa de cobrança, pendente, atraso e plano negociado.
+- Acessos rápidos financeiros no padrão de App.
+- Recebimentos por serviço e por aluno com filtros preservados e layout mais limpo.
+- Tabelas de top devedores e últimas transacções redesenhadas.
+- CSS financeiro centralizado em assets/style.css com prefixo sg-finpro.
+
+Perímetro protegido
+- Sem alterações no motor de KPIs financeiros.
+- Sem alterações em fórmulas de saldo, multa, desconto, transporte, mensalidades, pagamentos ou estornos.
+- Sem alterações nas regras académicas, notas, pautas, boletins, DEC ou actas.
+- Sem migrações de base de dados.
+
+Validação
+- php -l executado em todos os ficheiros PHP do plugin.
+- ZIP criado sobre a versão validada v12.10.5.

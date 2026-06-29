@@ -1,0 +1,37 @@
+SIGE SoftGenial v12.11.9.127 - AUDITORIA DE DESIGN (acta)
+========================================================
+
+Acta de avaliação/conselho de turma (1448 linhas). Documento oficial
+que se imprime.
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 8 pesos, 850 (12x), 900 (9x).
+- RAIOS: 9 valores. SOMBRAS: 11. CORES: 111 hex.
+
+CORRECÇÃO (bloco <style> 312-842, inclui @media print; scripts preservados)
+1. Hierarquia de 3 níveis: 8 pesos -> 500/600/700.
+2. Raios da escala: 9 -> 4. Sombras da escala: 11 -> 5.
+3. 151 cores migradas (CSS + zona HTML inline). Inclui cores de ESTADO
+   DE ERRO/ALERTA (vermelho quando a acta não está OK / pendente) e
+   estados de censo migradas para tokens semânticos preservando o
+   significado. A regra @media print (impressão da acta) PRESERVADA.
+   ZERO hex restantes.
+
+PROVA VISUAL
+- acta-antes-depois.png: estatísticas da acta. Codificação de estado
+  preservada (aprovados verde, recuperação laranja, pendente vermelho);
+  título e valores destacam-se, contexto recua.
+
+GATES
+- smoke-regression-pack: 219 -> 223 invariantes. Os invariantes de UX da
+  acta (aprovação com confirmação, botão Carregar) continuam verdes.
+- acta adicionado aos ecrãs auditados.
+- Baseline de mágicos: 6838 -> 6687 (-151).
+- Baseline de tipografia: 256 -> 238 (-18).
+- 12 gates verdes.
+
+MARCO: 17 ecrãs auditados. Desde o início: mágicos 9925 -> 6687; pesos
+não-canónicos 665 -> 238.
+
+PRÓXIMO
+- pautas (18 pesos), estatisticas-demograficas (17), abertura (16)...

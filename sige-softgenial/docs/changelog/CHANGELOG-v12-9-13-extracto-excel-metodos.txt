@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.9.13
+
+Base: v12.9.12 validada pelo cliente.
+
+Alterações cirúrgicas aplicadas:
+1) Extractos / Caixa - Exportação Excel
+   - Substituída exportação simples por exportação profissional com ExcelJS.
+   - Cabeçalho com nome dinâmico da escola, contacto, email e endereço.
+   - Título institucional, data de referência, data/hora de exportação.
+   - Cabeçalhos estilizados, colunas dimensionadas, filtros, congelação do cabeçalho e total líquido formatado.
+   - Fallback XLSX mantido caso ExcelJS não carregue.
+
+2) Métodos de pagamento
+   - Adicionado E-Mola Comerciante.
+   - Padronizado Paga Fácil.
+   - Aplicado em pagamentos individuais, pagamentos por família, planos/prestações, despesas, extractos, documentos/recibos e labels canónicas do financeiro.
+
+Não foram alteradas fórmulas financeiras, regras académicas, geração de notas, mensalidades, recibos, auditorias ou lógica de alocação de pagamentos.

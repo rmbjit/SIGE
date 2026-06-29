@@ -1,0 +1,17 @@
+SIGE SoftGenial 12.9.9.7 - V7.2.6 Fix Professor Edição de Notas
+
+Base usada:
+- sige-softgenial-12-9-9-6-v7-2-5-escopo-professor.zip
+
+Correção profunda:
+- Bloqueio de notas passa a usar estado canónico com motivo explícito.
+- Professor com escopo docente pode editar notas se a turma/disciplina lhe pertencem e se a Pauta Final/Ano Lectivo não estão realmente bloqueados.
+- Revalidação no POST usa turma/ano/disciplina enviados pelo formulário.
+- Protege contra falso bloqueio por falha de diagnóstico.
+- Admin, Director, Pedagógico e Secretaria mantêm visão ampla.
+
+Sem alterações:
+- Fórmulas de notas.
+- Pauta Final real.
+- Encerramento real do Ano Lectivo.
+- Regras financeiras, WhatsApp, documentos e UI geral.

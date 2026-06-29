@@ -1,0 +1,16 @@
+SIGE SoftGenial v12.9.30 - Central de Cobranças: UI Refinada
+
+Base: v12.9.29.1 hotfix validada.
+
+Alterações:
+- Redesenho visual da Central de Cobranças com header compacto e moderno.
+- KPIs reorganizados com melhor hierarquia visual.
+- Filtros e selecção inteligente mais limpos e legíveis.
+- Tabela refinada com cabeçalho sticky, leitura mais clara e linhas seleccionadas mais visíveis.
+- Botões de Factura e Extracto passam a ter texto visível.
+
+Garantias:
+- Não altera fórmulas financeiras.
+- Não altera fórmulas académicas.
+- Não altera lançamentos, pagamentos, saldos, estornos ou WhatsApp engine.
+- Alteração focada em UI/UX da view financeiro-devedores.

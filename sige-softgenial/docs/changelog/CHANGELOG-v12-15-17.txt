@@ -1,0 +1,22 @@
+v12.15.17 - P2: caminho rapido de presencas para a secretaria
+
+- Acrescenta um caminho rapido ao ecra de presencas da secretaria, que antes obrigava a abrir um modal por cada registo.
+- Popover inline ancorado a celula em vez de modal de ecra inteiro.
+- Seleccao por rato e teclado: Shift para intervalo, Ctrl/Cmd para alternar, clique no nome para a linha inteira, clique no cabecalho do dia para a coluna inteira.
+- Barra de accao em lote quando ha 2 ou mais celulas seleccionadas.
+- Navegacao por teclado com roving tabindex: setas movem o foco, Enter ou Espaco abrem o popover, Esc fecha ou limpa a seleccao.
+- Fica atras da flag `sige_presencas_fast_path_v121517_enabled`, DESLIGADA por defeito.
+- Com a flag desligada, a secretaria ve o mesmo modal classico de sempre, agora sem dialogos nativos (os 3 alert() passaram a sigeUi.toast).
+- Reversivel: definir a option a '1' liga o caminho rapido; '0' repoe o modal classico, sem reinstalar.
+- Backend: nucleo puro de validacao partilhado pela marcacao de celula e pela de lote (`sige_presencas_validar_item`).
+- Escrita factorizada como fonte unica (`sige_presencas_aplicar_excecao`).
+- Novo handler `wp_ajax_sige_presencas_marcar_lote` com guarda completa: permissao, nonce `sige_presencas`, `escola_id` em toda a query, validacao de todos os itens antes de aplicar qualquer um, tecto defensivo de 1000 itens, log de auditoria `presenca_corrigida_lote`.
+- Totais por aluno SEMPRE recalculados no servidor a partir de `sige_acessos` e `sige_presencas_excecoes`; o JS nunca recalcula totais.
+- O caminho de lote usa a mesma funcao pura de derivacao que o caminho de celula; o estado nunca diverge entre os dois.
+- Frontend sem dialogos nativos (sigeUi.toast) e sem onclick (delegacao de eventos apenas).
+- CSS novo so com tokens (var(--...)), zero hex ou raio literal novo.
+- Dois gates novos no corredor: `smoke-presencas-fastpath-v12-15-17` e `check-presencas-fastpath-v12-15-17`.
+- Manifesto de superficie de accao passa a declarar `wp_ajax:sige_presencas_marcar_lote`.
+- Acrescenta a guarda de linha de comandos a `tools/lib-portal-chrome.php` (residuo da Fase 2 que mantinha o release gate vermelho).
+- Nao altera PHP financeiro, formulas, Finance Score, saldos nem queries financeiras.
+- As regras academicas de derivacao de estado de presenca sao as canonicas ja existentes, intactas.

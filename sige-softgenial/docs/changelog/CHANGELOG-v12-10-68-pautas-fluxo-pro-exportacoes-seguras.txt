@@ -1,0 +1,30 @@
+SIGE SoftGenial v12.10.68 - Pautas: Fluxo PRO e Exportações Seguras
+
+Objectivo
+- Analisar e melhorar o fluxo completo do módulo &view=pautas, mantendo o padrão Produto PRO e corrigindo falhas reais que podiam prejudicar a geração/exportação da pauta.
+- Garantir coerência visual com o Painel Principal / Dashboard V2 MJS-grade e consistência operacional entre ecrã, PDF e Excel.
+
+Correcções funcionais e de fluxo
+- Corrigida a query de disciplinas na página de Pautas: havia uma duplicação textual de SELECT dentro do IN(), sem UNION, que podia causar erro SQL e impedir a geração da pauta.
+- Corrigido o estado “Sem disciplinas configuradas”, que antes nunca aparecia porque dependia de uma variável ($gerar) que já era falsa quando não havia disciplinas.
+- Adicionado estado inicial PRO quando nenhuma turma está seleccionada, orientando o utilizador a escolher ano, turma e período.
+- Trimestre recebido por URL passa a ser normalizado para 0-3, evitando estados inválidos via URL manual.
+- O botão Gerar Pauta passa a dar feedback visual (“A gerar pauta...”) e evita duplo clique acidental durante a submissão.
+- Exportação PDF/Excel passa a usar URLSearchParams no JavaScript, reduzindo risco de URL mal formada.
+- Exportações PDF e Excel passam a respeitar o mesmo escopo docente da página: professor não exporta pauta de turma não atribuída.
+- Exportação Excel passa a filtrar notas tal como o ecrã/PDF: apenas notas aprovadas ou sem status explícito.
+- Exportações PDF/Excel passam a aplicar categoria por matriz curricular quando disponível, mantendo coerência com a pauta no ecrã.
+- Ordem de Ciências Sociais/Ciências Naturais no Excel foi alinhada à ordem usada no ecrã e no PDF.
+
+Melhorias visuais Produto PRO
+- View “pautas” adicionada à lista oficial de páginas com header próprio, reforçando a regra de header único.
+- Painel lateral do hero harmonizado com o padrão dos módulos aprovados.
+- Filtros reorganizados em grid responsivo, com botões e campos consistentes.
+- Estado vazio, alertas, botões e tabela reforçados para aparência de App profissional.
+- Primeiras colunas da pauta no ecrã ficam fixas durante scroll horizontal, melhorando a leitura em pautas largas.
+
+Garantias
+- Sem alteração nas fórmulas de cálculo de MT, MFD, MG, negativas ou situação final.
+- Sem alteração nas regras de progressão, transição, reprovação ou fim de ciclo.
+- Sem alteração em boletins, DEC, permissões globais, base de dados, pagamentos, multas ou mensalidades.
+- Alterações focadas em robustez, consistência de fluxo, segurança de exportação e visual Produto PRO.

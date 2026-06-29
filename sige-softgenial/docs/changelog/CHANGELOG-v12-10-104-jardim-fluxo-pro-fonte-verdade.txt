@@ -1,0 +1,59 @@
+SIGE SoftGenial v12.10.104 - Jardim de Infância: Fluxo PRO e Fonte de Verdade
+
+Base
+- Construído por cima da v12.10.103 - Jardim Presenças: Compliance Visual Integral.
+
+Objectivo
+- Consolidar o fluxo funcional do Jardim de Infância antes de novas alterações estruturais.
+- Garantir uma fonte única de verdade para turmas, alunos, matrículas e escopo de utilizador.
+- Reforçar handlers para não confiarem apenas no formulário.
+- Manter design, cálculos pedagógicos e base de dados intactos.
+
+Helpers centrais adicionados
+- sige_jardim_get_preescolar_turmas_v104()
+- sige_jardim_turma_valida_v104()
+- sige_jardim_get_alunos_activos_turma_v104()
+- sige_jardim_get_aluno_ids_activos_turma_v104()
+- sige_jardim_aluno_activo_na_turma_v104()
+- sige_jardim_get_disciplinas_turma_v104()
+- helpers SQL/compatibilidade para coluna is_preescolar, status de turma, aluno activo e matrícula activa.
+
+Fluxos alinhados
+- &view=jardim_diario
+- &view=jardim_saude
+- &view=jardim_presencas
+- &view=jardim_relatorio
+- &view=jardim_boletim
+
+Melhorias funcionais
+- Todas as views passam a buscar turmas pré-escolares através do mesmo helper.
+- Todas as views passam a buscar alunos activos através de aluno activo + matrícula activa.
+- O fallback perigoso do relatório, que podia listar alunos sem respeitar status, foi removido.
+- Diário, Saúde, Presenças, Relatório e Boletim passam a respeitar a mesma fonte de verdade.
+- Disciplinas do Diário/Boletim passam a preferir turma/matriz curricular, mantendo fallback para disciplinas marcadas como Pré-Escolar.
+- Relatório passa a filtrar registos do diário por escola, turma, aluno, ano lectivo e período.
+- Presenças no relatório passam a filtrar por escola, turma, aluno, ano lectivo e período.
+- Respostas e avaliações do Boletim/Diário passam a respeitar escola/turma quando aplicável.
+
+Handlers reforçados
+- Diário: valida turma pré-escolar, escopo do utilizador e alunos activos antes de gravar.
+- Saúde: valida turma pré-escolar, escopo do utilizador e alunos activos antes de gravar.
+- Presenças: valida turma pré-escolar, escopo do utilizador e alunos activos antes de gravar.
+- Critérios/Avaliação: valida turma, alunos activos e disciplinas reais da turma antes de gravar.
+- Envio individual do relatório: valida turma e aluno activo na turma.
+- Envio mensal do relatório: usa alunos activos da turma via helper central.
+
+Permission Engine
+- Handlers passam a verificar permissões específicas:
+  - jardim.diario_gerir
+  - jardim.saude_gerir
+  - jardim.presencas_gerir
+  - jardim.relatorio_emitir
+- Mantido fallback legado apenas para compatibilidade quando aplicável.
+
+Garantias
+- Sem alteração de base de dados.
+- Sem alteração nos cálculos MB/B/S/NS.
+- Sem alteração no design validado das views.
+- Sem alteração em pagamentos, multas, mensalidades, recibos ou histórico financeiro.
+- Sem alteração em notas, Pauta, DEC, ACTA ou boletins académicos principais.

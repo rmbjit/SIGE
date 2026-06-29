@@ -1,0 +1,26 @@
+SIGE SoftGenial v12.12.5 - Security Kernel Corrective Runtime Audit
+
+Resumo:
+- Versao correctiva da v12.12.4 apos rediagnostico adversarial.
+- REST route matching deixou de depender de inferencia incompleta.
+- Security Kernel intercepta shortcode e wp_hook declarados no contrato.
+- M-Pesa/e-Mola mantem enforcement piloto, mas com escrita tenant-scoped.
+- Gates foram reforcados com provas runtime e testes negativos.
+
+Ficheiros principais:
+- includes/security-kernel.php
+- includes/security-kernel-rules.php
+- includes/payments/mobile-tenant-options.php
+- includes/payments/mpesa-config.php
+- includes/payments/emola-config.php
+- includes/payments/mpesa-webhook.php
+- includes/payments/emola-webhook.php
+- tools/check-security-kernel.php
+- tools/check-security-kernel-rules.php
+- tools/check-security-kernel-negative-tests.php
+- tools/smoke-security-kernel-v12-12-5.php
+- tools/smoke-mobile-tenant-options-v12-12-5.php
+- tools/run-gates.php
+
+P0 aberto: 0
+P1 aberto: 0

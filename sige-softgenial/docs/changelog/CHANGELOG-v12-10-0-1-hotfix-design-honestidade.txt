@@ -1,0 +1,175 @@
+═══════════════════════════════════════════════════════════════
+SIGE SoftGenial v12.10.0.1 - Hotfix de Design e Honestidade do Registry
+═══════════════════════════════════════════════════════════════
+
+Data:           16 Maio 2026
+Baseline:       v12.10.0 (refundação do módulo de configurações, validada em produção)
+Tipo:           Hotfix de design (UI) + honestidade do Registry
+Perímetro:      /includes/settings/ + /admin/system/config*.php
+Risco:          MUITO BAIXO (sem alterar lógica de gravação/leitura/auditoria)
+Rollback:       < 2 minutos (substituir 6 ficheiros)
+
+
+═══════════════════════════════════════════════════════════════
+1. PORQUE EXISTE ESTE HOTFIX
+═══════════════════════════════════════════════════════════════
+
+Após a entrega da v12.10.0, dois pontos foram identificados:
+
+(a) "A Config tem muitas anotações internas e o design tem muito cara de IA"
+    Significava: hero com gradient, badges promocionais, kicker de marketing,
+    descrições paragrafais redundantes, help text em quase todos os campos,
+    bordas exageradas (22-28px), sombras dramáticas. Estilo de demo de
+    framework, não de produto profissional.
+
+(b) Auditoria honesta do Registry detectou 4 chaves que foram declaradas
+    como "activas" no mapeamento original mas que NÃO TÊM consumidor real
+    no plugin (aparecem apenas em db-handler.php para gravação e em
+    class-sige-migration.php para schema). Decisão do cliente: manter
+    (opção B), mas com marcação clara.
+
+
+═══════════════════════════════════════════════════════════════
+2. O QUE MUDOU
+═══════════════════════════════════════════════════════════════
+
+DESIGN - alinhado ao vocabulário visual do plugin
+   ANTES (v12.10.0)                    DEPOIS (v12.10.0.1)
+   ─────────────────────────────       ─────────────────────────────
+   Cor primária #0f2f6f                Cor primária #0d1259 (mesma do
+                                       resto do plugin: WhatsApp Central,
+                                       Pautas, Notas)
+   border-radius 22-28px               border-radius 6-10px
+   box-shadow 0 24px 70px              box-shadow 0 2px 6px
+   Hero gradient azul→ciano            Header simples título + tag versão
+   5 badges promocionais no topo       Sem badges
+   "SoftGenial · Configuração v12.10.0" kicker  Removido
+   Descrições paragrafais em cada grupo Removidas
+   18 ui_help paragrafais              1 ui_help (apenas onde técnico)
+   Fonte Segoe UI exclusiva            -apple-system, Segoe UI, Roboto...
+   Pills "Hub", "Schema-driven", etc.  Apenas pills funcionais:
+                                       "informativo", "leitura", "hub"
+   Tabs 11px 14px border-radius 999    Tabs estilo WhatsApp Central
+                                       (8x14, border-radius 8)
+
+HONESTIDADE DO REGISTRY - opção B confirmada pelo cliente
+   4 chaves marcadas como informative_only=true:
+     - escola.tipo_instituicao
+     - escola.ensino_oferecido
+     - escola.entidade_proprietaria
+     - escola.ano_fundacao
+
+   Estas chaves aparecem na UI com pill discreto "informativo" e tooltip
+   "Campo preservado para uso futuro. Ainda sem efeito operacional no
+   plugin." Continuam graváveis (o utilizador pode introduzir dados),
+   mas o pill informa que nenhum motor as consome ainda.
+
+   Quando, no futuro, documents-engine ou outros começarem a usá-las
+   (ex.: tipo_instituicao em recibos), basta tirar informative_only=true
+   do Registry e o pill desaparece.
+
+GRUPO "TÉCNICO SOFTGENIAL" → "DIAGNÓSTICO"
+   Nome anterior implicava ser configuração técnica. Mas o conteúdo
+   real é informação de estado (versão, build, licença, valores
+   financeiros readonly de outra tabela). Nome novo é honesto: estes
+   campos servem para diagnosticar, não para configurar.
+
+
+═══════════════════════════════════════════════════════════════
+3. MÉTRICAS COMPARATIVAS
+═══════════════════════════════════════════════════════════════
+
+                                  v12.10.0    v12.10.0.1
+Chaves no Registry                     41          31  (+10 readonly)
+   Activas operacionais                30          27  (-3 corrigidas)
+   Informative_only                     0           4  (assumido)
+   Readonly diagnóstico                11          10
+ui_help paragrafais na UI              18           1
+Grupos UI                               9           9  (1 renomeado)
+Hero / badges promocionais            sim         não
+border-radius máximo                  28px       10px
+Sombra máxima               0 24px 70px       0 2px 6px
+Cor primária              #0f2f6f          #0d1259
+
+
+═══════════════════════════════════════════════════════════════
+4. CONTRATO DE PERÍMETRO (CONFIRMAÇÃO)
+═══════════════════════════════════════════════════════════════
+
+Os seguintes ficheiros mantêm-se BYTE-A-BYTE idênticos à v12.9.105
+e portanto também à v12.10.0:
+
+   ✓ includes/db-handler.php
+   ✓ includes/email-engine.php
+   ✓ includes/whatsapp-engine.php
+   ✓ includes/finance-core.php
+   ✓ includes/academic-logic.php
+   ✓ includes/documents-engine.php
+   ✓ includes/notification-policy.php
+   ✓ includes/audit-hooks.php
+   ✓ includes/email-queue-templates.php
+   ✓ includes/permissions-layer.php
+   ✓ includes/whatsapp-destinatarios-policy.php
+
+Dentro do módulo settings, os seguintes ficheiros NÃO foram alterados
+em relação à v12.10.0 (mantida lógica de gravação/auditoria):
+
+   ✓ includes/settings/settings-bootstrap.php
+   ✓ includes/settings/class-sige-settings-repository.php
+   ✓ includes/settings/class-sige-settings-sanitizer.php
+   ✓ includes/settings/class-sige-settings-policy.php
+   ✓ includes/settings/class-sige-settings-audit.php
+   ✓ includes/settings/class-sige-settings-controller.php
+   ✓ includes/settings/class-sige-settings-legacy.php
+   ✓ includes/settings/class-sige-settings-technical-mode.php
+
+Ficheiros tocados nesta versão:
+
+   • sige-softgenial.php                         (apenas bump 12.10.0 → 12.10.0.1)
+   • BUILD.json                                  (metadata)
+   • includes/settings/class-sige-settings-registry.php       (informative_only + ui_help)
+   • includes/settings/class-sige-settings-view-renderer.php  (design + pills)
+   • admin/system/config-center-view.php         (CSS + estrutura)
+   • admin/system/config-view.php                (redirector mais sóbrio)
+
+
+═══════════════════════════════════════════════════════════════
+5. NOVO CÓDIGO VISUAL DAS PILLS NA UI
+═══════════════════════════════════════════════════════════════
+
+informativo  (amarelo)  → Campo preservado, sem consumidor operacional actual.
+                          Utilizador pode preencher mas o plugin não usa.
+                          Aplica-se a: tipo_instituicao, ensino_oferecido,
+                          entidade_proprietaria, ano_fundacao.
+
+hub          (azul)     → Valor pode ser sobreposto pelo Hub/licença SoftGenial.
+                          Aplica-se a: modulos.ativos_locais, tecnico.license_status.
+
+leitura      (cinza)    → Readonly. Mostrado para diagnóstico, não editável.
+                          Aplica-se a todos os campos do grupo Diagnóstico
+                          (versão, build, licença, financeiro.*).
+
+vazio preserva (amarelo) → Indicador no campo de password SMTP, para clarificar
+                          que deixar vazio mantém o valor actual.
+
+
+═══════════════════════════════════════════════════════════════
+6. INSTALAÇÃO
+═══════════════════════════════════════════════════════════════
+
+Ver DEPLOY-v12-10-0-1.md. Resumo:
+
+   1. Backup do plugin actual (sige-softgenial-12.10.0-backup.zip).
+   2. Substituir pasta sige-softgenial/ pela nova.
+   3. Smoke test rápido (3 minutos): Centro abre, alterações guardam,
+      4 pills "informativo" visíveis na aba Identidade, separador
+      "Diagnóstico" em vez de "Técnico SoftGenial".
+   4. Propagar pela ordem habitual:
+      Demo → Teste → Liceu Muhalaze → Casa Colorida → Malisa.
+
+Sem migração de BD. Sem riscos para dados existentes.
+
+
+═══════════════════════════════════════════════════════════════
+FIM DO CHANGELOG v12.10.0.1
+═══════════════════════════════════════════════════════════════

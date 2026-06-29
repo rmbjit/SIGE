@@ -1,0 +1,31 @@
+SIGE SoftGenial v12.9.23 - Filtros operacionais no módulo de pagamentos
+
+Base usada:
+- v12.9.22 alunos-saldo-status validado pelo utilizador.
+
+Alterações:
+- Adicionado filtro por Estado Financeiro no módulo Registar Pagamento:
+  • Todos
+  • Com dívida
+  • Regular
+  • Com crédito
+- Adicionado filtro por Classe.
+- Adicionado filtro por Turma.
+- Pesquisa passa a aceitar nome, número de processo e contactos registados do encarregado/pai/mãe.
+- Resultados mostram badges de Dívida, Regular e Crédito, sem alterar cálculos.
+- Limite operacional de 50 resultados para manter performance e evitar sobrecarga.
+
+Garantias:
+- Não foram alteradas fórmulas financeiras.
+- Não foram alteradas fórmulas académicas.
+- O saldo em dívida usa apenas a expressão canónica existente: sige_fin_saldo_sql().
+- A alteração é incremental e confinada ao módulo admin/finance/financeiro-pagamentos.php e à versão principal do plugin.
+
+Teste rápido recomendado:
+1. Abrir: wp-admin/admin.php?page=sige-app&view=financeiro-pagamentos
+2. Pesquisar aluno por nome e por número de processo.
+3. Filtrar por Estado Financeiro: Com dívida.
+4. Filtrar por Estado Financeiro: Regular.
+5. Filtrar por Classe.
+6. Filtrar por Turma.
+7. Confirmar que ao abrir um aluno, a página de pagamento continua igual.

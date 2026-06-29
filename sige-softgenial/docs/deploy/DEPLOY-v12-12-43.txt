@@ -1,0 +1,67 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.43
+Data: 2026-06-23
+Titulo: Fase 3 - Afinacao dos codigos do gateway e escolha de lancamento
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+Dois afinamentos da reconciliacao de pagamentos moveis:
+
+(A) Verificacao contra o gateway mais exacta. Ate agora, a verificacao automatica
+diaria assumia que uma transacao tinha tido sucesso se a CONSULTA ao gateway
+corresse bem. Mas a consulta correr bem nao significa que a transacao foi paga: o
+gateway devolve o estado real da transacao (por exemplo, Concluida ou Falhada) num
+campo proprio. A partir desta versao, o sistema olha para esse estado: uma
+transacao Falhada deixa de ser tomada por confirmada. Se o estado nao for claro, a
+transacao fica "a rever" (o sistema nunca a da por falsa sem certeza).
+
+(B) Na resolucao com quatro-olhos, ao PROPOR conciliar uma transacao, ja e possivel
+escolher um lancamento especifico do aluno (alem da opcao automatica). O fluxo de
+aprovacao por um segundo utilizador mantem-se igual.
+
+Nada disto altera valores nem regras: o registo do pagamento continua a usar o
+caminho normal do sistema.
+
+================================================================
+AFINACAO AVANCADA (OPCIONAL, PARA TECNICOS)
+================================================================
+As listas de estados que contam como sucesso ou falha, e os codigos de resposta de
+falha, sao ajustaveis por filtro (sem mexer no codigo do plugin), para afinar com o
+ambiente real de cada operadora apos os testes de sandbox:
+  - sige_mpesa_estados_sucesso
+  - sige_mpesa_estados_falha
+  - sige_mpesa_codigos_falha
+Por omissao, os valores sao conservadores: na duvida, a transacao fica a rever.
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+
+================================================================
+VERIFICACAO
+================================================================
+1. Em Pagamentos Moveis, na seccao "Resolucao com quatro-olhos", confirme que cada
+   transacao pendente com aluno identificado mostra um seletor de lancamento (com a
+   opcao "automatico") na proposta de conciliacao.
+2. Proponha conciliar escolhendo um lancamento e confirme que o pedido fica a
+   aguardar aprovacao; aprove com um segundo utilizador e confirme que o pagamento
+   foi registado nesse lancamento.
+3. A verificacao automatica diaria contra o gateway (quando configurado) continua a
+   registar divergencias; agora classifica pelo estado real da transacao.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera o
+esquema da base de dados, pelo que a reversao e directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Ajuste fino final dos codigos e estados de cada operadora, com base no sandbox.

@@ -1,0 +1,16 @@
+v12.12.7.1 - Mapa de Cobranca em PDF
+
+Validacao executada:
+- PHP lint integral: 349 ficheiros PHP, 0 falhas.
+- php tools/run-gates.php: 39/39 gates verdes.
+- Smoke dedicado Mapa de Cobranca PDF: 32 verificacoes OK.
+- Teste de runtime do enforce do Kernel: 6 cenarios OK.
+- Teste focado da identidade da escola: 5 verificacoes OK.
+- Render funcional do documento: 16 verificacoes OK.
+- Security Kernel: 193 regras, enforce=30, delegated=17, observe=146; zero criticas em observe.
+- Manifesto e regras do Kernel alinhados (193 = 193).
+- Baseline de autorizacao: sem aumento de current_user_can; sem regressao real de sige_can vs v12.12.7.
+
+Rediagnostico adversarial: corrigiu P1 (identidade da escola), P2 (permissao alargada) e P1 reportado em producao (total do PDF acima do ecra: agora usa a populacao de activos e sige_fin_saldo_lancamento sem fan-out, igual ao ecra).
+Decisao tecnica automatizada: aprovado para validacao em staging apos correccoes. P0=0, P1=0.
+Producao depende de validacao humana por perfil e escola.

@@ -1,0 +1,21 @@
+SIGE SoftGenial v12.9.78 - Excel de Lançamentos Financeiros
+
+Base: v12.9.77 validada pelo cliente.
+
+Alteração única:
+- Adicionado botão para descarregar Excel na página ?page=sige-app&view=financeiro-lancamentos.
+
+Comportamento:
+- Exporta os lançamentos respeitando os filtros actuais: aluno/processo, mês, serviço, estado e centro financeiro quando aplicável.
+- Excel com elementos de identidade da escola: nome, contacto, e-mail/endereço quando configurados.
+- Inclui tabela detalhada com ID, aluno, processo, serviço, mês, vencimento, valor, pago, saldo, estado, descrição/observação e data de criação.
+- Inclui total geral, resumo por serviço e resumo por estado.
+- Mantém fallback CSV caso ExcelJS não esteja disponível no navegador.
+
+Não alterado:
+- Fórmulas financeiras.
+- Pagamentos, estornos, multas/descontos.
+- WhatsApp.
+- Dashboard financeiro.
+- Extracto/Diário de Caixa.
+- Estrutura da base de dados.

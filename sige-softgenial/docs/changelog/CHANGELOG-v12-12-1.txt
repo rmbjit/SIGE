@@ -1,0 +1,24 @@
+SIGE SoftGenial v12.12.1 - Governance Baseline Corrective Audit
+
+Tipo: versao correctiva da Fase 0.
+Base: v12.12.0.
+
+Correcções:
+- Fechado P0 do endpoint `sige_desp_print` sem isolamento por escola.
+- Impressao de despesas passa a exigir nonce, permissao e contexto de escola valido.
+- Queries de comprovativo e relatorio de despesas passam a incluir `escola_id` obrigatório.
+- Links da UI de despesas passam a ser gerados com `wp_nonce_url`.
+- Manifesto passa a detectar hooks dinamicos, incluindo `wp_ajax:sige_settings_save`.
+- Manifesto passa a cobrir query handlers criticos e hooks WordPress de request.
+- Gate do manifesto passa a usar extractor independente/adversarial para reduzir falso verde.
+- Adicionados gates de query handlers, tenant em despesas e testes negativos.
+
+Riscos residuais:
+- Autorizacao legada via `current_user_can` permanece como divida de fases futuras.
+- Tenant fail-closed global permanece para fase especifica.
+- Secret Vault, MFA, Ledger financeiro e CSP enforcement permanecem fora desta versao.
+
+QA:
+- PHP lint: 331 ficheiros, 0 falhas.
+- Gates: 27/27 verdes.
+- P0/P1 abertos: 0.

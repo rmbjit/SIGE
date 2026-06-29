@@ -1,0 +1,54 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.49
+Data: 2026-06-23
+Titulo: Fase 4 incr 2 - Fixe de impressao utilitarios e vaga admin-shell e jardim
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+Duas coisas, ambas internas, sem mudar a forma de trabalhar.
+
+1. Correccao de impressao. Nas versoes anteriores passamos a usar classes de estilo
+   reutilizaveis em vez de estilo escrito linha a linha. Em algumas paginas que abrem
+   uma janela separada para imprimir (boletim, ficha do aluno, mapa e lista de turmas,
+   mapa de devedores), essa janela nao carregava o ficheiro de estilo, e por isso
+   alguns alinhamentos e negritos saiam errados no papel. Isto fica corrigido: essas
+   janelas de impressao passam a levar as regras de estilo necessarias.
+
+2. Continuacao da arrumacao do estilo. O cabecalho e a estrutura do painel (sobretudo
+   os icones) e um relatorio do jardim passam a usar as classes reutilizaveis. O
+   aspecto no ecra e exactamente o mesmo.
+
+Nao ha qualquer alteracao visivel de funcionamento.
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+
+================================================================
+VERIFICACAO
+================================================================
+1. Imprima um boletim de aproveitamento e confirme que a linha "Media Geral do
+   Trimestre" fica alinhada a direita no papel, como antes.
+2. Imprima a ficha de um aluno, o mapa e a lista de uma turma, e o mapa de devedores,
+   e confirme que os alinhamentos e os totais saem corretos.
+3. Navegue pelo painel e confirme que o cabecalho, o menu lateral e os icones estao
+   visualmente identicos.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera o
+esquema da base de dados, pelo que a reversao e directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Continuar a mover o estilo das restantes areas, depois os cliques embutidos que
+  faltam, depois os blocos de script, e por fim impor a politica de seguranca de
+  conteudo (CSP).

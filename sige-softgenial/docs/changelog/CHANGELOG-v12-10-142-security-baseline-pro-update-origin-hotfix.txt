@@ -1,0 +1,20 @@
+SIGE SoftGenial v12.10.142 - Security Baseline PRO: Update Origin Hotfix
+
+Objectivo
+- Corrigir bloqueio indevido de instalação/actualização manual causado pela validação de origem de pacote introduzida na v12.10.140/v12.10.141.
+
+Correções aplicadas
+1. A validação de origem/checksum passa a aplicar-se apenas a pacotes remotos HTTP/HTTPS.
+2. Uploads manuais/local ZIP do WordPress deixam de ser bloqueados por não terem host.
+3. A protecção só interfere em pacotes anunciados pelo mecanismo SoftGenial de update remoto.
+4. Hosts autorizados passam a aceitar configuração adicional por:
+   - opção sige_allowed_update_hosts;
+   - constante SIGE_ALLOWED_UPDATE_HOSTS;
+   - filtro sige_allowed_update_hosts.
+5. Mantém validação SHA-256 para updates remotos oficiais quando o manifesto disponibiliza checksum.
+6. Adiciona bypass operacional controlado via SIGE_DISABLE_UPDATE_ORIGIN_GUARD apenas para recuperação de emergência.
+
+Impacto
+- Resolve o erro: "Actualização bloqueada: origem do pacote não autorizada."
+- Mantém endurecimento de segurança para updates remotos oficiais.
+- Não altera regras financeiras, académicas, pagamentos, mensalidades, multas, notas, pautas, DEC, boletins, WhatsApp ou base de dados de negócio.

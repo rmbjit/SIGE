@@ -1,0 +1,47 @@
+SIGE SoftGenial v12.10.132 - Dica do Dia: Apenas Gestão Escolar
+
+Base
+- Construído por cima da v12.10.131 - Dica do Dia: Cultura de Gestão Escolar.
+
+Problema corrigido
+- A v12.10.131 mostrava a Dica do Dia para qualquer utilizador autenticado dentro do SIGE, excepto quando havia primeiro acesso/senha provisória.
+- Isso podia fazer a dica aparecer também para aluno/encarregado depois de concluir a troca de senha.
+- A intenção correcta é que a Dica do Dia seja apenas para gestão/equipa da escola.
+
+Nova regra
+- A Dica do Dia aparece apenas para perfis de gestão/equipa da escola:
+  - Administrador
+  - Direcção
+  - Secretaria
+  - Direcção Pedagógica/Pedagógico
+  - Professor
+  - Tesouraria/Financeiro
+  - Outros perfis internos com permissões de gestão
+
+Bloqueio explícito
+- Nunca aparece para:
+  - sige_aluno
+  - sige_encarregado
+  - perfil activo SIGE aluno
+  - perfil activo SIGE encarregado
+  - utilizadores apenas com contexto de portal
+
+Implementação
+- Criado helper sige_dica_do_dia_is_school_staff_v132().
+- O helper faz primeiro o bloqueio explícito de aluno/encarregado.
+- Depois valida se o utilizador pertence à equipa da escola por:
+  - capabilities WordPress/SIGE;
+  - permissões sige_can();
+  - roles WordPress;
+  - active_role SIGE.
+
+Mantido
+- Uma vez por utilizador por dia.
+- Conteúdo local no plugin.
+- Sem dependência de internet.
+- AJAX com nonce para gravar "Entendi".
+- Não aparece durante primeiro acesso obrigatório/senha provisória.
+- Pode ser desligado por opção/filtro.
+- Sem alteração de base de dados académica/financeira.
+- Sem alteração de pagamentos.
+- Sem alteração de notas, Pauta, DEC, ACTA ou boletins.

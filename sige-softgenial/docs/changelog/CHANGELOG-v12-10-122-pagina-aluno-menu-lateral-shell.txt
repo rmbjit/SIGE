@@ -1,0 +1,41 @@
+SIGE SoftGenial v12.10.122 - Página do Aluno: Menu Lateral Renderizado no Shell
+
+Base
+- Construído por cima da v12.10.121 - Página do Aluno: Links Visíveis na Lateral.
+
+Diagnóstico crítico
+- O problema persistia porque a lateral recebia o título "Página do Aluno", mas os links continuavam invisíveis.
+- A causa mais provável e mais crítica estava no próprio App Shell:
+  1. o menu do portal era injectado pela view via JavaScript, depois da lateral já estar montada;
+  2. o App Shell gera uma regra de segurança que esconde links por view quando o perfil não tem permissões administrativas;
+  3. para aluno/encarregado, aluno_portal podia entrar nessa lista de links escondidos, porque o acesso real foi liberado por contexto de portal, não por menu administrativo tradicional;
+  4. como todos os links têm view=aluno_portal no URL, a regra escondia os links mesmo quando a página estava correcta.
+
+Correções aplicadas
+1. Renderização no App Shell
+- O menu Resumo/Académico/Financeiro/Documentos/Contactos passa a ser renderizado directamente dentro da lateral azul pelo App Shell.
+- Já não depende exclusivamente da injecção JavaScript da view.
+- O menu aparece antes do botão Terminar sessão.
+
+2. Regra de ocultação de menus
+- Quando o utilizador é aluno/encarregado e a view é aluno_portal, o App Shell deixa de adicionar aluno_portal à lista de views a ocultar.
+- Isto evita que os links do próprio portal sejam escondidos por segurança de menu administrativo.
+
+3. CSS reforçado
+- O CSS passa a usar selectores fortes com #sige-sidebar.
+- Os links do menu do aluno têm display:flex!important, visibilidade e opacidade forçadas.
+- O item activo continua destacado em branco.
+
+4. JavaScript mantido apenas como fallback
+- A injecção via JavaScript permanece como plano B, mas se o menu já existir no Shell, apenas garante visibilidade.
+- Evita duplicação.
+
+Mantido
+- Menu interno removido do conteúdo para aluno/encarregado.
+- Staff continua a ver menu interno quando abre administrativamente.
+- Modo leitura.
+- Bloqueio de notas/boletins por dívida.
+- Permissão real de portal.
+- Redireccionamento correcto do portal antigo.
+- Sem alteração de base de dados.
+- Sem alteração de pagamentos, notas, Pauta, DEC, ACTA ou boletins.

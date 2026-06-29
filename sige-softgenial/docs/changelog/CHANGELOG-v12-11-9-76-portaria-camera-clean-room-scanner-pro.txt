@@ -1,0 +1,17 @@
+SIGE SoftGenial v12.11.9.76 - Portaria Camera Clean Room Scanner PRO
+
+Objectivo
+- Corrigir as rondas persistentes de falsos bloqueios de câmara na Portaria, sobretudo quando o cadeado do navegador mostra Câmara permitida mas o documento wp-admin continua a falhar com NotAllowedError/NotReadableError.
+
+Alterações
+- Criada página limpa de scanner fora do wp-admin: ?sige_portaria_camera=1.
+- O botão principal da Portaria agora abre o leitor seguro em vez de insistir na captura dentro do app shell administrativo.
+- A página limpa emite Permissions-Policy: camera=(self), microphone=(), geolocation=(), payment=().
+- A política global continua a bloquear câmara nas restantes páginas do SIGE.
+- A validação continua a usar o AJAX sige_validar_acesso com nonce sige_portaria_acesso.
+- O perfil Guarda/Portaria continua isolado e só usa Portaria + alunos em leitura.
+- Adicionado fallback "Foto do QR" com input capture=environment para contornar falhas de WebRTC live streaming.
+- Mantido processo manual como terceiro caminho operacional.
+
+Não alterado
+- Base de dados, pagamentos, mensalidades, multas, dívidas, recibos, notas, pautas, boletins, DEC, ACTA, fórmulas académicas, importação/edição/remoção de alunos e regras financeiras/académicas.

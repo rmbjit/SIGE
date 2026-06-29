@@ -1,0 +1,38 @@
+SIGE SoftGenial v12.11.9.10 - Transportes Edição de Rotas PRO (TEST)
+Data: 25/05/2026
+Base: v12.11.9.9 - RH Arquivo de Removidos PRO (TEST), versão validada pelo utilizador
+
+Resumo
+- Actualização localizada no módulo de Transportes.
+- Permite editar rotas já criadas no ecrã Frotas & Rotas.
+- Mantém a matriz de permissões existente: apenas utilizadores com gestão de rotas podem criar, editar ou remover.
+- Mantém consulta para perfis sem permissão de gestão.
+
+Alterações técnicas
+- Ficheiro alterado: admin/logistics/transporte-view.php.
+- Adicionado botão de edição na lista de rotas activas.
+- O formulário lateral passa a funcionar em dois modos: Nova Rota e Editar Rota.
+- A edição actualiza a rota por id + escola_id, evitando alteração fora do escopo da escola actual.
+- O formulário mantém nonce WordPress e validação de permissão antes de gravar.
+- A criação de novas rotas passa a guardar explicitamente escola_id da escola actual.
+- Valores monetários aceitam ponto ou vírgula decimal de forma mais segura.
+- Campos textuais são sanitizados com wp_unslash + sanitize_*.
+- Mantém activo/ativo em 1 para compatibilidade com a estrutura existente.
+- Acrescentado registo de auditoria com sige_log quando disponível.
+
+Não alterado
+- Não foram alteradas fórmulas financeiras.
+- Não foram alteradas regras de mensalidades, multas, descontos, pagamentos ou recibos.
+- Não foram alteradas regras académicas, notas, pautas, DEC ou boletins.
+- Não foram alterados módulos de RH, financeiro, académico, WhatsApp ou permissões.
+- Não foram criadas novas tabelas nem migrações de base de dados.
+
+Como testar
+1. Abrir SIGE > Transportes.
+2. Criar uma rota nova e confirmar que aparece em Rotas Ativas.
+3. Clicar no ícone ✏️ da rota.
+4. Confirmar que o formulário muda para Editar Rota e carrega os dados existentes.
+5. Alterar preço, lotação, motorista ou matrícula e gravar.
+6. Confirmar que a rota permanece na lista com os novos dados.
+7. Clicar em Cancelar edição e confirmar que o formulário volta ao modo Nova Rota.
+8. Testar com perfil sem permissão de gestão de rotas: deve consultar, mas não editar/criar/remover.

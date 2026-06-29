@@ -1,0 +1,65 @@
+SIGE SoftGenial v12.11.9.92
+============================
+
+Sprint 3 - Saúde operacional com interruptores, cobrança push M-Pesa, primeira extracção assets/views e candidato de CSS consolidado
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+DETALHE COMPLETO DO SPRINT 3
+============================
+
+OPERAÇÕES - SAÚDE OPERACIONAL COM INTERRUPTORES (NOVO)
+- includes/saude-operacional.php: cartão novo na página Saúde do Sistema
+  com as métricas que o heartbeat envia ao Hub, agora visíveis a quem
+  gere a escola: fila WhatsApp (pendentes + falhas 24h), fila de email,
+  pendentes M-Pesa, próximos crons (com aviso EM ATRASO), bloqueios do
+  escudo de login nas últimas 24h e veredicto do piso PHP 8.1.
+- INTERRUPTORES no mesmo cartão (Director/admin real): 2FA por email,
+  relatório mensal automático + destinatários, e hora de corte das
+  Presenças. O que antes exigia WP-CLI liga-se agora com um clique,
+  com nonce e auditoria (evento saude_toggles).
+- Toque mínimo no monólito core-status: UMA linha de inserção.
+
+FINANCEIRO - COBRANÇA PUSH M-PESA (NOVO)
+- includes/payments/mpesa-cobranca.php + cartão "Cobrar agora" no ecrã
+  M-Pesa: a secretaria introduz processo, telefone e valor; o encarregado
+  confirma com o PIN no telemóvel. Sucesso entra no MESMO funil do webhook
+  (idempotência pelo UNIQUE) e concilia pela função financeira canónica;
+  o invariante de regressão prova que nada escreve em sige_fin_*.
+- Tradutor de códigos INS-* para mensagens humanas (saldo insuficiente,
+  PIN recusado, pedido expirado, provider inválido, etc.).
+- tools/simular-callback-mpesa.php (NOVO): o teste sandbox em live fica a
+  um comando: envia um callback idêntico ao da Vodacom ao webhook da
+  escola, com instruções de leitura do resultado e teste de idempotência.
+
+QUALIDADE - PRIMEIRA EXTRACÇÃO assets/views/ (regra do escuteiro PAGA)
+- admin/academic/presencas-view.php perdeu os blocos <style> e <script>:
+  assets/views/presencas.css e presencas.js nasceram por MOVIMENTAÇÃO
+  verificada programaticamente (CSS: uma única linha adaptada, o cursor
+  dinâmico passou a classe .sg-pres-editavel; JS: cabeçalho passou a ler
+  window.SIGE_PRESENCAS_CFG, corpo intacto, sintaxe validada por node).
+- A view chama sige_view_assets('presencas') com cache-busting por
+  filemtime. O padrão está provado; as próximas views seguem ao ritmo
+  dos toques normais.
+
+QUALIDADE - CANDIDATO DE CSS CONSOLIDADO (style.css INTOCADO)
+- tools/css-consolidar.php (NOVO): parser próprio que funde selectores
+  EXACTAMENTE iguais no mesmo contexto de media, colapsados na posição da
+  última ocorrência com a cascata preservada por propriedade. Selectores
+  apenas parecidos (listas :is() das camadas) ficam intactos de propósito.
+- assets/style-consolidado.css gerado: 281 KB -> 242 KB, 72 grupos
+  fundidos, 92 blocos absorvidos, 310 declarações redundantes removidas,
+  keyframes e media blocks preservados. NÃO é carregado por nenhum PHP
+  (provado por invariante de regressão).
+- docs/relatorios/CSS-CONSOLIDACAO.md: números, limite conhecido do
+  algoritmo e o procedimento de promoção com rollback de 10 segundos.
+
+QUALIDADE - GATES
+- tools/smoke-regression-pack.php: 41 -> 50 invariantes. Novos: view de
+  Presenças sem <style> e com sige_view_assets; assets extraídos existem;
+  candidato CSS marcado e NUNCA carregado; cobrança push com capacidade +
+  nonce + sem escrita financeira directa; interruptores com nonce.

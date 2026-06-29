@@ -1,0 +1,12 @@
+v12.12.7 - Critical Actions Lockdown
+
+- Adiciona suporte `view_action` ao Security Kernel para mutações directas em views administrativas.
+- Coloca acções críticas em `enforce` ou `delegated`; zero acção crítica permanece em `observe`.
+- Corrige conciliação/rejeição manual M-Pesa para exigir `id` + `escola_id` e validar lançamento no mesmo tenant.
+- Corrige despesas para usar a escola corrente, bloqueando fallback para a primeira escola da base.
+- Pagamentos e acções financeiras críticas passam a exigir permissões específicas de escrita, não apenas acesso de leitura à página.
+- Adiciona permissões por escola com `sige_school_role_permissions` e `sige_school_user_permission_overrides`.
+- A UI de permissões passa a alterar apenas a matriz da escola corrente.
+- Remoção de aluno no handler canónico passa a arquivar/desactivar, preservando histórico financeiro e académico.
+- Webhooks M-Pesa/e-Mola entram em enforcement tokenizado pelo Security Kernel.
+- Adiciona smoke `tools/smoke-critical-actions-lockdown-v12-12-7.php` com 87 verificações.

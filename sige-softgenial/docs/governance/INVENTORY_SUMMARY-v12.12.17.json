@@ -1,0 +1,597 @@
+{
+    "version": "12.12.17",
+    "total_files": 1520,
+    "runtime_php_files": 211,
+    "action_surface_total": 196,
+    "action_surface_by_type": {
+        "admin_post": 39,
+        "admin_post_nopriv": 1,
+        "cron_hook": 9,
+        "query_handler": 6,
+        "rest_route": 5,
+        "shortcode": 1,
+        "view_action": 18,
+        "wp_ajax": 113,
+        "wp_hook": 4
+    },
+    "views_allowlist": 54,
+    "views_permission_map": 54,
+    "authorization": {
+        "current_user_can_total": 475,
+        "sige_can_total": 60,
+        "files": {
+            "admin/academic/abertura-view.php": {
+                "current_user_can": 1,
+                "sige_can": 1
+            },
+            "admin/academic/acta-view.php": {
+                "current_user_can": 7,
+                "sige_can": 0
+            },
+            "admin/academic/aluno-portal-view.php": {
+                "current_user_can": 13,
+                "sige_can": 7
+            },
+            "admin/academic/alunos_lista.php": {
+                "current_user_can": 15,
+                "sige_can": 4
+            },
+            "admin/academic/aprovar_notas-view.php": {
+                "current_user_can": 4,
+                "sige_can": 0
+            },
+            "admin/academic/disciplinas-view.php": {
+                "current_user_can": 5,
+                "sige_can": 0
+            },
+            "admin/academic/encerramento-view.php": {
+                "current_user_can": 1,
+                "sige_can": 2
+            },
+            "admin/academic/minhas_turmas-view.php": {
+                "current_user_can": 1,
+                "sige_can": 0
+            },
+            "admin/academic/notas-view.php": {
+                "current_user_can": 4,
+                "sige_can": 2
+            },
+            "admin/academic/pautas-view.php": {
+                "current_user_can": 4,
+                "sige_can": 0
+            },
+            "admin/comunicacoes_central-view.php": {
+                "current_user_can": 1,
+                "sige_can": 0
+            },
+            "admin/finance/financeiro-despesas-view.php": {
+                "current_user_can": 7,
+                "sige_can": 0
+            },
+            "admin/finance/financeiro-extratos.php": {
+                "current_user_can": 8,
+                "sige_can": 0
+            },
+            "admin/finance/financeiro-gerador.php": {
+                "current_user_can": 3,
+                "sige_can": 0
+            },
+            "admin/finance/financeiro-pagamentos.php": {
+                "current_user_can": 20,
+                "sige_can": 1
+            },
+            "admin/finance/financeiro-planos-view.php": {
+                "current_user_can": 12,
+                "sige_can": 0
+            },
+            "admin/hr/equipe-view.php": {
+                "current_user_can": 2,
+                "sige_can": 0
+            },
+            "admin/logistics/transporte-view.php": {
+                "current_user_can": 2,
+                "sige_can": 2
+            },
+            "admin/system/config-center-view.php": {
+                "current_user_can": 1,
+                "sige_can": 0
+            },
+            "admin/system/core-status-view.php": {
+                "current_user_can": 1,
+                "sige_can": 0
+            },
+            "admin/system/dashboard-view.php": {
+                "current_user_can": 3,
+                "sige_can": 1
+            },
+            "admin/system/permissions-ui.php": {
+                "current_user_can": 2,
+                "sige_can": 2
+            },
+            "admin/whatsapp_central-view.php": {
+                "current_user_can": 2,
+                "sige_can": 0
+            },
+            "admin/whatsapp_diag-view.php": {
+                "current_user_can": 5,
+                "sige_can": 1
+            },
+            "includes/academic-logic.php": {
+                "current_user_can": 6,
+                "sige_can": 0
+            },
+            "includes/acta-pdf-handler.php": {
+                "current_user_can": 18,
+                "sige_can": 0
+            },
+            "includes/admin-shell.php": {
+                "current_user_can": 49,
+                "sige_can": 3
+            },
+            "includes/ajax-handlers.php": {
+                "current_user_can": 23,
+                "sige_can": 2
+            },
+            "includes/aluno-accounts.php": {
+                "current_user_can": 21,
+                "sige_can": 0
+            },
+            "includes/aluno-fetch-ajax.php": {
+                "current_user_can": 18,
+                "sige_can": 3
+            },
+            "includes/boletim-pdf-handler.php": {
+                "current_user_can": 3,
+                "sige_can": 0
+            },
+            "includes/centros-helpers.php": {
+                "current_user_can": 10,
+                "sige_can": 0
+            },
+            "includes/circulares.php": {
+                "current_user_can": 2,
+                "sige_can": 1
+            },
+            "includes/class-sige-migration.php": {
+                "current_user_can": 1,
+                "sige_can": 0
+            },
+            "includes/core/class-sige-core.php": {
+                "current_user_can": 1,
+                "sige_can": 0
+            },
+            "includes/cron-tasks.php": {
+                "current_user_can": 8,
+                "sige_can": 0
+            },
+            "includes/curriculum-engine.php": {
+                "current_user_can": 5,
+                "sige_can": 2
+            },
+            "includes/db-handler.php": {
+                "current_user_can": 21,
+                "sige_can": 1
+            },
+            "includes/db-migration-engine.php": {
+                "current_user_can": 1,
+                "sige_can": 0
+            },
+            "includes/dica-do-dia.php": {
+                "current_user_can": 2,
+                "sige_can": 1
+            },
+            "includes/documents-engine.php": {
+                "current_user_can": 1,
+                "sige_can": 0
+            },
+            "includes/email-central.php": {
+                "current_user_can": 8,
+                "sige_can": 1
+            },
+            "includes/email-engine.php": {
+                "current_user_can": 2,
+                "sige_can": 0
+            },
+            "includes/email-queue-templates.php": {
+                "current_user_can": 3,
+                "sige_can": 0
+            },
+            "includes/fin-action-service.php": {
+                "current_user_can": 1,
+                "sige_can": 1
+            },
+            "includes/fin-familia-service.php": {
+                "current_user_can": 2,
+                "sige_can": 0
+            },
+            "includes/fin-fecho-turno.php": {
+                "current_user_can": 6,
+                "sige_can": 0
+            },
+            "includes/finance-core.php": {
+                "current_user_can": 11,
+                "sige_can": 3
+            },
+            "includes/finance-data-efectiva.php": {
+                "current_user_can": 1,
+                "sige_can": 0
+            },
+            "includes/finance-devedores-pdf.php": {
+                "current_user_can": 4,
+                "sige_can": 2
+            },
+            "includes/financeiro-historico-aluno-pro.php": {
+                "current_user_can": 3,
+                "sige_can": 1
+            },
+            "includes/hub/class-sige-hub-admin.php": {
+                "current_user_can": 3,
+                "sige_can": 0
+            },
+            "includes/hub/class-sige-hub-billing.php": {
+                "current_user_can": 2,
+                "sige_can": 0
+            },
+            "includes/hub/class-sige-hub-client.php": {
+                "current_user_can": 1,
+                "sige_can": 0
+            },
+            "includes/jardim-handlers.php": {
+                "current_user_can": 7,
+                "sige_can": 1
+            },
+            "includes/map-pdf-handler.php": {
+                "current_user_can": 6,
+                "sige_can": 0
+            },
+            "includes/multitenancy.php": {
+                "current_user_can": 1,
+                "sige_can": 0
+            },
+            "includes/notas-reaprovacao-migracao.php": {
+                "current_user_can": 6,
+                "sige_can": 0
+            },
+            "includes/notification-policy.php": {
+                "current_user_can": 2,
+                "sige_can": 0
+            },
+            "includes/page-guard.php": {
+                "current_user_can": 2,
+                "sige_can": 1
+            },
+            "includes/passagem-docs-handler.php": {
+                "current_user_can": 2,
+                "sige_can": 1
+            },
+            "includes/pauta-excel-handler.php": {
+                "current_user_can": 5,
+                "sige_can": 0
+            },
+            "includes/pauta-pdf-handler.php": {
+                "current_user_can": 5,
+                "sige_can": 0
+            },
+            "includes/payments/mpesa-config.php": {
+                "current_user_can": 2,
+                "sige_can": 1
+            },
+            "includes/permissions-layer.php": {
+                "current_user_can": 0,
+                "sige_can": 2
+            },
+            "includes/portal-handlers.php": {
+                "current_user_can": 2,
+                "sige_can": 1
+            },
+            "includes/portaria-camera-safe-page.php": {
+                "current_user_can": 4,
+                "sige_can": 0
+            },
+            "includes/presencas-engine.php": {
+                "current_user_can": 2,
+                "sige_can": 2
+            },
+            "includes/saude-operacional.php": {
+                "current_user_can": 1,
+                "sige_can": 0
+            },
+            "includes/secure-document-download.php": {
+                "current_user_can": 6,
+                "sige_can": 3
+            },
+            "includes/security-baseline-pro.php": {
+                "current_user_can": 1,
+                "sige_can": 0
+            },
+            "includes/security-hardening.php": {
+                "current_user_can": 9,
+                "sige_can": 1
+            },
+            "includes/security-kernel.php": {
+                "current_user_can": 0,
+                "sige_can": 1
+            },
+            "includes/settings/class-sige-settings-legacy.php": {
+                "current_user_can": 4,
+                "sige_can": 0
+            },
+            "includes/settings/class-sige-settings-policy.php": {
+                "current_user_can": 2,
+                "sige_can": 0
+            },
+            "includes/settings/class-sige-settings-technical-mode.php": {
+                "current_user_can": 2,
+                "sige_can": 0
+            },
+            "includes/versioning.php": {
+                "current_user_can": 1,
+                "sige_can": 0
+            },
+            "includes/whatsapp-central.php": {
+                "current_user_can": 7,
+                "sige_can": 1
+            },
+            "includes/whatsapp-diagnostics.php": {
+                "current_user_can": 12,
+                "sige_can": 0
+            },
+            "includes/whatsapp-engine.php": {
+                "current_user_can": 20,
+                "sige_can": 0
+            },
+            "includes/whatsapp-recovery-mode.php": {
+                "current_user_can": 3,
+                "sige_can": 0
+            },
+            "sige-softgenial.php": {
+                "current_user_can": 0,
+                "sige_can": 1
+            }
+        }
+    },
+    "tenant_fallbacks_count": 0,
+    "option_names_count": 130,
+    "external_hosts_count": 12,
+    "views": {
+        "allowlist": [
+            "abertura",
+            "acta",
+            "alocacao",
+            "aluno_contas",
+            "aluno_portal",
+            "alunos_lista",
+            "aprovar_notas",
+            "auditoria_notas",
+            "boletim",
+            "comunicacoes_central",
+            "config",
+            "config_center",
+            "curriculos",
+            "dashboard",
+            "dec",
+            "disciplinas",
+            "encerramento",
+            "equipe",
+            "estatisticas_demo",
+            "financeiro-auditoria",
+            "financeiro-centros",
+            "financeiro-config",
+            "financeiro-dashboard",
+            "financeiro-despesas",
+            "financeiro-devedores",
+            "financeiro-extratos",
+            "financeiro-gerador",
+            "financeiro-inscricoes",
+            "financeiro-lancamentos",
+            "financeiro-mpesa",
+            "financeiro-pagamentos",
+            "financeiro-planos",
+            "financeiro-relatorio-mensal",
+            "jardim_boletim",
+            "jardim_diario",
+            "jardim_presencas",
+            "jardim_relatorio",
+            "jardim_saude",
+            "matriz",
+            "minhas_turmas",
+            "notas",
+            "pagamentos-turma",
+            "pauta_final",
+            "pautas",
+            "portaria",
+            "presencas",
+            "sige_core_status",
+            "sige_permissoes",
+            "transporte",
+            "turmas",
+            "vincular",
+            "whatsapp_central",
+            "whatsapp_circulares",
+            "whatsapp_diag"
+        ],
+        "permission_map": {
+            "abertura": [
+                "academico.reabrir_ano"
+            ],
+            "acta": [
+                "academico.actas_ver"
+            ],
+            "alocacao": [
+                "academico.alocacao_ver"
+            ],
+            "aluno_contas": [
+                "alunos.contas_ver"
+            ],
+            "aluno_portal": [
+                "alunos.ver",
+                "portal.ver"
+            ],
+            "alunos_lista": [
+                "alunos.ver"
+            ],
+            "aprovar_notas": [
+                "academico.aprovar_notas"
+            ],
+            "auditoria_notas": [
+                "academico.auditoria_notas_ver"
+            ],
+            "boletim": [
+                "academico.boletins_ver"
+            ],
+            "comunicacoes_central": [
+                "comunicacao.central_ver"
+            ],
+            "config": [
+                "configuracoes.ver"
+            ],
+            "config_center": [
+                "sistema.estado_ver",
+                "configuracoes.ver"
+            ],
+            "curriculos": [
+                "academico.matriz_ver",
+                "configuracoes.ver"
+            ],
+            "dashboard": [
+                "academico.dashboard_ver",
+                "financeiro.dashboard_ver",
+                "rh.equipe_ver",
+                "jardim.ver",
+                "sistema.estado_ver"
+            ],
+            "dec": [
+                "academico.dec_ver"
+            ],
+            "disciplinas": [
+                "academico.disciplinas_ver"
+            ],
+            "encerramento": [
+                "academico.fechar_ano"
+            ],
+            "equipe": [
+                "rh.equipe_ver"
+            ],
+            "estatisticas_demo": [
+                "academico.estatisticas_ver"
+            ],
+            "financeiro-auditoria": [
+                "financeiro.auditoria_ver"
+            ],
+            "financeiro-centros": [
+                "financeiro.centros_custo_ver"
+            ],
+            "financeiro-config": [
+                "financeiro.servicos_ver",
+                "financeiro.configurar_precos"
+            ],
+            "financeiro-dashboard": [
+                "financeiro.dashboard_ver",
+                "financeiro.ver"
+            ],
+            "financeiro-despesas": [
+                "financeiro.despesas_ver"
+            ],
+            "financeiro-devedores": [
+                "financeiro.cobrancas_ver"
+            ],
+            "financeiro-extratos": [
+                "financeiro.extractos_ver"
+            ],
+            "financeiro-gerador": [
+                "financeiro.lancar_mensalidades"
+            ],
+            "financeiro-inscricoes": [
+                "financeiro.lancamentos_gerir",
+                "financeiro.lancar_mensalidades"
+            ],
+            "financeiro-lancamentos": [
+                "financeiro.lancamentos_ver"
+            ],
+            "financeiro-mpesa": [
+                "financeiro.mobile_payments_gerir"
+            ],
+            "financeiro-pagamentos": [
+                "financeiro.pagar"
+            ],
+            "financeiro-planos": [
+                "financeiro.planos_ver",
+                "financeiro.planos_gerir"
+            ],
+            "financeiro-relatorio-mensal": [
+                "financeiro.relatorio_mensal_ver"
+            ],
+            "jardim_boletim": [
+                "jardim.boletim_ver"
+            ],
+            "jardim_diario": [
+                "jardim.diario_ver"
+            ],
+            "jardim_presencas": [
+                "jardim.presencas_ver"
+            ],
+            "jardim_relatorio": [
+                "jardim.relatorio_ver"
+            ],
+            "jardim_saude": [
+                "jardim.saude_ver"
+            ],
+            "matriz": [
+                "academico.matriz_ver"
+            ],
+            "minhas_turmas": [
+                "academico.turmas_ver"
+            ],
+            "notas": [
+                "academico.lancar_notas"
+            ],
+            "pagamentos-turma": [
+                "financeiro.pagamentos_turma_ver"
+            ],
+            "pauta_final": [
+                "academico.pauta_final_ver"
+            ],
+            "pautas": [
+                "academico.pautas_ver"
+            ],
+            "portaria": [
+                "portaria.ver",
+                "portaria.validar_acesso"
+            ],
+            "presencas": [
+                "academico.presencas_ver"
+            ],
+            "sige_core_status": [
+                "sistema.estado_ver"
+            ],
+            "sige_permissoes": [
+                "usuarios.gerir_permissoes"
+            ],
+            "transporte": [
+                "transporte.ver"
+            ],
+            "turmas": [
+                "academico.turmas_ver"
+            ],
+            "vincular": [
+                "alunos.ver",
+                "matriculas.editar"
+            ],
+            "whatsapp_central": [
+                "comunicacao.whatsapp_ver"
+            ],
+            "whatsapp_circulares": [
+                "comunicacao.circulares_enviar"
+            ],
+            "whatsapp_diag": [
+                "comunicacao.whatsapp_diagnostico_ver"
+            ]
+        }
+    },
+    "public_surface_count": 8,
+    "corrective_audit": {
+        "dynamic_hooks_detected": true,
+        "query_handlers_detected": true,
+        "independent_manifest_extractor": true
+    }
+}

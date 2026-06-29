@@ -1,0 +1,13 @@
+QA v12.12.5 - Security Kernel Corrective Runtime Audit
+
+Executado:
+- php tools/run-gates.php
+- php tools/smoke-security-kernel-v12-12-5.php
+- php tools/smoke-mobile-tenant-options-v12-12-5.php
+- PHP lint em todos os ficheiros PHP
+
+Resultado:
+- Gates oficiais: 35/35 verdes
+- PHP lint: 344 ficheiros, 0 falhas
+- P0 aberto: 0
+- P1 aberto: 0

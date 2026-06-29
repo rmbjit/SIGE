@@ -1,0 +1,955 @@
+{
+    "version": "12.12.2",
+    "items": [
+        {
+            "file": "admin/academic/abertura-view.php",
+            "line": 25,
+            "code": "$_eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/acta-view.php",
+            "line": 37,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/aluno-portal-view.php",
+            "line": 36,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/alunos_lista.php",
+            "line": 256,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/aprovar_notas-view.php",
+            "line": 32,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/auditoria_notas-view.php",
+            "line": 20,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/boletim-view.php",
+            "line": 35,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/dec-view.php",
+            "line": 18,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/disciplinas-view.php",
+            "line": 45,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/encerramento-view.php",
+            "line": 38,
+            "code": "$_eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/estatisticas-demograficas-view.php",
+            "line": 28,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/matriz-view.php",
+            "line": 298,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/minhas_turmas-view.php",
+            "line": 23,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/notas-view.php",
+            "line": 31,
+            "code": "$eid = function_exists('sige_get_escola_id') ? sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/pauta-final-view.php",
+            "line": 24,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/pautas-view.php",
+            "line": 175,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/presencas-view.php",
+            "line": 10,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/turmas-view.php",
+            "line": 42,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/academic/vincular-view.php",
+            "line": 75,
+            "code": "$discs = $wpdb->get_results($wpdb->prepare(\"SELECT * FROM {$wpdb->prefix}sige_disciplinas WHERE escola_id = %d ORDER BY nome ASC\", function_exists('sige_get_escola_id') ? sige_get_escola_id() : 1));"
+        },
+        {
+            "file": "admin/finance/financeiro-centros-view.php",
+            "line": 25,
+            "code": "function_exists('sige_get_escola_id') ? sige_get_escola_id() : 1"
+        },
+        {
+            "file": "admin/finance/financeiro-config.php",
+            "line": 41,
+            "code": "$escola_id  = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/finance/financeiro-config.php",
+            "line": 240,
+            "code": ": (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "admin/finance/financeiro-config.php",
+            "line": 243,
+            "code": "$escola_id = 1;"
+        },
+        {
+            "file": "admin/finance/financeiro-dashboard.php",
+            "line": 37,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/finance/financeiro-despesas-view.php",
+            "line": 24,
+            "code": "$escola_id = (int) ($wpdb->get_var(\"SELECT escola_id FROM {$p}sige_config LIMIT 1\") ?: 1);"
+        },
+        {
+            "file": "admin/finance/financeiro-devedores-view.php",
+            "line": 24,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/finance/financeiro-extratos.php",
+            "line": 310,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/finance/financeiro-gerador.php",
+            "line": 63,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/finance/financeiro-gerador.php",
+            "line": 137,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/finance/financeiro-inscricoes-view.php",
+            "line": 21,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/finance/financeiro-lancamentos-view.php",
+            "line": 117,
+            "code": "$escola_id = (int) ($wpdb->get_var(\"SELECT escola_id FROM {$wpdb->prefix}sige_config LIMIT 1\") ?: 1);"
+        },
+        {
+            "file": "admin/finance/financeiro-lancamentos-view.php",
+            "line": 210,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/finance/financeiro-pagamentos.php",
+            "line": 39,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/finance/financeiro-pagamentos.php",
+            "line": 90,
+            "code": "if (!$eid) $eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/finance/financeiro-pagamentos.php",
+            "line": 155,
+            "code": "$escola_id = $escola_id > 0 ? $escola_id : (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "admin/finance/financeiro-pagamentos.php",
+            "line": 204,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/finance/financeiro-pagamentos.php",
+            "line": 294,
+            "code": "if (!$eid) $eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/finance/financeiro-pagamentos.php",
+            "line": 312,
+            "code": "if (!$eid) $eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/finance/financeiro-planos-view.php",
+            "line": 23,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/finance/financeiro-relatorio-mensal-view.php",
+            "line": 47,
+            "code": "$escola_id = (int) ($wpdb->get_var(\"SELECT escola_id FROM {$wpdb->prefix}sige_config LIMIT 1\") ?: 1);"
+        },
+        {
+            "file": "admin/finance/mpesa-view.php",
+            "line": 10,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/finance/pagamentos-turma-view.php",
+            "line": 13,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/hr/equipe-view.php",
+            "line": 37,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/jardim/jardim_boletim-view.php",
+            "line": 19,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/jardim/jardim_diario-view.php",
+            "line": 19,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/jardim/jardim_presencas-view.php",
+            "line": 10,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/jardim/jardim_relatorio-view.php",
+            "line": 18,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/jardim/jardim_saude-view.php",
+            "line": 17,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/logistics/transporte-view.php",
+            "line": 23,
+            "code": "$sige_transport_escola_id = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/system/curriculum-engine-view.php",
+            "line": 22,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/system/dashboard-view.php",
+            "line": 39,
+            "code": "$eid = function_exists('sige_get_escola_id') ? sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/system/permissions-ui.php",
+            "line": 234,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/system/permissions-ui.php",
+            "line": 235,
+            "code": "if ($escola_id <= 0) $escola_id = 1;"
+        },
+        {
+            "file": "admin/system/permissions-ui.php",
+            "line": 276,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/system/permissions-ui.php",
+            "line": 277,
+            "code": "if ($escola_id <= 0) $escola_id = 1;"
+        },
+        {
+            "file": "admin/system/permissions-ui.php",
+            "line": 427,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/system/permissions-ui.php",
+            "line": 428,
+            "code": "if ($escola_id <= 0) $escola_id = 1;"
+        },
+        {
+            "file": "admin/whatsapp_circulares-view.php",
+            "line": 10,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "admin/whatsapp_diag-view.php",
+            "line": 33,
+            "code": "$eid     = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/academic-logic.php",
+            "line": 32,
+            "code": "return function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/academic-logic.php",
+            "line": 62,
+            "code": "$eid = ($escola_id !== null && (int)$escola_id > 0) ? (int)$escola_id : (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/academic-logic.php",
+            "line": 490,
+            "code": "'escola_id'     => function_exists('sige_get_escola_id') ? sige_get_escola_id() : 1,"
+        },
+        {
+            "file": "includes/academic-logic.php",
+            "line": 571,
+            "code": "$turma = $wpdb->get_row($wpdb->prepare(\"SELECT * FROM {$tTurmas} WHERE id=%d AND escola_id=%d LIMIT 1\", $turma_id, function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1));"
+        },
+        {
+            "file": "includes/academic-logic.php",
+            "line": 655,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/academic-logic.php",
+            "line": 677,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/academic-logic.php",
+            "line": 743,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/academic-logic.php",
+            "line": 831,
+            "code": "function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1,"
+        },
+        {
+            "file": "includes/academic-logic.php",
+            "line": 1322,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/academic-logic.php",
+            "line": 1769,
+            "code": ": (function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/academic-logic.php",
+            "line": 2083,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/academic-logic.php",
+            "line": 2188,
+            "code": "$escola_id = $escola_id ?: (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/academic-logic.php",
+            "line": 2227,
+            "code": "$escola_id = $escola_id ?: (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/acta-pdf-handler.php",
+            "line": 596,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/acta-pdf-handler.php",
+            "line": 1236,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/acta-pdf-handler.php",
+            "line": 1355,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/acta-pdf-handler.php",
+            "line": 1609,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/ajax-handlers.php",
+            "line": 45,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/alertas-core.php",
+            "line": 303,
+            "code": ": (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/alertas-core.php",
+            "line": 357,
+            "code": "$eid = $escola_id ?? (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/alertas-core.php",
+            "line": 372,
+            "code": "$eid = $escola_id ?? (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/aluno-accounts.php",
+            "line": 396,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/aluno-fetch-ajax.php",
+            "line": 44,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/aluno-fetch-ajax.php",
+            "line": 230,
+            "code": "$escola_id  = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/aluno-fetch-ajax.php",
+            "line": 303,
+            "code": "$escola_id  = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/aluno-fetch-ajax.php",
+            "line": 737,
+            "code": "$escola_id   = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/aluno-fetch-ajax.php",
+            "line": 1384,
+            "code": "$escola_id   = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/aluno-fetch-ajax.php",
+            "line": 1974,
+            "code": "$escola_id    = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/aluno-fetch-ajax.php",
+            "line": 2386,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/aluno-fetch-ajax.php",
+            "line": 2496,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/aluno-fetch-ajax.php",
+            "line": 2555,
+            "code": "$escola_id = isset($payload['escola_id']) ? (int)$payload['escola_id'] : (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/centros-helpers.php",
+            "line": 51,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/centros-helpers.php",
+            "line": 102,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/centros-helpers.php",
+            "line": 163,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/centros-helpers.php",
+            "line": 204,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/centros-helpers.php",
+            "line": 263,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/centros-helpers.php",
+            "line": 286,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/centros-helpers.php",
+            "line": 402,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/centros-helpers.php",
+            "line": 473,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/centros-helpers.php",
+            "line": 689,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/circulares.php",
+            "line": 105,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/circulares.php",
+            "line": 132,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/core-helpers.php",
+            "line": 34,
+            "code": "$eid = function_exists('sige_get_escola_id') ? sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/core-helpers.php",
+            "line": 153,
+            "code": "$eid = function_exists('sige_get_escola_id') ? sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/core-helpers.php",
+            "line": 353,
+            "code": "$escola_id = $escola_id > 0 ? $escola_id : (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/core-helpers.php",
+            "line": 439,
+            "code": "$eid = function_exists('sige_get_escola_id') ? sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/curriculum-engine.php",
+            "line": 199,
+            "code": "$eid = $escola_id ?: (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/curriculum-engine.php",
+            "line": 221,
+            "code": "$eid = $escola_id ?: (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/curriculum-engine.php",
+            "line": 237,
+            "code": "$eid = $escola_id ?: (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/curriculum-engine.php",
+            "line": 338,
+            "code": "$eid = $escola_id ?: (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/curriculum-engine.php",
+            "line": 376,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/curriculum-engine.php",
+            "line": 386,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/curriculum-engine.php",
+            "line": 404,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/db-handler.php",
+            "line": 114,
+            "code": "$escola_id = $escola_id > 0 ? $escola_id : (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/db-handler.php",
+            "line": 133,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/db-handler.php",
+            "line": 1010,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/db-handler.php",
+            "line": 1011,
+            "code": "if ($escola_id <= 0) $escola_id = 1;"
+        },
+        {
+            "file": "includes/db-handler.php",
+            "line": 1641,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/db-handler.php",
+            "line": 2847,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/email-central.php",
+            "line": 66,
+            "code": "return function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/encarregados-advanced.php",
+            "line": 315,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/finance-core.php",
+            "line": 15,
+            "code": "$escola_id = $escola_id > 0 ? $escola_id : (function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/finance-core.php",
+            "line": 740,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/finance-core.php",
+            "line": 1181,
+            "code": "$escola_id = $escola_id > 0 ? $escola_id : (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/finance-core.php",
+            "line": 2000,
+            "code": "if (!$eid) $eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/finance-data-efectiva.php",
+            "line": 88,
+            "code": "$eid = $escola_id ?? (function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/finance-data-efectiva.php",
+            "line": 185,
+            "code": "$eid = $escola_id ?? (function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/financeiro-historico-aluno-pro.php",
+            "line": 83,
+            "code": "$role = sige_permissions_get_active_role((int)get_current_user_id(), function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/financeiro-historico-aluno-pro.php",
+            "line": 131,
+            "code": "$escola_id = $escola_id > 0 ? $escola_id : (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/financeiro-historico-aluno-pro.php",
+            "line": 981,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/hub/class-sige-hub-commands.php",
+            "line": 54,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/jardim-handlers.php",
+            "line": 125,
+            "code": "$escola_id = $escola_id > 0 ? $escola_id : (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/jardim-handlers.php",
+            "line": 746,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/jardim-handlers.php",
+            "line": 772,
+            "code": "global $wpdb; $eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/jardim-handlers.php",
+            "line": 799,
+            "code": "global $wpdb; $eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/jardim-handlers.php",
+            "line": 825,
+            "code": "global $wpdb; $eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/jardim-handlers.php",
+            "line": 882,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/jardim-handlers.php",
+            "line": 901,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/jardim-handlers.php",
+            "line": 980,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/jardim-handlers.php",
+            "line": 1010,
+            "code": "global $wpdb; $eid=function_exists('sige_get_escola_id')?(int)sige_get_escola_id():1;"
+        },
+        {
+            "file": "includes/jardim-handlers.php",
+            "line": 1039,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/map-pdf-handler.php",
+            "line": 191,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/map-pdf-handler.php",
+            "line": 494,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/notificacoes-encarregados.php",
+            "line": 75,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/notificacoes-encarregados.php",
+            "line": 239,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/notification-policy.php",
+            "line": 122,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/notification-policy.php",
+            "line": 148,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/notification-policy.php",
+            "line": 241,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/notification-policy.php",
+            "line": 343,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/notification-policy.php",
+            "line": 481,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/notification-policy.php",
+            "line": 1226,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/notification-policy.php",
+            "line": 1231,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/notification-policy.php",
+            "line": 1335,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/passagem-docs-handler.php",
+            "line": 119,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/pauta-excel-handler.php",
+            "line": 79,
+            "code": "function_exists('sige_get_escola_id') ? sige_get_escola_id() : 1, $ano_lectivo, $classe_num"
+        },
+        {
+            "file": "includes/pauta-pdf-handler.php",
+            "line": 75,
+            "code": "function_exists('sige_get_escola_id') ? sige_get_escola_id() : 1, $ano_lectivo, $classe_num"
+        },
+        {
+            "file": "includes/payments/emola-webhook.php",
+            "line": 82,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/payments/mpesa-cobranca.php",
+            "line": 49,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/payments/mpesa-conciliacao.php",
+            "line": 311,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/payments/mpesa-webhook.php",
+            "line": 47,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/permissions-layer.php",
+            "line": 777,
+            "code": "$escola_id = 1;"
+        },
+        {
+            "file": "includes/permissions-layer.php",
+            "line": 867,
+            "code": "$escola_id = $escola_id ?: (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/permissions-layer.php",
+            "line": 870,
+            "code": "$escola_id = 1;"
+        },
+        {
+            "file": "includes/permissions-layer.php",
+            "line": 955,
+            "code": "$escola_id = $escola_id ?: (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/permissions-layer.php",
+            "line": 958,
+            "code": "$escola_id = 1;"
+        },
+        {
+            "file": "includes/permissions-layer.php",
+            "line": 1031,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/permissions-layer.php",
+            "line": 1037,
+            "code": "$escola_id = 1;"
+        },
+        {
+            "file": "includes/portal-logic.php",
+            "line": 165,
+            "code": "$_eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/portal-logic.php",
+            "line": 2131,
+            "code": "$_eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/presencas-engine.php",
+            "line": 272,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/presencas-engine.php",
+            "line": 287,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/regime-mensalidade-core.php",
+            "line": 102,
+            "code": "$escola_id = $escola_id !== null ? (int)$escola_id : (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/relatorio-mensal-email.php",
+            "line": 90,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/settings/class-sige-settings-repository.php",
+            "line": 308,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/settings/class-sige-settings-technical-mode.php",
+            "line": 150,
+            "code": "'escola_id'    => function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1,"
+        },
+        {
+            "file": "includes/settings/class-sige-settings-view-renderer.php",
+            "line": 303,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/whatsapp-central.php",
+            "line": 65,
+            "code": "return function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/whatsapp-destinatarios-policy.php",
+            "line": 65,
+            "code": "$eid = $escola_id !== null ? (int)$escola_id : (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/whatsapp-destinatarios-policy.php",
+            "line": 80,
+            "code": "$eid = $escola_id !== null ? (int)$escola_id : (function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1);"
+        },
+        {
+            "file": "includes/whatsapp-destinatarios-policy.php",
+            "line": 234,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/whatsapp-diagnostics.php",
+            "line": 50,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/whatsapp-diagnostics.php",
+            "line": 215,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int) sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/whatsapp-engine.php",
+            "line": 137,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/whatsapp-engine.php",
+            "line": 186,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/whatsapp-engine.php",
+            "line": 437,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/whatsapp-guardian.php",
+            "line": 361,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/whatsapp-guardian.php",
+            "line": 396,
+            "code": "$escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/whatsapp-guardrails-pro.php",
+            "line": 278,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/whatsapp-recovery-mode.php",
+            "line": 648,
+            "code": "add_filter('sige_wpp_normal_daily_limit', function($limit) { return function_exists('sige_wpp_health_effective_daily_limit') ? sige_wpp_health_effective_daily_limit(function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1, 250) : 250; }, 999);"
+        },
+        {
+            "file": "includes/whatsapp-recovery-mode.php",
+            "line": 816,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        },
+        {
+            "file": "includes/whatsapp-recovery-mode.php",
+            "line": 867,
+            "code": "$eid = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1;"
+        }
+    ]
+}

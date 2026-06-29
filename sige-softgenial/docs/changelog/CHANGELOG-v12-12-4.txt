@@ -1,0 +1,30 @@
+SIGE SoftGenial v12.12.4 - Security Kernel Foundation
+
+Escopo:
+- Fase 1 do programa Alto Calibre.
+- Security Kernel runtime em `includes/security-kernel.php`.
+- Regras operacionais em `includes/security-kernel-rules.php`.
+- Contrato JSON em `docs/security/SECURITY_KERNEL_RULES-v12.12.4.json`.
+- 174 superficies cobertas.
+- 4 superficies em enforcement piloto.
+- 170 superficies em observe para lockdown progressivo.
+
+Piloto enforce:
+- admin_post:sige_mpesa_guardar_config.
+- admin_post:sige_emola_guardar_config.
+- query_handler:sige_desp_print.
+- wp_ajax:sige_settings_save.
+
+Validacao esperada:
+- PHP lint.
+- php tools/run-gates.php.
+- smoke-security-kernel-v12-12-4.
+- check-security-kernel-negative-tests.
+
+Fora do escopo:
+- MFA.
+- Secret Vault.
+- Financial Ledger.
+- CSP enforcement.
+- Tenant fail-closed global.
+- Lockdown completo de todas as acoes criticas.

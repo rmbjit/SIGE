@@ -1,0 +1,15 @@
+SIGE SoftGenial v12.10.51 - Encerramento: Header Único
+
+Objectivo
+- Corrigir a duplicação de cabeçalhos no módulo &view=encerramento.
+- Manter apenas o cabeçalho/hero próprio do módulo, no padrão Produto PRO.
+
+Alterações
+- O App Shell deixa de renderizar o cabeçalho genérico superior para a view encerramento.
+- O módulo passa a exibir somente o header harmonizado com ícone canónico, título principal e texto explicativo.
+- Preserva-se o padrão validado: sem pontinhos verdes, sem header duplicado e com aparência de aplicação profissional.
+
+Garantias
+- Sem alteração em notas, pautas, DEC, boletins, fórmulas, pagamentos, multas ou base de dados.
+- Sem alteração na lógica de encerramento/reabertura do ano lectivo.
+- Intervenção limitada à apresentação visual e ao controlo de duplicação do header no App Shell.

@@ -1,0 +1,30 @@
+DEPLOY - SIGE SoftGenial v12.12.29
+Fase 9 incremento 2: Hierarquia de perfis por nivel
+Data: 2026-06-22
+
+O QUE MUDA NESTA VERSAO
+- O modulo de Perfis e Permissoes passa a ter uma hierarquia. Cada perfil tem um nivel, e um gestor so pode atribuir e mexer em perfis abaixo do seu proprio nivel.
+- Os tres perfis que gerem permissoes ficam no topo: direccao geral e admin escola no nivel 90, admin TI no nivel 80. Os restantes por responsabilidade (direccao e RH a 70; secretaria geral a 60; secretaria, secretario e tesoureiro a 50; recepcao e assistente a 40; professor e educador a 30; guarda, motorista e limpeza a 10; encarregado a 0). Qualquer perfil personalizado fica no nivel 0, o mais restritivo.
+- Na pratica: um admin TI pode atribuir e gerir perfis abaixo do nivel 80 (por exemplo, director, secretaria, professor), mas nao pode mexer numa direccao geral nem atribuir um perfil de nivel igual ou superior ao seu. E continua a nao poder criar gestores (essa garantia, do incremento anterior, mantem-se: so um administrador WordPress real cria perfis que gerem permissoes).
+- A lista de utilizadores fica coerente: o selector de perfil so mostra os perfis que a pessoa pode mesmo atribuir, e as linhas de utilizadores de nivel igual ou superior aparecem so de leitura, com nota. As contas de administrador WordPress continuam so de leitura com o selo Protegido, como na versao anterior.
+
+PASSOS DE INSTALACAO (CloudPanel / File Manager)
+1. Faca uma copia de seguranca do plugin actual e da base de dados (rotina normal).
+2. Em Plugins, desactive o SIGE SoftGenial (nao apague: os dados ficam).
+3. Substitua a pasta do plugin pelo conteudo deste ZIP (a pasta sige-softgenial na raiz do ZIP). Em alternativa, instale o ZIP por cima pela administracao do WordPress.
+4. Reactive o plugin. Nao ha migracao de base de dados nesta versao: a hierarquia vive em codigo.
+
+VERIFICACAO RAPIDA (5 minutos)
+1. Inicie sessao como admin TI e abra Configuracoes > Perfis e Permissoes. No selector de perfil de um utilizador, confirme que ja nao aparecem os perfis de gestao (direccao geral, admin escola, admin TI) nem nenhum de nivel igual ou superior ao seu.
+2. Como admin TI, atribua um perfil abaixo do seu nivel (por exemplo, secretaria ou professor) a um utilizador comum. Deve funcionar.
+3. Como admin TI, repare que a linha de uma direccao geral (se existir) aparece so de leitura, com a nota de nivel superior ou igual; nao ha botoes nessa linha.
+4. Como administrador do sistema (administrador WordPress), confirme que continua a ver e a poder atribuir todos os perfis, incluindo os de gestao.
+
+NOTAS
+- Sem migracao de esquema: a versao do esquema nao muda. A hierarquia e um mapa em codigo.
+- Sem alteracoes a regras de calculo financeiro ou academico.
+- Sem novo ecra e sem nova superficie de accao: o inventario de seguranca mantem-se em 199 accoes (33 em modo enforce).
+- Se quiser ajustar quem esta acima de quem, os niveis sao um mapa em codigo e podem ser afinados num proximo incremento (ou tornados editaveis na interface, ja previsto para mais tarde).
+
+REVERSAO
+- Reinstale o pacote da versao anterior (v12.12.28). Esta versao nao altera dados nem esquema; a reversao do codigo nao deixa o sistema inconsistente.

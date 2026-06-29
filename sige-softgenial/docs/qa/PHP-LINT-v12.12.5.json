@@ -1,0 +1,1727 @@
+{
+  "version": "12.12.5",
+  "php_files": 344,
+  "failures": 0,
+  "items": [
+    {
+      "file": "admin/academic/abertura-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/abertura-view.php"
+    },
+    {
+      "file": "admin/academic/acta-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/acta-view.php"
+    },
+    {
+      "file": "admin/academic/alocacao-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/alocacao-view.php"
+    },
+    {
+      "file": "admin/academic/aluno-portal-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/aluno-portal-view.php"
+    },
+    {
+      "file": "admin/academic/aluno_contas-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/aluno_contas-view.php"
+    },
+    {
+      "file": "admin/academic/alunos_lista.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/alunos_lista.php"
+    },
+    {
+      "file": "admin/academic/aprovar_notas-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/aprovar_notas-view.php"
+    },
+    {
+      "file": "admin/academic/auditoria_notas-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/auditoria_notas-view.php"
+    },
+    {
+      "file": "admin/academic/boletim-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/boletim-view.php"
+    },
+    {
+      "file": "admin/academic/dec-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/dec-view.php"
+    },
+    {
+      "file": "admin/academic/disciplinas-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/disciplinas-view.php"
+    },
+    {
+      "file": "admin/academic/encerramento-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/encerramento-view.php"
+    },
+    {
+      "file": "admin/academic/estatisticas-demograficas-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/estatisticas-demograficas-view.php"
+    },
+    {
+      "file": "admin/academic/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/index.php"
+    },
+    {
+      "file": "admin/academic/matriz-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/matriz-view.php"
+    },
+    {
+      "file": "admin/academic/minhas_turmas-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/minhas_turmas-view.php"
+    },
+    {
+      "file": "admin/academic/notas-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/notas-view.php"
+    },
+    {
+      "file": "admin/academic/pauta-final-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/pauta-final-view.php"
+    },
+    {
+      "file": "admin/academic/pautas-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/pautas-view.php"
+    },
+    {
+      "file": "admin/academic/presencas-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/presencas-view.php"
+    },
+    {
+      "file": "admin/academic/turmas-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/turmas-view.php"
+    },
+    {
+      "file": "admin/academic/vincular-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/academic/vincular-view.php"
+    },
+    {
+      "file": "admin/acta-oficial-template.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/acta-oficial-template.php"
+    },
+    {
+      "file": "admin/boletim-pdf-template.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/boletim-pdf-template.php"
+    },
+    {
+      "file": "admin/comunicacoes_central-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/comunicacoes_central-view.php"
+    },
+    {
+      "file": "admin/finance/financeiro-auditoria-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/finance/financeiro-auditoria-view.php"
+    },
+    {
+      "file": "admin/finance/financeiro-centros-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/finance/financeiro-centros-view.php"
+    },
+    {
+      "file": "admin/finance/financeiro-config.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/finance/financeiro-config.php"
+    },
+    {
+      "file": "admin/finance/financeiro-dashboard.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/finance/financeiro-dashboard.php"
+    },
+    {
+      "file": "admin/finance/financeiro-despesas-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/finance/financeiro-despesas-view.php"
+    },
+    {
+      "file": "admin/finance/financeiro-devedores-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/finance/financeiro-devedores-view.php"
+    },
+    {
+      "file": "admin/finance/financeiro-extratos.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/finance/financeiro-extratos.php"
+    },
+    {
+      "file": "admin/finance/financeiro-gerador.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/finance/financeiro-gerador.php"
+    },
+    {
+      "file": "admin/finance/financeiro-inscricoes-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/finance/financeiro-inscricoes-view.php"
+    },
+    {
+      "file": "admin/finance/financeiro-lancamentos-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/finance/financeiro-lancamentos-view.php"
+    },
+    {
+      "file": "admin/finance/financeiro-pagamentos.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/finance/financeiro-pagamentos.php"
+    },
+    {
+      "file": "admin/finance/financeiro-planos-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/finance/financeiro-planos-view.php"
+    },
+    {
+      "file": "admin/finance/financeiro-relatorio-mensal-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/finance/financeiro-relatorio-mensal-view.php"
+    },
+    {
+      "file": "admin/finance/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/finance/index.php"
+    },
+    {
+      "file": "admin/finance/mpesa-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/finance/mpesa-view.php"
+    },
+    {
+      "file": "admin/finance/pagamentos-turma-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/finance/pagamentos-turma-view.php"
+    },
+    {
+      "file": "admin/hr/equipe-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/hr/equipe-view.php"
+    },
+    {
+      "file": "admin/hr/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/hr/index.php"
+    },
+    {
+      "file": "admin/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/index.php"
+    },
+    {
+      "file": "admin/jardim/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/jardim/index.php"
+    },
+    {
+      "file": "admin/jardim/jardim_boletim-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/jardim/jardim_boletim-view.php"
+    },
+    {
+      "file": "admin/jardim/jardim_diario-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/jardim/jardim_diario-view.php"
+    },
+    {
+      "file": "admin/jardim/jardim_presencas-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/jardim/jardim_presencas-view.php"
+    },
+    {
+      "file": "admin/jardim/jardim_relatorio-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/jardim/jardim_relatorio-view.php"
+    },
+    {
+      "file": "admin/jardim/jardim_saude-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/jardim/jardim_saude-view.php"
+    },
+    {
+      "file": "admin/logistics/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/logistics/index.php"
+    },
+    {
+      "file": "admin/logistics/transporte-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/logistics/transporte-view.php"
+    },
+    {
+      "file": "admin/map-oficial-template.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/map-oficial-template.php"
+    },
+    {
+      "file": "admin/pauta-pdf-template.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/pauta-pdf-template.php"
+    },
+    {
+      "file": "admin/system/config-center-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/system/config-center-view.php"
+    },
+    {
+      "file": "admin/system/config-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/system/config-view.php"
+    },
+    {
+      "file": "admin/system/core-status-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/system/core-status-view.php"
+    },
+    {
+      "file": "admin/system/curriculum-engine-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/system/curriculum-engine-view.php"
+    },
+    {
+      "file": "admin/system/dashboard-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/system/dashboard-view.php"
+    },
+    {
+      "file": "admin/system/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/system/index.php"
+    },
+    {
+      "file": "admin/system/permissions-ui.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/system/permissions-ui.php"
+    },
+    {
+      "file": "admin/system/portaria-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/system/portaria-view.php"
+    },
+    {
+      "file": "admin/whatsapp_central-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/whatsapp_central-view.php"
+    },
+    {
+      "file": "admin/whatsapp_circulares-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/whatsapp_circulares-view.php"
+    },
+    {
+      "file": "admin/whatsapp_diag-view.php",
+      "ok": true,
+      "output": "No syntax errors detected in admin/whatsapp_diag-view.php"
+    },
+    {
+      "file": "assets/audio/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in assets/audio/index.php"
+    },
+    {
+      "file": "assets/icons/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in assets/icons/index.php"
+    },
+    {
+      "file": "assets/icons/sg/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in assets/icons/sg/index.php"
+    },
+    {
+      "file": "assets/img/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in assets/img/index.php"
+    },
+    {
+      "file": "assets/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in assets/index.php"
+    },
+    {
+      "file": "docs/changelog/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in docs/changelog/index.php"
+    },
+    {
+      "file": "docs/deploy/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in docs/deploy/index.php"
+    },
+    {
+      "file": "docs/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in docs/index.php"
+    },
+    {
+      "file": "docs/legado/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in docs/legado/index.php"
+    },
+    {
+      "file": "docs/qa/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in docs/qa/index.php"
+    },
+    {
+      "file": "docs/relatorios/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in docs/relatorios/index.php"
+    },
+    {
+      "file": "includes/academic-logic.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/academic-logic.php"
+    },
+    {
+      "file": "includes/acta-pdf-handler.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/acta-pdf-handler.php"
+    },
+    {
+      "file": "includes/admin-shell.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/admin-shell.php"
+    },
+    {
+      "file": "includes/ajax-handlers.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/ajax-handlers.php"
+    },
+    {
+      "file": "includes/alertas-core.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/alertas-core.php"
+    },
+    {
+      "file": "includes/alertas-cron.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/alertas-cron.php"
+    },
+    {
+      "file": "includes/alertas-templates.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/alertas-templates.php"
+    },
+    {
+      "file": "includes/aluno-accounts.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/aluno-accounts.php"
+    },
+    {
+      "file": "includes/aluno-fetch-ajax.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/aluno-fetch-ajax.php"
+    },
+    {
+      "file": "includes/audit-hooks.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/audit-hooks.php"
+    },
+    {
+      "file": "includes/backup-safety.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/backup-safety.php"
+    },
+    {
+      "file": "includes/boletim-pdf-handler.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/boletim-pdf-handler.php"
+    },
+    {
+      "file": "includes/cdn-scripts.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/cdn-scripts.php"
+    },
+    {
+      "file": "includes/centros-helpers.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/centros-helpers.php"
+    },
+    {
+      "file": "includes/circulares.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/circulares.php"
+    },
+    {
+      "file": "includes/class-sige-migration.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/class-sige-migration.php"
+    },
+    {
+      "file": "includes/comunicacoes-core.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/comunicacoes-core.php"
+    },
+    {
+      "file": "includes/config-layer.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/config-layer.php"
+    },
+    {
+      "file": "includes/core-helpers.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/core-helpers.php"
+    },
+    {
+      "file": "includes/core/class-sige-core.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/core/class-sige-core.php"
+    },
+    {
+      "file": "includes/core/class-sige-diagnostics.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/core/class-sige-diagnostics.php"
+    },
+    {
+      "file": "includes/core/core-loader.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/core/core-loader.php"
+    },
+    {
+      "file": "includes/core/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/core/index.php"
+    },
+    {
+      "file": "includes/cron-tasks.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/cron-tasks.php"
+    },
+    {
+      "file": "includes/curriculum-engine.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/curriculum-engine.php"
+    },
+    {
+      "file": "includes/db-handler.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/db-handler.php"
+    },
+    {
+      "file": "includes/db-migration-engine.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/db-migration-engine.php"
+    },
+    {
+      "file": "includes/despesa-state-machine.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/despesa-state-machine.php"
+    },
+    {
+      "file": "includes/dica-do-dia.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/dica-do-dia.php"
+    },
+    {
+      "file": "includes/documents-engine.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/documents-engine.php"
+    },
+    {
+      "file": "includes/email-central.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/email-central.php"
+    },
+    {
+      "file": "includes/email-engine.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/email-engine.php"
+    },
+    {
+      "file": "includes/email-queue-templates.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/email-queue-templates.php"
+    },
+    {
+      "file": "includes/encarregados-advanced.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/encarregados-advanced.php"
+    },
+    {
+      "file": "includes/feature-registry-sync.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/feature-registry-sync.php"
+    },
+    {
+      "file": "includes/fin-action-service.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/fin-action-service.php"
+    },
+    {
+      "file": "includes/fin-classe-helper.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/fin-classe-helper.php"
+    },
+    {
+      "file": "includes/fin-devedores-calendario.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/fin-devedores-calendario.php"
+    },
+    {
+      "file": "includes/fin-familia-service.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/fin-familia-service.php"
+    },
+    {
+      "file": "includes/fin-fecho-turno.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/fin-fecho-turno.php"
+    },
+    {
+      "file": "includes/fin-fsm-php74.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/fin-fsm-php74.php"
+    },
+    {
+      "file": "includes/fin-fsm-php81.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/fin-fsm-php81.php"
+    },
+    {
+      "file": "includes/fin-fsm.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/fin-fsm.php"
+    },
+    {
+      "file": "includes/fin-item-dispatcher.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/fin-item-dispatcher.php"
+    },
+    {
+      "file": "includes/fin-kpi-engine.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/fin-kpi-engine.php"
+    },
+    {
+      "file": "includes/finance-core.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/finance-core.php"
+    },
+    {
+      "file": "includes/finance-data-efectiva.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/finance-data-efectiva.php"
+    },
+    {
+      "file": "includes/financeiro-historico-aluno-pro.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/financeiro-historico-aluno-pro.php"
+    },
+    {
+      "file": "includes/hub/class-sige-hub-admin.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/hub/class-sige-hub-admin.php"
+    },
+    {
+      "file": "includes/hub/class-sige-hub-billing.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/hub/class-sige-hub-billing.php"
+    },
+    {
+      "file": "includes/hub/class-sige-hub-client.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/hub/class-sige-hub-client.php"
+    },
+    {
+      "file": "includes/hub/class-sige-hub-commands.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/hub/class-sige-hub-commands.php"
+    },
+    {
+      "file": "includes/hub/class-sige-hub-heartbeat.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/hub/class-sige-hub-heartbeat.php"
+    },
+    {
+      "file": "includes/hub/class-sige-hub-update-checker.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/hub/class-sige-hub-update-checker.php"
+    },
+    {
+      "file": "includes/hub/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/hub/index.php"
+    },
+    {
+      "file": "includes/hub/sige-feature.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/hub/sige-feature.php"
+    },
+    {
+      "file": "includes/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/index.php"
+    },
+    {
+      "file": "includes/infra/class-sige-logger.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/infra/class-sige-logger.php"
+    },
+    {
+      "file": "includes/infra/class-sige-queue.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/infra/class-sige-queue.php"
+    },
+    {
+      "file": "includes/infra/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/infra/index.php"
+    },
+    {
+      "file": "includes/jardim-handlers.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/jardim-handlers.php"
+    },
+    {
+      "file": "includes/licensing/class-sige-license.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/licensing/class-sige-license.php"
+    },
+    {
+      "file": "includes/licensing/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/licensing/index.php"
+    },
+    {
+      "file": "includes/login-page.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/login-page.php"
+    },
+    {
+      "file": "includes/map-pdf-handler.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/map-pdf-handler.php"
+    },
+    {
+      "file": "includes/multitenancy.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/multitenancy.php"
+    },
+    {
+      "file": "includes/notas-reaprovacao-migracao.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/notas-reaprovacao-migracao.php"
+    },
+    {
+      "file": "includes/notificacoes-encarregados.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/notificacoes-encarregados.php"
+    },
+    {
+      "file": "includes/notification-humanization-pro.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/notification-humanization-pro.php"
+    },
+    {
+      "file": "includes/notification-policy.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/notification-policy.php"
+    },
+    {
+      "file": "includes/observability-layer.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/observability-layer.php"
+    },
+    {
+      "file": "includes/page-guard.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/page-guard.php"
+    },
+    {
+      "file": "includes/passagem-docs-handler.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/passagem-docs-handler.php"
+    },
+    {
+      "file": "includes/pauta-excel-handler.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/pauta-excel-handler.php"
+    },
+    {
+      "file": "includes/pauta-pdf-handler.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/pauta-pdf-handler.php"
+    },
+    {
+      "file": "includes/payments/emola-client.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/payments/emola-client.php"
+    },
+    {
+      "file": "includes/payments/emola-config.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/payments/emola-config.php"
+    },
+    {
+      "file": "includes/payments/emola-webhook.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/payments/emola-webhook.php"
+    },
+    {
+      "file": "includes/payments/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/payments/index.php"
+    },
+    {
+      "file": "includes/payments/mobile-tenant-options.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/payments/mobile-tenant-options.php"
+    },
+    {
+      "file": "includes/payments/mpesa-client.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/payments/mpesa-client.php"
+    },
+    {
+      "file": "includes/payments/mpesa-cobranca.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/payments/mpesa-cobranca.php"
+    },
+    {
+      "file": "includes/payments/mpesa-conciliacao.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/payments/mpesa-conciliacao.php"
+    },
+    {
+      "file": "includes/payments/mpesa-config.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/payments/mpesa-config.php"
+    },
+    {
+      "file": "includes/payments/mpesa-webhook.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/payments/mpesa-webhook.php"
+    },
+    {
+      "file": "includes/permissions-layer.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/permissions-layer.php"
+    },
+    {
+      "file": "includes/portal-handlers.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/portal-handlers.php"
+    },
+    {
+      "file": "includes/portal-logic.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/portal-logic.php"
+    },
+    {
+      "file": "includes/portaria-camera-safe-page.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/portaria-camera-safe-page.php"
+    },
+    {
+      "file": "includes/presencas-engine.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/presencas-engine.php"
+    },
+    {
+      "file": "includes/regime-mensalidade-core.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/regime-mensalidade-core.php"
+    },
+    {
+      "file": "includes/relatorio-mensal-email.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/relatorio-mensal-email.php"
+    },
+    {
+      "file": "includes/saude-operacional.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/saude-operacional.php"
+    },
+    {
+      "file": "includes/secure-document-download.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/secure-document-download.php"
+    },
+    {
+      "file": "includes/security-baseline-pro.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/security-baseline-pro.php"
+    },
+    {
+      "file": "includes/security-hardening.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/security-hardening.php"
+    },
+    {
+      "file": "includes/security-kernel-rules.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/security-kernel-rules.php"
+    },
+    {
+      "file": "includes/security-kernel.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/security-kernel.php"
+    },
+    {
+      "file": "includes/security-login-shield.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/security-login-shield.php"
+    },
+    {
+      "file": "includes/security-roles.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/security-roles.php"
+    },
+    {
+      "file": "includes/security-scope-guard.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/security-scope-guard.php"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-audit.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/settings/class-sige-settings-audit.php"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-controller.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/settings/class-sige-settings-controller.php"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-legacy.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/settings/class-sige-settings-legacy.php"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-policy.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/settings/class-sige-settings-policy.php"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-registry.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/settings/class-sige-settings-registry.php"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-repository.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/settings/class-sige-settings-repository.php"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-sanitizer.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/settings/class-sige-settings-sanitizer.php"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-technical-mode.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/settings/class-sige-settings-technical-mode.php"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-view-renderer.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/settings/class-sige-settings-view-renderer.php"
+    },
+    {
+      "file": "includes/settings/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/settings/index.php"
+    },
+    {
+      "file": "includes/settings/settings-bootstrap.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/settings/settings-bootstrap.php"
+    },
+    {
+      "file": "includes/sri-hashes.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/sri-hashes.php"
+    },
+    {
+      "file": "includes/tenant-profiles.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/tenant-profiles.php"
+    },
+    {
+      "file": "includes/theme-engine.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/theme-engine.php"
+    },
+    {
+      "file": "includes/ui-components.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/ui-components.php"
+    },
+    {
+      "file": "includes/ui-kit.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/ui-kit.php"
+    },
+    {
+      "file": "includes/update-checker.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/update-checker.php"
+    },
+    {
+      "file": "includes/versioning.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/versioning.php"
+    },
+    {
+      "file": "includes/view-assets.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/view-assets.php"
+    },
+    {
+      "file": "includes/whatsapp-central.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/whatsapp-central.php"
+    },
+    {
+      "file": "includes/whatsapp-destinatarios-policy.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/whatsapp-destinatarios-policy.php"
+    },
+    {
+      "file": "includes/whatsapp-diagnostics.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/whatsapp-diagnostics.php"
+    },
+    {
+      "file": "includes/whatsapp-engine.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/whatsapp-engine.php"
+    },
+    {
+      "file": "includes/whatsapp-guardian.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/whatsapp-guardian.php"
+    },
+    {
+      "file": "includes/whatsapp-guardrails-pro.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/whatsapp-guardrails-pro.php"
+    },
+    {
+      "file": "includes/whatsapp-helper.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/whatsapp-helper.php"
+    },
+    {
+      "file": "includes/whatsapp-human-advanced.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/whatsapp-human-advanced.php"
+    },
+    {
+      "file": "includes/whatsapp-recovery-mode.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/whatsapp-recovery-mode.php"
+    },
+    {
+      "file": "includes/whatsapp-templates-conversacional.php",
+      "ok": true,
+      "output": "No syntax errors detected in includes/whatsapp-templates-conversacional.php"
+    },
+    {
+      "file": "index.php",
+      "ok": true,
+      "output": "No syntax errors detected in index.php"
+    },
+    {
+      "file": "languages/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in languages/index.php"
+    },
+    {
+      "file": "sige-softgenial.php",
+      "ok": true,
+      "output": "No syntax errors detected in sige-softgenial.php"
+    },
+    {
+      "file": "tools/arnes-visual/strip-important.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/arnes-visual/strip-important.php"
+    },
+    {
+      "file": "tools/build-release.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/build-release.php"
+    },
+    {
+      "file": "tools/check-action-surface-manifest.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-action-surface-manifest.php"
+    },
+    {
+      "file": "tools/check-authorization-baseline.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-authorization-baseline.php"
+    },
+    {
+      "file": "tools/check-consistencia-visual.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-consistencia-visual.php"
+    },
+    {
+      "file": "tools/check-css-collisions.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-css-collisions.php"
+    },
+    {
+      "file": "tools/check-design-tokens.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-design-tokens.php"
+    },
+    {
+      "file": "tools/check-external-dependencies-register.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-external-dependencies-register.php"
+    },
+    {
+      "file": "tools/check-governance-docs.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-governance-docs.php"
+    },
+    {
+      "file": "tools/check-governance-negative-tests.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-governance-negative-tests.php"
+    },
+    {
+      "file": "tools/check-js-views-combined.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-js-views-combined.php"
+    },
+    {
+      "file": "tools/check-js-views.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-js-views.php"
+    },
+    {
+      "file": "tools/check-php-compat.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-php-compat.php"
+    },
+    {
+      "file": "tools/check-public-endpoints-policy.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-public-endpoints-policy.php"
+    },
+    {
+      "file": "tools/check-query-handler-surface.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-query-handler-surface.php"
+    },
+    {
+      "file": "tools/check-secrets-options-register.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-secrets-options-register.php"
+    },
+    {
+      "file": "tools/check-security-kernel-negative-tests.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-security-kernel-negative-tests.php"
+    },
+    {
+      "file": "tools/check-security-kernel-rules.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-security-kernel-rules.php"
+    },
+    {
+      "file": "tools/check-security-kernel.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-security-kernel.php"
+    },
+    {
+      "file": "tools/check-tenant-fallbacks.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-tenant-fallbacks.php"
+    },
+    {
+      "file": "tools/check-tenant-sensitive-queries.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-tenant-sensitive-queries.php"
+    },
+    {
+      "file": "tools/check-tokens-fora-de-contexto.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-tokens-fora-de-contexto.php"
+    },
+    {
+      "file": "tools/check-typography.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-typography.php"
+    },
+    {
+      "file": "tools/check-view-permission-map.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/check-view-permission-map.php"
+    },
+    {
+      "file": "tools/controlador-consistencia-visual.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/controlador-consistencia-visual.php"
+    },
+    {
+      "file": "tools/diag-responsivo.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/diag-responsivo.php"
+    },
+    {
+      "file": "tools/governance-lib.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/governance-lib.php"
+    },
+    {
+      "file": "tools/index.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/index.php"
+    },
+    {
+      "file": "tools/inventory-surface.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/inventory-surface.php"
+    },
+    {
+      "file": "tools/migrar-status-canonico.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/migrar-status-canonico.php"
+    },
+    {
+      "file": "tools/run-gates.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/run-gates.php"
+    },
+    {
+      "file": "tools/security-kernel-gate-lib.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/security-kernel-gate-lib.php"
+    },
+    {
+      "file": "tools/simular-callback-mpesa.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/simular-callback-mpesa.php"
+    },
+    {
+      "file": "tools/smoke-academico-af-map-turma-v12-11-9-12.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-academico-af-map-turma-v12-11-9-12.php"
+    },
+    {
+      "file": "tools/smoke-academico-filtro-turma-aproveitamento-v12-11-9-13.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-academico-filtro-turma-aproveitamento-v12-11-9-13.php"
+    },
+    {
+      "file": "tools/smoke-aluno-360-hotfix-v12-11-9-48.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-aluno-360-hotfix-v12-11-9-48.php"
+    },
+    {
+      "file": "tools/smoke-aluno-360-privacidade-v12-11-9-47.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-aluno-360-privacidade-v12-11-9-47.php"
+    },
+    {
+      "file": "tools/smoke-aluno-360-v12-11-9-46.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-aluno-360-v12-11-9-46.php"
+    },
+    {
+      "file": "tools/smoke-alunos-bottom-more-deep-v12-11-9-70.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-alunos-bottom-more-deep-v12-11-9-70.php"
+    },
+    {
+      "file": "tools/smoke-alunos-bottom-more-v12-11-9-70.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-alunos-bottom-more-v12-11-9-70.php"
+    },
+    {
+      "file": "tools/smoke-alunos-bottom-nav-mais-v12-11-9-70.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-alunos-bottom-nav-mais-v12-11-9-70.php"
+    },
+    {
+      "file": "tools/smoke-alunos-deep-audit-v12-11-9-69.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-alunos-deep-audit-v12-11-9-69.php"
+    },
+    {
+      "file": "tools/smoke-alunos-deep-regression-v12-11-9-70.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-alunos-deep-regression-v12-11-9-70.php"
+    },
+    {
+      "file": "tools/smoke-alunos-final-qa-gate-v12-11-9-71.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-alunos-final-qa-gate-v12-11-9-71.php"
+    },
+    {
+      "file": "tools/smoke-alunos-mobile-header-cards-v12-11-9-56.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-alunos-mobile-header-cards-v12-11-9-56.php"
+    },
+    {
+      "file": "tools/smoke-alunos-mobile-redesign-v12-11-9-54.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-alunos-mobile-redesign-v12-11-9-54.php"
+    },
+    {
+      "file": "tools/smoke-alunos-mobile-redesign-v12-11-9-55.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-alunos-mobile-redesign-v12-11-9-55.php"
+    },
+    {
+      "file": "tools/smoke-alunos-mobile-tablet-ux-v12-11-9-68.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-alunos-mobile-tablet-ux-v12-11-9-68.php"
+    },
+    {
+      "file": "tools/smoke-alunos-ux-responsivo-v12-11-9-52.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-alunos-ux-responsivo-v12-11-9-52.php"
+    },
+    {
+      "file": "tools/smoke-auditoria-avancada-encarregados-v12-11-9-50.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-auditoria-avancada-encarregados-v12-11-9-50.php"
+    },
+    {
+      "file": "tools/smoke-beta-views-v12-12-3.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-beta-views-v12-12-3.php"
+    },
+    {
+      "file": "tools/smoke-dashboard-deep-mobile-tablet-v12-11-9-66.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-dashboard-deep-mobile-tablet-v12-11-9-66.php"
+    },
+    {
+      "file": "tools/smoke-dashboard-mobile-fit-v12-11-9-67.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-dashboard-mobile-fit-v12-11-9-67.php"
+    },
+    {
+      "file": "tools/smoke-dashboard-mobile-tablet-ux-v12-11-9-64.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-dashboard-mobile-tablet-ux-v12-11-9-64.php"
+    },
+    {
+      "file": "tools/smoke-design-system.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-design-system.php"
+    },
+    {
+      "file": "tools/smoke-devedores-calendario.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-devedores-calendario.php"
+    },
+    {
+      "file": "tools/smoke-devedores-extracto-detalhado-v12-12-2.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-devedores-extracto-detalhado-v12-12-2.php"
+    },
+    {
+      "file": "tools/smoke-equipe-professores-v12-11-9-3.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-equipe-professores-v12-11-9-3.php"
+    },
+    {
+      "file": "tools/smoke-equipe-professores-v12-11-9-4.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-equipe-professores-v12-11-9-4.php"
+    },
+    {
+      "file": "tools/smoke-equipe-professores-v12-11-9-5.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-equipe-professores-v12-11-9-5.php"
+    },
+    {
+      "file": "tools/smoke-equipe-professores-v12-11-9-6.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-equipe-professores-v12-11-9-6.php"
+    },
+    {
+      "file": "tools/smoke-equipe-professores-v12-11-9.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-equipe-professores-v12-11-9.php"
+    },
+    {
+      "file": "tools/smoke-finance-lancamento-notificacoes-v12-11-9-32.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-finance-lancamento-notificacoes-v12-11-9-32.php"
+    },
+    {
+      "file": "tools/smoke-financeiro-extratos-cash-reconciliation-v12-11-9-88.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-financeiro-extratos-cash-reconciliation-v12-11-9-88.php"
+    },
+    {
+      "file": "tools/smoke-financeiro-extratos-deep-gate-v12-11-9-87-1.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-financeiro-extratos-deep-gate-v12-11-9-87-1.php"
+    },
+    {
+      "file": "tools/smoke-financeiro-extratos-pro-ux-hardening-v12-11-9-87.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-financeiro-extratos-pro-ux-hardening-v12-11-9-87.php"
+    },
+    {
+      "file": "tools/smoke-financeiro-extratos-ux-state-hotfix-v12-11-9-86.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-financeiro-extratos-ux-state-hotfix-v12-11-9-86.php"
+    },
+    {
+      "file": "tools/smoke-financeiro-extratos-ux-ui-v12-11-9-85.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-financeiro-extratos-ux-ui-v12-11-9-85.php"
+    },
+    {
+      "file": "tools/smoke-financeiro-mensalidade-virtual-classe-v12-11-9-88-2.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-financeiro-mensalidade-virtual-classe-v12-11-9-88-2.php"
+    },
+    {
+      "file": "tools/smoke-financeiro-status-sync-v12-11-9-88-1.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-financeiro-status-sync-v12-11-9-88-1.php"
+    },
+    {
+      "file": "tools/smoke-gestao-avancada-encarregados-v12-11-9-49.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-gestao-avancada-encarregados-v12-11-9-49.php"
+    },
+    {
+      "file": "tools/smoke-guarda-portaria-readonly-v12-11-9-65.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-guarda-portaria-readonly-v12-11-9-65.php"
+    },
+    {
+      "file": "tools/smoke-guarda-portaria-regression-v12-11-9-70.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-guarda-portaria-regression-v12-11-9-70.php"
+    },
+    {
+      "file": "tools/smoke-guarda-portaria-regression-v12-11-9-72.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-guarda-portaria-regression-v12-11-9-72.php"
+    },
+    {
+      "file": "tools/smoke-guarda-portaria-regression-v12-11-9-73.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-guarda-portaria-regression-v12-11-9-73.php"
+    },
+    {
+      "file": "tools/smoke-guarda-portaria-regression-v12-11-9-74.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-guarda-portaria-regression-v12-11-9-74.php"
+    },
+    {
+      "file": "tools/smoke-guarda-portaria-v12-11-9-65.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-guarda-portaria-v12-11-9-65.php"
+    },
+    {
+      "file": "tools/smoke-guarda-regression-v12-11-9-66.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-guarda-regression-v12-11-9-66.php"
+    },
+    {
+      "file": "tools/smoke-guarda-regression-v12-11-9-67.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-guarda-regression-v12-11-9-67.php"
+    },
+    {
+      "file": "tools/smoke-guarda-regression-v12-11-9-69.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-guarda-regression-v12-11-9-69.php"
+    },
+    {
+      "file": "tools/smoke-guarda-regression-v12-11-9-70.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-guarda-regression-v12-11-9-70.php"
+    },
+    {
+      "file": "tools/smoke-historico-financeiro-aluno-pro-v12-11-9-81.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-historico-financeiro-aluno-pro-v12-11-9-81.php"
+    },
+    {
+      "file": "tools/smoke-historico-financeiro-aluno-v12-11-9-81.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-historico-financeiro-aluno-v12-11-9-81.php"
+    },
+    {
+      "file": "tools/smoke-historico-financeiro-documento-administrativo-ux-pro-v12-11-9-83.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-historico-financeiro-documento-administrativo-ux-pro-v12-11-9-83.php"
+    },
+    {
+      "file": "tools/smoke-historico-financeiro-hotfix-multitenant-v12-11-9-84.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-historico-financeiro-hotfix-multitenant-v12-11-9-84.php"
+    },
+    {
+      "file": "tools/smoke-historico-financeiro-oficial-excel-pro-v12-11-9-82.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-historico-financeiro-oficial-excel-pro-v12-11-9-82.php"
+    },
+    {
+      "file": "tools/smoke-icones.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-icones.php"
+    },
+    {
+      "file": "tools/smoke-importacao-alunos-v12-11-9-37.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-importacao-alunos-v12-11-9-37.php"
+    },
+    {
+      "file": "tools/smoke-importacao-alunos-v12-11-9-38.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-importacao-alunos-v12-11-9-38.php"
+    },
+    {
+      "file": "tools/smoke-importacao-alunos-v12-11-9-39.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-importacao-alunos-v12-11-9-39.php"
+    },
+    {
+      "file": "tools/smoke-importacao-alunos-v12-11-9-40.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-importacao-alunos-v12-11-9-40.php"
+    },
+    {
+      "file": "tools/smoke-importacao-alunos-v12-11-9-41.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-importacao-alunos-v12-11-9-41.php"
+    },
+    {
+      "file": "tools/smoke-importacao-alunos-v12-11-9-42.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-importacao-alunos-v12-11-9-42.php"
+    },
+    {
+      "file": "tools/smoke-importacao-alunos-v12-11-9-43.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-importacao-alunos-v12-11-9-43.php"
+    },
+    {
+      "file": "tools/smoke-importacao-alunos-v12-11-9-45.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-importacao-alunos-v12-11-9-45.php"
+    },
+    {
+      "file": "tools/smoke-lancamento-notificacoes-v12-11-9-32.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-lancamento-notificacoes-v12-11-9-32.php"
+    },
+    {
+      "file": "tools/smoke-login-shield.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-login-shield.php"
+    },
+    {
+      "file": "tools/smoke-mobile-tablet-ux-v12-11-9-63.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-mobile-tablet-ux-v12-11-9-63.php"
+    },
+    {
+      "file": "tools/smoke-mobile-tenant-options-v12-12-5.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-mobile-tenant-options-v12-12-5.php"
+    },
+    {
+      "file": "tools/smoke-mobile-ux-compliance-v12-11-9-59.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-mobile-ux-compliance-v12-11-9-59.php"
+    },
+    {
+      "file": "tools/smoke-mpesa.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-mpesa.php"
+    },
+    {
+      "file": "tools/smoke-pagina-aluno-pendencias-v12-11-9-14.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-pagina-aluno-pendencias-v12-11-9-14.php"
+    },
+    {
+      "file": "tools/smoke-payment-methods-pos-bancos-v12-11-9-31.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-payment-methods-pos-bancos-v12-11-9-31.php"
+    },
+    {
+      "file": "tools/smoke-phase1-blindagem-v12-11-9-24.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-phase1-blindagem-v12-11-9-24.php"
+    },
+    {
+      "file": "tools/smoke-phase1-final-v12-11-9-25.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-phase1-final-v12-11-9-25.php"
+    },
+    {
+      "file": "tools/smoke-phase1-hotfix-v12-11-9-26.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-phase1-hotfix-v12-11-9-26.php"
+    },
+    {
+      "file": "tools/smoke-phase2-tenant-schema-v12-11-9-27.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-phase2-tenant-schema-v12-11-9-27.php"
+    },
+    {
+      "file": "tools/smoke-portaria-active-only-access-gate-v12-11-9-79.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-portaria-active-only-access-gate-v12-11-9-79.php"
+    },
+    {
+      "file": "tools/smoke-portaria-active-only-gate-v12-11-9-79.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-portaria-active-only-gate-v12-11-9-79.php"
+    },
+    {
+      "file": "tools/smoke-portaria-camera-diagnostics-v12-11-9-73.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-portaria-camera-diagnostics-v12-11-9-73.php"
+    },
+    {
+      "file": "tools/smoke-portaria-camera-permission-ux-v12-11-9-72.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-portaria-camera-permission-ux-v12-11-9-72.php"
+    },
+    {
+      "file": "tools/smoke-portaria-camera-safe-bootstrap-v12-11-9-75.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-portaria-camera-safe-bootstrap-v12-11-9-75.php"
+    },
+    {
+      "file": "tools/smoke-portaria-clean-room-scanner-v12-11-9-76.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-portaria-clean-room-scanner-v12-11-9-76.php"
+    },
+    {
+      "file": "tools/smoke-portaria-copy-essencial-v12-11-9-78.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-portaria-copy-essencial-v12-11-9-78.php"
+    },
+    {
+      "file": "tools/smoke-portaria-onscreen-result-retake-v12-11-9-77.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-portaria-onscreen-result-retake-v12-11-9-77.php"
+    },
+    {
+      "file": "tools/smoke-portaria-permissions-policy-camera-v12-11-9-74.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-portaria-permissions-policy-camera-v12-11-9-74.php"
+    },
+    {
+      "file": "tools/smoke-portaria-state-consistency-gate-v12-11-9-80.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-portaria-state-consistency-gate-v12-11-9-80.php"
+    },
+    {
+      "file": "tools/smoke-portaria-user-copy-cleanup-v12-11-9-78.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-portaria-user-copy-cleanup-v12-11-9-78.php"
+    },
+    {
+      "file": "tools/smoke-presencas.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-presencas.php"
+    },
+    {
+      "file": "tools/smoke-regression-pack.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-regression-pack.php"
+    },
+    {
+      "file": "tools/smoke-release-gate.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-release-gate.php"
+    },
+    {
+      "file": "tools/smoke-rh-equipe-v12-11-9-7.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-rh-equipe-v12-11-9-7.php"
+    },
+    {
+      "file": "tools/smoke-rh-equipe-v12-11-9-8.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-rh-equipe-v12-11-9-8.php"
+    },
+    {
+      "file": "tools/smoke-rh-equipe-v12-11-9-9.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-rh-equipe-v12-11-9-9.php"
+    },
+    {
+      "file": "tools/smoke-rh-preservation-v12-11-9-11.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-rh-preservation-v12-11-9-11.php"
+    },
+    {
+      "file": "tools/smoke-role-guarda-portaria-v12-11-9-65.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-role-guarda-portaria-v12-11-9-65.php"
+    },
+    {
+      "file": "tools/smoke-security-kernel-v12-12-4.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-security-kernel-v12-12-4.php"
+    },
+    {
+      "file": "tools/smoke-security-kernel-v12-12-5.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-security-kernel-v12-12-5.php"
+    },
+    {
+      "file": "tools/smoke-transporte-v12-11-9-10.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-transporte-v12-11-9-10.php"
+    },
+    {
+      "file": "tools/smoke-transporte-v12-11-9-11.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-transporte-v12-11-9-11.php"
+    },
+    {
+      "file": "tools/smoke-whatsapp-pt-mz-v12-11-9-29.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-whatsapp-pt-mz-v12-11-9-29.php"
+    },
+    {
+      "file": "tools/smoke-whatsapp-render-servicos-v12-11-9-30.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-whatsapp-render-servicos-v12-11-9-30.php"
+    },
+    {
+      "file": "tools/smoke-whatsapp-servicos-contextuais-v12-11-9-30.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/smoke-whatsapp-servicos-contextuais-v12-11-9-30.php"
+    },
+    {
+      "file": "tools/ux-audit.php",
+      "ok": true,
+      "output": "No syntax errors detected in tools/ux-audit.php"
+    },
+    {
+      "file": "uninstall.php",
+      "ok": true,
+      "output": "No syntax errors detected in uninstall.php"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+SIGE SoftGenial v12.11.9.34 - Currículos com Harmonia Visual PRO
+Data: 2026-06-04
+
+Intervenção principal:
+- Modernizado o visual do módulo view=curriculos com base no Painel Principal / Dashboard V2 MJS-grade.
+
+Ficheiros alterados:
+- admin/system/curriculum-engine-view.php
+- sige-softgenial.php
+- BUILD.json
+
+Melhorias visuais aplicadas:
+- Hero próprio no padrão Produto PRO, com linguagem de módulo académico.
+- KPIs visuais para perfil activo, perfis disponíveis, classes mapeadas e disciplinas mapeadas.
+- Cartões arredondados, sombras suaves, ícones SVG consistentes e paleta alinhada ao Dashboard V2.
+- Selector de perfil curricular com formulário visual premium.
+- Tabela de perfis curriculares com cabeçalho, badges, hover e melhor hierarquia visual.
+- Card lateral de sincronização da matriz actual com metadados resumidos.
+- Acessos rápidos para Disciplinas, Matriz Curricular, Turmas e Pautas.
+- Roteiro visual das próximas fases controladas.
+- Responsividade melhorada para tablets e telemóveis.
+
+Preservado sem alteração:
+- Permissões e guardas de acesso.
+- Nonces e formulários admin-post existentes.
+- Acção de selecção de perfil curricular.
+- Acção de sincronização legacy da matriz.
+- Base de dados.
+- Fórmulas de notas.
+- Pautas, boletins, DEC, transição e regras académicas.
+- Lógica do Curriculum Engine.
+
+Validação:
+- php -l executado com sucesso em admin/system/curriculum-engine-view.php.
+- php -l executado com sucesso em sige-softgenial.php.

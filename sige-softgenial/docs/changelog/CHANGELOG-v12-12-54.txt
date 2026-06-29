@@ -1,0 +1,86 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.54
+Data: 2026-06-23
+Titulo: Fase 4 incr 2 - Cadeias jQuery e IIFE em onclick reescritas em vanilla
+Tipo: Incremento de funcionalidade (migracao de inline, a caminho do CSP)
+Base: 12.12.53
+Canal: validated-feature
+
+================================================================
+CONTEXTO
+================================================================
+O CSP em enforcement (incremento final da Fase 4) bloqueia manipuladores de evento
+inline (onclick). Esta versao reescreve as ULTIMAS cadeias jQuery e funcoes
+imediatamente invocadas (IIFE) em onclick para vanilla, em funcoes nomeadas. Conclui
+os onclick em ficheiros limpos: nao resta nenhum onclick jQuery ou IIFE nessas vistas.
+Sequencia as vagas anteriores (v12.12.46 a v12.12.53).
+
+================================================================
+FUNCOES NOMEADAS VANILLA (co-localizadas nas vistas)
+================================================================
+Definidas no script da propria vista e expostas em window (o despachante encontra-as
+via window[accao]):
+
+  admin/whatsapp_central-view.php
+    window.sigeReabrirPainelPendentes()
+      -> querySelector('.wppc-pending-panel'); removeAttribute('open');
+         setTimeout(setAttribute('open',''), 100)   [fiel a IIFE original]
+
+  admin/academic/matriz-view.php
+    window.sigeFecharModalClone()
+      -> getElementById('modal-clone'): display none, aria-hidden true;
+         se nenhum .sige-modal estiver visivel (offsetWidth/offsetHeight/getClientRects,
+         como o :visible do jQuery), remove a classe sige-modal-open do corpo
+
+================================================================
+CONVERSAO DE ONCLICK (2 trocas)
+================================================================
+EDIT  admin/whatsapp_central-view.php
+      onclick="(function(){...querySelector('.wppc-pending-panel')...})()"  (em template JS)
+      -> data-sige-act="sigeReabrirPainelPendentes" data-sige-noargs
+
+EDIT  admin/academic/matriz-view.php
+      onclick="jQuery('#modal-clone').hide().attr('aria-hidden','true'); if (!jQuery('.sige-modal:visible').length) jQuery('body').removeClass('sige-modal-open');"
+      -> data-sige-act="sigeFecharModalClone" data-sige-noargs
+
+EDIT  tools/check-inline-frontend.php
+      - SIGE_INLINE_ONCLICK_MAX de 164 para 162. style 2051 e script 81 inalterados.
+
+CONCLUSAO: zero onclick jQuery ou IIFE em ficheiros limpos. Os restantes onclick estao
+em ficheiros com janela autonoma, em popups ou em canonicos.
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- Nao toca em regras de calculo nem em ficheiros canonicos.
+- As regras anteriores do despachante ficam inalteradas.
+- Superficie de accao: 199 itens (enforce 33). Vistas: 60. Opcoes: 132.
+- Dependencias externas: 9 (inalteradas). Sem alteracao de esquema.
+- Calculo financeiro byte-identico. Comportamento dos botoes identico.
+- Versao sincronizada nas cinco fontes. Zero travessoes. Ficheiros de codigo em LF.
+
+================================================================
+VALIDACAO
+================================================================
+- node -c (funcoes extraidas)            -> limpo
+- php tools/check-inline-frontend.php      -> OK (onclick 162 de 162, sem folga)
+- php tools/smoke-inline-frontend.php        -> OK
+- php tools/smoke-regression-pack.php          -> OK
+- php tools/diag-responsivo.php                 -> OK (0 antipadroes)
+- php tools/check-governance-docs.php            -> OK (21 documentos v12.12.54)
+- php tools/smoke-release-gate.php                 -> verde a partir de pasta limpa
+- gates de pagamentos, cofre, Fase 1 e Fase 4 incr 1 -> sem regressao
+- extractor de superficie / opcoes / hosts         -> 199 / 132 / 9
+- php -l nas 2 vistas tocadas                       -> limpo
+
+================================================================
+INSTALACAO E REVERSAO
+================================================================
+- Instalacao: backup, desactivar, substituir a pasta sige-softgenial, reactivar.
+- Reversao: reinstalar a versao anterior. Sem alteracao de esquema; reversao directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Os blocos script inline, e por fim o CSP em enforcement (nonce por pedido e flip do
+  cabecalho).

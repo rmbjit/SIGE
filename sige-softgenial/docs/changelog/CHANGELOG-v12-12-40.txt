@@ -1,0 +1,70 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.40
+Data: 2026-06-22
+Titulo: Fase 3 - Reconciliacao de pagamentos digitais - deteccao de duplicados
+Tipo: Funcionalidade (incremento 1 da Fase 3)
+Base: 12.12.39
+Canal: validated-feature
+
+================================================================
+CONTEXTO
+================================================================
+Primeiro incremento da Fase 3 (reconciliacao de pagamentos digitais, que completa
+a Fase 7 do plano original). O circuito ja tinha idempotencia de webhooks (M-Pesa e
+e-Mola dedupam por escola e referencia, com chave unica) e um relatorio de
+divergencias so de leitura. Este incremento acrescenta uma camada de deteccao de
+duplicados logicos que a idempotencia por referencia nao apanha, totalmente so de
+leitura: nunca apaga nem altera pagamentos, apenas assinala para revisao humana.
+
+================================================================
+ALTERACOES
+================================================================
+EDIT  includes/payments/reconciliacao-divergencias.php
+      - sige_pagamentos_detectar_duplicados: nucleo puro testavel. Recebe as
+        transacoes de gateway e devolve grupos de possiveis duplicados em tres
+        classes:
+          referencia_repetida   - mesma provider e referencia em 2+ transacoes.
+          pagamento_duplo        - mesmo pagamento_id em 2+ transacoes conciliadas.
+          mesmo_pagador_valor    - mesmo msisdn e valor dentro de uma janela.
+        A janela de tempo evita falsos positivos em mensalidades legitimas.
+      - sige_reconciliacao_duplicados: involucro de dominio por escola, fail-closed
+        e so de leitura, devolve os grupos com totais.
+      - sige_reconciliacao_duplicado_rotulo: rotulo legivel do motivo.
+
+EDIT  admin/finance/reconciliacao-view.php
+      - Apresenta uma seccao de possiveis duplicados (so leitura, sem formularios).
+
+================================================================
+QUALIDADE
+================================================================
+NOVO  tools/check-payments-dedup.php (gate estatico)
+NOVO  tools/smoke-payments-dedup.php (smoke de runtime, 9 verificacoes)
+EDIT  tools/run-gates.php (corredor passa de 89 para 91 verificacoes)
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- So de leitura: a deteccao nunca apaga nem altera pagamentos. Nao toca em regras
+  de calculo nem em ficheiros canonicos. A idempotencia de webhooks nao e tocada.
+- Superficie de accao: 199 itens. Regras do Kernel: 199; enforce 33. Views: 60.
+- Opcoes: 132 (nenhuma nova). Dependencias externas: 11 (nenhuma nova).
+- Sem alteracao de esquema. Calculo academico e financeiro byte-identico.
+- Versao sincronizada nas cinco fontes. Zero travessoes. Ficheiros em LF.
+
+================================================================
+VALIDACAO
+================================================================
+- php tools/check-payments-dedup.php   -> OK
+- php tools/smoke-payments-dedup.php     -> OK (9 verificacoes)
+- php tools/smoke-reconciliacao.php       -> OK (sem regressao, 12 verificacoes)
+- php tools/check-governance-docs.php     -> OK (21 documentos v12.12.40)
+- php tools/smoke-release-gate.php          -> verde a partir de pasta limpa
+- extractor de superficie / opcoes          -> 199 / 132
+- php -l                                     -> limpo nos ficheiros tocados
+
+================================================================
+A SEGUIR (FASE 3)
+================================================================
+- Reconciliacao viva: consulta ao gateway (M-Pesa/e-Mola) para confirmar o estado
+  de transacoes e descobrir as que faltam. Depende do sandbox.
+- Resolucao de divergencias com escrita (juntar ou anular), com quatro-olhos.

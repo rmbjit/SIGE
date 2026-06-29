@@ -1,0 +1,554 @@
+/**
+ * SIGE SoftGenial v12.11.9.63 - Jornada Mobile + Tablet UX PRO
+ * Camada visual/adaptativa para melhorar Mobile e Tablet sem tocar nas regras de negócio.
+ */
+
+body.sige-admin-app {
+    --sg-ux-safe-bottom: env(safe-area-inset-bottom, 0px);
+    --sg-ux-safe-top: env(safe-area-inset-top, 0px);
+    --sg-ux-surface: #ffffff;
+    --sg-ux-page: #f4f7ff;
+    --sg-ux-border: rgba(35, 48, 96, .09);
+    --sg-ux-shadow: 0 16px 36px rgba(31, 44, 98, .08);
+    --sg-ux-radius: 22px;
+    --sg-ux-primary: var(--sg-theme-primary, #5a3fd6);
+    --sg-ux-primary-800: var(--sg-theme-primary-800, #3b2f8d);
+    --sg-ux-focus: rgba(var(--sg-theme-primary-rgb, 90, 63, 214), .28);
+}
+
+body.sige-admin-app .sg-app-page,
+body.sige-admin-app .sg-app-page *,
+body.sige-admin-app #sige-layout.sg-product-pro-shell,
+body.sige-admin-app #sige-layout.sg-product-pro-shell * {
+    box-sizing: border-box;
+}
+
+body.sige-admin-app .sg-app-page,
+body.sige-admin-app .sg-app-content,
+body.sige-admin-app .sg-app-topbar,
+body.sige-admin-app .sg-app-topbar-headings,
+body.sige-admin-app .sg-app-topbar-meta,
+body.sige-admin-app .sg-app-sidebar,
+body.sige-admin-app .sg-app-nav,
+body.sige-admin-app .sige-menu-item,
+body.sige-admin-app .sg-card,
+body.sige-admin-app .sige-card,
+body.sige-admin-app .sg-panel,
+body.sige-admin-app .sige-panel,
+body.sige-admin-app .sg-box,
+body.sige-admin-app .sige-box {
+    min-width: 0;
+}
+
+body.sige-admin-app .sg-mobile-table-scroll {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-inline: contain;
+    border-radius: 18px;
+    border: 1px solid var(--sg-ux-border);
+    background: #fff;
+    box-shadow: 0 12px 28px rgba(31, 44, 98, .055);
+    margin:var(--space-3) 0;
+    outline: none;
+}
+
+body.sige-admin-app .sg-mobile-table-scroll:focus-visible,
+body.sige-admin-app .sg-mobile-table-scroll:focus-within {
+    box-shadow: 0 0 0 4px var(--sg-ux-focus), 0 12px 28px rgba(31, 44, 98, .07);
+}
+
+body.sige-admin-app .sg-mobile-table-scroll[data-sg-hint="1"]::after {
+    content: attr(data-sg-scroll-hint);
+    display: block;
+    padding: 8px 14px 10px;
+    color: #7b8498;
+    font-size:var(--fs-xs);
+    font-weight: 800;
+    letter-spacing: .01em;
+    text-align: right;
+    background: linear-gradient(180deg, rgba(255,255,255,.78), #fff);
+}
+
+body.sige-admin-app .sg-mobile-table-scroll table[data-sg-mobile-wrapped="1"] {
+    margin: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+body.sige-admin-app .sg-ux-icon-only[aria-label],
+body.sige-admin-app button.sg-ux-icon-only[aria-label],
+body.sige-admin-app a.sg-ux-icon-only[aria-label] {
+    position: relative;
+}
+
+@media (hover: none), (pointer: coarse) {
+    body.sige-admin-app .sg-app-page a,
+    body.sige-admin-app .sg-app-page button,
+    body.sige-admin-app .sg-app-page .button,
+    body.sige-admin-app .sg-app-page .sige-btn,
+    body.sige-admin-app .sg-app-page .sg-btn,
+    body.sige-admin-app .sg-app-page input[type="submit"],
+    body.sige-admin-app .sige-menu-item,
+    body.sige-admin-app .sg-app-hamburger {
+        touch-action: manipulation;
+    }
+
+    body.sige-admin-app .sg-app-page button,
+    body.sige-admin-app .sg-app-page .button,
+    body.sige-admin-app .sg-app-page .sige-btn,
+    body.sige-admin-app .sg-app-page .sg-btn,
+    body.sige-admin-app .sg-app-page input[type="submit"],
+    body.sige-admin-app .sg-app-page a.page-title-action {
+        min-height: 44px;
+    }
+
+    body.sige-admin-app .sg-app-page input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    body.sige-admin-app .sg-app-page select,
+    body.sige-admin-app .sg-app-page textarea {
+        min-height: 44px;
+    }
+}
+
+@media (max-width: 1100px) {
+    html.wp-toolbar {
+        padding-top: 0 !important;
+        scroll-padding-top: 92px;
+        scroll-padding-bottom: calc(108px + var(--sg-ux-safe-bottom));
+    }
+
+    body.sige-admin-app {
+        background: var(--sg-ux-page) !important;
+        overflow-x: hidden !important;
+    }
+
+    body.sige-admin-app #wpadminbar {
+        display: none !important;
+        height: 0 !important;
+        min-height: 0 !important;
+    }
+
+    body.sige-admin-app #wpcontent,
+    body.sige-admin-app #wpbody,
+    body.sige-admin-app #wpbody-content {
+        margin-left: 0 !important;
+        padding-left: 0 !important;
+        padding-top: 0 !important;
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+    }
+
+    body.sige-admin-app #sige-layout.sg-product-pro-shell {
+        display: block !important;
+        width: 100% !important;
+        min-height: 100vh !important;
+        background: linear-gradient(180deg, #f8fbff 0%, #eef3ff 100%) !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 100vh !important;
+        overflow: visible !important;
+        background: linear-gradient(180deg, #f8fbff 0%, #eef3ff 100%) !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-page {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-sidebar {
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        width: min(86vw, 344px) !important;
+        max-width: 344px !important;
+        transform: translateX(-106%) !important;
+        transition: transform .24s ease !important;
+        z-index: 10070 !important;
+        will-change: transform;
+        box-shadow: 26px 0 70px rgba(30, 24, 88, .34) !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-sidebar.open {
+        transform: translateX(0) !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-overlay.show {
+        display: block !important;
+        z-index: 10060 !important;
+        background: rgba(15, 23, 42, .58) !important;
+        -webkit-backdrop-filter: blur(7px) !important;
+        backdrop-filter: blur(7px) !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-sidebar-inner {
+        height: 100dvh !important;
+        min-height: 100vh !important;
+        top: 0 !important;
+        position: relative !important;
+        border-radius: 0 !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-nav {
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        max-height: calc(100dvh - 206px) !important;
+        padding-bottom: 24px !important;
+    }
+
+    body.sige-admin-app .sg-app-page .sg-mobile-table-scroll table,
+    body.sige-admin-app .sg-app-page table.widefat,
+    body.sige-admin-app .sg-app-page table.wp-list-table {
+        width: 100% !important;
+        min-width: 720px;
+    }
+
+    body.sige-admin-app .sg-app-page .sige-toolbar,
+    body.sige-admin-app .sg-app-page .sg-toolbar,
+    body.sige-admin-app .sg-app-page form.sige-toolbar,
+    body.sige-admin-app .sg-app-page .sige-filters,
+    body.sige-admin-app .sg-app-page .sg-filters,
+    body.sige-admin-app .sg-app-page .tablenav {
+        max-width: 100% !important;
+        gap: 10px !important;
+    }
+
+    body.sige-admin-app .sg-app-page .sige-card,
+    body.sige-admin-app .sg-app-page .sg-card,
+    body.sige-admin-app .sg-app-page .sige-panel,
+    body.sige-admin-app .sg-app-page .sg-panel,
+    body.sige-admin-app .sg-app-page .postbox {
+        max-width: 100% !important;
+        border-radius: var(--sg-ux-radius) !important;
+    }
+
+    body.sige-admin-app .sige-modal,
+    body.sige-admin-app .sg-modal,
+    body.sige-admin-app .sg-modal-backdrop,
+    body.sige-admin-app .sg-expense-modal-backdrop,
+    body.sige-admin-app .sg-extracts-modal-overlay,
+    body.sige-admin-app .sige-modal-overlay,
+    body.sige-admin-app .wppc-modal-bg {
+        overscroll-behavior: contain !important;
+    }
+
+    body.sige-admin-app .sige-modal-content,
+    body.sige-admin-app .sg-modal-content,
+    body.sige-admin-app .modal-content,
+    body.sige-admin-app .sige-lanc-modal,
+    body.sige-admin-app .sg-paypro-modal,
+    body.sige-admin-app .sg-paypro-result-modal,
+    body.sige-admin-app .sg-plans-modal-card,
+    body.sige-admin-app .sg-inspro-modal-box,
+    body.sige-admin-app .sg-generator-modal-card,
+    body.sige-admin-app .sg-expense-modal,
+    body.sige-admin-app .sg-extracts-modal-box,
+    body.sige-admin-app .sige-modal-box,
+    body.sige-admin-app .wppc-modal {
+        max-height: calc(100dvh - 28px) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+    }
+
+    body.sige-admin-app .sige-modal-body,
+    body.sige-admin-app .sg-modal-body,
+    body.sige-admin-app .modal-body,
+    body.sige-admin-app .sige-lanc-modal-body,
+    body.sige-admin-app .sg-plans-modal-body,
+    body.sige-admin-app .sg-inspro-modal-body,
+    body.sige-admin-app .sg-extracts-modal-body,
+    body.sige-admin-app .wppc-modal-body {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.sige-admin-app a:focus-visible,
+    body.sige-admin-app button:focus-visible,
+    body.sige-admin-app input:focus-visible,
+    body.sige-admin-app select:focus-visible,
+    body.sige-admin-app textarea:focus-visible,
+    body.sige-admin-app summary:focus-visible {
+        outline: 3px solid var(--sg-ux-focus) !important;
+        outline-offset: 3px !important;
+    }
+}
+
+@media (min-width: 761px) and (max-width: 1100px) {
+    body.sige-admin-app .sg-product-pro-shell .sg-app-content {
+        padding: 0 18px calc(104px + var(--sg-ux-safe-bottom)) !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 10050 !important;
+        min-height: 72px !important;
+        margin: 0 -18px 18px !important;
+        padding: 13px 18px !important;
+        border-radius: 0 0 24px 24px !important;
+        border-top: 0 !important;
+        border-left: 0 !important;
+        border-right: 0 !important;
+        background: rgba(255, 255, 255, .96) !important;
+        -webkit-backdrop-filter: blur(14px);
+        backdrop-filter: blur(14px);
+        box-shadow: var(--shadow-lg) !important;
+        align-items: center !important;
+        gap:var(--space-3)!important;
+        flex-wrap: nowrap !important;
+        overflow: hidden !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar .sg-app-hamburger {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        position: static !important;
+        left: auto !important;
+        top: auto !important;
+        width: 46px !important;
+        height: 46px !important;
+        min-width: 46px !important;
+        border-radius: 15px !important;
+        border: 0 !important;
+        background: linear-gradient(135deg, var(--sg-ux-primary), var(--sg-ux-primary-800)) !important;
+        color: #fff !important;
+        box-shadow: 0 12px 26px rgba(var(--sg-theme-primary-rgb, 90, 63, 214), .28) !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar .sg-app-hamburger svg {
+        width: 24px !important;
+        height: 24px !important;
+        stroke: currentColor !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar > div:first-child,
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar-headings {
+        padding-left: 0 !important;
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 11px !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar-logo {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+        border-radius: 14px !important;
+        background: #fff !important;
+        border: 1px solid rgba(35, 48, 96, .08) !important;
+        box-shadow: var(--shadow-md) !important;
+        overflow: hidden !important;
+        padding: 3px !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar-logo img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+        border-radius: 11px !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar-kicker {
+        display: block !important;
+        font-size:var(--fs-xs)!important;
+        line-height: 1.1 !important;
+        margin: 0 0 3px !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar-title {
+        display: block !important;
+        max-width: 42vw !important;
+        font-size: 18px !important;
+        line-height: 1.1 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar-title::before {
+        content: none !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar-meta {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        width: auto !important;
+        flex: 0 0 auto !important;
+        gap: 10px !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-chip-year {
+        display: inline-flex !important;
+        min-height: 36px !important;
+        padding:0 var(--space-3)!important;
+        border-radius:var(--radius-pill)!important;
+        white-space: nowrap !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-user {
+        max-width: 210px !important;
+        padding: 4px 10px 4px 4px !important;
+        border-radius:var(--radius-pill)!important;
+        background: #fff !important;
+        border: 1px solid rgba(35, 48, 96, .08) !important;
+        box-shadow: 0 8px 18px rgba(31, 44, 98, .06) !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-user-meta {
+        display: flex !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-user-meta strong {
+        max-width: 118px !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-avatar {
+        width: 38px !important;
+        height: 38px !important;
+        border-width: 0 !important;
+    }
+
+    body.sige-admin-app:not(.sige-view-alunos_lista):not(.sige-view-aluno_portal) .sg-mobile-global-bottom-nav {
+        position: fixed !important;
+        left: max(18px, env(safe-area-inset-left, 0px)) !important;
+        right: max(18px, env(safe-area-inset-right, 0px)) !important;
+        bottom: calc(14px + var(--sg-ux-safe-bottom)) !important;
+        z-index: 10040 !important;
+        min-height: 72px !important;
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)) !important;
+        align-items: center !important;
+        gap:var(--space-1)!important;
+        padding:var(--space-2) var(--space-3)!important;
+        border-radius: 24px !important;
+        background: rgba(255, 255, 255, .97) !important;
+        border: 1px solid rgba(35, 48, 96, .08) !important;
+        box-shadow: 0 -14px 36px rgba(22, 32, 71, .16) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        backdrop-filter: blur(12px) !important;
+    }
+
+    body.sige-admin-app:not(.sige-view-alunos_lista):not(.sige-view-aluno_portal) .sg-mobile-global-bottom-nav a,
+    body.sige-admin-app:not(.sige-view-alunos_lista):not(.sige-view-aluno_portal) .sg-mobile-global-bottom-nav button {
+        appearance: none !important;
+        border: 0 !important;
+        background: transparent !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 5px !important;
+        min-width: 0 !important;
+        min-height: 58px !important;
+        color: #626b80 !important;
+        text-decoration: none !important;
+        font-size: 12px !important;
+        font-weight: 850 !important;
+        cursor: pointer !important;
+    }
+
+    body.sige-admin-app:not(.sige-view-alunos_lista):not(.sige-view-aluno_portal) .sg-mobile-global-bottom-nav svg {
+        width: 24px !important;
+        height: 24px !important;
+    }
+
+    body.sige-admin-app:not(.sige-view-alunos_lista):not(.sige-view-aluno_portal) .sg-mobile-global-bottom-nav .is-active {
+        color: var(--sg-ux-primary) !important;
+        font-weight: 950 !important;
+    }
+
+    body.sige-admin-app .sg-app-page .sg-kpi-grid,
+    body.sige-admin-app .sg-app-page .sige-kpi-grid,
+    body.sige-admin-app .sg-app-page .sg-stats-grid,
+    body.sige-admin-app .sg-app-page .sige-stats-grid,
+    body.sige-admin-app .sg-app-page .sg-quick-grid-v2,
+    body.sige-admin-app .sg-app-page .sg-quick-grid,
+    body.sige-admin-app .sg-app-page .sige-quick-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 14px !important;
+    }
+
+    body.sige-admin-app .sg-app-page .sige-toolbar,
+    body.sige-admin-app .sg-app-page .sg-toolbar,
+    body.sige-admin-app .sg-app-page form.sige-toolbar,
+    body.sige-admin-app .sg-app-page .sige-filters,
+    body.sige-admin-app .sg-app-page .sg-filters {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: flex-end !important;
+        padding: 14px !important;
+        border-radius:var(--radius-xl)!important;
+        background: #fff !important;
+        border: 1px solid var(--sg-ux-border) !important;
+        box-shadow: 0 12px 28px rgba(31, 44, 98, .055) !important;
+    }
+
+    body.sige-admin-app .sg-app-page .sige-toolbar > *,
+    body.sige-admin-app .sg-app-page .sg-toolbar > *,
+    body.sige-admin-app .sg-app-page .sige-filters > *,
+    body.sige-admin-app .sg-app-page .sg-filters > * {
+        min-width: min(260px, 100%) !important;
+        max-width: 100% !important;
+    }
+
+    body.sige-admin-app .sg-app-page input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    body.sige-admin-app .sg-app-page select,
+    body.sige-admin-app .sg-app-page textarea {
+        font-size: 15px !important;
+        border-radius: 14px !important;
+    }
+}
+
+@media (max-width: 760px) {
+    body.sige-admin-app .sg-mobile-table-scroll[data-sg-hint="1"]::after {
+        text-align: center;
+    }
+
+    body.sige-admin-app .sg-app-page .sg-mobile-table-scroll table,
+    body.sige-admin-app .sg-app-page table.widefat,
+    body.sige-admin-app .sg-app-page table.wp-list-table {
+        min-width: 640px !important;
+    }
+}
+
+@media (max-width: 430px) {
+    body.sige-admin-app .sg-app-page .sg-kpi-grid,
+    body.sige-admin-app .sg-app-page .sige-kpi-grid,
+    body.sige-admin-app .sg-app-page .sg-stats-grid,
+    body.sige-admin-app .sg-app-page .sige-stats-grid,
+    body.sige-admin-app .sg-app-page .sg-quick-grid-v2,
+    body.sige-admin-app .sg-app-page .sg-quick-grid,
+    body.sige-admin-app .sg-app-page .sige-quick-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media print {
+    body.sige-admin-app .sg-mobile-table-scroll {
+        overflow: visible !important;
+        border: 0 !important;
+        box-shadow: none !important;
+    }
+
+    body.sige-admin-app .sg-mobile-table-scroll::after,
+    body.sige-admin-app .sg-mobile-global-bottom-nav {
+        display: none !important;
+    }
+}

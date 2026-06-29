@@ -1,0 +1,31 @@
+SIGE SoftGenial v12.11.9.58 - Mobile App Visual System Global PRO
+
+Área: App Shell / UX Mobile Global
+
+Objectivo:
+- Aplicar ao sistema inteiro as regras visuais mobile validadas no módulo Alunos, mantendo o mesmo padrão app-grade: topbar premium, logo oficial, ano lectivo, avatar, bottom navigation e base visual mobile mais limpa.
+
+Intervenções realizadas:
+- Globalização da topbar mobile em gradiente azul/roxo.
+- Exibição do logotipo oficial configurado em logo_sistema_url no cabeçalho mobile.
+- Texto SoftGenial padronizado na topbar mobile.
+- Cápsula do Ano Lectivo preservada no mobile quando houver espaço.
+- Avatar alinhado dentro da topbar mobile.
+- Remoção de folgas superiores indesejadas no App Shell mobile.
+- Navegação inferior global no mobile para módulos sem bottom nav próprio: Início, Alunos, Pagamentos e Mais.
+- O módulo Alunos mantém a bottom nav própria validada, evitando duplicação.
+- O Portal do Aluno foi excluído da bottom nav global para não interferir na navegação própria do portal.
+- Harmonização leve de cards, toolbars, inputs, botões e painéis no mobile.
+
+Blindagem:
+- Sem alterações em base de dados.
+- Sem alterações em regras académicas, financeiras, notas, pautas, boletins, DEC, pagamentos, recibos, mensalidades ou multas.
+- Sem alterações na importação de alunos, Ficha 360º ou Gestão Avançada de Encarregados.
+- Intervenção concentrada no App Shell e camada visual/mobile.
+
+Validação esperada:
+- Abrir módulos diferentes em telemóvel: Dashboard, Pagamentos, Turmas, Disciplinas, Configurações e Portaria.
+- Confirmar topbar mobile consistente.
+- Confirmar ausência de folga superior.
+- Confirmar bottom nav global apenas onde não existe bottom nav própria.
+- Confirmar que o módulo Alunos continua com o padrão validado.

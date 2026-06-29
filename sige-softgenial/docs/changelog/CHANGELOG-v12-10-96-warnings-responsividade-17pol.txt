@@ -1,0 +1,46 @@
+SIGE SoftGenial v12.10.96 - Correção Warnings e Responsividade 17 Pol.
+
+Base
+- Construído por cima da v12.10.95 - Notas Docentes: Edição por Disciplina Atribuída.
+
+Objectivo
+- Corrigir warnings e SQL inválido reportados após o merge Malisa.
+- Melhorar a adaptabilidade visual em telas de laptop de 17 polegadas / larguras intermédias.
+- Manter intactas as regras de negócio validadas: transferidos, edição de notas por professor, permissões, pagamentos históricos e fórmulas académicas.
+
+Correções técnicas
+- includes/fin-kpi-engine.php
+  - Corrigido Undefined variable $where_aluno_activo.
+  - KPI de pendente passa a declarar e aplicar condição de aluno activo com join seguro à tabela de alunos.
+  - KPI de atraso passa a declarar e aplicar condição de aluno activo com join seguro à tabela de alunos.
+  - Top devedores operacional passa a excluir alunos transferidos/desistentes/inactivos.
+- admin/finance/financeiro-gerador.php
+  - Corrigido Undefined variable $__sige_am_activo_gerador.
+  - Corrigido SQL inválido do tipo WHERE AND a.escola_id.
+  - Condição canónica de aluno/matrícula activa passa a estar disponível antes da listagem inicial.
+  - Join da matrícula na listagem inicial passa a respeitar escola_id do aluno.
+
+Melhorias de adaptabilidade visual
+- admin/academic/alunos_lista.php
+  - KPIs ajustados para laptops 17".
+  - Filtros e botões deixam de ficar comprimidos em larguras intermédias.
+  - Cards de alunos ganham melhor grid em telas médias.
+- admin/academic/matriz-view.php
+  - KPIs da Matriz Curricular deixam de cair prematuramente para 2 colunas em laptops 17".
+  - Texto dos indicadores deixa de se sobrepor/ficar cortado.
+- admin/finance/financeiro-lancamentos-view.php
+  - Filtros passam a quebrar melhor em larguras intermédias.
+  - Acções passam para linha própria quando necessário.
+- assets/style.css
+  - Modal "Pagar Prestação" passa a receber estilos completos mesmo estando fora do wrapper principal.
+  - Inputs, selects e botões do modal passam para o padrão Produto PRO.
+- admin/system/dashboard-view.php
+  - KPIs e Acessos Rápidos ajustados para telas intermédias.
+
+Garantias
+- Sem alterar fórmulas de notas.
+- Sem alterar aprovação pedagógica.
+- Sem alterar Pauta, DEC, Pauta Final, ACTA ou boletins.
+- Sem alterar pagamentos históricos, recibos, multas ou mensalidades já lançadas.
+- Sem regressão ao fluxo de transferidos/desistentes/inactivos.
+- Sem alterar Permission Engine.

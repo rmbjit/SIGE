@@ -1,0 +1,15 @@
+v12.15.21 - P3: Pesquisa Global
+
+- Fase P3 do diagnostico de UX inicial.
+- Caixa de pesquisa unica na barra de topo da shell, acessivel de qualquer ecra.
+- Pesquisa por AJAX e de uma so vez em Alunos, Turmas e Recibos.
+- Resultados agrupados por tipo, navegacao por teclado (setas, Enter, Esc), atalho / para focar.
+- A caixa so aparece a quem tem ambito de pesquisa.
+- Backend novo includes/sige-pesquisa-global.php: handler wp_ajax_sige_pesquisa_global.
+- Nonce global, escola_id em todas as queries, prepare e esc_like, so leitura.
+- Cada grupo so e consultado com a permissao: Alunos (alunos.ver), Turmas (academico.turmas_ver), Recibos (financeiro.extractos_ver ou financeiro.pagar).
+- Deep-links: aluno abre a lista filtrada pelo numero de processo, recibo abre sige_print=recibo&id, turma abre a lista de turmas.
+- Frontend: pesquisa-global.js (debounce, render seguro, teclado, zero dialogos nativos, zero atributos de evento inline) e pesquisa-global.css (so tokens var()).
+- Caixa injectada na barra de topo (admin-shell.php), gateada por permissao, JS/CSS enfileirados.
+- Gate novo check-pesquisa-global-v12-15-21 registado no corredor.
+- Nao altera formulas, valores, saldos nem queries financeiras existentes. Nenhuma regra academica foi alterada.

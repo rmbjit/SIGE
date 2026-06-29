@@ -1,0 +1,48 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.159
+Data: 2026-06-14
+Ambito: CORRECCAO - placeholders literais no email de recibo
+
+SINTOMA
+-------
+O email de recibo chegava com variaveis por substituir, no titulo e no corpo:
+  "Recibo de pagamento - {nomeescola}"
+  "Ola {nomeencarregado}, ... recibo {recibonumero} ... {linkrecibo}"
+(o {descricao} e o {valor} apareciam correctos.)
+
+ANALISE 360
+-----------
+1. O texto do email NAO existe no codigo do plugin (grep vazio). Logo era um
+   template guardado na base de dados pela escola: option sige_email_templates_config,
+   lido por sige_email_templates_get() e sobreposto aos defaults.
+2. Esse template guardado usa placeholders SEM underscore ({nomeescola}), mas o
+   motor sige_email_render_template substituia por chaves EXACTAS com underscore
+   (nome_escola, recibo_numero, link_recibo, nome_encarregado). Sem casamento,
+   ficavam literais.
+3. O titulo do cabecalho do email e o SUBJECT renderizado (sige_email_wrap_html
+   recebe o subject como titulo), por isso o {nomeescola} aparecia tambem no topo.
+4. O humanizador so remove emojis - nao mexe em placeholders. Nao era a causa.
+5. O remetente "nonreplay@..." e gralha da config SMTP da escola (noreply), nao
+   do codigo.
+
+CORRECCAO (mestra, sem reeditar dados)
+--------------------------------------
+sige_email_render_template passa a substituir de forma TOLERANTE: alem da chave
+exacta, normaliza o nome do placeholder (remove tudo o que nao for alfanumerico,
+em minusculas) e casa por essa forma. Assim {nome_escola}, {nomeescola},
+{Nome Escola} e {NOME-ESCOLA} resolvem todos para a mesma variavel.
+  - Conserta o template ja guardado SEM a escola precisar de o reeditar.
+  - Cobre TODOS os templates de email (recibo, fatura, cobranca, etc.).
+  - Placeholders desconhecidos ficam literais (nao se apaga conteudo).
+
+VALIDACAO
+---------
+Reproduzido o cenario exacto do screenshot (template sem underscore + variaveis
+com underscore): titulo e corpo resolvem na integra, 0 placeholders por resolver.
+php -l limpo; 15/15 gates.
+
+NOTA
+----
+O template que a escola tem guardado e o proprio (texto "Segue a confirmacao do
+recibo..."), nao o default caloroso da v158. Com a futura Central de Comunicacoes
+(editor de templates) a escola podera ver, editar ou repor o default. Por agora,
+o que tem guardado passa a renderizar correctamente.

@@ -1,0 +1,347 @@
+{
+    "version": "12.12.24",
+    "current_user_can_total": 475,
+    "sige_can_total": 63,
+    "files": {
+        "admin/academic/abertura-view.php": {
+            "current_user_can": 1,
+            "sige_can": 1
+        },
+        "admin/academic/acta-view.php": {
+            "current_user_can": 7,
+            "sige_can": 0
+        },
+        "admin/academic/aluno-portal-view.php": {
+            "current_user_can": 13,
+            "sige_can": 7
+        },
+        "admin/academic/alunos_lista.php": {
+            "current_user_can": 15,
+            "sige_can": 4
+        },
+        "admin/academic/aprovar_notas-view.php": {
+            "current_user_can": 4,
+            "sige_can": 0
+        },
+        "admin/academic/disciplinas-view.php": {
+            "current_user_can": 5,
+            "sige_can": 0
+        },
+        "admin/academic/encerramento-view.php": {
+            "current_user_can": 1,
+            "sige_can": 2
+        },
+        "admin/academic/minhas_turmas-view.php": {
+            "current_user_can": 1,
+            "sige_can": 0
+        },
+        "admin/academic/notas-view.php": {
+            "current_user_can": 4,
+            "sige_can": 2
+        },
+        "admin/academic/pautas-view.php": {
+            "current_user_can": 4,
+            "sige_can": 0
+        },
+        "admin/comunicacoes_central-view.php": {
+            "current_user_can": 1,
+            "sige_can": 0
+        },
+        "admin/finance/financeiro-despesas-view.php": {
+            "current_user_can": 7,
+            "sige_can": 0
+        },
+        "admin/finance/financeiro-extratos.php": {
+            "current_user_can": 8,
+            "sige_can": 0
+        },
+        "admin/finance/financeiro-gerador.php": {
+            "current_user_can": 3,
+            "sige_can": 0
+        },
+        "admin/finance/financeiro-pagamentos.php": {
+            "current_user_can": 20,
+            "sige_can": 1
+        },
+        "admin/finance/financeiro-planos-view.php": {
+            "current_user_can": 12,
+            "sige_can": 0
+        },
+        "admin/hr/equipe-view.php": {
+            "current_user_can": 2,
+            "sige_can": 0
+        },
+        "admin/logistics/transporte-view.php": {
+            "current_user_can": 2,
+            "sige_can": 2
+        },
+        "admin/system/config-center-view.php": {
+            "current_user_can": 1,
+            "sige_can": 0
+        },
+        "admin/system/core-status-view.php": {
+            "current_user_can": 1,
+            "sige_can": 0
+        },
+        "admin/system/dashboard-view.php": {
+            "current_user_can": 3,
+            "sige_can": 1
+        },
+        "admin/system/permissions-ui.php": {
+            "current_user_can": 2,
+            "sige_can": 2
+        },
+        "admin/whatsapp_central-view.php": {
+            "current_user_can": 2,
+            "sige_can": 0
+        },
+        "admin/whatsapp_diag-view.php": {
+            "current_user_can": 5,
+            "sige_can": 1
+        },
+        "includes/academic-logic.php": {
+            "current_user_can": 6,
+            "sige_can": 0
+        },
+        "includes/acta-pdf-handler.php": {
+            "current_user_can": 18,
+            "sige_can": 0
+        },
+        "includes/admin-shell.php": {
+            "current_user_can": 49,
+            "sige_can": 3
+        },
+        "includes/ajax-handlers.php": {
+            "current_user_can": 23,
+            "sige_can": 2
+        },
+        "includes/aluno-accounts.php": {
+            "current_user_can": 21,
+            "sige_can": 0
+        },
+        "includes/aluno-fetch-ajax.php": {
+            "current_user_can": 18,
+            "sige_can": 3
+        },
+        "includes/boletim-pdf-handler.php": {
+            "current_user_can": 3,
+            "sige_can": 0
+        },
+        "includes/centros-helpers.php": {
+            "current_user_can": 10,
+            "sige_can": 0
+        },
+        "includes/circulares.php": {
+            "current_user_can": 2,
+            "sige_can": 1
+        },
+        "includes/class-sige-migration.php": {
+            "current_user_can": 1,
+            "sige_can": 0
+        },
+        "includes/core/class-sige-core.php": {
+            "current_user_can": 1,
+            "sige_can": 0
+        },
+        "includes/cron-tasks.php": {
+            "current_user_can": 8,
+            "sige_can": 0
+        },
+        "includes/curriculum-engine.php": {
+            "current_user_can": 5,
+            "sige_can": 2
+        },
+        "includes/db-handler.php": {
+            "current_user_can": 21,
+            "sige_can": 1
+        },
+        "includes/db-migration-engine.php": {
+            "current_user_can": 1,
+            "sige_can": 0
+        },
+        "includes/dica-do-dia.php": {
+            "current_user_can": 2,
+            "sige_can": 1
+        },
+        "includes/documents-engine.php": {
+            "current_user_can": 1,
+            "sige_can": 0
+        },
+        "includes/email-central.php": {
+            "current_user_can": 8,
+            "sige_can": 1
+        },
+        "includes/email-engine.php": {
+            "current_user_can": 2,
+            "sige_can": 0
+        },
+        "includes/email-queue-templates.php": {
+            "current_user_can": 3,
+            "sige_can": 0
+        },
+        "includes/fin-action-service.php": {
+            "current_user_can": 1,
+            "sige_can": 1
+        },
+        "includes/fin-familia-service.php": {
+            "current_user_can": 2,
+            "sige_can": 0
+        },
+        "includes/fin-fecho-turno.php": {
+            "current_user_can": 6,
+            "sige_can": 0
+        },
+        "includes/finance-aprovacoes.php": {
+            "current_user_can": 0,
+            "sige_can": 1
+        },
+        "includes/finance-core.php": {
+            "current_user_can": 11,
+            "sige_can": 3
+        },
+        "includes/finance-data-efectiva.php": {
+            "current_user_can": 1,
+            "sige_can": 0
+        },
+        "includes/finance-devedores-pdf.php": {
+            "current_user_can": 4,
+            "sige_can": 2
+        },
+        "includes/financeiro-historico-aluno-pro.php": {
+            "current_user_can": 3,
+            "sige_can": 1
+        },
+        "includes/hub/class-sige-hub-admin.php": {
+            "current_user_can": 3,
+            "sige_can": 0
+        },
+        "includes/hub/class-sige-hub-billing.php": {
+            "current_user_can": 2,
+            "sige_can": 0
+        },
+        "includes/hub/class-sige-hub-client.php": {
+            "current_user_can": 1,
+            "sige_can": 0
+        },
+        "includes/jardim-handlers.php": {
+            "current_user_can": 7,
+            "sige_can": 1
+        },
+        "includes/map-pdf-handler.php": {
+            "current_user_can": 6,
+            "sige_can": 0
+        },
+        "includes/multitenancy.php": {
+            "current_user_can": 1,
+            "sige_can": 0
+        },
+        "includes/notas-reaprovacao-migracao.php": {
+            "current_user_can": 6,
+            "sige_can": 0
+        },
+        "includes/notification-policy.php": {
+            "current_user_can": 2,
+            "sige_can": 0
+        },
+        "includes/page-guard.php": {
+            "current_user_can": 2,
+            "sige_can": 1
+        },
+        "includes/passagem-docs-handler.php": {
+            "current_user_can": 2,
+            "sige_can": 1
+        },
+        "includes/pauta-excel-handler.php": {
+            "current_user_can": 5,
+            "sige_can": 0
+        },
+        "includes/pauta-pdf-handler.php": {
+            "current_user_can": 5,
+            "sige_can": 0
+        },
+        "includes/payments/mpesa-config.php": {
+            "current_user_can": 2,
+            "sige_can": 1
+        },
+        "includes/permissions-layer.php": {
+            "current_user_can": 0,
+            "sige_can": 2
+        },
+        "includes/portal-handlers.php": {
+            "current_user_can": 2,
+            "sige_can": 1
+        },
+        "includes/portaria-camera-safe-page.php": {
+            "current_user_can": 4,
+            "sige_can": 0
+        },
+        "includes/presencas-engine.php": {
+            "current_user_can": 2,
+            "sige_can": 2
+        },
+        "includes/privacy/pii-dossier.php": {
+            "current_user_can": 0,
+            "sige_can": 1
+        },
+        "includes/privacy/pii-inventario.php": {
+            "current_user_can": 0,
+            "sige_can": 1
+        },
+        "includes/saude-operacional.php": {
+            "current_user_can": 1,
+            "sige_can": 0
+        },
+        "includes/secure-document-download.php": {
+            "current_user_can": 6,
+            "sige_can": 3
+        },
+        "includes/security-baseline-pro.php": {
+            "current_user_can": 1,
+            "sige_can": 0
+        },
+        "includes/security-hardening.php": {
+            "current_user_can": 9,
+            "sige_can": 1
+        },
+        "includes/security-kernel.php": {
+            "current_user_can": 0,
+            "sige_can": 1
+        },
+        "includes/settings/class-sige-settings-legacy.php": {
+            "current_user_can": 4,
+            "sige_can": 0
+        },
+        "includes/settings/class-sige-settings-policy.php": {
+            "current_user_can": 2,
+            "sige_can": 0
+        },
+        "includes/settings/class-sige-settings-technical-mode.php": {
+            "current_user_can": 2,
+            "sige_can": 0
+        },
+        "includes/versioning.php": {
+            "current_user_can": 1,
+            "sige_can": 0
+        },
+        "includes/whatsapp-central.php": {
+            "current_user_can": 7,
+            "sige_can": 1
+        },
+        "includes/whatsapp-diagnostics.php": {
+            "current_user_can": 12,
+            "sige_can": 0
+        },
+        "includes/whatsapp-engine.php": {
+            "current_user_can": 20,
+            "sige_can": 0
+        },
+        "includes/whatsapp-recovery-mode.php": {
+            "current_user_can": 3,
+            "sige_can": 0
+        },
+        "sige-softgenial.php": {
+            "current_user_can": 0,
+            "sige_can": 1
+        }
+    }
+}

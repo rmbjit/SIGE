@@ -1,0 +1,5 @@
+v12.9.47 - Ponte de controlo Hub → Cliente
+- Executa comandos remotos autenticados do SoftGenial Hub.
+- Aplica suspensão/cancelamento da licença no cliente após refresh.
+- Permite disparar cobranças pendentes por email/WhatsApp a partir do Hub.
+- Mantém financeiro, email, templates e correções anteriores sem regressão.

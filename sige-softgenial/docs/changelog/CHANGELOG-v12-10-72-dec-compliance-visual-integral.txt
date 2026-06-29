@@ -1,0 +1,22 @@
+SIGE SoftGenial v12.10.72 - DEC: Compliance Visual Integral
+
+Objectivo
+- Melhorar o design do módulo page=sige-app&view=dec.
+- Garantir compliance visual com o Painel Principal / Dashboard V2 MJS-grade.
+- Manter a intervenção exclusivamente visual, sem tocar em cálculos, notas, estatísticas, impressão ou exportação.
+
+Ajustes aplicados
+- Removido o cabeçalho genérico do App Shell para esta view, mantendo header único.
+- Hero antigo escuro substituído por hero claro no padrão Produto PRO.
+- Sequência visual obrigatória aplicada: ícone canónico, área Académico, título, subtítulo e estado lateral.
+- Filtros de turma, trimestre e ano lectivo harmonizados como cartão claro, com campos arredondados.
+- Barra de contexto da turma convertida para chips informativos com ícones canónicos.
+- Botões Imprimir/PDF e Exportar Excel redesenhados no padrão do sistema, com cursor e hover claros.
+- Tabela principal e tabela estatística receberam bordas, sombras, raio, cabeçalhos e leitura visual mais próximos do padrão PRO.
+- Estados vazios redesenhados sem setas/emojis visuais.
+
+Garantias
+- Sem alteração em cálculos do DEC.
+- Sem alteração em notas, médias, MT, estatísticas por género ou por coluna.
+- Sem alteração em queries, permissões, impressão popup ou exportação Excel.
+- Sem alteração em pautas, boletins, pagamentos, multas, mensalidades ou base de dados.

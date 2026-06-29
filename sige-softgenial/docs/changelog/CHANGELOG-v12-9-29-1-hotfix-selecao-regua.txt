@@ -1,0 +1,13 @@
+SIGE SoftGenial v12.9.29.1 - Hotfix Selecção na Régua de Cobrança
+
+Base: v12.9.29 validada.
+
+Correcção:
+- Corrigido erro de JavaScript na geração da Lista de Cobrança que quebrava todo o script da Central de Cobranças.
+- Restaurado funcionamento da selecção manual, selecção por prioridade, comportamento e régua.
+- Ajustado colspan da linha vazia para respeitar as 11 colunas actuais da tabela.
+
+Garantias:
+- Sem alteração de fórmulas financeiras.
+- Sem alteração de fórmulas académicas.
+- Sem alteração de lançamentos, pagamentos, saldos, estornos ou WhatsApp engine.

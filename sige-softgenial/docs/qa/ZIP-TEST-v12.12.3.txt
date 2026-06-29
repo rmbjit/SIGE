@@ -1,0 +1,9 @@
+SIGE SoftGenial v12.12.3 - ZIP validation
+
+Command:
+unzip -t /mnt/data/sige-softgenial-v12_12_3-notas-beta-modulos-validacao.zip
+
+Expected result:
+No errors detected in compressed data.
+
+The final command output and SHA-256 are reported in the delivery message.

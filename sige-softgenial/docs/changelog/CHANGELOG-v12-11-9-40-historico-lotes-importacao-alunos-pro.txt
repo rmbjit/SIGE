@@ -1,0 +1,75 @@
+SIGE SoftGenial v12.11.9.40 - Histórico de Lotes de Importação PRO
+Data: 05/06/2026
+
+Objectivo
+- Completar o ciclo profissional da importação de estudantes com um histórico visual, rastreável e persistente dos lotes importados.
+
+Ficheiros alterados
+- sige-softgenial.php
+- BUILD.json
+- includes/class-sige-migration.php
+- includes/aluno-fetch-ajax.php
+- admin/academic/alunos_lista.php
+
+Melhorias implementadas
+1. Nova tabela persistente de histórico:
+   - sige_alunos_importacao_lotes.
+
+2. Cada importação confirmada passa a registar:
+   - ID do lote;
+   - escola;
+   - ano lectivo;
+   - turma;
+   - nome do ficheiro;
+   - total de linhas;
+   - importáveis;
+   - importados;
+   - pendentes;
+   - erros;
+   - duplicados;
+   - estado do lote;
+   - utilizador que importou;
+   - data/hora da importação;
+   - resumo e detalhes em JSON para auditoria.
+
+3. Novo endpoint AJAX protegido:
+   - sige_listar_lotes_importacao_alunos.
+
+4. Histórico visual no popup de importação:
+   - data;
+   - ID do lote;
+   - turma;
+   - ano lectivo;
+   - contagens principais;
+   - utilizador;
+   - estado;
+   - acções “Usar ID” e “Anular”.
+
+5. Compatibilidade com lotes antigos:
+   - se houver lotes criados antes da nova tabela, o sistema tenta reconstruir o histórico a partir dos alunos/matrículas ainda existentes.
+
+6. Integração com anulação segura:
+   - quando a anulação é bloqueada, o histórico guarda a última tentativa de bloqueio;
+   - quando a anulação é concluída, o lote passa para estado “anulado”, preservando a rastreabilidade mesmo depois de os alunos serem removidos.
+
+Preservado sem alterações
+- Regras de notas;
+- Pautas;
+- Boletins;
+- DEC;
+- Mensalidades;
+- Multas;
+- Pagamentos;
+- Recibos;
+- Fórmulas académicas;
+- Regras financeiras;
+- Importação em duas etapas;
+- Anulação segura de lote.
+
+Testes realizados
+- php -l nos ficheiros alterados;
+- smoke test específico v12.11.9.40;
+- validação de presença do endpoint AJAX;
+- validação de presença da nova tabela de histórico;
+- validação de presença do painel visual no módulo Alunos;
+- validação de integridade do ZIP final.

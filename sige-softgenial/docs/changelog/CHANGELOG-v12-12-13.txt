@@ -1,0 +1,9 @@
+## v12.12.13 - Painel de controlo de seguranca (MFA), so super admin (2026-06-20)
+
+- Novo ecra "Seguranca (MFA)" sob Definicoes para o administrador WordPress real gerir os controlos de MFA sem codigo, WP-CLI ou base de dados: liga/desliga step-up (sige_mfa_stepup), reposicao automatica (sige_mfa_autoreplay) e modo estrito (sige_mfa_stepup_strict), e escolhe os perfis abrangidos (sige_mfa_stepup_roles). Mostra ainda, so para leitura, quantos utilizadores tem a aplicacao autenticadora inscrita.
+- Acesso restrito ao ADMIN Super pela funcao canonica sige_is_real_wp_admin_user(), em tripla camada: o ecra so e registado se for super admin real; o render e a gravacao voltam a verificar e recusam com wp_die 403; e o filtro de hardening que retira manage_options aos perfis SIGE continua a aplicar-se. O Admin IT (sige_admin_ti) e os outros perfis nativos do SIGE nunca veem nem alcancam o ecra (provado em runtime no smoke e no gate).
+- Novo endpoint governado admin_post:sige_mfa_settings_save, com nonce (check_admin_referer), gate duro, sanitizacao e auditoria de cada alteracao. Desligar o step-up gera um evento de auditoria distinto (mfa_stepup_disabled). Manifesto 195 -> 196; regra nova em observe; enforce mantem-se em 30.
+- Em producao (fora de WP_DEBUG) deixa de EXIBIR avisos/deprecations do PHP no wp-admin (continuam a ir para o log), removendo a faixa amarela strip_tags do nucleo do WordPress. Opcional pela opcao sige_admin_hide_php_notices (defeito on).
+- Sem alteracao a logica nem ao comportamento do MFA (step-up, TOTP, reposicao). Sem alteracao ao modelo de capacidades (reutiliza os helpers existentes). Sem migracao de base de dados. Sem alteracao de regras de calculo. Zero travessoes em codigo e documentos.
+- Governanca: gate check-mfa-settings.php e smoke smoke-mfa-settings-v12-12-13.php (14 verificacoes com o gate de acesso real) ligados ao corredor. Rediagnostico adversarial Zero P0/P1; dois achados P3 aceites e documentados.
+

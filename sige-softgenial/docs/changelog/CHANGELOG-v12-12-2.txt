@@ -1,0 +1,38 @@
+SIGE SoftGenial v12.12.2 - Extracto de Divida Detalhado para Encarregados
+
+Base: v12.12.1 - Governance Baseline Corrective Audit
+Data: 2026-06-16
+
+Objectivo
+- Melhorar o documento de extracto dos devedores para que pais e encarregados compreendam a decomposicao da divida.
+
+Alteracoes principais
+- `includes/documents-engine.php`
+  - `?sige_print=factura` passa a imprimir `EXTRATO DE DÍVIDA DETALHADO`.
+  - Criado helper `sige_doc_fin_lancamento_breakdown()` para organizar base/propina, transporte, extras, multa efectiva, descontos, desconto especial, ja pago e saldo.
+  - O helper usa `sige_fin_total_lancamento()` e `sige_fin_saldo_lancamento()` quando disponiveis.
+  - A consulta de dividas inclui `pendente`, `parcial` e `em_plano`.
+  - Pagamentos abatidos por lancamento sao apresentados com recibos e ultimo pagamento quando existirem.
+  - O documento mostra resumo geral: total em aberto, total vencido, em plano, ja pago nos itens e quantidade de itens.
+  - O documento nao escreve na base de dados e nao chama recalculadores.
+
+- `admin/finance/financeiro-devedores-view.php`
+  - Botao `Factura` passa a `Extracto dívida`.
+  - Botao `Extracto` passa a `Histórico`.
+  - Links de impressao gerados na Central de Devedores passam por `wp_nonce_url()`.
+
+- `tools/smoke-devedores-extracto-detalhado-v12-12-2.php`
+  - Novo smoke test especifico com verificacoes da formula, decomposicao, tenant, side effects, labels e nonce.
+
+- `tools/run-gates.php`
+  - Gate do extracto detalhado integrado no corredor oficial.
+
+Exclusoes
+- Sem alteracao de schema.
+- Sem alteracao do Financial Ledger.
+- Sem enforcement global de nonce documental.
+- Sem alteracao em M-Pesa/e-Mola, recibos, pagamentos ou regras globais de lancamentos.
+
+Riscos residuais
+- Links legados sem nonce continuam aceites por compatibilidade ate Security Kernel.
+- Validacao com dados reais em staging continua obrigatoria antes de producao.

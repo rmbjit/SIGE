@@ -1,0 +1,20 @@
+SIGE SoftGenial v12.10.39 - Equipa e Professores: Modal do Colaborador
+
+Objectivo
+- Harmonizar o pop-up de criação/edição de colaborador com o padrão visual aprovado do Painel Principal.
+
+Alterações principais
+- Modal de Novo/Editar Colaborador redesenhado com cabeçalho claro, ícone contextual, subtítulo humano e fecho mais elegante.
+- Separadores transformados em passos visuais mais limpos e consistentes.
+- Formulário reorganizado com cartões, campos arredondados, melhor espaçamento e melhor contraste.
+- Área de foto passe redesenhada como painel lateral profissional.
+- Rodapé do modal com acções fixas e botões alinhados ao tema da escola.
+- Labels e textos ajustados para linguagem limpa, sem termos técnicos internos.
+- Preservada a aplicação das cores personalizadas da escola.
+- Mantida responsividade para tablet e telemóvel.
+
+Garantias
+- Sem alteração de fórmulas.
+- Sem alteração de mensalidades, multas, pagamentos, cobranças, recibos, estornos ou base de dados.
+- Sem alteração de notas, pautas, DEC, boletins ou actas.
+- Sem migrações de base de dados.

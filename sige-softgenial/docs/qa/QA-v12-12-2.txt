@@ -1,0 +1,38 @@
+SIGE SoftGenial v12.12.2 - Extracto de Dívida Detalhado para Encarregados
+
+Resumo de QA
+============
+
+PHP lint:
+- 332 ficheiros PHP verificados.
+- 0 falhas.
+- Evidência: docs/qa/PHP-LINT-v12.12.2.json
+
+Gates oficiais:
+- 28/28 gates verdes.
+- Evidência: docs/qa/GATES-v12.12.2.txt
+
+Smoke específico:
+- tools/smoke-devedores-extracto-detalhado-v12-12-2.php
+- 25 verificações passaram.
+
+Alterações funcionais principais:
+- Extracto de dívida detalhado para encarregados.
+- Decomposição por item em aberto.
+- Inclusão de status em_plano.
+- Pagamentos abatidos, recibos e último pagamento por lançamento.
+- Botões da Central de Devedores clarificados.
+- Links de impressão na Central de Devedores com nonce.
+
+Alterações de segurança/robustez:
+- Queries do documento com aluno_id e escola_id.
+- Remoção de fallbacks perigosos para escola_id=1 em caminhos documentais tocados.
+- Gate JS estabilizado por lotes isolados, mantendo validação por tools/check-js-views.php.
+
+Schema:
+- Sem alteração de schema.
+
+Decisão:
+- P0 aberto: 0.
+- P1 aberto: 0.
+- Versão pronta para validação em staging.

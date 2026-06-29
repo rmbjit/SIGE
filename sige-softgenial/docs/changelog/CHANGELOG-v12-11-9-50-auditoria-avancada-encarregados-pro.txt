@@ -1,0 +1,28 @@
+SIGE SoftGenial v12.11.9.50 - Auditoria Avançada de Encarregados PRO
+
+Objectivo
+- Implementar a segunda sugestão aprovada para a Gestão Avançada de Encarregados: criação de uma tabela própria para histórico/auditoria de alterações sensíveis.
+
+Intervenções
+- Criada a tabela sige_alunos_encarregados_historico na migração centralizada.
+- Incrementada a versão do schema para 20260606.2.
+- Adicionado logging seguro quando os campos de encarregados são criados ou actualizados no cadastro do aluno.
+- O histórico regista: escola, aluno, evento, origem, campos alterados, total de alterações, resumo, utilizador, data/hora e alterações em JSON.
+- Valores sensíveis como telefones, e-mails e documentos são expostos de forma mascarada no histórico visual, com hashes internos para integridade.
+- A Ficha 360º passa a mostrar a auditoria dos encarregados, em formato resumido e minimizado.
+
+Campos auditados
+- Pai/mãe: nome, telemóvel principal, telemóvel alternativo e e-mail.
+- WhatsApp/e-mail principal do encarregado.
+- Encarregado principal: tipo, nome, parentesco, telemóvel e e-mail.
+- Canal preferencial de comunicação.
+- Consentimentos: WhatsApp, e-mail, SMS e chamada.
+- Contacto alternativo.
+- Pessoa autorizada a buscar o aluno.
+- Observações de comunicação/autorização.
+
+Blindagem
+- A auditoria não bloqueia a gravação do aluno se a tabela ainda não existir.
+- Não altera regras financeiras, académicas, fórmulas, pautas, boletins, DEC, pagamentos, recibos, importação de alunos, histórico de lotes ou anulação segura.
+- Mantém escopo por escola_id.
+- Mantém permissões e nonce existentes do fluxo de gravação do aluno.

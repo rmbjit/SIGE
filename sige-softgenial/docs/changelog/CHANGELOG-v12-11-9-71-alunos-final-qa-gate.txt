@@ -1,0 +1,26 @@
+SIGE SoftGenial v12.11.9.71 - Alunos Final QA Gate
+
+Objetivo:
+- Fechar a verificação do módulo Alunos antes de avançar para outro módulo, após o hotfix do botão “Mais” da navegação inferior.
+
+O que foi tratado:
+- Confirmada a causa do reporte: o botão “Mais” da bottom nav própria do módulo Alunos precisava abrir o menu lateral, não apontar para configuração nem ficar inerte.
+- Confirmado que o handler global de mobile/tablet intercepta o botão em capture phase, chama preventDefault/stopPropagation e evita double-toggle com o fallback local.
+- Confirmado que o fallback local continua disponível caso a camada global não esteja carregada.
+- Alinhadas as validações finais para o slug real desta linha de build.
+- Criado smoke final de go/no-go para evitar avançar com uma divergência de QA.
+
+Sem alterações em:
+- Base de dados.
+- Migrations.
+- Cálculos financeiros.
+- Pagamentos, dívidas, multas, mensalidades ou recibos.
+- Notas, pautas, boletins, DEC, ACTA ou fórmulas académicas.
+- Importação de alunos.
+- Criação, edição ou remoção de alunos.
+- Portaria Digital.
+- Scanner de crachás.
+- Isolamento Guarda / Portaria.
+
+Conclusão:
+- O módulo Alunos fica aprovado como baseline para avançar para o próximo módulo, mantendo apenas recomendação de validação visual em dispositivo real após instalação.

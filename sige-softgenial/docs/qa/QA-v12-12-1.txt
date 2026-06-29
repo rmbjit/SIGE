@@ -1,0 +1,31 @@
+SIGE SoftGenial v12.12.1 - Governance Baseline Corrective Audit
+
+Objectivo:
+- Corrigir os bloqueadores encontrados no rediagnostico adversarial da v12.12.0.
+- Fechar P0/P1 antes de qualquer nova fase.
+
+Evidencias executadas:
+- PHP lint: docs/qa/PHP-LINT-v12.12.1.json
+  Escopo: 331 ficheiros PHP do pacote.
+  Resultado: 331/331 OK; falhas: 0.
+- Gates oficiais: docs/qa/GATES-v12.12.1.txt
+  Resultado: 27/27 verdes.
+- Tempo do run-gates: docs/qa/GATES-v12.12.1.stderr.txt
+  Resultado: RC=0.
+
+Bloqueadores corrigidos:
+- P0-001: query/print de despesas agora exige nonce, permissão, escola_id valido e consulta id+escola_id.
+- P1-001: wp_ajax:sige_settings_save agora entra no manifesto.
+- P1-002: template_redirect/query handlers agora entram no manifesto.
+- P1-003: manifesto validado por extractor primario e independente, com testes negativos.
+
+Gates correctivos adicionados/reforçados:
+- check-query-handler-surface.php
+- check-tenant-sensitive-queries.php
+- check-governance-negative-tests.php
+- check-action-surface-manifest.php com comparação primária/independente.
+
+Decisão QA:
+- P0 aberto: 0
+- P1 aberto: 0
+- Estado: aprovado para staging.

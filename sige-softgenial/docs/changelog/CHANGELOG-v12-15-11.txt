@@ -1,0 +1,16 @@
+v12.15.11 - Alunos Stability Recovery
+
+Objectivo
+- Recuperar a página de Alunos quando a v12.15.10 deixou a view lenta/sem resposta.
+- Corrigir a sobreposição dos modais com a sidebar sem mover modais para o body.
+
+Mudanças
+- Base funcional: v12.15.8 aprovada em staging.
+- Removida a abordagem de v12.15.9/v12.15.10: portal de modais, dispatcher extra e MutationObserver.
+- Corrigido layering dos modais usando apenas CSS scoped a body.sige-view-alunos_lista.sige-aluno-modal-open.
+- Preservado menu vertical dos três pontinhos e protecção contra hover do card vizinho.
+
+Exclusões
+- Não altera Financeiro, Portaria, documentos/PDFs, RH, Sistema ou shell global.
+- Não reintroduz camada global do Design System PRO.
+- Não relaxa CSP.

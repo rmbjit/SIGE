@@ -1,0 +1,33 @@
+SIGE SoftGenial v12.11.9.114 - AUDITORIA DE DESIGN (matriz curricular)
+=====================================================================
+
+Matriz curricular (1123 linhas), alta visibilidade para direcção.
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 8 pesos, mas a concentração mais extrema vista: 950 usado
+  30x, 900 14x (44 de 62 ocorrências em extra-bold). Numa matriz com
+  muitos rótulos (disciplinas, classes, cargas), tudo no peso máximo
+  torna a tabela exaustiva de ler.
+- RAIOS: 10 valores (14 a 30px). SOMBRAS: 13. CORES: 88 hex.
+
+CORRECÇÃO (dois blocos CSS: 29-292 e 335-560; JS preservado)
+1. Hierarquia de 3 níveis: 8 pesos -> 600/700. Verificado que não havia
+   legendas pesadas a forçar.
+2. Raios da escala: 10 -> 4. Sombras da escala: 13 -> 4.
+3. 202 cores migradas para tokens. ZERO hex restantes. Referências
+   resolvem, CSS bem-formado.
+
+PROVA VISUAL
+- matriz-antes-depois.png: linha de matriz. Disciplina e carga horária
+  mantêm-se fortes (info principal), o tipo "Obrigatória" recua para
+  qualificador leve. Tabela legível.
+
+GATES
+- smoke-regression-pack: 173 -> 176 invariantes.
+- matriz adicionado aos ecrãs auditados.
+- Baseline de mágicos: 8779 -> 8577 (-202).
+- Baseline de tipografia: 564 -> 524 (-40).
+- 12 gates verdes.
+
+PRÓXIMO
+- aluno-portal (32 pesos), disciplinas (27), boletim (25)...

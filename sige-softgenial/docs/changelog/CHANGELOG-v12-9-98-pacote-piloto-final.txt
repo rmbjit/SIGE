@@ -1,0 +1,46 @@
+SIGE SoftGenial v12.9.98 - Pacote Piloto Final
+
+Base validada:
+- v12.9.97 - Modo Produção Piloto e Bloqueio Informativo, validada em ambiente de teste.
+
+Objectivo:
+- Consolidar a passagem do ambiente de teste para a primeira escola real piloto, com pacote técnico mínimo, roteiro de instalação, checklist das primeiras 48h, critérios de pausa e registo seguro para suporte.
+
+Alterações principais:
+1. Nova camada apenas de leitura:
+   - includes/settings/class-sige-settings-pilot-final-package.php
+
+2. Nova área no Centro de Configuração → Pré-produção:
+   - Pacote Piloto Final.
+
+3. Conteúdos acrescentados:
+   - estado do pacote piloto;
+   - pacote técnico mínimo;
+   - roteiro de instalação piloto;
+   - checklist das primeiras 48h;
+   - critérios para pausar rollout;
+   - comunicação com a escola piloto;
+   - registo seguro para suporte;
+   - condições de “não instalar se”;
+   - política do Pacote Piloto Final.
+
+4. Segurança e anti-regressão:
+   - não grava configurações operacionais;
+   - não remove campos;
+   - não migra valores;
+   - não sincroniza automaticamente;
+   - não altera financeiro, académico, WhatsApp, SMTP, Hub/licença, permissões, pautas, boletins, recibos ou schema;
+   - não promove produção automaticamente;
+   - não expõe tokens, senhas, SMTP, Z-API, API keys, dados bancários ou segredos.
+
+5. Versionamento:
+   - Header do plugin actualizado para 12.9.98;
+   - SIGE_VERSION actualizado para 12.9.98;
+   - BUILD.json actualizado para 12.9.98.
+
+Teste recomendado:
+1. Instalar no ambiente de teste.
+2. Abrir Sistema Técnico → Centro de Configuração → Pré-produção.
+3. Confirmar a nova área “Pacote Piloto Final”.
+4. Confirmar que nenhuma lógica operacional mudou.
+5. Executar smoke test funcional antes de qualquer escola real.

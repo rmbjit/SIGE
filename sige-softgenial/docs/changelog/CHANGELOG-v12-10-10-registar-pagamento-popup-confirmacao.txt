@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.10.10 - Registar Pagamento: pop-up de confirmação
+
+Objectivo
+- Reforçar a experiência do utilizador no fluxo de pagamento, evitando métodos de pagamento errados e removendo elementos visualmente ilegíveis, sem mexer nas fórmulas nem nas regras financeiras.
+
+Alterações realizadas
+- Corrigida a legibilidade da opção “Isentar multas” dentro do cartão de confirmação de pagamento.
+- Adicionado pop-up de confirmação antes de gravar pagamento, mostrando método seleccionado, referência, total e aluno.
+- Mantida a possibilidade de voltar e corrigir o método antes de finalizar.
+- Convertida a mensagem “Pagamento realizado” para pop-up com botão de continuar e botão de imprimir recibo.
+- Convertida a mensagem de pagamento de família registado para pop-up.
+- Mantido o padrão visual aprovado: cartões arredondados, contraste forte, linguagem limpa e experiência de App.
+
+Perímetro de segurança
+- Não altera fórmulas financeiras.
+- Não altera cálculo de mensalidades, multas, descontos, pagamentos parciais, serviços avulsos ou recibos.
+- Não altera queries de cobrança, lançamentos, estornos ou schema da base de dados.
+- Não altera notas, pautas, DEC, boletins ou regras académicas.

@@ -1,0 +1,13 @@
+SIGE SoftGenial v12.10.41 - Disciplinas: Harmonia Visual
+
+- Gestão de Disciplinas alinhada ao padrão visual aprovado do Painel Principal.
+- Removida duplicação de cabeçalho do App Shell nesta página.
+- Hero claro, amplo e consistente com o Dashboard.
+- KPIs redesenhados no modelo visual validado.
+- Tabela, badges, acções e indicadores harmonizados.
+- Formulário Nova/Editar Disciplina redesenhado no novo modelo de modal claro e profissional.
+- Confirmações de remoção de disciplina e indicadores passam a usar pop-up real.
+- Ícones reforçados para visibilidade e consistência.
+- Cores personalizadas da escola respeitadas.
+- Mobile-friendly preservado.
+- Sem alteração de fórmulas, notas, pautas, DEC, boletins, pagamentos, mensalidades, multas, recibos, estornos ou base de dados.

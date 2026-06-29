@@ -1,0 +1,24 @@
+SIGE SoftGenial v12.9.31 - WhatsApp Safety / Fluxo Humanizado
+
+Objectivo:
+Reduzir o risco operacional de restrição do número WhatsApp através de boas práticas legítimas: menos automação, mais selecção humana, mensagens mais conversacionais, limites conservadores e respeito por opt-out.
+
+Alterações aplicadas:
+1. Lembretes automáticos pré-vencimento foram desactivados no cron diário.
+2. Detectores automáticos D-5 e D-0 de cobrança foram transformados em no-op.
+3. Alertas D+5 e D+15 deixam de disparar auto-send externo; ficam como alerta interno/manual.
+4. sige_enviar_whatsapp() deixa de enviar directo para a API; passa pela fila protegida quando disponível.
+5. Limites do Guardian ficaram mais conservadores:
+   - janela segura 07:00-19:00;
+   - batch 2;
+   - intervalo global mínimo 90s;
+   - intervalo por contacto 30min;
+   - limite horário 18;
+   - limite diário normal 80;
+   - aquecimento mais lento.
+6. Mensagens padrão financeiras foram suavizadas e tornadas mais conversacionais.
+7. Links continuam separados e atrasados, com texto menos agressivo.
+8. Opt-out mantido: resposta PARAR/NÃO/STOP bloqueia novos envios.
+
+Observação:
+Nenhum sistema garante risco zero com WhatsApp/Meta. Esta versão reduz padrões de envio agressivo e privilegia acção humana pela Central de Cobranças.

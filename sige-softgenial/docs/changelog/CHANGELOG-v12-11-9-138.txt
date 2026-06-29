@@ -1,0 +1,34 @@
+SIGE SoftGenial v12.11.9.138 - AUDITORIA DE DESIGN (core-status)
+===============================================================
+
+Estado do núcleo / diagnóstico do sistema (660 linhas).
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 7 pesos, 850 dominante (9x). Zero pesos inline fora do
+  <style> (verificado).
+- RAIOS: 5 valores. SOMBRAS: 12. CORES: 64 hex.
+
+CORRECÇÃO (bloco <style> 237-660, quase todo o ficheiro; sem JS/template)
+1. Hierarquia de 3 níveis: 7 pesos -> 500/600/700.
+2. Raios da escala: 5 -> 4. Sombras da escala: 12 -> 6.
+3. 81 cores migradas (CSS). Inclui classes de ESTADO DE SISTEMA
+   (.sg-core-badge.ok verde, .warn laranja, .grace azul) migradas para
+   tokens semânticos preservando o significado. ZERO hex restantes.
+
+PROVA VISUAL
+- core-status-antes-depois.png: verificações de sistema. Estado
+  preservado (OK verde, Aviso laranja); nome da verificação destaca-se,
+  detalhe recua, estado ênfase.
+
+GATES
+- smoke-regression-pack: 264 -> 268 invariantes.
+- core-status adicionado aos ecrãs auditados.
+- Baseline de mágicos: 5001 -> 4920 (-81). Abaixo de 5000!
+- Baseline de tipografia: 85 -> 73 (-12).
+- 12 gates verdes.
+
+MARCO: 28 ecrãs auditados. Desde o início: mágicos 9925 -> 4920 (mais de
+metade eliminada); pesos não-canónicos 665 -> 73.
+
+PRÓXIMO
+- financeiro-devedores (12 pesos), turmas (12), auditoria_notas (12)...

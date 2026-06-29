@@ -1,0 +1,49 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.52
+Data: 2026-06-23
+Titulo: Fase 4 incr 2 - Expressoes inline em onclick para funcoes nomeadas
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+Mudanca interna, sem alterar a forma de trabalhar. Continuamos a preparar o reforco
+de seguranca do navegador (CSP), que exige tirar das etiquetas as pequenas instrucoes
+de clique e liga-las de outra forma, sem mudar o que cada botao faz.
+
+Nesta versao tratamos os cliques que eram instrucoes embutidas (imprimir, mostrar ou
+esconder, abrir e fechar o menu lateral no telemovel, fechar um aviso). Cinco ecrans
+foram ajustados, incluindo o menu lateral do telemovel, que aparece em todo o lado.
+O funcionamento e exactamente o mesmo. Nao ha qualquer alteracao visivel.
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+
+================================================================
+VERIFICACAO
+================================================================
+1. Menu lateral no telemovel (ecra estreito): tocar no hamburguer abre o menu; tocar
+   na zona escura por fora fecha; o botao de mais opcoes abre e fecha o menu.
+2. Abertura do ano: o botao de imprimir abre a caixa de impressao; tocar num grupo de
+   alunos abre e fecha a lista.
+3. Encerramento e Pagamentos por turma: o botao de imprimir abre a caixa de impressao.
+4. Auditoria de notas: tocar numa celula longa alterna entre mostrar tudo e encurtar.
+
+Tudo deve comportar-se exactamente como antes.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera o
+esquema da base de dados, pelo que a reversao e directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Tratar os cliques que abrem outra pagina ou janela (recibo, ligacao de email),
+  depois os blocos de script, e por fim impor a politica de seguranca de conteudo (CSP).

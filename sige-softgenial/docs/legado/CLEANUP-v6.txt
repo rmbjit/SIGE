@@ -1,0 +1,3 @@
+SIGE SoftGenial 12.9.9.1 - Cleanup Performance v6
+
+Removido script CLI de desenvolvimento; removidas opções/logística sem módulo funcional; removida interface SMS legado; admin shell/jardim carregam só em contexto administrativo.

@@ -1,0 +1,38 @@
+# Changelog - v12.18.0 Operational UX & Workflow Hardening
+
+## Objectivo
+Reduzir erro humano em tarefas operacionais frequentes através de orientação contextual curta, visível e não bloqueante.
+
+## Alterações
+- Versão sincronizada para 12.18.0.
+- Novo include: `includes/operational-workflow-hardening.php`.
+- Novo CSS: `assets/operational-workflow-v12-18-0.css`.
+- Novo JS: `assets/operational-workflow-v12-18-0.js`.
+- Novo catálogo de fluxos seguros por view crítica.
+- Inserção DOM não bloqueante dentro de `.sg-app-page`.
+- Fecho da orientação apenas por sessão, via `sessionStorage`.
+
+## Views cobertas
+- alunos_lista
+- financeiro-pagamentos
+- financeiro-devedores
+- financeiro-gerador
+- financeiro-extratos
+- notas
+- minhas_turmas
+- aprovar_notas
+- pautas
+- portaria
+- whatsapp_central
+- comunicacoes_central
+- turmas
+
+## Contratos protegidos
+- Sem alteração de fórmulas financeiras.
+- Sem alteração de fórmulas académicas.
+- Sem alteração de permissões reais.
+- Sem alteração de schema.
+- Sem alteração de dados históricos.
+- Sem alteração do `admin-shell.php`.
+- Sem alteração do core de Alunos aprovado na v12.17.1.
+- Sem alteração da Portaria aprovada.

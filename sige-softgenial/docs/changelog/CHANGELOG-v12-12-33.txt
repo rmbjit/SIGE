@@ -1,0 +1,14 @@
+# Changelog - SIGE SoftGenial
+
+## v12.12.33 - Correccao do numero de chamada no Mapa de Aproveitamento (varredura canonica) (2026-06-22)
+
+Patch de defeito, antes de retomar as fases do programa Alto Calibre. O numero de chamada (No) do Mapa de Aproveitamento Pedagogico nao coincidia com a posicao alfabetica do aluno na pauta da turma.
+
+- Causa raiz: em includes/map-pdf-handler.php (sige_map_build_data), o numero de chamada era calculado por uma variavel de utilizador do MariaDB no padrao (@rn := @rn + 1) sobre uma subconsulta. O @rn incrementa na ordem de varrimento da tabela (proxima da insercao ou da chave primaria) e nao na ordem ORDER BY a.nome_completo ASC, pelo que o aluno alfabeticamente primeiro recebia o seu posto de insercao. A mesma funcao alimenta o MAP individual e o MAP em lote por turma.
+- Correccao: rolo canonico unico e deterministico do numero de chamada. Dois auxiliares novos em includes/core-helpers.php: sige_turma_ordem_chamada_order_sql (ordem nome_completo ASC, id ASC) e sige_turma_numero_chamada (COUNT correlacionado das linhas estritamente menores na ordem canonica, mais um, sem variavel de utilizador). Populacao canonica: aluno activo e matricula activa (sige_aluno_matricula_activa_sql).
+- Varredura: o MAP (individual e em lote), a modal de alunos da turma e as pautas (pauta-pdf, pauta-excel, dec-view, pauta-final-view) foram convergidos para a mesma populacao e ordem canonicas, com desempate por id e seguranca de tenant (escola_id) no join. O numero do MAP passa a ser igual ao da modal e ao da pauta em todos os casos, incluindo desistencias.
+- Efeito visivel: o unico numero que muda e o que estava errado (na 4a Classe Turma A, Eluenny Ivan Barrama passa de No 6 para No 1). A modal de alunos da turma passa a excluir matriculas inactivas, alinhando-se com os documentos oficiais que ja as excluiam; os totais da modal continuam coerentes (calculados no cliente a partir do proprio array).
+- O numero de chamada e apresentacao e identidade, nao entra em calculo academico nem financeiro; nenhuma formula foi tocada. Sem nova superficie (manifesto e Kernel em 199, enforce 33; views 60), sem alteracao de esquema, sem aumento de current_user_can, calculo byte-identico. A variavel (@rn := @rn + 1) deixa de existir no codigo de producao.
+- Qualidade: versao sincronizada nas cinco fontes; release gate verde a partir de pasta limpa; busca de @rn := sem ocorrencias em codigo; php -l limpo nos sete ficheiros tocados; simulacao de equivalencia do numero de chamada; rediagnostico adversarial Zero P0/P1. Documentos de governanca regenerados para v12.12.33.
+
+Nota: o registo consolidado de todas as versoes esta em CHANGELOG.md, na raiz do pacote.

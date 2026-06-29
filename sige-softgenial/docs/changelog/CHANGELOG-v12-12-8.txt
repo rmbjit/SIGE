@@ -1,0 +1,90 @@
+SIGE SoftGenial - CHANGELOG detalhado - v12.12.8
+Tenant Isolation Hardening (Fase 3), primeiro incremento: ESCRITAS
+Data: 2026-06-19
+Base: 12.12.7.1 (ultimo estado validado)
+
+================================================================
+1. OBJECTIVO
+================================================================
+Reduzir definitivamente a superficie de "default para a escola 1" nos caminhos
+de escrita, fazendo-os falhar fechado quando nao ha escola valida em modo
+multi-escola estrito, sem regressao, sem quebrar contextos publicos ou cron, e
+sem tocar em regras de calculo financeiro ou academico aprovadas.
+
+================================================================
+2. DIAGNOSTICO QUE ORIENTOU A SOLUCAO
+================================================================
+- O padrao nos call-sites era: function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 1
+- Como o resolvedor esta sempre carregado, o ramo ": 1" era codigo morto.
+- O risco real esta no proprio resolvedor sige_get_escola_id() (multitenancy.php),
+  que devolve SIGE_ESCOLA_MALISA (1) como ultimo recurso em modo relaxado e ja
+  devolve 0 em modo estrito (sige_multitenancy_strict_enabled()).
+- Logo, a correccao tem de garantir que as escritas nao prosseguem com escola 0
+  (modo estrito sem contexto) nem caem para 1.
+- Dos 178 fallbacks, 41 estao em funcoes que escrevem; 137 sao leitura (adiadas).
+
+================================================================
+3. ALTERACOES
+================================================================
+3.1 Resolvedor canonico (includes/multitenancy.php)
+    - Novo sige_require_escola_id(string $contexto = ''): int
+    - Devolve (int) sige_get_escola_id(); se <= 0, regista tenant_write_blocked e
+      faz wp_die 403 (contexto web). Sem wp_die disponivel, devolve 0 para o
+      chamador abortar.
+
+3.2 Call-sites de escrita em contexto de request (25): passam a
+    $x = sige_require_escola_id('contexto'); (fail-closed 403)
+    Ficheiros: abertura-view, disciplinas-view, encerramento-view, notas-view,
+    financeiro-config (topo), financeiro-inscricoes-view, financeiro-planos-view,
+    transporte-view, academic-logic (4 pontos em salvar_notas), acta-pdf-handler
+    (handler guardar), aluno-fetch-ajax (importar e anular lote), centros-helpers
+    (salvar e eliminar), db-handler (config avancado e validar acesso),
+    whatsapp-engine (isolado e templates).
+
+3.3 Funcoes de biblioteca (14): resolvem com sige_get_escola_id() e abortam a
+    escrita quando o id vier <= 0, com return tipado:
+    - acta-pdf-handler sige_acta_get_or_create (int) -> return 0
+    - aluno-fetch sige_import_alunos_save_batch_history (void) -> return
+    - centros-helpers sige_fin_centros_maybe_install (void) -> return
+    - curriculum-engine sige_curriculum_sync_legacy_matrix (array) -> return []
+    - db-handler sige_sync_matricula_status_from_aluno (void) -> return
+    - encarregados-advanced sige_guardian_adv_audit_log (bool) -> return false
+    - finance-core sige_fin_queue_whatsapp (bool) -> return false
+    - finance-core sige_fin_get_ou_criar_servico_transporte (sem tipo) -> return null
+    - finance-data-efectiva sige_fin_aplicar_data_efectiva (array) -> ok=false
+    - notification-policy sige_notify_apply_batch_delay (bool) -> return false
+    - notification-policy sige_notify_force_immediate (bool) -> return false
+    - settings/technical-mode audit (void) -> return (resolve antes do insert)
+    - whatsapp-destinatarios-policy sige_wpp_destinatarios_save (string) -> return ''
+    - whatsapp-guardian sige_wpp_guardian_insert_queue (bool) -> return false
+    - financeiro-config seeder sige_fin_seed_servicos_padrao -> return (nao semeia)
+
+3.4 Pontos deixados por design (ja protegidos, documentados):
+    - permissions-ui.php:70 (super-admin gated; nao super-admin ja fecha)
+    - permissions-layer.php:1014 (relaxado, gated por sige_multitenancy_strict_enabled)
+
+3.5 Governacao
+    - Versao sincronizada para 12.12.8 (header, SIGE_VERSION, BUILD.json, SIGE_GOV_VERSION).
+    - Baselines v12.12.8 gerados; TENANT_FALLBACK desce para 139; v12.12.7.1 congelado a 178.
+    - SECURITY_KERNEL_RULES-v12.12.8.json: 193 regras, ids identicos a v12.12.7.1.
+    - 12 documentos versionados v12.12.8 (governance + security).
+    - Smoke smoke-tenant-hardening-v12-12-8.php ligado ao corredor (40 gates).
+    - Gate check-tenant-fallbacks reforcado com ratchet monotonico (so desce).
+
+================================================================
+4. VALIDACAO
+================================================================
+- PHP lint integral: 350 ficheiros, 0 falhas.
+- Resolvedor testado: escola 7 -> 7; escola 0 -> wp_die + auditoria tenant_write_blocked.
+- Baseline: 178 -> 139 (menos 39, igual ao numero de escritas endurecidas).
+- Rediagnostico adversarial: Zero P0/P1 (ver ADVERSARIAL_REVIEW-v12.12.8.md).
+- php tools/run-gates.php: 40 gates verdes.
+
+================================================================
+5. IMPACTO E COMPATIBILIDADE
+================================================================
+- Mono-escola (uma escola por site, caso actual): sem alteracao de comportamento.
+- Multi-escola estrito: escritas sem contexto de escola passam a falhar fechado,
+  em vez de gravar na escola 1.
+- Sem alteracoes a regras de calculo financeiro ou academico.
+- Sem novas dependencias, hosts ou endpoints publicos.

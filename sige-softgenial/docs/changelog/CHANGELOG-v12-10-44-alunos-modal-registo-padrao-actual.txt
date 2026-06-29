@@ -1,0 +1,19 @@
+SIGE SoftGenial v12.10.44 - Alunos: Modal de Registo no Padrão Actual
+
+Objectivo
+- Harmonizar o pop-up de Registar/Editar Aluno com o padrão visual aprovado do Painel Principal e dos módulos Produto PRO.
+
+Alterações
+- Modal de Registar/Editar Aluno redesenhado com cabeçalho claro, ícone, subtítulo e linguagem limpa.
+- Separadores transformados em passos visuais modernos e coerentes com o tema actual.
+- Secções internas, campos, fotografia, documentos, rodapé e botões harmonizados.
+- Área de fotografia e arquivo digital com melhor leitura e indicação clara de carregamento.
+- Corrigido risco de rolagem horizontal no modal.
+- Layout mobile-friendly reforçado.
+- Respeito pelas cores personalizadas da escola através das variáveis do tema.
+
+Garantias
+- Sem alteração de fórmulas financeiras.
+- Sem alteração de notas, pautas, DEC, boletins ou regras académicas.
+- Sem alteração de mensalidades, multas, pagamentos, recibos, cobranças, estornos ou base de dados.
+- Sem termos técnicos internos visíveis ao utilizador final.

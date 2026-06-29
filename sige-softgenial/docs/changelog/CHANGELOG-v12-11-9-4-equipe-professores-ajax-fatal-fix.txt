@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.11.9.4 - Equipa e Professores AJAX Fatal Fix PRO (TEST)
+
+Contexto:
+- Após a v12.11.9.3, os fluxos Editar e Novo colaborador ainda podiam devolver HTTP 500.
+- Causa confirmada no código: chamadas novas a sige_audit_log() usavam ordem de argumentos incompatível com a assinatura real: sige_audit_log(string $acao, $detalhes = null, string $modulo = 'financeiro', ?int $user_id = null).
+- Em PHP 8, o quarto argumento string passado para ?int podia provocar TypeError fatal, quebrando o AJAX.
+
+Correção:
+- Criado wrapper seguro sige_ajax_equipe_audit().
+- Substituídas as chamadas RH novas de auditoria por detalhes estruturados e módulo 'professores'.
+- A auditoria do módulo Equipa deixa de poder quebrar os fluxos do utilizador.
+
+Âmbito:
+- Módulo Equipa e Professores (&view=equipe).
+- Não altera regras financeiras, académicas, mensalidades, notas, pautas, DEC, boletins ou fórmulas.
+
+Validação adicional:
+- Normalizadas chamadas antigas e isoladas de auditoria com assinatura errada em handlers próximos, sem alterar regras de negócio.

@@ -1,0 +1,46 @@
+SIGE SoftGenial v12.14.1 - CSP Zero-Inline Absolute Guard
+Data: 2026-06-25
+Base: v12.14.0
+
+Resumo
+- Remove a dependencia de unsafe-inline no CSP do SIGE.
+- Introduz includes/csp-zero-inline.php como politica e guard central.
+- Envia Content-Security-Policy com script-src-attr 'none' e style-src-attr 'none'.
+- Mantem apenas self + nonce para blocos script/style controlados.
+- Converte style= em data-sige-style antes do HTML chegar ao navegador.
+- Converte on*= em data-sige-on-* antes do HTML chegar ao navegador.
+- Hidrata estilos e eventos em assets/sige-ui.js externo, sem eval/new Function.
+- Actualiza os headers CSP autonomos para reutilizar sige_csp_zero_inline_policy().
+- Actualiza gates e smoke tests para validar a ausencia de unsafe-inline em ficheiros de producao.
+
+Ficheiros principais
+- sige-softgenial.php
+- includes/csp-zero-inline.php
+- includes/admin-shell.php
+- includes/documents-engine.php
+- includes/boletim-pdf-handler.php
+- includes/pauta-pdf-handler.php
+- includes/portaria-camera-safe-page.php
+- includes/financeiro-historico-aluno-pro.php
+- admin/jardim/jardim_boletim-view.php
+- assets/sige-ui.js
+- tools/check-inline-frontend.php
+- tools/smoke-csp-enforcement-v12-14-0.php
+- BUILD.json
+- CHANGELOG.md
+
+Validacao
+- php -l nos ficheiros alterados.
+- node --check assets/sige-ui.js.
+- php tools/check-inline-frontend.php.
+- php tools/smoke-csp-enforcement-v12-14-0.php.
+- php tools/smoke-inline-frontend.php.
+- php tools/check-js-views.php.
+- php tools/run-gates.php.
+
+Resultado esperado
+- Content-Security-Policy em enforcement.
+- Zero unsafe-inline em ficheiros de producao.
+- script-src-attr 'none'.
+- style-src-attr 'none'.
+- Interface preservada por hidratacao externa.

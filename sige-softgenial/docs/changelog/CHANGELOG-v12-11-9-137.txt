@@ -1,0 +1,39 @@
+SIGE SoftGenial v12.11.9.137 - AUDITORIA DE DESIGN (jardim_relatorio)
+====================================================================
+
+Relatório de avaliação do jardim de infância (1243 linhas).
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 9 pesos, 700 (25x, muitos inline já canónicos), 850 (10x).
+  Pesos inline no corpo (600/700) já canónicos (verificado).
+- RAIOS: 14 valores. SOMBRAS: 15. CORES: 168 hex.
+
+CORRECÇÃO (bloco <style> 252-683; JS 1174+ preservado)
+1. Hierarquia de 3 níveis: 9 pesos -> 500/600/700.
+2. Raios da escala: 14 -> 4. Sombras da escala: 15 -> 6.
+3. 201 cores migradas (CSS + corpo HTML + 2 mapas). Inclui DOIS mapas PHP
+   de avaliação migrados para tokens semânticos preservando o significado:
+   - ESTADO EMOCIONAL (feliz verde, calmo azul, triste vermelho, agitado
+     laranja, cansado roxo);
+   - DESEMPENHO (excelente verde, bom azul, satisfatório laranja,
+     necessita_atenção vermelho).
+   Tema dinâmico (--sg-theme-primary) preservado com fallback em token.
+   Cores em JS preservadas. ZERO hex de estilo restantes.
+
+PROVA VISUAL
+- jardim-relatorio-antes-depois.png: relatório diário. Ambos os mapas
+  preservados (excelente verde, bom azul, satisfatório laranja); nome
+  domina, avaliação ênfase, "avaliação do dia" recua.
+
+GATES
+- smoke-regression-pack: 260 -> 264 invariantes.
+- jardim_relatorio adicionado aos ecrãs auditados.
+- Baseline de mágicos: 5202 -> 5001 (-201).
+- Baseline de tipografia: 98 -> 85 (-13).
+- 12 gates verdes.
+
+MARCO: 27 ecrãs auditados. Desde o início: mágicos 9925 -> 5001 (quase
+metade eliminada); pesos não-canónicos 665 -> 85.
+
+PRÓXIMO
+- core-status (12 pesos), financeiro-devedores (12), turmas (12)...

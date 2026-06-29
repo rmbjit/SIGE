@@ -1,0 +1,62 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.45
+Data: 2026-06-23
+Titulo: Fase 4 incr 1 - Self-host das bibliotecas e infra de enqueue
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+As bibliotecas de front-end (graficos, exportacao para Excel, leitor de codigos,
+arrastar-e-largar) deixam de ser carregadas de servidores externos (CDN) e passam a
+ser servidas pela propria instalacao. Isto torna o sistema mais seguro e
+independente: nao depende de terceiros para funcionar, e cada biblioteca e
+verificada por uma assinatura (SRI), pelo que o navegador rejeita qualquer
+adulteracao.
+
+Em concreto:
+- As sete bibliotecas passam a estar dentro do plugin, em assets/vendor/.
+- Os ecrans que as usavam continuam a funcionar exactamente como antes (graficos,
+  relatorios, exportacoes, portaria com leitor de cracha).
+- O sistema deixa de chamar cdnjs e unpkg.
+
+Nao ha qualquer alteracao visivel de funcionamento. E uma base tecnica para os
+proximos passos (front-end seguro e politica de seguranca de conteudo).
+
+================================================================
+NOTA SOBRE O TAMANHO
+================================================================
+O pacote fica maior do que o habitual (cerca de 2,7 MB a mais), porque agora traz as
+bibliotecas dentro de si. E o esperado quando se faz self-host.
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+
+================================================================
+VERIFICACAO
+================================================================
+1. Abra um ecra com graficos (por exemplo, o painel financeiro) e confirme que os
+   graficos aparecem.
+2. Faca uma exportacao para Excel num relatorio e confirme que o ficheiro e gerado.
+3. Abra a Portaria Digital e confirme que o leitor de cracha (camera) carrega.
+4. Opcional, para tecnicos: nas ferramentas de rede do navegador, confirme que os
+   scripts das bibliotecas sao carregados a partir do dominio da escola
+   (wp-content/plugins/sige-softgenial/assets/vendor/...), e nao de cdnjs ou unpkg.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera o
+esquema da base de dados, pelo que a reversao e directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Incremento 2 da Fase 4: comecar a mover o codigo de interface (scripts e estilos
+  embutidos nas paginas) para ficheiros proprios, por vagas, a caminho de poder
+  impor a politica de seguranca de conteudo (CSP).

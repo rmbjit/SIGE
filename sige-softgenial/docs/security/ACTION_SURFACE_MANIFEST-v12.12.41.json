@@ -1,0 +1,4461 @@
+{
+    "version": "12.12.41",
+    "base_version": "12.12.40",
+    "purpose": "Fase 9 incremento 5 (sobreposicao puramente aditiva por capacidades). Elimina a substituicao do papel WordPress: o modulo deixa de chamar set_role na atribuicao de perfis de staff e na sincronizacao do init, e passa a conceder as capacidades em tempo de execucao por um filtro user_has_cap (sige_permissions_grant_caps_filter), a partir do papel sige_* mapeado ao perfil SIGE activo, sem nunca tocar no papel WordPress guardado. As capacidades sao lidas do conjunto completo do papel mapeado (sige_permissions_caps_for_user via get_role), incluindo a capacidade com o nome do papel (que e o que as verificacoes current_user_can(sige_*) usam) e as em cascata. Para replicar fielmente o antigo set_role (capacidades disponiveis em todo o lado, independentes do contexto de escola) sem regressao, caps_for_user prefere o perfil da escola actual e, sem contexto, usa o perfil activo mais recente em qualquer escola (sige_permissions_get_latest_active_role); a isolacao de dados por escola (escola_id) e separada e nao muda. O filtro ignora administradores WordPress reais e utilizadores sem perfil activo, tem cache por pedido e guarda anti-recursao. A sincronizacao no init passa a fazer so limpeza: repoe o papel WordPress original quando o utilizador esta num papel sige_* de staff legado (migracao preguicosa, uma vez por utilizador). A reposicao (restore_wp_roles) foi tornada segura para o fluxo aditivo: sem copia, so repoe o papel por omissao se o utilizador estiver num papel sige_* de staff, nunca mexendo num utilizador ja num papel real. As poucas verificacoes por slug de papel sige_* de staff que existiam (proteccao do Admin TI em ajax-handlers, rotulo do cracha em equipe-view) foram convertidas para verificacao por capacidade (user_can), que passa pelo filtro. Garantia central sem WordPress vivo: um invariante mecanico (gate) que falha se existir qualquer verificacao por slug de papel sige_* de staff no array de papeis; se nada depende do papel estar guardado, o filtro e suficiente por construcao. Os papeis de portal (sige_aluno, sige_encarregado) tem fluxo proprio (contas de aluno/encarregado) e ficam intocados, fora do ambito de staff. Sem nova superficie: o manifesto e as regras do Kernel mantem-se em 199 (enforce 33) e a allowlist de views em 60. Sem alteracao de esquema. Sem aumento de current_user_can (as conversoes usam user_can, funcao distinta). Regras de calculo financeiro intocadas. Conclui o conjunto previsto para a Fase 9. Gate e smoke dedicados: check-permissoes-aditiva e smoke-permissoes-aditiva.",
+    "totals": {
+        "admin_post": 41,
+        "admin_post_nopriv": 1,
+        "cron_hook": 9,
+        "query_handler": 6,
+        "rest_route": 5,
+        "shortcode": 1,
+        "view_action": 19,
+        "wp_ajax": 113,
+        "wp_hook": 4
+    },
+    "items": [
+        {
+            "id": "admin_post:sige_abrir_ano",
+            "type": "admin_post",
+            "name": "sige_abrir_ano",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 303
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_acta_aprovar_nota_votada",
+            "type": "admin_post",
+            "name": "sige_acta_aprovar_nota_votada",
+            "module": "academico",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 336
+                },
+                {
+                    "file": "sige-softgenial.php",
+                    "line": 477
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_acta_guardar",
+            "type": "admin_post",
+            "name": "sige_acta_guardar",
+            "module": "academico",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 345
+                },
+                {
+                    "file": "sige-softgenial.php",
+                    "line": 476
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_acta_pdf",
+            "type": "admin_post",
+            "name": "sige_acta_pdf",
+            "module": "academico",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "sige-softgenial.php",
+                    "line": 475
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_aluno_portal_change_password",
+            "type": "admin_post",
+            "name": "sige_aluno_portal_change_password",
+            "module": "portal",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "portal.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/portal-handlers.php",
+                    "line": 200
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_aprovar_pauta",
+            "type": "admin_post",
+            "name": "sige_aprovar_pauta",
+            "module": "academico",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 129
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_boletim_passagem_pdf",
+            "type": "admin_post",
+            "name": "sige_boletim_passagem_pdf",
+            "module": "academico",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "sige-softgenial.php",
+                    "line": 465
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_circular_enviar",
+            "type": "admin_post",
+            "name": "sige_circular_enviar",
+            "module": "comunicacao",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/circulares.php",
+                    "line": 123
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_core_force_license_check",
+            "type": "admin_post",
+            "name": "sige_core_force_license_check",
+            "module": "sistema",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/core/class-sige-core.php",
+                    "line": 15
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_core_save_license_settings",
+            "type": "admin_post",
+            "name": "sige_core_save_license_settings",
+            "module": "sistema",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/core/class-sige-core.php",
+                    "line": 14
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_curriculum_select_profile",
+            "type": "admin_post",
+            "name": "sige_curriculum_select_profile",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/curriculum-engine.php",
+                    "line": 400
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_curriculum_sync_legacy",
+            "type": "admin_post",
+            "name": "sige_curriculum_sync_legacy",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/curriculum-engine.php",
+                    "line": 384
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_declaracao_passagem_pdf",
+            "type": "admin_post",
+            "name": "sige_declaracao_passagem_pdf",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "sige-softgenial.php",
+                    "line": 464
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_download_modelo_importacao_alunos_xlsx",
+            "type": "admin_post",
+            "name": "sige_download_modelo_importacao_alunos_xlsx",
+            "module": "secretaria",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "alunos.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/aluno-fetch-ajax.php",
+                    "line": 1365
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_emola_guardar_config",
+            "type": "admin_post",
+            "name": "sige_emola_guardar_config",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.ver + permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/payments/emola-config.php",
+                    "line": 83
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_encerrar_ano",
+            "type": "admin_post",
+            "name": "sige_encerrar_ano",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 298
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_hub_force_heartbeat",
+            "type": "admin_post",
+            "name": "sige_hub_force_heartbeat",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/hub/class-sige-hub-admin.php",
+                    "line": 28
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_hub_force_refresh",
+            "type": "admin_post",
+            "name": "sige_hub_force_refresh",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/hub/class-sige-hub-admin.php",
+                    "line": 27
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_jardim_avaliacao_salvar",
+            "type": "admin_post",
+            "name": "sige_jardim_avaliacao_salvar",
+            "module": "jardim",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "jardim.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/jardim-handlers.php",
+                    "line": 873
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_jardim_criterios_salvar",
+            "type": "admin_post",
+            "name": "sige_jardim_criterios_salvar",
+            "module": "jardim",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "jardim.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 283
+                },
+                {
+                    "file": "includes/jardim-handlers.php",
+                    "line": 822
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_jardim_diario_salvar",
+            "type": "admin_post",
+            "name": "sige_jardim_diario_salvar",
+            "module": "jardim",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "jardim.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 261
+                },
+                {
+                    "file": "includes/jardim-handlers.php",
+                    "line": 769
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_jardim_presencas_salvar",
+            "type": "admin_post",
+            "name": "sige_jardim_presencas_salvar",
+            "module": "academico",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/jardim-handlers.php",
+                    "line": 741
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_jardim_relatorio_enviar_individual",
+            "type": "admin_post",
+            "name": "sige_jardim_relatorio_enviar_individual",
+            "module": "jardim",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "jardim.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/jardim-handlers.php",
+                    "line": 976
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_jardim_relatorio_enviar_mensal",
+            "type": "admin_post",
+            "name": "sige_jardim_relatorio_enviar_mensal",
+            "module": "jardim",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "jardim.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/jardim-handlers.php",
+                    "line": 1007
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_jardim_saude_salvar",
+            "type": "admin_post",
+            "name": "sige_jardim_saude_salvar",
+            "module": "jardim",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "jardim.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 272
+                },
+                {
+                    "file": "includes/jardim-handlers.php",
+                    "line": 796
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_limpar_dados_teste",
+            "type": "admin_post",
+            "name": "sige_limpar_dados_teste",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 325
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_map_pdf",
+            "type": "admin_post",
+            "name": "sige_map_pdf",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "sige-softgenial.php",
+                    "line": 470
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_map_turma_pdf",
+            "type": "admin_post",
+            "name": "sige_map_turma_pdf",
+            "module": "academico",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "sige-softgenial.php",
+                    "line": 471
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_mfa_confirm",
+            "type": "admin_post",
+            "name": "sige_mfa_confirm",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/security-mfa-stepup.php",
+                    "line": 259
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_mfa_settings_save",
+            "type": "admin_post",
+            "name": "sige_mfa_settings_save",
+            "module": "sistema",
+            "risk": "high",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/security-mfa-settings.php",
+                    "line": 214
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_mfa_totp_enroll",
+            "type": "admin_post",
+            "name": "sige_mfa_totp_enroll",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/security-mfa-totp.php",
+                    "line": 548
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_mpesa_guardar_config",
+            "type": "admin_post",
+            "name": "sige_mpesa_guardar_config",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.ver + permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/payments/mpesa-config.php",
+                    "line": 95
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_pauta_excel",
+            "type": "admin_post",
+            "name": "sige_pauta_excel",
+            "module": "academico",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/pauta-excel-handler.php",
+                    "line": 15
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_pauta_pdf",
+            "type": "admin_post",
+            "name": "sige_pauta_pdf",
+            "module": "academico",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/pauta-pdf-handler.php",
+                    "line": 15
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_privacidade_apagar",
+            "type": "admin_post",
+            "name": "sige_privacidade_apagar",
+            "module": "sistema",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/privacy/pii-anonimizar-handler.php",
+                    "line": 19
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_privacidade_exportar",
+            "type": "admin_post",
+            "name": "sige_privacidade_exportar",
+            "module": "sistema",
+            "risk": "high",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/privacy/pii-dossier-export.php",
+                    "line": 16
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_process_queue_now",
+            "type": "admin_post",
+            "name": "sige_process_queue_now",
+            "module": "sistema",
+            "risk": "high",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/cron-tasks.php",
+                    "line": 554
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_saude_toggles",
+            "type": "admin_post",
+            "name": "sige_saude_toggles",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/saude-operacional.php",
+                    "line": 136
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_secure_document_download",
+            "type": "admin_post",
+            "name": "sige_secure_document_download",
+            "module": "sistema",
+            "risk": "high",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 352
+                },
+                {
+                    "file": "includes/secure-document-download.php",
+                    "line": 269
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_secure_staff_document_download",
+            "type": "admin_post",
+            "name": "sige_secure_staff_document_download",
+            "module": "sistema",
+            "risk": "high",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/secure-document-download.php",
+                    "line": 267
+                }
+            ]
+        },
+        {
+            "id": "admin_post:sige_wpp_health_set",
+            "type": "admin_post",
+            "name": "sige_wpp_health_set",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/notification-policy.php",
+                    "line": 1347
+                }
+            ]
+        },
+        {
+            "id": "admin_post_nopriv:sige_process_queue_now",
+            "type": "admin_post_nopriv",
+            "name": "sige_process_queue_now",
+            "module": "sistema",
+            "risk": "high",
+            "public": true,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "hmac_token_or_signature_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/cron-tasks.php",
+                    "line": 555
+                }
+            ]
+        },
+        {
+            "id": "cron_hook:admin_enqueue_scripts",
+            "type": "cron_hook",
+            "name": "admin_enqueue_scripts",
+            "module": "sistema",
+            "risk": "high",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/admin-shell.php",
+                    "line": 937
+                },
+                {
+                    "file": "includes/ui-kit.php",
+                    "line": 16
+                }
+            ]
+        },
+        {
+            "id": "cron_hook:login_enqueue_scripts",
+            "type": "cron_hook",
+            "name": "login_enqueue_scripts",
+            "module": "sistema",
+            "risk": "high",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/login-page.php",
+                    "line": 10
+                }
+            ]
+        },
+        {
+            "id": "cron_hook:sige_alertas_cron_daily",
+            "type": "cron_hook",
+            "name": "sige_alertas_cron_daily",
+            "module": "sistema",
+            "risk": "high",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/alertas-cron.php",
+                    "line": 100
+                },
+                {
+                    "file": "includes/alertas-cron.php",
+                    "line": 77
+                },
+                {
+                    "file": "includes/alertas-cron.php",
+                    "line": 90
+                },
+                {
+                    "file": "includes/alertas-cron.php",
+                    "line": 213
+                }
+            ]
+        },
+        {
+            "id": "cron_hook:sige_conciliacao_semanal",
+            "type": "cron_hook",
+            "name": "sige_conciliacao_semanal",
+            "module": "sistema",
+            "risk": "high",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/cron-tasks.php",
+                    "line": 770
+                },
+                {
+                    "file": "includes/cron-tasks.php",
+                    "line": 44
+                }
+            ]
+        },
+        {
+            "id": "cron_hook:sige_evento_diario",
+            "type": "cron_hook",
+            "name": "sige_evento_diario",
+            "module": "comunicacao",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "admin/whatsapp_central-view.php",
+                    "line": 206
+                },
+                {
+                    "file": "admin/whatsapp_diag-view.php",
+                    "line": 87
+                },
+                {
+                    "file": "includes/alertas-cron.php",
+                    "line": 159
+                },
+                {
+                    "file": "includes/cron-tasks.php",
+                    "line": 560
+                },
+                {
+                    "file": "includes/cron-tasks.php",
+                    "line": 601
+                },
+                {
+                    "file": "includes/cron-tasks.php",
+                    "line": 41
+                },
+                {
+                    "file": "includes/payments/mpesa-conciliacao.php",
+                    "line": 241
+                },
+                {
+                    "file": "includes/relatorio-mensal-email.php",
+                    "line": 83
+                }
+            ]
+        },
+        {
+            "id": "cron_hook:sige_hub_client_refresh",
+            "type": "cron_hook",
+            "name": "sige_hub_client_refresh",
+            "module": "sistema",
+            "risk": "high",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/hub/class-sige-hub-client.php",
+                    "line": 28
+                },
+                {
+                    "file": "includes/hub/class-sige-hub-client.php",
+                    "line": 30
+                },
+                {
+                    "file": "includes/hub/class-sige-hub-client.php",
+                    "line": 40
+                }
+            ]
+        },
+        {
+            "id": "cron_hook:sige_hub_heartbeat_send",
+            "type": "cron_hook",
+            "name": "sige_hub_heartbeat_send",
+            "module": "sistema",
+            "risk": "high",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/hub/class-sige-hub-heartbeat.php",
+                    "line": 23
+                },
+                {
+                    "file": "includes/hub/class-sige-hub-heartbeat.php",
+                    "line": 27
+                },
+                {
+                    "file": "includes/hub/class-sige-hub-heartbeat.php",
+                    "line": 46
+                }
+            ]
+        },
+        {
+            "id": "cron_hook:sige_processar_email_queue",
+            "type": "cron_hook",
+            "name": "sige_processar_email_queue",
+            "module": "comunicacao",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/email-queue-templates.php",
+                    "line": 378
+                },
+                {
+                    "file": "includes/email-queue-templates.php",
+                    "line": 374
+                }
+            ]
+        },
+        {
+            "id": "cron_hook:sige_processar_whatsapp_queue",
+            "type": "cron_hook",
+            "name": "sige_processar_whatsapp_queue",
+            "module": "comunicacao",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "admin/whatsapp_central-view.php",
+                    "line": 205
+                },
+                {
+                    "file": "admin/whatsapp_diag-view.php",
+                    "line": 86
+                },
+                {
+                    "file": "includes/cron-tasks.php",
+                    "line": 492
+                }
+            ]
+        },
+        {
+            "id": "query_handler:sige_billing_bypass",
+            "type": "query_handler",
+            "name": "sige_billing_bypass",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/hub/class-sige-hub-billing.php",
+                    "line": 201
+                }
+            ]
+        },
+        {
+            "id": "query_handler:sige_desp_print",
+            "type": "query_handler",
+            "name": "sige_desp_print",
+            "module": "financeiro",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/finance-core.php",
+                    "line": 3511
+                },
+                {
+                    "file": "includes/finance-core.php",
+                    "line": 3515
+                }
+            ]
+        },
+        {
+            "id": "query_handler:sige_dev_print",
+            "type": "query_handler",
+            "name": "sige_dev_print",
+            "module": "financeiro",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "financeiro.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/finance-devedores-pdf.php",
+                    "line": 187
+                },
+                {
+                    "file": "includes/finance-devedores-pdf.php",
+                    "line": 194
+                }
+            ]
+        },
+        {
+            "id": "query_handler:sige_portaria_camera",
+            "type": "query_handler",
+            "name": "sige_portaria_camera",
+            "module": "portaria",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "portaria.ver ou portaria.validar_acesso",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/portaria-camera-safe-page.php",
+                    "line": 13
+                },
+                {
+                    "file": "includes/security-baseline-pro.php",
+                    "line": 333
+                }
+            ]
+        },
+        {
+            "id": "query_handler:sige_print",
+            "type": "query_handler",
+            "name": "sige_print",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/documents-engine.php",
+                    "line": 16
+                },
+                {
+                    "file": "includes/documents-engine.php",
+                    "line": 21
+                },
+                {
+                    "file": "includes/financeiro-historico-aluno-pro.php",
+                    "line": 960
+                },
+                {
+                    "file": "includes/security-roles.php",
+                    "line": 190
+                },
+                {
+                    "file": "includes/security-scope-guard.php",
+                    "line": 182
+                },
+                {
+                    "file": "includes/security-scope-guard.php",
+                    "line": 197
+                }
+            ]
+        },
+        {
+            "id": "query_handler:sige_recibo",
+            "type": "query_handler",
+            "name": "sige_recibo",
+            "module": "financeiro",
+            "risk": "high",
+            "public": true,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "hmac_token_or_signature_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/email-engine.php",
+                    "line": 661
+                },
+                {
+                    "file": "includes/email-engine.php",
+                    "line": 667
+                }
+            ]
+        },
+        {
+            "id": "rest_route:sige/v1:/emola/callback",
+            "type": "rest_route",
+            "name": "sige/v1",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": true,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "hmac_token_or_signature_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.ver + permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/payments/emola-webhook.php",
+                    "line": 53
+                }
+            ],
+            "route": "/emola/callback",
+            "runtime_match": "namespace_route"
+        },
+        {
+            "id": "rest_route:sige/v1:/hub/instant-refresh",
+            "type": "rest_route",
+            "name": "sige/v1",
+            "module": "sistema",
+            "risk": "medium",
+            "public": true,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "hmac_token_or_signature_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/hub/class-sige-hub-client.php",
+                    "line": 47
+                }
+            ],
+            "route": "/hub/instant-refresh",
+            "runtime_match": "namespace_route"
+        },
+        {
+            "id": "rest_route:sige/v1:/mpesa/callback",
+            "type": "rest_route",
+            "name": "sige/v1",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": true,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "hmac_token_or_signature_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.ver + permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/payments/mpesa-webhook.php",
+                    "line": 18
+                }
+            ],
+            "route": "/mpesa/callback",
+            "runtime_match": "namespace_route"
+        },
+        {
+            "id": "rest_route:sige/v1:/process-queue",
+            "type": "rest_route",
+            "name": "sige/v1",
+            "module": "sistema",
+            "risk": "high",
+            "public": true,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "hmac_token_or_signature_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/cron-tasks.php",
+                    "line": 499
+                }
+            ],
+            "route": "/process-queue",
+            "runtime_match": "namespace_route"
+        },
+        {
+            "id": "rest_route:sige/v1:/whatsapp-webhook",
+            "type": "rest_route",
+            "name": "sige/v1",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": true,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "hmac_token_or_signature_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-guardian.php",
+                    "line": 192
+                },
+                {
+                    "file": "includes/whatsapp-recovery-mode.php",
+                    "line": 792
+                }
+            ],
+            "route": "/whatsapp-webhook",
+            "runtime_match": "namespace_route"
+        },
+        {
+            "id": "shortcode:sige_portal",
+            "type": "shortcode",
+            "name": "sige_portal",
+            "module": "portal",
+            "risk": "medium",
+            "public": true,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "hmac_token_or_signature_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "portal.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/portal-logic.php",
+                    "line": 2297
+                },
+                {
+                    "file": "includes/portal-logic.php",
+                    "line": 2301
+                }
+            ]
+        },
+        {
+            "id": "view_action:financeiro-aprovacoes:sige_fin_aprovacao_decidir",
+            "type": "view_action",
+            "name": "sige_fin_aprovacao_decidir",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.estornar",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "financeiro-aprovacoes",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/finance/aprovacoes-view.php",
+                    "line": 33
+                }
+            ]
+        },
+        {
+            "id": "view_action:financeiro-despesas:anular_despesa",
+            "type": "view_action",
+            "name": "anular_despesa",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.despesas_gerir",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "financeiro-despesas",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/finance/financeiro-despesas-view.php",
+                    "line": 136
+                }
+            ]
+        },
+        {
+            "id": "view_action:financeiro-despesas:aprovar_despesa",
+            "type": "view_action",
+            "name": "aprovar_despesa",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.despesas_gerir",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "financeiro-despesas",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/finance/financeiro-despesas-view.php",
+                    "line": 97
+                }
+            ]
+        },
+        {
+            "id": "view_action:financeiro-despesas:nova_despesa",
+            "type": "view_action",
+            "name": "nova_despesa",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.despesas_gerir",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "financeiro-despesas",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/finance/financeiro-despesas-view.php",
+                    "line": 43
+                }
+            ]
+        },
+        {
+            "id": "view_action:financeiro-extratos:sige_anular_recibo",
+            "type": "view_action",
+            "name": "sige_anular_recibo",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.estornar",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "financeiro-extratos",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/finance/financeiro-extratos.php",
+                    "line": 725
+                }
+            ]
+        },
+        {
+            "id": "view_action:financeiro-extratos:sige_fechar_caixa",
+            "type": "view_action",
+            "name": "sige_fechar_caixa",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.caixa_fechar",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "financeiro-extratos",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/finance/financeiro-extratos.php",
+                    "line": 607
+                }
+            ]
+        },
+        {
+            "id": "view_action:financeiro-extratos:sige_reabrir_caixa",
+            "type": "view_action",
+            "name": "sige_reabrir_caixa",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.caixa_reabrir",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "financeiro-extratos",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/finance/financeiro-extratos.php",
+                    "line": 494
+                }
+            ]
+        },
+        {
+            "id": "view_action:financeiro-lancamentos:cancelar_lancamento",
+            "type": "view_action",
+            "name": "cancelar_lancamento",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.lancamentos_gerir",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "financeiro-lancamentos",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/finance/financeiro-lancamentos-view.php",
+                    "line": 226
+                }
+            ]
+        },
+        {
+            "id": "view_action:financeiro-lancamentos:isentar_lancamento",
+            "type": "view_action",
+            "name": "isentar_lancamento",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.isentar_multas",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "financeiro-lancamentos",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/finance/financeiro-lancamentos-view.php",
+                    "line": 249
+                }
+            ]
+        },
+        {
+            "id": "view_action:financeiro-lancamentos:reativar_lancamento",
+            "type": "view_action",
+            "name": "reativar_lancamento",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.lancamentos_gerir",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "financeiro-lancamentos",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/finance/financeiro-lancamentos-view.php",
+                    "line": 272
+                }
+            ]
+        },
+        {
+            "id": "view_action:financeiro-pagamentos:sige_fin_bloquear_mes_submit",
+            "type": "view_action",
+            "name": "sige_fin_bloquear_mes_submit",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.bloquear_mes",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "financeiro-pagamentos",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/finance/financeiro-pagamentos.php",
+                    "line": 1100
+                }
+            ]
+        },
+        {
+            "id": "view_action:financeiro-pagamentos:sige_fin_cancelar_submit",
+            "type": "view_action",
+            "name": "sige_fin_cancelar_submit",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.lancamentos_gerir",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "financeiro-pagamentos",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/finance/financeiro-pagamentos.php",
+                    "line": 1016
+                }
+            ]
+        },
+        {
+            "id": "view_action:financeiro-pagamentos:sige_fin_desbloquear_mes_submit",
+            "type": "view_action",
+            "name": "sige_fin_desbloquear_mes_submit",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.desbloquear_mes",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "financeiro-pagamentos",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/finance/financeiro-pagamentos.php",
+                    "line": 1140
+                }
+            ]
+        },
+        {
+            "id": "view_action:financeiro-pagamentos:sige_fin_isentar_lancamento_submit",
+            "type": "view_action",
+            "name": "sige_fin_isentar_lancamento_submit",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.isentar_multas",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "financeiro-pagamentos",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/finance/financeiro-pagamentos.php",
+                    "line": 1045
+                }
+            ]
+        },
+        {
+            "id": "view_action:financeiro-pagamentos:sige_fin_pagar_familia_submit",
+            "type": "view_action",
+            "name": "sige_fin_pagar_familia_submit",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.pagar",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "financeiro-pagamentos",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/finance/financeiro-pagamentos.php",
+                    "line": 1200
+                }
+            ]
+        },
+        {
+            "id": "view_action:financeiro-pagamentos:sige_fin_pagar_submit",
+            "type": "view_action",
+            "name": "sige_fin_pagar_submit",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.pagar",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "financeiro-pagamentos",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/finance/financeiro-pagamentos.php",
+                    "line": 340
+                }
+            ]
+        },
+        {
+            "id": "view_action:sige_permissoes:assign_user_role",
+            "type": "view_action",
+            "name": "assign_user_role",
+            "module": "usuarios",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "usuarios.gerir_permissoes",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "sige_permissoes",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/system/permissions-ui.php",
+                    "line": 233
+                }
+            ]
+        },
+        {
+            "id": "view_action:sige_permissoes:save_role_permissions",
+            "type": "view_action",
+            "name": "save_role_permissions",
+            "module": "usuarios",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "usuarios.gerir_permissoes",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "sige_permissoes",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/system/permissions-ui.php",
+                    "line": 183
+                }
+            ]
+        },
+        {
+            "id": "view_action:sige_permissoes:unassign_user_role",
+            "type": "view_action",
+            "name": "unassign_user_role",
+            "module": "usuarios",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "usuarios.gerir_permissoes",
+            "status": "critical_actions_lockdown",
+            "page": "sige-app",
+            "view": "sige_permissoes",
+            "method": "POST",
+            "registrations": [
+                {
+                    "file": "admin/system/permissions-ui.php",
+                    "line": 278
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_alocar_aluno",
+            "type": "wp_ajax",
+            "name": "sige_alocar_aluno",
+            "module": "secretaria",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "alunos.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 510
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_alterar_senha_portal",
+            "type": "wp_ajax",
+            "name": "sige_alterar_senha_portal",
+            "module": "portal",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "portal.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/portal-handlers.php",
+                    "line": 30
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_anular_lote_importacao_alunos",
+            "type": "wp_ajax",
+            "name": "sige_anular_lote_importacao_alunos",
+            "module": "secretaria",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "alunos.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/aluno-fetch-ajax.php",
+                    "line": 2375
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_atualizar_professor",
+            "type": "wp_ajax",
+            "name": "sige_atualizar_professor",
+            "module": "rh",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "rh.equipe_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 494
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_carregar_horario_turma",
+            "type": "wp_ajax",
+            "name": "sige_carregar_horario_turma",
+            "module": "academico",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/ajax-handlers.php",
+                    "line": 470
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_centro_eliminar",
+            "type": "wp_ajax",
+            "name": "sige_centro_eliminar",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/centros-helpers.php",
+                    "line": 460
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_centro_reatribuir_servico",
+            "type": "wp_ajax",
+            "name": "sige_centro_reatribuir_servico",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/centros-helpers.php",
+                    "line": 518
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_centro_salvar",
+            "type": "wp_ajax",
+            "name": "sige_centro_salvar",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/centros-helpers.php",
+                    "line": 388
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_check_caixa_data",
+            "type": "wp_ajax",
+            "name": "sige_check_caixa_data",
+            "module": "financeiro",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "financeiro.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/finance-data-efectiva.php",
+                    "line": 151
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_circular_preview",
+            "type": "wp_ajax",
+            "name": "sige_circular_preview",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/circulares.php",
+                    "line": 101
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_clonar_matriz",
+            "type": "wp_ajax",
+            "name": "sige_clonar_matriz",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 202
+                },
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 1815
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_comm_action",
+            "type": "wp_ajax",
+            "name": "sige_comm_action",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/comunicacoes-core.php",
+                    "line": 300
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_comm_buscar",
+            "type": "wp_ajax",
+            "name": "sige_comm_buscar",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/comunicacoes-core.php",
+                    "line": 522
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_comm_get_full",
+            "type": "wp_ajax",
+            "name": "sige_comm_get_full",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/comunicacoes-core.php",
+                    "line": 332
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_comm_historico",
+            "type": "wp_ajax",
+            "name": "sige_comm_historico",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/comunicacoes-core.php",
+                    "line": 532
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_criar_turma",
+            "type": "wp_ajax",
+            "name": "sige_criar_turma",
+            "module": "academico",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 506
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_criar_usuario_staff",
+            "type": "wp_ajax",
+            "name": "sige_criar_usuario_staff",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/ajax-handlers.php",
+                    "line": 412
+                },
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 1356
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_dica_do_dia_dismiss",
+            "type": "wp_ajax",
+            "name": "sige_dica_do_dia_dismiss",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/dica-do-dia.php",
+                    "line": 816
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_editar_usuario_staff",
+            "type": "wp_ajax",
+            "name": "sige_editar_usuario_staff",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/ajax-handlers.php",
+                    "line": 413
+                },
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 1513
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_emc_cancel",
+            "type": "wp_ajax",
+            "name": "sige_emc_cancel",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/email-central.php",
+                    "line": 117
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_emc_delete",
+            "type": "wp_ajax",
+            "name": "sige_emc_delete",
+            "module": "comunicacao",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/email-central.php",
+                    "line": 199
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_emc_get_full",
+            "type": "wp_ajax",
+            "name": "sige_emc_get_full",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/email-central.php",
+                    "line": 228
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_emc_process_now",
+            "type": "wp_ajax",
+            "name": "sige_emc_process_now",
+            "module": "comunicacao",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/email-central.php",
+                    "line": 259
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_emc_reset_template",
+            "type": "wp_ajax",
+            "name": "sige_emc_reset_template",
+            "module": "comunicacao",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/email-central.php",
+                    "line": 304
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_emc_retry",
+            "type": "wp_ajax",
+            "name": "sige_emc_retry",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/email-central.php",
+                    "line": 157
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_emc_save_templates",
+            "type": "wp_ajax",
+            "name": "sige_emc_save_templates",
+            "module": "comunicacao",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/email-central.php",
+                    "line": 278
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_emc_smtp_test",
+            "type": "wp_ajax",
+            "name": "sige_emc_smtp_test",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/email-central.php",
+                    "line": 382
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_emc_test_template",
+            "type": "wp_ajax",
+            "name": "sige_emc_test_template",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/email-central.php",
+                    "line": 334
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_enviar_credenciais",
+            "type": "wp_ajax",
+            "name": "sige_enviar_credenciais",
+            "module": "secretaria",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "alunos.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/aluno-accounts.php",
+                    "line": 334
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_excluir_turma",
+            "type": "wp_ajax",
+            "name": "sige_excluir_turma",
+            "module": "academico",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 508
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_exportar_folha_staff",
+            "type": "wp_ajax",
+            "name": "sige_exportar_folha_staff",
+            "module": "sistema",
+            "risk": "high",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/ajax-handlers.php",
+                    "line": 1031
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_get_aluno_360",
+            "type": "wp_ajax",
+            "name": "sige_get_aluno_360",
+            "module": "secretaria",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "alunos.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/aluno-fetch-ajax.php",
+                    "line": 404
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_get_aluno_full",
+            "type": "wp_ajax",
+            "name": "sige_get_aluno_full",
+            "module": "secretaria",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "alunos.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/aluno-fetch-ajax.php",
+                    "line": 216
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_get_alunos_export",
+            "type": "wp_ajax",
+            "name": "sige_get_alunos_export",
+            "module": "secretaria",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "alunos.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/aluno-fetch-ajax.php",
+                    "line": 284
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_get_disciplinas_turma",
+            "type": "wp_ajax",
+            "name": "sige_get_disciplinas_turma",
+            "module": "academico",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/academic-logic.php",
+                    "line": 551
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_get_matriz",
+            "type": "wp_ajax",
+            "name": "sige_get_matriz",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 1793
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_get_professor_detalhes",
+            "type": "wp_ajax",
+            "name": "sige_get_professor_detalhes",
+            "module": "rh",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "rh.equipe_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 498
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_get_staff_secure",
+            "type": "wp_ajax",
+            "name": "sige_get_staff_secure",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/ajax-handlers.php",
+                    "line": 963
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_importar_alunos_csv",
+            "type": "wp_ajax",
+            "name": "sige_importar_alunos_csv",
+            "module": "secretaria",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "alunos.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/aluno-fetch-ajax.php",
+                    "line": 1363
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_isentar_mes",
+            "type": "wp_ajax",
+            "name": "sige_isentar_mes",
+            "module": "financeiro",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "financeiro.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/finance-core.php",
+                    "line": 3345
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_ler_logs",
+            "type": "wp_ajax",
+            "name": "sige_ler_logs",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 484
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_listar_alunos_notas",
+            "type": "wp_ajax",
+            "name": "sige_listar_alunos_notas",
+            "module": "secretaria",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "alunos.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/academic-logic.php",
+                    "line": 210
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_listar_alunos_turma",
+            "type": "wp_ajax",
+            "name": "sige_listar_alunos_turma",
+            "module": "secretaria",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "alunos.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/ajax-handlers.php",
+                    "line": 673
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_listar_criterios",
+            "type": "wp_ajax",
+            "name": "sige_listar_criterios",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 1718
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_listar_docentes_turma",
+            "type": "wp_ajax",
+            "name": "sige_listar_docentes_turma",
+            "module": "academico",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 2019
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_listar_lotes_importacao_alunos",
+            "type": "wp_ajax",
+            "name": "sige_listar_lotes_importacao_alunos",
+            "module": "secretaria",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "alunos.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/aluno-fetch-ajax.php",
+                    "line": 2486
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_mpesa_abertos",
+            "type": "wp_ajax",
+            "name": "sige_mpesa_abertos",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.ver + permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/payments/mpesa-conciliacao.php",
+                    "line": 320
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_mpesa_cobrar",
+            "type": "wp_ajax",
+            "name": "sige_mpesa_cobrar",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.ver + permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/payments/mpesa-cobranca.php",
+                    "line": 38
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_mpesa_conciliar_manual",
+            "type": "wp_ajax",
+            "name": "sige_mpesa_conciliar_manual",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.ver + permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/payments/mpesa-conciliacao.php",
+                    "line": 253
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_mpesa_rejeitar",
+            "type": "wp_ajax",
+            "name": "sige_mpesa_rejeitar",
+            "module": "financeiro",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.ver + permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/payments/mpesa-conciliacao.php",
+                    "line": 296
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_notas_reaprovacao_run",
+            "type": "wp_ajax",
+            "name": "sige_notas_reaprovacao_run",
+            "module": "academico",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/notas-reaprovacao-migracao.php",
+                    "line": 161
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_ping",
+            "type": "wp_ajax",
+            "name": "sige_ping",
+            "module": "academico",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/academic-logic.php",
+                    "line": 202
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_planos_lancs_aluno",
+            "type": "wp_ajax",
+            "name": "sige_planos_lancs_aluno",
+            "module": "financeiro",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "financeiro.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/finance-core.php",
+                    "line": 3286
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_portal_pagamentos",
+            "type": "wp_ajax",
+            "name": "sige_portal_pagamentos",
+            "module": "financeiro",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "financeiro.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/portal-logic.php",
+                    "line": 2092
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_presencas_grid",
+            "type": "wp_ajax",
+            "name": "sige_presencas_grid",
+            "module": "academico",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/presencas-engine.php",
+                    "line": 269
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_presencas_marcar",
+            "type": "wp_ajax",
+            "name": "sige_presencas_marcar",
+            "module": "academico",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/presencas-engine.php",
+                    "line": 281
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_processar_email_queue_now",
+            "type": "wp_ajax",
+            "name": "sige_processar_email_queue_now",
+            "module": "comunicacao",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/email-queue-templates.php",
+                    "line": 429
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_processar_matricula",
+            "type": "wp_ajax",
+            "name": "sige_processar_matricula",
+            "module": "secretaria",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "alunos.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 102
+                },
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 504
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_provisionar_individual",
+            "type": "wp_ajax",
+            "name": "sige_provisionar_individual",
+            "module": "secretaria",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "alunos.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/aluno-accounts.php",
+                    "line": 302
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_provisionar_lote",
+            "type": "wp_ajax",
+            "name": "sige_provisionar_lote",
+            "module": "secretaria",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "alunos.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/aluno-accounts.php",
+                    "line": 353
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_registar_acesso",
+            "type": "wp_ajax",
+            "name": "sige_registar_acesso",
+            "module": "portaria",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "portaria.ver ou portaria.validar_acesso",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 312
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_remover_alocacao",
+            "type": "wp_ajax",
+            "name": "sige_remover_alocacao",
+            "module": "sistema",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 512
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_remover_aluno",
+            "type": "wp_ajax",
+            "name": "sige_remover_aluno",
+            "module": "secretaria",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "alunos.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/ajax-handlers.php",
+                    "line": 525
+                },
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 96
+                },
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 2702
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_remover_criterio",
+            "type": "wp_ajax",
+            "name": "sige_remover_criterio",
+            "module": "sistema",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 1702
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_remover_matriz",
+            "type": "wp_ajax",
+            "name": "sige_remover_matriz",
+            "module": "sistema",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 197
+                },
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 1777
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_remover_professor",
+            "type": "wp_ajax",
+            "name": "sige_remover_professor",
+            "module": "rh",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "rh.equipe_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 496
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_remover_turma",
+            "type": "wp_ajax",
+            "name": "sige_remover_turma",
+            "module": "academico",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 155
+                },
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 1993
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_remover_usuario_staff",
+            "type": "wp_ajax",
+            "name": "sige_remover_usuario_staff",
+            "module": "sistema",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/ajax-handlers.php",
+                    "line": 1106
+                },
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 1471
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_repor_senha_aluno",
+            "type": "wp_ajax",
+            "name": "sige_repor_senha_aluno",
+            "module": "secretaria",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "alunos.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/aluno-accounts.php",
+                    "line": 278
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_resetar_senha",
+            "type": "wp_ajax",
+            "name": "sige_resetar_senha",
+            "module": "sistema",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/ajax-handlers.php",
+                    "line": 1203
+                },
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 1632
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_restaurar_backup",
+            "type": "wp_ajax",
+            "name": "sige_restaurar_backup",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 486
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_salvar_aluno",
+            "type": "wp_ajax",
+            "name": "sige_salvar_aluno",
+            "module": "secretaria",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "alunos.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/aluno-accounts.php",
+                    "line": 266
+                },
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 86
+                },
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 2187
+                },
+                {
+                    "file": "includes/regime-mensalidade-core.php",
+                    "line": 33
+                },
+                {
+                    "file": "includes/regime-mensalidade-core.php",
+                    "line": 96
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_salvar_config_avancado",
+            "type": "wp_ajax",
+            "name": "sige_salvar_config_avancado",
+            "module": "sistema",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 229
+                },
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 482
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_salvar_criterio",
+            "type": "wp_ajax",
+            "name": "sige_salvar_criterio",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 1672
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_salvar_docente_disciplina",
+            "type": "wp_ajax",
+            "name": "sige_salvar_docente_disciplina",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 161
+                },
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 2131
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_salvar_email_templates",
+            "type": "wp_ajax",
+            "name": "sige_salvar_email_templates",
+            "module": "comunicacao",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/email-queue-templates.php",
+                    "line": 389
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_salvar_funcionario",
+            "type": "wp_ajax",
+            "name": "sige_salvar_funcionario",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/ajax-handlers.php",
+                    "line": 711
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_salvar_horario_turma",
+            "type": "wp_ajax",
+            "name": "sige_salvar_horario_turma",
+            "module": "academico",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/ajax-handlers.php",
+                    "line": 419
+                },
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 171
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_salvar_notas_bulk",
+            "type": "wp_ajax",
+            "name": "sige_salvar_notas_bulk",
+            "module": "academico",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/academic-logic.php",
+                    "line": 381
+                },
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 115
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_salvar_professor",
+            "type": "wp_ajax",
+            "name": "sige_salvar_professor",
+            "module": "rh",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "rh.equipe_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 492
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_salvar_smtp_config",
+            "type": "wp_ajax",
+            "name": "sige_salvar_smtp_config",
+            "module": "comunicacao",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/email-engine.php",
+                    "line": 274
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_salvar_templates_whatsapp_financeiro",
+            "type": "wp_ajax",
+            "name": "sige_salvar_templates_whatsapp_financeiro",
+            "module": "financeiro",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "financeiro.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-engine.php",
+                    "line": 169
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_salvar_turma",
+            "type": "wp_ajax",
+            "name": "sige_salvar_turma",
+            "module": "academico",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "academico.ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 143
+                },
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 1911
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_salvar_whatsapp_isolado",
+            "type": "wp_ajax",
+            "name": "sige_salvar_whatsapp_isolado",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 253
+                },
+                {
+                    "file": "includes/whatsapp-engine.php",
+                    "line": 124
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_settings_enter_technical_mode",
+            "type": "wp_ajax",
+            "name": "sige_settings_enter_technical_mode",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/settings/class-sige-settings-technical-mode.php",
+                    "line": 18
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_settings_exit_technical_mode",
+            "type": "wp_ajax",
+            "name": "sige_settings_exit_technical_mode",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/settings/class-sige-settings-technical-mode.php",
+                    "line": 19
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_settings_save",
+            "type": "wp_ajax",
+            "name": "sige_settings_save",
+            "module": "sistema",
+            "risk": "high",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/settings/class-sige-settings-controller.php",
+                    "line": 31
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_testar_email_template_queue",
+            "type": "wp_ajax",
+            "name": "sige_testar_email_template_queue",
+            "module": "comunicacao",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/email-queue-templates.php",
+                    "line": 418
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_testar_sms_config",
+            "type": "wp_ajax",
+            "name": "sige_testar_sms_config",
+            "module": "sistema",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 488
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_testar_smtp_config",
+            "type": "wp_ajax",
+            "name": "sige_testar_smtp_config",
+            "module": "comunicacao",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/email-engine.php",
+                    "line": 398
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_testar_wpp_config",
+            "type": "wp_ajax",
+            "name": "sige_testar_wpp_config",
+            "module": "comunicacao",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-engine.php",
+                    "line": 247
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_toggle_status_staff",
+            "type": "wp_ajax",
+            "name": "sige_toggle_status_staff",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/ajax-handlers.php",
+                    "line": 586
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_update_ordem_matriz",
+            "type": "wp_ajax",
+            "name": "sige_update_ordem_matriz",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 1859
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_update_ordem_matriz_lote",
+            "type": "wp_ajax",
+            "name": "sige_update_ordem_matriz_lote",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 1879
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_validar_acesso",
+            "type": "wp_ajax",
+            "name": "sige_validar_acesso",
+            "module": "portaria",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "portaria.ver ou portaria.validar_acesso",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 2841
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_vincular_carga",
+            "type": "wp_ajax",
+            "name": "sige_vincular_carga",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 500
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_vincular_matriz",
+            "type": "wp_ajax",
+            "name": "sige_vincular_matriz",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/audit-hooks.php",
+                    "line": 188
+                },
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 1735
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_wpp_activar_recovery",
+            "type": "wp_ajax",
+            "name": "sige_wpp_activar_recovery",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-recovery-mode.php",
+                    "line": 868
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_wpp_diag_force_cron",
+            "type": "wp_ajax",
+            "name": "sige_wpp_diag_force_cron",
+            "module": "comunicacao",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-diagnostics.php",
+                    "line": 111
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_wpp_diag_send_test",
+            "type": "wp_ajax",
+            "name": "sige_wpp_diag_send_test",
+            "module": "comunicacao",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-diagnostics.php",
+                    "line": 198
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_wpp_diag_status",
+            "type": "wp_ajax",
+            "name": "sige_wpp_diag_status",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-diagnostics.php",
+                    "line": 33
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_wpp_teste_directo",
+            "type": "wp_ajax",
+            "name": "sige_wpp_teste_directo",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-engine.php",
+                    "line": 215
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_wppc_backfill_pending",
+            "type": "wp_ajax",
+            "name": "sige_wppc_backfill_pending",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-central.php",
+                    "line": 573
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_wppc_bulk",
+            "type": "wp_ajax",
+            "name": "sige_wppc_bulk",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-central.php",
+                    "line": 727
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_wppc_cancel",
+            "type": "wp_ajax",
+            "name": "sige_wppc_cancel",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-central.php",
+                    "line": 155
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_wppc_clear_pending",
+            "type": "wp_ajax",
+            "name": "sige_wppc_clear_pending",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-central.php",
+                    "line": 460
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_wppc_delete",
+            "type": "wp_ajax",
+            "name": "sige_wppc_delete",
+            "module": "comunicacao",
+            "risk": "critical",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-central.php",
+                    "line": 253
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_wppc_force_cron",
+            "type": "wp_ajax",
+            "name": "sige_wppc_force_cron",
+            "module": "comunicacao",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-central.php",
+                    "line": 520
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_wppc_get_full",
+            "type": "wp_ajax",
+            "name": "sige_wppc_get_full",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-central.php",
+                    "line": 96
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_wppc_pending_receipts_list",
+            "type": "wp_ajax",
+            "name": "sige_wppc_pending_receipts_list",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-central.php",
+                    "line": 294
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_wppc_pull_forward",
+            "type": "wp_ajax",
+            "name": "sige_wppc_pull_forward",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-central.php",
+                    "line": 491
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_wppc_retry",
+            "type": "wp_ajax",
+            "name": "sige_wppc_retry",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-central.php",
+                    "line": 199
+                }
+            ]
+        },
+        {
+            "id": "wp_ajax:sige_wppc_send_link_now",
+            "type": "wp_ajax",
+            "name": "sige_wppc_send_link_now",
+            "module": "comunicacao",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "comunicacao.enviar ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/whatsapp-central.php",
+                    "line": 416
+                }
+            ]
+        },
+        {
+            "id": "wp_hook:admin_init",
+            "type": "wp_hook",
+            "name": "admin_init",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/admin-shell.php",
+                    "line": 1524
+                },
+                {
+                    "file": "includes/centros-helpers.php",
+                    "line": 88
+                },
+                {
+                    "file": "includes/core/class-sige-core.php",
+                    "line": 13
+                },
+                {
+                    "file": "includes/core/class-sige-core.php",
+                    "line": 17
+                },
+                {
+                    "file": "includes/curriculum-engine.php",
+                    "line": 373
+                },
+                {
+                    "file": "includes/db-handler.php",
+                    "line": 176
+                },
+                {
+                    "file": "includes/db-migration-engine.php",
+                    "line": 177
+                },
+                {
+                    "file": "includes/feature-registry-sync.php",
+                    "line": 149
+                },
+                {
+                    "file": "includes/finance-data-efectiva.php",
+                    "line": 64
+                },
+                {
+                    "file": "includes/financeiro-historico-aluno-pro.php",
+                    "line": 1001
+                },
+                {
+                    "file": "includes/hub/class-sige-hub-billing.php",
+                    "line": 27
+                },
+                {
+                    "file": "includes/hub/class-sige-hub-client.php",
+                    "line": 35
+                },
+                {
+                    "file": "includes/hub/class-sige-hub-client.php",
+                    "line": 36
+                },
+                {
+                    "file": "includes/jardim-handlers.php",
+                    "line": 731
+                },
+                {
+                    "file": "includes/jardim-handlers.php",
+                    "line": 734
+                },
+                {
+                    "file": "includes/jardim-handlers.php",
+                    "line": 1033
+                },
+                {
+                    "file": "includes/multitenancy.php",
+                    "line": 480
+                },
+                {
+                    "file": "includes/notas-reaprovacao-migracao.php",
+                    "line": 139
+                },
+                {
+                    "file": "includes/notification-humanization-pro.php",
+                    "line": 397
+                },
+                {
+                    "file": "includes/permissions-layer.php",
+                    "line": 862
+                },
+                {
+                    "file": "includes/permissions-layer.php",
+                    "line": 1152
+                },
+                {
+                    "file": "includes/regime-mensalidade-core.php",
+                    "line": 32
+                },
+                {
+                    "file": "includes/regime-mensalidade-core.php",
+                    "line": 95
+                },
+                {
+                    "file": "includes/security-baseline-pro.php",
+                    "line": 419
+                },
+                {
+                    "file": "includes/security-baseline-pro.php",
+                    "line": 423
+                },
+                {
+                    "file": "includes/security-baseline-pro.php",
+                    "line": 547
+                },
+                {
+                    "file": "includes/security-kernel.php",
+                    "line": 516
+                },
+                {
+                    "file": "includes/security-kernel.php",
+                    "line": 517
+                },
+                {
+                    "file": "includes/security-roles.php",
+                    "line": 244
+                },
+                {
+                    "file": "includes/security-scope-guard.php",
+                    "line": 295
+                },
+                {
+                    "file": "includes/versioning.php",
+                    "line": 92
+                },
+                {
+                    "file": "includes/whatsapp-templates-conversacional.php",
+                    "line": 1118
+                },
+                {
+                    "file": "sige-softgenial.php",
+                    "line": 478
+                },
+                {
+                    "file": "sige-softgenial.php",
+                    "line": 571
+                }
+            ]
+        },
+        {
+            "id": "wp_hook:parse_request",
+            "type": "wp_hook",
+            "name": "parse_request",
+            "module": "sistema",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": false,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "sistema.estado_ver ou permissao especifica",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/security-baseline-pro.php",
+                    "line": 132
+                },
+                {
+                    "file": "includes/security-kernel.php",
+                    "line": 518
+                }
+            ]
+        },
+        {
+            "id": "wp_hook:send_headers",
+            "type": "wp_hook",
+            "name": "send_headers",
+            "module": "portaria",
+            "risk": "high",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": true,
+            "rate_limit_expected": true,
+            "permission_expected": "portaria.ver ou portaria.validar_acesso",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/portaria-camera-safe-page.php",
+                    "line": 35
+                },
+                {
+                    "file": "includes/security-baseline-pro.php",
+                    "line": 418
+                },
+                {
+                    "file": "includes/security-baseline-pro.php",
+                    "line": 422
+                }
+            ]
+        },
+        {
+            "id": "wp_hook:template_redirect",
+            "type": "wp_hook",
+            "name": "template_redirect",
+            "module": "comunicacao",
+            "risk": "medium",
+            "public": false,
+            "tenant_required": true,
+            "csrf_or_hmac_required": "nonce_expected",
+            "audit_required": false,
+            "rate_limit_expected": false,
+            "permission_expected": "comunicacao.ver",
+            "status": "baseline_pending_phase_1_enforcement",
+            "registrations": [
+                {
+                    "file": "includes/email-engine.php",
+                    "line": 658
+                },
+                {
+                    "file": "includes/finance-core.php",
+                    "line": 3509
+                },
+                {
+                    "file": "includes/finance-devedores-pdf.php",
+                    "line": 186
+                },
+                {
+                    "file": "includes/portaria-camera-safe-page.php",
+                    "line": 323
+                },
+                {
+                    "file": "includes/security-kernel.php",
+                    "line": 519
+                },
+                {
+                    "file": "includes/security-roles.php",
+                    "line": 105
+                },
+                {
+                    "file": "includes/security-roles.php",
+                    "line": 182
+                }
+            ]
+        }
+    ]
+}

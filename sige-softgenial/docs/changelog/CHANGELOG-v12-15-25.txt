@@ -1,0 +1,9 @@
+v12.15.25 - Fecho dos 4 gates vermelhos pre-existentes
+
+Divida das fases anteriores, nao desta linha de trabalho. Fecho honesto:
+- Financeiro Core Design PRO (real): gate generalizado, deixa de exigir Version==12.15.12; verifica presenca/integridade da funcionalidade.
+- Magicos + Consistencia visual (reducao real): isencao dos contextos de impressao/documento standalone (DOCTYPE proprio, sem sige-tokens.css, onde var(--token) nao resolve) + conversao de 4 box-shadow e 1 transition em tokens. Baselines DESCERAM (magicos 2414->1934; primitivos 7398->7113); nunca subiram.
+- Autorizacao (aceitacao de divida): chamadas current_user_can sao fallbacks de admin e verificacoes de papel SIGE, nao reduziveis as cegas. Snapshot refrescado para o nivel actual (478/66) pelo mecanismo sancionado.
+- Corredor: 121/121 verde (era 117/121).
+- Sem alteracao de formulas/valores financeiros. Runtime: so harmonizacao de sombras/transicoes em devedores.css e mobile-tablet-ux.css.
+- Base: v12.15.24.

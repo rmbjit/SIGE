@@ -1,0 +1,46 @@
+SIGE SoftGenial v12.10.128 - Página do Aluno: Mensagens Claras de Senha
+
+Base
+- Construído por cima da v12.10.127 - Página do Aluno: Senha com Execução Real.
+
+Problema tratado
+- Quando a senha não cumpria a política mínima, o sistema mostrava apenas:
+  "A nova senha não cumpre as condições mínimas de segurança."
+- Essa mensagem era genérica e não explicava o que estava errado.
+
+Correções aplicadas
+1. Mensagens específicas
+- Se tiver menos de 8 caracteres:
+  "A nova senha deve ter pelo menos 8 caracteres."
+- Se não tiver letras e números:
+  "A nova senha deve combinar letras e números. Exemplo: Escola2026."
+- Se tiver mais de 128 caracteres:
+  "A nova senha é demasiado longa. Use no máximo 128 caracteres."
+- Se contiver o nome de utilizador:
+  "A nova senha não deve conter o nome de utilizador."
+- Se contiver parte do e-mail:
+  "A nova senha não deve conter parte do e-mail."
+
+2. Handler
+- O handler deixa de redireccionar sempre com erro genérico "policy".
+- Passa a enviar o primeiro motivo real da falha de política.
+
+3. Regras visíveis
+- A secção de condições agora informa que símbolos são permitidos.
+- Inclui exemplo de formato aceite: Escola2026.
+
+4. Robustez
+- O helper antigo da view foi suavizado para evitar type-hint rígido, caso seja chamado por engano no futuro.
+
+Mantido
+- Execução real via admin-post.php.
+- Alteração apenas da senha do utilizador autenticado.
+- Nonce obrigatório.
+- Senha actual obrigatória.
+- Limite de 5 tentativas em 15 minutos.
+- Modo leitura.
+- Bloqueio de notas/boletins por dívida.
+- Validação de propriedade dos recibos.
+- Sem alteração de base de dados académica/financeira.
+- Sem alteração de pagamentos.
+- Sem alteração de notas, Pauta, DEC, ACTA ou boletins.

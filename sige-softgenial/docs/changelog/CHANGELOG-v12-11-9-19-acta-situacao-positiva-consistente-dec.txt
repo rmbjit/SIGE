@@ -1,0 +1,54 @@
+SIGE SoftGenial v12.11.9.19 - ACTA: Situação Positiva consistente com o DEC
+
+Diagnóstico a partir de dados reais (5ª Classe, Turma A - Malisa)
+- A estatística por GÉNERO da ACTA já estava CORRECTA:
+    Matriculados/Existentes: M=10, HM=21  →  igual ao DEC (10 mulheres, 21 total).
+- O que ainda divergia era a linha "Situação Positiva (+)":
+    ACTA mostrava M=9, HM=19 (90% / 90.5%).
+    Mas o DEC e a própria "Estatística por Disciplina" da ACTA mostram que os
+    21 alunos têm MT entre 14 e 20 em TODAS as disciplinas (zero negativas).
+    Logo a Situação Positiva tem de ser 21/21 (e 10/10 mulheres), não 19/9.
+
+Causa-raiz
+- sige_acta_aluno_aprovado_trimestre (que conta a Situação Positiva) lia a nota
+  de cada disciplina com:
+      SELECT ... FROM sige_notas WHERE aluno_id=.. AND disciplina_id=.. AND
+      ano_lectivo=.. AND trimestre=.. AND escola_id=.. LIMIT 1
+  - ou seja, SEM filtrar por turma_id e ignorando nota_conselho.
+- Em alunos reinscritos/transferidos (típico do merge Malisa) existe mais do que
+  uma linha de nota para a mesma disciplina/ano/trimestre (de turmas/contextos
+  diferentes). O LIMIT 1 podia apanhar uma linha-fantasma vazia; pela regra
+  null=0 o MT vinha 0 e o aluno era reprovado por engano.
+- O DEC e a Estatística por Disciplina liam a nota CERTA (filtrada por turma_id
+  e respeitando nota_conselho), por isso davam o resultado correcto. Daí a
+  divergência entre DEC (certo) e ACTA (Situação Positiva errada).
+
+Correcção aplicada (includes/acta-pdf-handler.php)
+- Nova função sige_acta_fetch_nota_row(): para cada aluno/disciplina/trimestre,
+    1) prefere a linha da TURMA correcta;
+    2) em falta, escolhe a linha mais completa (maior MT calculado).
+  Elimina o efeito da linha-fantasma sem reintroduzir risco em instalações onde
+  notas.turma_id seja nulo.
+- sige_acta_aluno_aprovado_trimestre passa a calcular o MT com
+  sige_acta_mt_from_nota_row() - A MESMA fonte de MT do DEC e das Estatísticas
+  por Disciplina (respeita nota_conselho e usa nota_exame/nota_at).
+- Mantém a regra null=0 apenas quando NÃO existe nenhuma linha de nota.
+
+Resultado
+- A Situação Positiva da ACTA passa a coincidir com o DEC e com a Estatística
+  por Disciplina da própria ACTA. No caso da 5ª A: 21/21 (10/10 mulheres), 100%.
+
+Validação
+- Teste do selector de linha: linha-fantasma (vazia) + linha correcta da turma →
+  antes MT=0 (reprovava), agora MT=18 (aprova). nota_conselho respeitado.
+  Sem linha nenhuma → null=0 (negativo), regra preservada.
+- php -l sem erros em todo o plugin (166 ficheiros).
+
+Garantias (anti-regressão)
+- Sem alteração na estatística por género (mantém v12.11.9.18: DEC=Pauta=ACTA).
+- Sem alteração nas fórmulas de MT/MFD/Méd/AT, progressão ou regras académicas.
+- Sem alteração em Nota Votada, aprovação do DP, Financeiro, RH, WhatsApp ou BD.
+- Para turmas sem linhas duplicadas, o resultado é idêntico ao anterior.
+
+Versionamento sincronizado
+- Header do plugin, SIGE_VERSION e BUILD.json → 12.11.9.19.

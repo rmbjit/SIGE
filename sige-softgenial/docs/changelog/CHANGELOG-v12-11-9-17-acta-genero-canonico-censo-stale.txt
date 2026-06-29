@@ -1,0 +1,74 @@
+SIGE SoftGenial v12.11.9.17 - ACTA: Género Canónico + Censo 3 de Março Desactualizado (3A/4A/5A)
+
+Sintoma reportado
+- Após a v12.11.9.16, todas as turmas ficaram com a estatística da ACTA correcta,
+  EXCEPTO 3 A, 4 A e 5 A.
+
+Causa-raiz (verificação 360°)
+- O campo sige_alunos.genero é CHAR(1). Tanto o DEC como a ACTA (já corrigida)
+  lêem os mesmos valores da BD pela MESMA lógica, logo a estatística AO VIVO
+  não pode divergir entre eles.
+- O ÚNICO valor de género da ACTA que NÃO passa pela normalização ao vivo é a
+  linha "3 de Março": é um snapshot OFICIAL CONFIRMADO e guardado na tabela
+  sige_acta_censo_3_marco. O formulário de confirmação era pré-preenchido com a
+  sugestão automática.
+- Turmas confirmadas ANTES da correcção de género (v12.11.9.16) congelaram um
+  nº de Mulheres (M) abaixo do real, mantendo o total HM. Como 3 A/4 A/5 A já
+  tinham o Censo confirmado nesse período, ficaram com o valor antigo - daí
+  serem as únicas a falhar. (Coincidência útil: 3.ª/4.ª/5.ª classes formam o
+  2.º ciclo do EP, frequentemente confirmadas em conjunto.)
+
+Correcções aplicadas
+1) Normalização de género CANÓNICA e partilhada (fonte única de verdade):
+   - Nova função sige_genero_bucket() em includes/academic-logic.php.
+   - Cobertura máxima de variantes: M/F/H; Masculino/Feminino; Mulher/Homem;
+     Feminina/Masculina; Female/Male/Fêmea/Macho; Menino/Menina; Rapaz/Rapariga;
+     Garoto/Garota; Moço/Moça; Senhor/Senhora; códigos 1/2; e desconhecido='U'.
+   - remove_accents + maiúsculas + remoção de não-alfanuméricos + heurística de
+     1.ª letra (F->Feminino, H->Masculino) só para texto livre não reconhecido.
+   - A ACTA (sige_acta_norm_genero) passa a DELEGAR nesta função, com fallback
+     robusto interno se a logic não estiver carregada.
+2) Detecção automática de Censo 3 de Março DESACTUALIZADO:
+   - Ao abrir/imprimir a ACTA, o sistema recalcula a sugestão JÁ corrigida e
+     compara com o snapshot confirmado.
+   - Sinal inequívoco do bug antigo: MESMO total HM mas Mulheres (M) diferente.
+     (Alterações de roster - HM diferente - NÃO disparam alarme, evitando falsos
+     positivos.)
+   - Quando detecta divergência:
+     • ACTA digital: aviso vermelho no cartão do Censo com o valor corrigido e
+       botão "Aplicar valores corrigidos" que preenche M/HM corrigidos e marca a
+       confirmação - basta Guardar (reutiliza o fluxo de gravação existente).
+     • ACTA PDF: nota de atenção na fonte da linha 3 de Março, indicando o M
+       corrigido e que a turma deve ser reconfirmada.
+   - O valor oficial confirmado NUNCA é sobrescrito automaticamente: a
+     reconfirmação continua a ser uma acção humana auditada.
+
+Como resolver as 3 turmas (uma vez):
+- Académico → ACTA → escolher 3 A (depois 4 A, 5 A) → no cartão "Censo Escolar  - 
+  3 de Março" aparecerá o aviso vermelho → clicar "Aplicar valores corrigidos" →
+  Guardar. Feito. O PDF e a estatística passam a bater certo com o DEC.
+
+Validação
+- 37 casos de normalização (incl. Menino/Menina, Rapaz/Rapariga, 1/2, vazios)
+  todos correctos.
+- Lógica de divergência: dispara em 3A (M subcontado, HM igual); não dispara em
+  turma coincidente, em mudança de roster (HM diferente) nem em turma vazia.
+- php -l sem erros em todos os ficheiros alterados e em todo o plugin.
+
+Ficheiros alterados
+- includes/academic-logic.php   (nova normalização canónica de género)
+- includes/acta-pdf-handler.php (delegação + detecção de snapshot stale)
+- admin/academic/acta-view.php  (aviso + botão "Aplicar valores corrigidos")
+- admin/acta-oficial-template.php (nota de atenção no PDF)
+
+Garantias (anti-regressão)
+- Sem alteração em fórmulas (MT/MFD/AF/MF/MG/médias/negativas).
+- Sem alteração em progressão/transição/reprovação, Nota Votada ou aprovação DP.
+- Sem alteração no DEC, Pauta, Pauta Final, Boletins, Estatísticas por
+  Disciplina, Quadro de Honra.
+- Sem alteração em Financeiro, RH, WhatsApp, permissões ou base de dados.
+- Snapshots de Censo legítimos (sem divergência ou com mudança de roster real)
+  ficam intactos e sem avisos.
+
+Versionamento sincronizado
+- Header do plugin, SIGE_VERSION e BUILD.json → 12.11.9.17.

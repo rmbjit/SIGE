@@ -1,0 +1,91 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.37
+Data: 2026-06-22
+Titulo: Fase 1 Incremento 3 - Ciclo de vida dos documentos
+Tipo: Funcionalidade (fecha a Fase 1)
+Base: 12.12.36
+Canal: validated-feature
+
+================================================================
+CONTEXTO
+================================================================
+Terceiro e ultimo incremento da Fase 1 (seguranca de documentos e ficheiros).
+Constroi sobre o Incremento 1 (perimetro anti-execucao e bloqueio de tipos) e o
+Incremento 2 (armazenamento privado e migracao). Com este incremento a fase fica
+completa.
+
+================================================================
+FRENTE 1 - LINKS COM EXPIRACAO
+================================================================
+EDIT  includes/secure-document-download.php
+      - Novos auxiliares: sige_secure_document_link_ttl (constante
+        SIGE_SECURE_DOC_LINK_TTL, por omissao 3600s), sige_secure_document_link_secret
+        (wp_salt, sem opcao nova), sige_secure_document_link_sig (HMAC-SHA256 de
+        escopo, id, campo e expiracao), sige_secure_document_link_valid (recusa
+        expirados ou adulterados, com hash_equals), sige_secure_document_client_ip.
+      - Os construtores de URL (fluxo do aluno e fluxo da equipa) passam a incluir
+        exp e sig, alem do nonce.
+      - Os handlers verificam a expiracao logo apos o nonce e recusam (403) links
+        expirados ou invalidos, nos dois fluxos.
+
+================================================================
+FRENTE 2 - REGISTO DE DOWNLOAD REFORCADO
+================================================================
+EDIT  includes/secure-document-download.php
+      - O registo de auditoria de cada descarregamento (documento_baixado_seguro e
+        documento_rh_baixado_seguro) passa a incluir o IP do cliente (saneado) e o
+        utilizador, alem do aluno ou professor, campo, rotulo e nome do ficheiro.
+
+================================================================
+FRENTE 3 - LIMPEZA DE ORFAOS
+================================================================
+EDIT  includes/security-uploads-private.php
+      - Novas funcoes: sige_uploads_private_ref_key, sige_uploads_private_referenced_keys
+        (devolve null se alguma consulta falhar), sige_uploads_private_orphan_grace
+        (constante SIGE_PRIVATE_ORPHAN_GRACE, por omissao 86400s),
+        sige_uploads_private_orphan_sweep.
+      - O varrimento remove ficheiros privados sem referencia e mais antigos que o
+        periodo de graca. Opera apenas dentro de sige-private/docs, nunca toca nos
+        ficheiros de proteccao (.htaccess, web.config, index) e aborta sem apagar
+        nada se nao conseguir construir o conjunto de referencias.
+      - E chamado pela rotina existente de admin_init
+        (sige_uploads_maybe_run_private_migration), apos o dreno da migracao.
+
+================================================================
+FRENTE 4 - QR LOCAL
+================================================================
+EDIT  admin/academic/alunos_lista.php
+      - Carrega a biblioteca qrious (ja no catalogo com SRI) e adiciona o auxiliar
+        sigeQrDataUri, que gera o QR no proprio navegador e devolve um pixel
+        transparente de recurso se a biblioteca nao estiver disponivel.
+      - As duas geracoes do QR dos cartoes de estudante deixam de usar o servico
+        externo api.qrserver.com e passam a usar sigeQrDataUri. O numero de processo
+        do aluno nunca sai do dispositivo.
+      - api.qrserver.com e removido de todo o codigo. Dependencias externas: de 12
+        para 11.
+
+================================================================
+QUALIDADE
+================================================================
+NOVO  tools/check-doc-lifecycle.php (gate estatico)
+NOVO  tools/smoke-doc-lifecycle.php (smoke de runtime, 12 verificacoes)
+EDIT  tools/run-gates.php (corredor passa de 83 para 85 verificacoes)
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- Superficie de accao: 199 itens. Regras do Kernel: 199; enforce 33. Views: 60.
+- Opcoes: 132 (nenhuma nova). Dependencias externas: 11 (api.qrserver.com removido).
+- Sem alteracao de esquema. Calculo academico e financeiro byte-identico.
+- Versao sincronizada nas cinco fontes. Zero travessoes. Ficheiros em LF.
+
+================================================================
+VALIDACAO
+================================================================
+- php tools/check-doc-lifecycle.php   -> OK
+- php tools/smoke-doc-lifecycle.php    -> OK (12 verificacoes)
+- php tools/check-governance-docs.php  -> OK (21 documentos v12.12.37)
+- php tools/smoke-release-gate.php       -> verde a partir de pasta limpa
+- extractor de superficie                -> 199 itens
+- extractor de dependencias              -> 11 hosts
+- php -l                                  -> limpo nos ficheiros tocados

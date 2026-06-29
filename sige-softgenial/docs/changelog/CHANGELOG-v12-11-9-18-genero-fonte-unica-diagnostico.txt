@@ -1,0 +1,70 @@
+SIGE SoftGenial v12.11.9.18 - Género: Fonte Única (DEC=Pauta=ACTA) + Diagnóstico por Turma
+
+Sintoma reportado (persistência em 3 A / 4 A / 5 A)
+- Os dados do DEC e da ACTA destas turmas continuavam a não coincidir.
+- O botão "Aplicar valores corrigidos" não aparecia no cartão do Censo.
+
+Causa-raiz (verificação 360°, agora confirmada)
+- Existiam normalizações de género DIFERENTES em cada módulo:
+    • DEC e Pauta Final: lista curta (M/F, Masculino/Feminino, Mulher/Homem,
+      Macho/Male/Fêmea) e ainda REMOVIAM dígitos -> "1"/"2" tratados como
+      desconhecido.
+    • ACTA (desde v12.11.9.17): lista alargada que reconhece também Menino/
+      Menina, Rapaz/Rapariga, Garoto/Garota, Moço/Moça, Senhor/Senhora e
+      códigos 1/2.
+- Em turmas do ensino primário (3.ª/4.ª/5.ª), onde o género costuma estar
+  gravado como Menino/Menina (ou códigos), a ACTA classificava-os e o DEC não
+  -> as contagens de Mulheres voltavam a divergir. Foi o que sobrou.
+- O botão só aparecia quando havia um snapshot de Censo desactualizado; estas
+  turmas não tinham snapshot, logo o botão nunca surgia.
+
+Correcção definitiva
+1) FONTE ÚNICA DE VERDADE para género:
+   - DEC (admin/academic/dec-view.php), Pauta Final (pauta-final-view.php) e
+     Estatísticas Demográficas (estatisticas-demograficas-view.php) passam TODOS
+     a delegar na MESMA função canónica sige_genero_bucket() (academic-logic.php),
+     já usada pela ACTA. Cada um mantém a sua convenção de exibição (DEC/Pauta:
+     H/M/ - ; Demográficas: M/F/I) através de um mapeamento fino.
+   - Resultado: os quatro módulos ficam IDÊNTICOS por construção. É
+     impossível o DEC e a ACTA divergirem.
+2) DIAGNÓSTICO DE GÉNERO POR TURMA (novo) no cartão do Censo da ACTA:
+   - Mostra os valores REAIS gravados em sige_alunos.genero, o nº de alunos por
+     valor e como cada um é classificado (Masculino/Feminino/Por confirmar).
+   - Destaca a vermelho os valores não reconhecidos e indica o total "por
+     confirmar". Permite ver de imediato porque é que uma turma divergia.
+3) BOTÃO "Aplicar valores corrigidos" SEMPRE disponível (com permissão):
+   - Deixa de depender da detecção de snapshot desactualizado.
+   - Preenche M e HM com o cálculo corrigido e marca a confirmação; basta rever
+     e Guardar. O aviso vermelho de snapshot desactualizado continua a aparecer
+     quando aplicável.
+
+Como resolver / verificar
+- Académico → ACTA → escolher 3 A (depois 4 A, 5 A):
+    • Abrir "Diagnóstico de género desta turma" para ver os valores reais.
+    • Se houver alunos "por confirmar" (vermelho), corrigir o campo género na
+      ficha do aluno (Alunos & Matrículas); a partir daí entram bem na contagem.
+    • Conferir que a coluna M da ACTA = Mulheres do DEC da mesma turma/trimestre.
+- Para o Censo 3 de Março: usar "Aplicar valores corrigidos" → Guardar.
+
+Validação
+- Teste cruzado DEC vs ACTA em datasets difíceis (Menino/Menina, Rapaz/Rapariga,
+  códigos 1/2, palavras completas, vazios): DEC e ACTA coincidem em 100% das
+  turmas testadas.
+- php -l sem erros em todos os ficheiros e em todo o plugin (166 ficheiros).
+
+Ficheiros alterados
+- admin/academic/dec-view.php               (delegação na fonte única)
+- admin/academic/pauta-final-view.php       (delegação na fonte única)
+- admin/academic/estatisticas-demograficas-view.php (delegação na fonte única)
+- admin/academic/acta-view.php              (diagnóstico + botão sempre visível)
+- includes/academic-logic.php               (sige_genero_bucket - já existente)
+- includes/acta-pdf-handler.php             (já delega; nota stale mantida)
+
+Garantias (anti-regressão)
+- Para turmas com dados M/F limpos (a maioria), os números NÃO mudam.
+- Sem alteração em fórmulas (MT/MFD/AF/MF/MG), progressão, Nota Votada,
+  aprovação do DP, Boletins, Financeiro, RH, WhatsApp ou base de dados.
+- Snapshots de Censo legítimos ficam intactos; nada é sobrescrito sozinho.
+
+Versionamento sincronizado
+- Header do plugin, SIGE_VERSION e BUILD.json → 12.11.9.18.

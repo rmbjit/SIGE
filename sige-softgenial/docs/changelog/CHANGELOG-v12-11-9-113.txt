@@ -1,0 +1,56 @@
+SIGE SoftGenial v12.11.9.113 - AUDITORIA DE DESIGN (financeiro-extratos)
+=======================================================================
+
+Ecrã financeiro (3760 linhas). Auditado com as 3 regras E com o cuidado
+acrescido que um ecrã de extratos exige: cor que é SEMÂNTICA financeira
+não se toca como se fosse decoração.
+
+DIAGNÓSTICO (medido)
+- TIPOGRAFIA: 9 pesos. O 950 era o MAIS usado (27x), 900 17x. Ecrã
+  pesadíssimo - mau num ecrã de números, onde a hierarquia valor/rótulo
+  é crítica para a leitura.
+- RAIOS: 15 valores (4 a 28px).
+- SOMBRAS: 23 distintas.
+- CORES: 107 hex.
+
+CUIDADO ESPECÍFICO (ecrã financeiro)
+- Cores de SEMÂNTICA financeira identificadas e tratadas com respeito:
+  verde de reconciliação OK (#128754), vermelho de diferença/débito
+  (#b42318) são INDICADORES contabilísticos, não decoração. Migraram
+  para os tokens semânticos CORRECTOS (danger/success), preservando o
+  significado e até reforçando a consistência.
+- O template de impressão do "Termo de Fecho de Caixa" (documento
+  contabilístico oficial, embebido em string PHP) foi PRESERVADO com
+  cores absolutas - um documento impresso não deve depender de
+  variáveis CSS que podem não resolver no contexto de impressão.
+
+CORRECÇÃO (CSS principal, linhas 963-1887)
+1. Hierarquia de 3 níveis: 9 pesos -> 400/500/600/700. Distribuição
+   saudável (600 labels, 700 títulos/valores). Verificado que não havia
+   legendas com peso pesado a forçar (não se aplicou regra cega).
+2. Raios da escala: 15 -> 6. Sombras da escala: 23 -> 8.
+3. 268 cores migradas para tokens. Zero referências inexistentes, CSS
+   bem-formado. Os 11 hex restantes estão TODOS nas zonas preservadas
+   (9 no termo de fecho, 2 no JS).
+
+PROVA VISUAL
+- financeiro-extratos-antes-depois.png: KPIs e linha de extrato. O verde
+  de entradas, vermelho de saídas e verde de crédito PRESERVADOS; a
+  hierarquia melhora (valor domina, metadados recuam).
+
+GATES
+- smoke-regression-pack: 168 -> 173 invariantes.
+- extratos adicionado aos ecrãs auditados do gate de tipografia.
+- Baseline de mágicos: 9047 -> 8779 (-268).
+- Baseline de tipografia: 611 -> 564 (-47).
+- Todos os 12 gates verdes.
+
+NOTA DE PROCESSO (honestidade)
+- 1ª passagem de afinação de legendas foi agressiva demais (empurrou 62
+  ocorrências para 400, destruindo a hierarquia ao contrário). Detectado
+  na medição (62x 400 vs 11x 700 = suspeito), revertido da v112, e
+  refeito com mapa conservador + verificação de que NÃO havia legendas
+  pesadas a corrigir. A lição: verificar antes de aplicar regra cega.
+
+PRÓXIMO
+- matriz (40 pesos), aluno-portal (32), disciplinas (27)...

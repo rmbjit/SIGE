@@ -1,0 +1,51 @@
+SIGE SoftGenial v12.9.87 - Sincronização Assistida e Auditoria de Configurações
+
+Base validada:
+- v12.9.86 - Fonte Canónica e Compatibilidade Segura.
+
+Objectivo:
+- Começar a organizar configurações duplicadas com acções técnicas explícitas, seguras e auditadas, sem apagar campos e sem alterar a lógica operacional validada.
+
+O que mudou:
+1. Nova camada SIGE_Settings_Sync
+   - Relatório de sincronização assistida.
+   - Whitelist conservadora de grupos sincronizáveis.
+   - Bloqueio automático de grupos de alto risco.
+   - Bloqueio de dados sensíveis.
+   - Bloqueio de financeiro, académico, WhatsApp, SMTP, Hub/licença e templates nesta fase.
+
+2. Primeiro grupo sincronizável
+   - Endereço físico da escola:
+     - escola.endereco_fisico ↔ legado.endereco_duplicado.
+   - Permite alinhar fonte canónica e legado quando houver valor vazio ou conflito.
+   - Não remove nenhuma coluna.
+   - Mantém fallback legado activo.
+
+3. Segurança e auditoria
+   - Requer perfil técnico/core.
+   - Requer nonce.
+   - Requer confirmação textual exacta: SINCRONIZAR.
+   - Sanitiza e valida o valor antes de gravar.
+   - Regista auditoria da alteração e da operação de sincronização.
+
+4. Centro de Configuração
+   - Nova secção: “Sincronização assistida e auditoria”.
+   - Mostra grupos sincronizáveis, bloqueios por alto risco, bloqueios por política e grupos já alinhados.
+   - Apresenta botões apenas quando a acção é permitida.
+
+Garantias anti-regressão:
+- Não altera cálculos financeiros.
+- Não altera pautas/notas/boletins.
+- Não altera WhatsApp/Z-API.
+- Não altera SMTP.
+- Não altera Hub/licença.
+- Não altera permissões existentes.
+- Não remove campos legados.
+- Não muda leituras antigas dos módulos.
+
+Como testar:
+1. Instalar a versão.
+2. Abrir: SIGE SoftGenial → Sistema Técnico → Centro de Configuração → Saneamento controlado.
+3. Confirmar a secção “Sincronização assistida e auditoria”.
+4. Se houver conflito ou valor em falta no grupo “Endereço físico da escola”, executar uma sincronização com confirmação textual.
+5. Confirmar auditoria e ausência de regressão nos restantes módulos.

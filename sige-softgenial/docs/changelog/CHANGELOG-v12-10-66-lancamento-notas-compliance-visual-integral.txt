@@ -1,0 +1,22 @@
+SIGE SoftGenial v12.10.66 - Lançamento de Notas: Compliance Visual Integral
+
+Objectivo
+- Rever o desenho do módulo &view=notas e garantir alinhamento rigoroso com o Painel Principal / Dashboard V2 MJS-grade.
+- Manter a intervenção exclusivamente visual, sem alterar lançamento de notas, cálculos, submissão, aprovação, pautas, permissões, queries ou regras académicas.
+
+Ajustes aplicados
+- Adicionado &view=notas à lista de views com header próprio para evitar duplicação pelo App Shell.
+- Hero antigo escuro foi substituído por hero claro no padrão Produto PRO.
+- Aplicada a sequência mandatória: ícone canónico, área Área Docente, título Lançamento de Notas, subtítulo e acções.
+- Adicionado painel lateral de contexto para indicar se o lançamento está preparado ou activo.
+- Filtros de turma, disciplina e ano lectivo harmonizados como cartão claro no padrão aprovado.
+- Alertas e mensagens de estado receberam ícones canónicos, removendo emojis visuais.
+- Barra de contexto da turma/disciplina foi redesenhada com chips e ícones canónicos.
+- Botões Guardar Notas foram alinhados ao padrão Produto PRO.
+- Tabela de notas recebeu reforço visual: bordas suaves, cabeçalhos alinhados, inputs com foco consistente e leitura mais limpa.
+
+Garantias
+- Sem alteração em fórmulas de cálculo de notas.
+- Sem alteração em lançamento, gravação, submissão ou aprovação de notas.
+- Sem alteração em pautas, boletins, DEC ou regras académicas.
+- Sem alteração em permissões, queries, base de dados, pagamentos, multas ou mensalidades.

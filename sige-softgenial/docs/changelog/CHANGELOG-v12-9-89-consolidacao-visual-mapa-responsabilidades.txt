@@ -1,0 +1,42 @@
+SIGE SoftGenial v12.9.89 - Consolidação Visual e Mapa de Responsabilidades
+
+Base validada:
+- v12.9.88 - Normalização de Estado e Expansão Segura.
+
+Objectivo:
+- Consolidar visualmente o Centro de Configuração, separando responsabilidades por actor, mostrando maturidade da configuração da escola e reforçando governança de produto sem alterar lógica operacional.
+
+Incluído nesta versão:
+1. Nova camada de leitura: includes/settings/class-sige-settings-responsibility.php
+   - Mapa de responsabilidades: Escola, SoftGenial técnico, Hub/licença, Sistema/build, Legado e Regras operacionais protegidas.
+   - Visão de maturidade por área: identidade, contactos, documentos, dados sensíveis, comunicação, financeiro e académico.
+   - Política de responsabilidade por área, risco e tratamento.
+   - Recomendações executivas para produto, segurança, saneamento e operação.
+
+2. Novo separador técnico no Centro de Configuração
+   - "Responsabilidade e maturidade".
+   - Mostra quem controla cada grupo de configurações.
+   - Ajuda a implantação, suporte técnico e revisão de qualidade por escola.
+
+3. Segurança e anti-regressão
+   - Apenas leitura.
+   - Não remove campos.
+   - Não migra valores.
+   - Não sincroniza automaticamente.
+   - Não altera financeiro, académico, WhatsApp, SMTP, Hub/licença, documentos finais, permissões ou schema.
+   - Segredos continuam mascarados.
+
+4. Versionamento
+   - Header do plugin: 12.9.89.
+   - SIGE_VERSION: 12.9.89.
+   - BUILD.json: 12.9.89.
+
+Como testar:
+1. Instalar a versão 12.9.89 sobre a 12.9.88 validada.
+2. Abrir: Sistema Técnico → Centro de Configuração.
+3. Confirmar o novo separador "Responsabilidade e maturidade".
+4. Confirmar que o separador mostra resumo, responsáveis, maturidade, política e recomendações.
+5. Confirmar que nenhum cálculo, WhatsApp, pauta, recibo, pagamento, permissão ou documento mudou.
+
+Nota:
+Esta versão é de consolidação visual e governança. A remoção real de duplicações continua bloqueada para fases futuras, depois de maturidade, fallback, auditoria e smoke tests.

@@ -1,0 +1,87 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.46
+Data: 2026-06-23
+Titulo: Fase 4 incr 2 - Migracao de inline (vaga 1) e catraca
+Tipo: Incremento de funcionalidade (front-end seguro, vaga 1)
+Base: 12.12.45
+Canal: validated-feature
+
+================================================================
+CONTEXTO
+================================================================
+Segundo incremento da Fase 4 (CSP e front-end seguro). O incremento 1 trouxe as
+bibliotecas para dentro (self-host) e criou a infra de enqueue. Este comeca a tirar
+o codigo de interface de dentro do HTML: cria o mecanismo que substitui onclick,
+faz a primeira vaga de migracao e protege-a com um gate de catraca.
+
+================================================================
+MECANISMO DE DELEGACAO
+================================================================
+EDIT  assets/sige-ui.js
+      - Novo despachante declarativo data-sige-act, ao lado do enhancer
+        data-sige-confirm ja existente. Um unico ouvinte delegado (em fase de bolha)
+        encontra o elemento com [data-sige-act], le o nome da funcao e dispara
+        window[nome]. Se existir [data-sige-arg], passa-o como argumento; caso
+        contrario passa o proprio elemento (equivalente ao this do onclick).
+      - Corre em bolha para que o enhancer de confirmacao (em captura, com
+        stopPropagation) seja sempre tratado primeiro.
+
+================================================================
+PRIMEIRA VAGA DE MIGRACAO
+================================================================
+EDIT  admin/finance/financeiro-lancamentos-view.php
+      - Os dez onclick passam a data-sige-act:
+          sigeExportarLancamentosExcel  (2x, exportacao)
+          sigeOpenDetails               (abrir detalhes; recebe o elemento)
+          sigeOpenCancel                (anular; id por data-sige-arg)
+          sigeOpenExempt                (isentar; id por data-sige-arg)
+          sigeOpenReactivate            (reactivar; id por data-sige-arg)
+          sigeCloseCancel, sigeCloseExempt, sigeCloseReactivate, sigeCloseDetails
+      - Resultado: 0 onclick (eram 10), 10 data-sige-act.
+      - So muda a forma de ligar o clique a funcao. As funcoes dos handlers nao
+        mudaram; nenhuma regra financeira e tocada; os ficheiros canonicos ficam
+        intactos.
+
+================================================================
+CATRACA (RATCHET)
+================================================================
+NOVO  tools/check-inline-frontend.php
+      - Conta as ocorrencias de onclick=, style=" e blocos <script> sem src nas
+        views e includes (exclui assets/vendor/, docs e ferramentas).
+      - Baseline (so pode descer): onclick 250 (era 260), style 2191, script 81.
+      - Falha se qualquer categoria exceder a baseline. Confirma tambem que o
+        despachante data-sige-act existe em assets/sige-ui.js.
+EDIT  tools/run-gates.php (corredor de 97 para 98)
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- Nao toca em regras de calculo nem em ficheiros canonicos.
+- Superficie de accao: 199 (enforce 33). Vistas: 60. Opcoes: 132. Dependencias: 9.
+- Sem alteracao de esquema. Calculo academico e financeiro byte-identico.
+- Versao sincronizada nas cinco fontes. Zero travessoes. Ficheiros de codigo em LF.
+
+================================================================
+VALIDACAO
+================================================================
+- php tools/check-inline-frontend.php   -> OK (onclick=250, style=2191, script=81)
+- node -c assets/sige-ui.js              -> limpo
+- php -l admin/finance/financeiro-lancamentos-view.php -> limpo
+- php tools/check-governance-docs.php     -> OK (21 documentos v12.12.46)
+- php tools/smoke-release-gate.php          -> verde a partir de pasta limpa
+- gates de pagamentos, cofre, Fase 1 e Fase 4 incr 1 -> sem regressao
+- extractor de superficie / opcoes / hosts  -> 199 / 132 / 9
+
+================================================================
+INSTALACAO E REVERSAO
+================================================================
+- Instalacao: backup, desactivar, substituir a pasta sige-softgenial, reactivar.
+- Reversao: reinstalar a versao anterior. Sem alteracao de esquema; reversao directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Vagas seguintes: converter os restantes onclick por area (academico, RH, sistema),
+  comecar a externalizar os blocos <script> para ficheiros enfileirados e a passar
+  style inline para classes, baixando a catraca a cada vaga, ate ser possivel impor
+  o CSP em enforcement.

@@ -1,0 +1,64 @@
+SIGE SoftGenial v12.11.9.109 - RECONCILIAÇÃO DOS CSS LEGADOS
+============================================================
+
+Os CSS legados eram o maior reservatório de inconsistência visual.
+Esta versão resolve-os de forma definitiva - com uma descoberta crítica
+e uma reconciliação arquitectural, não um find-replace cego.
+
+DESCOBERTA CRÍTICA: CÓDIGO MORTO
+- assets/style-consolidado.css (2066 linhas, 1467 mágicos) era CÓDIGO
+  MORTO: zero referências em código de produção. Era um "candidato"
+  gerado pela ferramenta tools/css-consolidar.php que NUNCA foi
+  adoptado. O ficheiro vivo é assets/style.css, carregado como
+  'sige-design-system' em admin-shell.php.
+- AMBOS apagados (o candidato morto + a ferramenta obsoleta que o
+  gerava). Removidos os invariantes que os vigiavam.
+- Resultado: -1467 mágicos por DELEÇÃO DE LIXO (não migração). O
+  repositório deixa de carregar 2066 linhas de CSS fantasma.
+
+RECONCILIAÇÃO ARQUITECTURAL: style.css (vivo)
+Diagnóstico crítico do ficheiro vivo revelou:
+- 945 !important (especificidade descontrolada - dívida a vigiar);
+- um :root próprio com SISTEMA DE TOKENS PARALELO (--sg-primary-*,
+  --sg-radius-*, etc.) que COMPETIA com a fonte da verdade canónica.
+  Pior: o --sg-primary era ancorado noutro roxo (#5a3fd6) diferente do
+  --color-brand (#7c3aed) - a inconsistência de marca na raiz.
+
+Solução (a mais limpa e escalável): o :root do style.css deixou de
+DEFINIR valores e passou a ser uma PONTE DE COMPATIBILIDADE - cada
+--sg-* referencia o token canónico equivalente (--sg-primary-500 ->
+var(--color-brand-500), etc.). 196 tokens-ponte, validados para não
+deixar NENHUMA variável usada órfã. Assim:
+- os milhares de sítios que usam --sg-* herdam a paleta canónica sem
+  serem tocados (retrocompatível);
+- há UMA só fonte da verdade;
+- a ponte remove-se um dia, quando --sg-* estiver extinto.
+
+Decisões de produto validadas:
+- DOURADO (--sg-accent #ffeb3b, "Energy/Achievement") UNIFICADO em
+  warning (laranja): uma cor de identidade redundante eliminada.
+- Primitivos estruturais que faltavam (z-index, easings bounce/spring,
+  sombras semânticas) SUBIDOS para a fonte da verdade canónica.
+
+MIGRAÇÃO DE CORES (style.css)
+- 1150 cores hex -> tokens. Os 3 roxos dispersos (#5f45dc x43,
+  #6d5dfc x21, #5a3fd6 x20) colapsaram em brand; cinzas à mão e azuis
+  unificados em slate/ink/info. style.css: 769 hex -> 0.
+- 777 referências a var(--color-*). Impressão digital de famílias
+  preservada; CSS validado (chavetas, var() bem-formados, zero
+  referências a tokens inexistentes).
+
+SMOKE TEST NOVO (regra do utilizador)
+- tools/smoke-design-system.php (15 verificações): valida 7 famílias
+  completas, integridade da ponte (zero órfãs), resolução de todas as
+  referências, zero hex no style.css, cascata correcta, e que o código
+  morto não regressa. É o 10º gate do corredor.
+
+GATES
+- Corredor: 9 -> 10 gates. smoke-regression-pack: 151 -> 155.
+- Baseline de mágicos: 12615 -> 9925 (-2690 nesta entrega: 1467 por
+  deleção + 1223 por migração). Todos os 10 gates verdes.
+
+PRÓXIMO
+- Views pesadas: alunos_lista (1003), financeiro-pagamentos (471),
+  financeiro-extratos (340), e a cauda. Baseline a descer até ~zero.

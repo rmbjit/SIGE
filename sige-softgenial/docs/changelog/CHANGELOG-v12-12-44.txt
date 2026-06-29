@@ -1,0 +1,81 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.44
+Data: 2026-06-23
+Titulo: Fase 3 - Ajuste fino dos codigos e estados por operadora
+Tipo: Afinacao final (sobre os incrementos 1 a 3 da Fase 3)
+Base: 12.12.43
+Canal: validated-feature
+
+================================================================
+CONTEXTO
+================================================================
+Ajuste fino final da reconciliacao viva. Os afinamentos anteriores tornaram a
+verificacao sensivel ao estado da transacao, mas com listas globais. Esta versao
+torna a classificacao POR OPERADORA, para que o M-Pesa (Vodacom) e o e-Mola
+(Movitel) possam ser afinados de forma independente.
+
+================================================================
+ALTERACOES
+================================================================
+EDIT  includes/payments/reconciliacao-viva.php
+      - NOVA funcao sige_pagamentos_mapa_estados_gateway(provider): devolve, para
+        cada provider, as listas de estados de sucesso e de falha e os codigos de
+        resposta de falha.
+      - sige_pagamentos_normalizar_estado_gateway passa a receber o provider
+        (segundo parametro, opcional) e a usar o mapa.
+      - sige_pagamentos_consultar_gateway passa o provider (mpesa ou emola) ao
+        normalizador.
+      - Defaults fundamentados na documentacao publica:
+          M-Pesa (Vodacom, OpenAPI): o estado da transacao vem em
+            ResponseTransactionStatus (ex.: Completed); um INS-0 confirma apenas a
+            CONSULTA, nao a transacao, pelo que os codigos de resposta de falha
+            ficam vazios por omissao (a falha e expressa pelo estado).
+          e-Mola (Movitel): API de consulta por documentar; mantem-se conservador
+            com termos genericos ate haver a especificacao oficial.
+      - Sobreposicao por filtro COM o provider como contexto:
+          sige_mpesa_estados_sucesso(lista, provider)
+          sige_mpesa_estados_falha(lista, provider)
+          sige_mpesa_codigos_falha(lista, provider)
+        Permite afinar por operadora num unico filtro e garante isolamento: um
+        codigo ou estado de falha de uma operadora nao contamina a outra.
+
+================================================================
+QUALIDADE
+================================================================
+EDIT  tools/smoke-reconciliacao-viva.php (passa de 21 para 27 verificacoes: mapa
+      por operadora, isolamento de codigos e estados, retro-compatibilidade)
+EDIT  tools/check-reconciliacao-viva.php (exige o mapa por operadora, o normalizador
+      com provider e os filtros com o provider como contexto)
+      Corredor estavel em 95 verificacoes (gates editados, nao adicionados).
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- Nao toca em regras de calculo nem em ficheiros canonicos. So afina a classificacao
+  da verificacao (so leitura).
+- Conservadorismo: estado nao mapeado -> desconhecida (nunca acusa uma transacao
+  real de falsa). Retro-compatibilidade: sem provider, defaults comuns; filtros
+  antigos de um argumento continuam a funcionar.
+- Superficie de accao: 199 itens. Regras do Kernel: 199; enforce 33. Vistas: 60.
+- Opcoes: 132 (a afinacao e por filtro). Dependencias externas: 11.
+- Sem alteracao de esquema. Calculo academico e financeiro byte-identico.
+- Versao sincronizada nas cinco fontes. Zero travessoes. Ficheiros em LF.
+
+================================================================
+VALIDACAO
+================================================================
+- php tools/check-reconciliacao-viva.php    -> OK
+- php tools/smoke-reconciliacao-viva.php      -> OK (27 verificacoes)
+- php tools/check-recon-resolucao.php          -> OK (sem regressao)
+- php tools/smoke-recon-resolucao.php           -> OK (sem regressao)
+- php tools/check-governance-docs.php            -> OK (21 documentos v12.12.44)
+- php tools/smoke-release-gate.php                 -> verde a partir de pasta limpa
+- extractor de superficie / opcoes / vistas       -> 199 / 132 / 60
+- php -l                                           -> limpo nos ficheiros tocados
+
+================================================================
+A SEGUIR
+================================================================
+- Ajuste fino definitivo dos valores exactos de cada operadora, com o sandbox. A
+  estrutura por operadora (mapa e filtros com provider) ja esta pronta para os
+  receber, sem necessidade de nova versao do plugin (basta um filtro).

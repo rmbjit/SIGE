@@ -1,0 +1,48 @@
+SIGE SoftGenial v12.10.77 - Acta do Conselho: Fluxo PRO e Consistência Académica
+
+Objectivo
+- Transformar a Acta do Conselho de Notas de simples formulário documental para fluxo académico controlado.
+- Garantir que a Nota Votada só altera a pauta mediante aprovação explícita do Director Pedagógico/Director/Admin.
+- Preservar a consistência entre Acta, Pauta, PDF/Excel, DEC, Boletim e restantes leituras académicas que usam a tabela oficial de notas.
+
+Principais melhorias
+- Adicionado painel de prontidão académica da acta:
+  - alunos da turma;
+  - disciplinas da matriz/turma;
+  - notas aprovadas esperadas;
+  - notas em falta;
+  - notas pendentes de aprovação.
+- Criado fluxo seguro para Nota Votada:
+  - a nota votada nasce como “Pendente DP”;
+  - não altera a pauta automaticamente ao guardar a acta;
+  - apenas Director Pedagógico, Director ou Administração podem aprovar e aplicar;
+  - ao aprovar, a nota é aplicada na tabela oficial `sige_notas`;
+  - a pauta passa a reflectir a nota votada aprovada;
+  - a nota original é preservada em JSON na linha da acta;
+  - a acção fica auditada.
+- Adicionada migração compatível para instalações existentes:
+  - `status`;
+  - `aprovado_por`;
+  - `aprovado_em`;
+  - `aplicado_em`;
+  - `nota_id`;
+  - `nota_original_json`;
+  - `observacao_dp`.
+- Melhorado o comportamento do guardar da Nota Votada:
+  - se uma linha já aplicada não foi alterada, mantém o estado aplicado;
+  - se a linha for alterada depois de aplicada, volta a “Pendente DP” por segurança.
+- Adicionado handler próprio:
+  - `admin-post.php?action=sige_acta_aprovar_nota_votada`.
+- Registado o novo handler no plugin principal.
+
+Regra aplicada à pauta
+- Ao aprovar a Nota Votada, a nota oficial do trimestre é registada na tabela `sige_notas` no campo `nota_conselho`.
+- As componentes originais AC, ACP e AT/nota_exame são preservadas para rastreabilidade pedagógica.
+- Pauta, PDF, Excel, DEC, Pauta Final e Boletim passam a usar `nota_conselho` como MT oficial quando existir.
+- Esta operação é controlada, auditada e reversível apenas por intervenção técnica/administrativa com base no JSON da nota original.
+
+Garantias
+- Sem alteração nas fórmulas de cálculo académico.
+- Sem alteração nas regras de progressão/transição/reprovação.
+- Sem alteração no PDF da acta, excepto a disponibilidade dos dados persistidos.
+- Sem alteração em pagamentos, mensalidades, multas, base de dados financeira ou outros módulos.

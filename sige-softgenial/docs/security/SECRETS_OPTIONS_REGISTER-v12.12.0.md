@@ -1,0 +1,143 @@
+# SECRETS AND OPTIONS REGISTER - v12.12.0
+
+Registo de segredo e opcoes WordPress. A migracao definitiva pertence ao Secret Vault.
+
+Total de opcoes inventariadas: 137.
+
+- OPTION: admin_email | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: blogname | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_2fa_email | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_2fa_incluir_wpadmin | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_2fa_roles | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_abertura_data_{$_eid}_{$ano_destino} | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_abertura_data_{$eid}_{$ano_destino} | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_abertura_log_{$_eid}_{$ano_destino} | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_abertura_log_{$eid}_{$ano_destino} | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_abertura_operacao_id_{$eid}_{$ano_destino} | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_abertura_por_{$_eid}_{$ano_destino} | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_abertura_por_{$eid}_{$ano_destino} | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_abertura_relatorio_{$_eid}_{$ano_destino} | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_abertura_relatorio_{$eid}_{$ano_destino} | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_acad_db_version | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_alertas_email_director | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_alertas_email_director_ | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_alertas_templates | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_allow_cron_key_in_query | classe: segredo/candidato sensivel | operacoes: get_option
+- OPTION: sige_allowed_update_hosts | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_ano_encerrado_checklist_{$_eid}_{$ano_post_int} | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_ano_encerrado_data_{$_eid}_{$ano_post_int} | classe: opcao comum ou operacional | operacoes: delete_option, update_option
+- OPTION: sige_ano_encerrado_data_{$_eid}_{$ano_sel} | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_ano_encerrado_por_{$_eid}_{$ano_post_int} | classe: opcao comum ou operacional | operacoes: delete_option, update_option
+- OPTION: sige_ano_encerrado_por_{$_eid}_{$ano_sel} | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_ano_encerrado_snapshot_stats_{$_eid}_{$ano_post_int} | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_ano_encerrado_snapshot_stats_{$_eid}_{$ano_sel} | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_ano_lectivo_encerrado_{$_eid}_{$ano_origem} | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_ano_lectivo_encerrado_{$_eid}_{$ano_post_int} | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_ano_lectivo_encerrado_{$_eid}_{$ano_sel} | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_ano_lectivo_encerrado_{$_eid}_{$a} | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_ano_lectivo_encerrado_{$eid}_{$ano_origem} | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_core_db_version | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_core_logs | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_core_queue | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_core_version | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_cron_key | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_curriculum_initial_sync_done_ | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_curriculum_last_sync_ | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_db_migrated_at | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_db_migration_engine | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_db_version | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_dica_do_dia_enabled | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_email_queue_schema_version | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_email_templates_config | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_emola_ | classe: segredo/candidato sensivel | operacoes: get_option
+- OPTION: sige_emola_ambiente | classe: segredo/candidato sensivel | operacoes: update_option
+- OPTION: sige_emola_api_key | classe: segredo/candidato sensivel | operacoes: update_option
+- OPTION: sige_emola_api_secret | classe: segredo/candidato sensivel | operacoes: update_option
+- OPTION: sige_emola_host | classe: segredo/candidato sensivel | operacoes: update_option
+- OPTION: sige_emola_merchant_code | classe: segredo/candidato sensivel | operacoes: update_option
+- OPTION: sige_emola_webhook_token | classe: segredo/candidato sensivel | operacoes: update_option
+- OPTION: sige_feature_registry_bridge_disabled | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_feature_registry_bridge_keys | classe: segredo/candidato sensivel | operacoes: get_option
+- OPTION: sige_feature_registry_keys | classe: segredo/candidato sensivel | operacoes: update_option
+- OPTION: sige_feature_registry_manifest | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_features_local | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_fin_db_version | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_hub_heartbeat_url | classe: segredo/candidato sensivel | operacoes: get_option
+- OPTION: sige_hub_last_commands_result | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_hub_last_heartbeat_at | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_hub_last_heartbeat_body | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_hub_last_heartbeat_code | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_hub_last_heartbeat_error | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_hub_last_instant_refresh_request | classe: segredo/candidato sensivel | operacoes: update_option
+- OPTION: sige_hub_last_refresh_attempt | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_hub_last_refresh_ok | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_hub_state | classe: segredo/candidato sensivel | operacoes: get_option
+- OPTION: sige_hub_updates_url | classe: segredo/candidato sensivel | operacoes: get_option
+- OPTION: sige_hub_validate_url | classe: segredo/candidato sensivel | operacoes: get_option
+- OPTION: sige_jardim_criterios_pro_v105_done | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_last_backup_snapshot | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_last_unique_index_error_ | classe: opcao comum ou operacional | operacoes: delete_option, update_option
+- OPTION: sige_license_cache | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_license_client_id | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_license_grace_days | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_license_key | classe: segredo/candidato sensivel | operacoes: delete_option, get_option, update_option
+- OPTION: sige_license_last_attempt_at | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_license_last_attempt_message | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_license_last_attempt_ok | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_license_server_url | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_m10_matriz_categoria_done | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_m11_disciplina_19_done | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_m11_log | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_m12_mat46_to_mat_checked | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_m12_mat46_to_mat_log | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_m13_edvisual_auxiliar_checked | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_m6_recorrente_done | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_m8_unique_keys_done | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_migracao_status_canonico | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_mined_data_corte | classe: opcao comum ou operacional | operacoes: add_option, get_option
+- OPTION: sige_mpesa_ | classe: segredo/candidato sensivel | operacoes: get_option
+- OPTION: sige_mpesa_ambiente | classe: segredo/candidato sensivel | operacoes: update_option
+- OPTION: sige_mpesa_api_key | classe: segredo/candidato sensivel | operacoes: update_option
+- OPTION: sige_mpesa_porta_ | classe: segredo/candidato sensivel | operacoes: get_option
+- OPTION: sige_mpesa_provider_code | classe: segredo/candidato sensivel | operacoes: update_option
+- OPTION: sige_mpesa_public_key | classe: segredo/candidato sensivel | operacoes: update_option
+- OPTION: sige_mpesa_webhook_token | classe: segredo/candidato sensivel | operacoes: update_option
+- OPTION: sige_observability_enabled | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_pauta_final_mode_{$_eid}_{$ano_post_int}_{$turma_id} | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_pauta_final_mode_{$_eid}_{$ano_sel}_{$tid} | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_pauta_final_mode_{$eid}_{$ano}_{$tid} | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_pauta_final_mode_{$escola_id}_{$ano_sel}_{$turma_id} | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_pauta_final_mode_{$escola_id}_{$h->ano_lectivo}_{$h->turma_id} | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_permissions_engine_version | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_phase1_removed_manage_options_from_sige_users | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_phase2_backfill_error_ | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_phase2_tenant_schema_audit_v12_11_9_27 | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_phase2_unique_error_ | classe: opcao comum ou operacional | operacoes: delete_option, update_option
+- OPTION: sige_phase2_unique_pending_ | classe: opcao comum ou operacional | operacoes: delete_option, update_option
+- OPTION: sige_plugin_build_id | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_plugin_build_time | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_plugin_header_version | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_plugin_version_installed | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_plugin_version_issues | classe: opcao comum ou operacional | operacoes: delete_option, update_option
+- OPTION: sige_plugin_version_status_ok | classe: opcao comum ou operacional | operacoes: update_option
+- OPTION: sige_presencas_hora_corte | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_professores_unique_email_pending_cleanup | classe: opcao comum ou operacional | operacoes: delete_option, update_option
+- OPTION: sige_recibo_public_link_ttl_days | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_relatorio_mensal_destinatarios | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_relatorio_mensal_email | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_relatorio_mensal_ultimo | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_security_baseline_141_installed | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_smtp_config | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_smtp_last_error | classe: segredo/candidato sensivel | operacoes: delete_option, get_option, update_option
+- OPTION: sige_smtp_last_replyto_error | classe: segredo/candidato sensivel | operacoes: update_option
+- OPTION: sige_smtp_last_success | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_smtp_last_test | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_tenant_profile | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_tenant_profile_locked | classe: opcao comum ou operacional | operacoes: get_option
+- OPTION: sige_wpp_destinatarios_padrao_ | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_wpp_guardian_db_version | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_wpp_health_manual_since_e | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_wpp_last_send_test_ | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_wpp_queue_cron_key | classe: segredo/candidato sensivel | operacoes: get_option, update_option
+- OPTION: sige_wpp_recovery_version | classe: opcao comum ou operacional | operacoes: get_option, update_option
+- OPTION: sige_wpp_webhook_enabled | classe: segredo/candidato sensivel | operacoes: get_option

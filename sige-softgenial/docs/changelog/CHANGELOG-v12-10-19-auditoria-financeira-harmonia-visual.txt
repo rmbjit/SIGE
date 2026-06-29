@@ -1,0 +1,17 @@
+SIGE SoftGenial v12.10.19 - Auditoria Financeira: Harmonia Visual
+
+Alterações:
+- Auditoria Financeira alinhada ao padrão visual aprovado do Painel Principal.
+- Removida duplicação de cabeçalho nesta página.
+- Novo hero claro, amplo e consistente com os módulos já validados.
+- KPIs de alertas reorganizados com cartões modernos.
+- Texto visível ao utilizador limpo, sem rótulos internos de versão, build ou anotações técnicas.
+- Área de correcção segura reorganizada em cartão próprio.
+- Confirmação de correcção segura convertida em pop-up real, centrado no ecrã.
+- Tabela de alertas redesenhada com badges, melhor legibilidade e rolagem controlada no mobile.
+
+Garantias:
+- Sem alteração de fórmulas.
+- Sem alteração de mensalidades, multas, descontos, pagamentos, cobranças, recibos, estornos ou base de dados.
+- Sem alteração de notas, pautas, DEC, boletins ou actas.
+- Mantido o Painel Principal como referência visual inegociável.

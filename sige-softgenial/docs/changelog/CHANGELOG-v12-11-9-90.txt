@@ -1,0 +1,87 @@
+SIGE SoftGenial v12.11.9.90
+============================
+
+Sprint 1 - Fundação de Segurança e Produto: escudo de login com 2FA opcional, backups verificados, CI de release, regressão viva, status canónico, Circulares WhatsApp e relatório mensal automático
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+DETALHE COMPLETO DO SPRINT 1
+============================
+
+SEGURANÇA
+- includes/security-login-shield.php (NOVO, activo por defeito):
+  rate limit de autenticação: 5 falhas/10 min por utilizador+IP => bloqueio
+  10 min; 20 falhas/h por IP => bloqueio 30 min (anti password-spray);
+  sucesso limpa o contador do utilizador (nunca o do IP); tudo auditado;
+  emergência: define('SIGE_LOGIN_SHIELD_OFF', true).
+- 2FA por email no mesmo módulo (OFF por defeito): option sige_2fa_email='on';
+  perfis alvo em sige_2fa_roles (defeito: sige_director, sige_admin_ti);
+  admin WP real isento salvo sige_2fa_incluir_wpadmin='on'; código de 6
+  dígitos, 10 min, 5 tentativas; falha de SMTP NUNCA tranca a escola (deixa
+  entrar e regista); emergência: define('SIGE_2FA_OFF', true).
+- tools/smoke-login-shield.php (NOVO): 16 verificações funcionais do núcleo
+  (lockout, janelas deslizantes, spray, ciclo completo do OTP). Todas verdes.
+
+OPERAÇÕES
+- tools/backup/ (NOVO): sige-backup.sh (dump por base com single-transaction,
+  verificação gzip + tabelas sentinela + tamanho mínimo, retenção 14 dias,
+  exit!=0 em falha para alerta por MAILTO); sige-restore-test.sh (restauro
+  REAL semanal rotativo em base temporária com contagem das tabelas
+  críticas); RUNBOOK-BACKUPS.md (instalação em 15 minutos, utilizador MySQL
+  só-leitura, cópia offsite por rclone).
+- Heartbeat do Hub enriquecido: wpp_queue_pendentes, wpp_queue_falhadas_24h,
+  email_queue_pendentes, cron_wpp_proximo, cron_diario_proximo,
+  login_locks_24h. Base do painel de saúde por tenant (SPEC-HUB-SAUDE.md).
+
+QUALIDADE / CI
+- .gitignore + .github/workflows/ci.yml (NOVOS): lint integral em PHP 8.1 e
+  8.3, três gates vivos em cada push, ZIP instalável gerado em cada tag v*
+  com verificação tag==header. Guia: docs/dev/GIT-CI.md.
+- tools/smoke-regression-pack.php (NOVO): 29 invariantes funcionais sem
+  literais de versão, portados dos gates históricos 71/80/27 + contratos
+  financeiros canónicos + escudo de login. Substitui a era dos smokes
+  congelados por versão.
+- tools/smoke-release-gate.php: raiz canónica passa a 7 ficheiros
+  (+.gitignore), pastas permitidas verificadas (+.github), rota das
+  Circulares coberta.
+
+DADOS
+- sige_aluno_status_canonico() em core-helpers (NOVO): canoniza o status do
+  aluno NA ESCRITA para a grafia pré-AO90 da casa; a leitura continua a
+  aceitar ambas as grafias (compatibilidade histórica intocada).
+- tools/migrar-status-canonico.php (NOVO): convergência dos dados
+  históricos; dry-run por defeito; --aplicar exige escrever CONFIRMO;
+  regista resumo em sige_migracao_status_canonico + auditoria.
+- tools/check-php-compat.php (NOVO): veredicto por tenant sobre o piso
+  PHP 8.1 (caminho para apagar fin-fsm-php74.php).
+
+PRODUTO
+- CIRCULARES WHATSAPP (NOVO): menu próprio para Direcção/Secretaria Geral;
+  escopo escola inteira ou turma; pré-visualização com contagem REAL de
+  famílias (deduplicação por telefone normalizado, política de
+  destinatários respeitada); confirmação explícita obrigatória; envio pela
+  fila existente (tipo 'circular') com os guardrails de sempre; auditado.
+  Ficheiros: includes/circulares.php, admin/whatsapp_circulares-view.php.
+- RELATÓRIO MENSAL AUTOMÁTICO (NOVO, OFF por defeito): no dia 1 envia por
+  email à Direcção o resumo do mês fechado (receita do mês, pendente,
+  atraso, taxa de cobrança, top 5 devedores) usando os MESMOS KPIs do
+  Painel Financeiro; idempotente; ligar com
+  update_option('sige_relatorio_mensal_email','on').
+  Ficheiro: includes/relatorio-mensal-email.php.
+
+DECISÕES (docs/dev/)
+- ADR-001-i18n.md: PT-MZ é a língua do produto; sem retrofit; critério
+  objectivo de reavaliação.
+- ADR-002-updates.md: Hub é o canal primário de updates; o checker clássico
+  só arranca sem Hub configurado (gate implementado).
+- CSS-AUDIT.md: 281KB, 26 camadas, 150 selectores 3x+, 2.414 !important;
+  plano de consolidação em 3 passos (execução em sprint dedicado).
+- SPEC-MPESA.md e SPEC-PRESENCAS.md: desenho completo do Sprint 2.
+- assets/views/README.md + sige_view_assets(): regra do escuteiro em vigor.
+
+PAINEL
+- docs/PAINEL-MELHORIAS.md: scorecard vivo com percentagem por item.

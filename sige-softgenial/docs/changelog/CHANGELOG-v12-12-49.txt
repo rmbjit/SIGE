@@ -1,0 +1,96 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.49
+Data: 2026-06-23
+Titulo: Fase 4 incr 2 - Fixe de impressao utilitarios e vaga admin-shell e jardim
+Tipo: Correccao (impressao) + incremento de funcionalidade (vaga de inline)
+Base: 12.12.48
+Canal: validated-feature
+
+================================================================
+CONTEXTO
+================================================================
+Incremento 2 da Fase 4 (CSP e front-end seguro), em duas partes: uma correccao de
+impressao das classes utilitarias introduzidas nas vagas 2 e 3, e mais uma vaga de
+migracao de estilo inline (admin-shell e jardim).
+
+================================================================
+PARTE A - CORRECCAO DE IMPRESSAO DAS CLASSES UTILITARIAS
+================================================================
+Sintoma: as vagas 2 (v12.12.47) e 3 (v12.12.48) migraram estilos inline para classes
+utilitarias (sige-u-). Essas classes so resolvem onde o assets/sige-utilities.css esta
+carregado, ou seja na shell do admin. Cinco vistas, porem, abrem janelas de impressao
+autonomas (window.open mais document.write) que clonam ou geram marcacao com essas
+classes e levam o seu proprio <style>, sem o sige-utilities.css. No impresso, as
+classes ficavam sem efeito (por exemplo, a celula "Media Geral do Trimestre" do
+boletim perdia o alinhamento a direita e voltava ao centro herdado da tabela).
+
+EDIT  includes/assets-registry.php
+      - Novo helper sige_utilities_inline_css(): devolve as 12 regras utilitarias com
+        !important, numa cadeia compacta, sem aspas simples nem backticks (seguro de
+        embeber em qualquer janela de impressao).
+EDIT  admin/academic/boletim-view.php            (helper embebido no <style> do popup)
+EDIT  admin/academic/alunos_lista.php             (helper no <style> da ficha impressa)
+EDIT  admin/academic/turmas-view.php              (helper nos 2 popups: mapa e lista)
+EDIT  admin/academic/estatisticas-demograficas-view.php (helper, uniformidade defensiva)
+EDIT  admin/finance/financeiro-devedores-view.php (helper no <style> da tabela impressa)
+      - Em cada popup, o <?php echo sige_utilities_inline_css(); ?> cai logo apos a
+        abertura do <style>, de modo que as classes sige-u- clonadas ou geradas
+        resolvem no impresso. Confirmado por simulacao da saida.
+EDIT  tools/smoke-inline-frontend.php
+      - Guarda nova: percorre admin e includes; qualquer vista com popup de impressao
+        (window.open ou document.write) e classes sige-u- tem de chamar
+        sige_utilities_inline_css(). Trava regressoes futuras.
+
+================================================================
+PARTE B - VAGA ADMIN-SHELL E JARDIM (59 trocas)
+================================================================
+EDIT  includes/admin-shell.php                    (55 trocas, sobretudo icones flex-shrink)
+EDIT  admin/jardim/jardim_relatorio-view.php       (4 trocas)
+      - Migracao conservadora: so atributos style 100 por cento compostos por
+        declaracoes do mapa seguro, estaticos, sem PHP interpolado e sem class
+        existente. Exemplos:
+          <svg style="flex-shrink:0">  -> <svg class="sige-u-shrink-0">
+        O admin-shell continua a enfileirar o sige-utilities.css.
+EDIT  tools/check-inline-frontend.php
+      - SIGE_INLINE_STYLE_MAX de 2110 para 2051. onclick 250 e script 81 inalterados.
+
+EXCLUIDOS por desenho (saida autonoma sem o sige-utilities.css):
+  includes/documents-engine.php   (geracao de PDF/HTML)
+  includes/portal-logic.php       (vista de portal)
+  admin/jardim/jardim_boletim-view.php (popup de impressao)
+  e os ficheiros canonicos (finance-core, academic-logic, whatsapp-engine, db-handler).
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- Nao toca em regras de calculo nem em ficheiros canonicos.
+- Superficie de accao: 199 itens (enforce 33). Vistas: 60. Opcoes: 132.
+- Dependencias externas: 9 (inalteradas). Sem alteracao de esquema.
+- Calculo financeiro byte-identico. Aspecto visual identico no ecra e fiel no impresso.
+- Versao sincronizada nas cinco fontes. Zero travessoes. Ficheiros de codigo em LF.
+
+================================================================
+VALIDACAO
+================================================================
+- php tools/check-inline-frontend.php   -> OK (style 2051 de 2051, sem folga)
+- php tools/smoke-inline-frontend.php      -> OK (com guarda de impressao)
+- php tools/smoke-regression-pack.php        -> OK
+- php tools/diag-responsivo.php               -> OK (0 antipadroes)
+- php tools/check-governance-docs.php          -> OK (21 documentos v12.12.49)
+- php tools/smoke-release-gate.php               -> verde a partir de pasta limpa
+- gates de pagamentos, cofre, Fase 1 e Fase 4 incr 1 -> sem regressao
+- extractor de superficie / opcoes / hosts      -> 199 / 132 / 9
+- php -l nos ficheiros tocados; node -c sige-ui.js -> limpo
+- simulacao da saida do helper: CSS valido, sem aspas simples nem backticks
+
+================================================================
+INSTALACAO E REVERSAO
+================================================================
+- Instalacao: backup, desactivar, substituir a pasta sige-softgenial, reactivar.
+- Reversao: reinstalar a versao anterior. Sem alteracao de esquema; reversao directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Restantes areas de estilo, depois os onclick remanescentes, depois os blocos script
+  inline, e por fim o CSP em enforcement (nonce por pedido e flip do cabecalho).

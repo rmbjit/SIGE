@@ -1,0 +1,33 @@
+{
+  "version": "12.15.12",
+  "base_version": "12.15.11",
+  "purpose": "Baseline de integridade para garantir que a vaga Design System PRO: Financeiro Core nao altera PHP financeiro, formulas, Finance Score, queries ou regras de negocio.",
+  "generated_at": "2026-06-25T20:30:00+02:00",
+  "files": {
+    "admin/finance/aprovacoes-view.php": "f8bc7694c63cdb3de4ac87364f775fa5ce4017b67d25fde305f73b24b00505b0",
+    "admin/finance/financeiro-auditoria-view.php": "05c468b17dccb8bbc533224853126ce83c7508f0af9b316e5fc70658cd99a3df",
+    "admin/finance/financeiro-centros-view.php": "8528cca333a82f9c96a2116cc9d2471ff1a90e7aabf962c90a6e95b6960a4862",
+    "admin/finance/financeiro-config.php": "1481e9d16c1d6ee5abb4883e81784e3c885ea466b75a2a6cd2f9ad2d6b84be0d",
+    "admin/finance/financeiro-dashboard.php": "cb357a0587506a03abac5eb1b2d265efe4589559da6b32be93eb8f62c6c4f6cd",
+    "admin/finance/financeiro-despesas-view.php": "465088bf90e98e25e402b65fb5072f7785425eb1388d6a5e3ea415b8622f5ce6",
+    "admin/finance/financeiro-devedores-view.php": "8c384479b059e63aaf6b5c866b012ebe0c3bf22404b4ecb0aa8f0e5924c8b6ee",
+    "admin/finance/financeiro-extratos.php": "e251917d82564372c5a779152ef6a9640754a394e95298396ac48bf53eb293d1",
+    "admin/finance/financeiro-gerador.php": "bd8a182f47c4462fd76cafffd35b1002b63591a05da28a39f517a952f943d417",
+    "admin/finance/financeiro-inscricoes-view.php": "1b1452529b4a99769af8d9129e90e86e52b165283832517799f1735f783357df",
+    "admin/finance/financeiro-lancamentos-view.php": "1c57b06e32ac74dd99b4cb7879e32cf518819a0233d22458982c2d0717bee9ab",
+    "admin/finance/financeiro-pagamentos.php": "3afab797c29cd261d25c53410ac482f267d043232b98f31c02c323caebd9a823",
+    "admin/finance/financeiro-planos-view.php": "b5f6cccb1b4c64fae72104d1effe138e5b8d310ec9ae70cf654e806356343c93",
+    "admin/finance/financeiro-relatorio-mensal-view.php": "91dfe7c9c802edc668370299209e01940cd59f82c9fcd38f20882ccb53be0b11",
+    "admin/finance/index.php": "8335eb4c709b8ad7b6949033a0f875fb0d928f354dc61d259a6fe7fcba9adb07",
+    "admin/finance/mpesa-view.php": "837c1333c78e0e17afc986b3d789b4589090447c9379fb8701f861140207e5f3",
+    "admin/finance/pagamentos-turma-view.php": "a8002c3d51b80162cc552bd8325d8e7f9c7860ae0e26f3f4e3ccc749cd6394aa",
+    "admin/finance/reconciliacao-view.php": "1beb248d4ccb5847f409614c5d95f84e1da77b433521b5d102b885408bae72d1",
+    "includes/finance-core.php": "bcb51dcfaf93f8c45f378b825d734df2a3dea8dfe23e26b5364fc12fb5ad7266",
+    "includes/fin-kpi-engine.php": "9313161a9fd143dbaacc05a39c11ffda2ede66d7ff4c6f8e8690c9b9e95af61a",
+    "includes/fin-devedores-calendario.php": "500b3490518338a7335660d855063c581fb13663e9b8b6e3df3aa758a62ccda2",
+    "includes/financeiro-historico-aluno-pro.php": "19fbe7a9e2b5b99f977128e585f4375209fdeb9847464b229a45f3f215434585",
+    "includes/finance-devedores-pdf.php": "c99d2720aaeda8252e10f07e05968af4ca421ac24d7d022a5f337e00c8906ae0",
+    "includes/fin-action-service.php": "4de29f5a288c77037e1d4bebfcfa56e285fdbdee5c46c0e7fb38194051846273",
+    "includes/fin-item-dispatcher.php": "db7f1e00ee5cca8c7ba10a1ebcc6c1941a843617a442c2b652229e2b25a62b6d"
+  }
+}

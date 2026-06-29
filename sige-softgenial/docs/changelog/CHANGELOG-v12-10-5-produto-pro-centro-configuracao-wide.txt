@@ -1,0 +1,25 @@
+SIGE SoftGenial v12.10.5 - Produto PRO: Centro de Configuração Wide Layout Alignment
+
+Objectivo
+- Alinhar o Centro de Configuração ao mesmo padrão de largura, respiração e presença visual aprovado no Dashboard V2 MJS-grade.
+
+Alterações visuais
+- O Centro de Configuração deixa de ficar limitado a um container estreito e passa a ocupar a largura útil da aplicação.
+- Hero principal alargado, com melhor proporção entre texto, acções e painel de estado.
+- Cartões de maturidade da configuração mais largos e alinhados ao padrão do dashboard.
+- Navegação por áreas com maior espaçamento e melhor distribuição horizontal.
+- Formulários mais amplos em ecrãs grandes, com distribuição automática em três colunas quando houver espaço suficiente.
+- Mantida responsividade para ecrãs menores.
+
+Perímetro preservado
+- Não altera fórmulas financeiras.
+- Não altera mensalidades, multas, pagamentos, cobranças ou recibos.
+- Não altera notas, pautas, DEC, boletins, actas ou regras académicas.
+- Não altera tabelas, migrations, schema ou dados.
+- Não altera permissões nem modo avançado; apenas melhora layout e consistência visual.
+
+Validação esperada
+- Abrir o Centro de Configuração em ecrã largo e confirmar que a página ocupa a mesma área útil do Dashboard.
+- Confirmar que os separadores e formulários continuam funcionais.
+- Guardar uma configuração simples em ambiente de testes.
+- Confirmar que as opções avançadas continuam fechadas por padrão.

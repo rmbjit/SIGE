@@ -1,0 +1,64 @@
+CHANGELOG - SIGE SoftGenial v12.12.60
+Fase 4 (CSP e front-end seguro) - incremento 2
+onclick seguros das vistas admin em data-sige-act
+Data: 2026-06-23
+
+RESUMO
+Conversao dos onclick seguros das vistas admin para o despachante data-sige-act,
+preparando o CSP enforce do shell admin. Depois do enforce das paginas autonomas
+(v12.12.59), o passo para um script-src baseado em nonce no shell admin exige
+remover os handlers inline das vistas admin. Estas vistas correm no shell que
+carrega o despachante global, pelo que a conversao usa data-sige-act (mecanismo ja
+em producao e validado pelos gates), nao addEventListener local.
+
+CONVERSAO (56 onclick, 8 vistas)
+- 52 onclick sem argumentos: fn() passa a data-sige-act mais data-sige-noargs.
+- 4 onclick com um inteiro: fn(<?php echo (int)id ?>) passa a data-sige-act mais
+  data-sige-args com a lista JSON, que preserva o tipo numero.
+Por vista:
+- alunos_lista: 17 sem-arg + 4 inteiro
+- turmas-view: 10
+- financeiro-extratos: 10
+- equipe-view: 8
+- dec-view: 2
+- estatisticas-demograficas-view: 2
+- pauta-final-view: 2
+- boletim-view: 1
+
+COMPORTAMENTO
+- Identico: o despachante chama a mesma funcao com os mesmos argumentos.
+
+EXCLUIDOS (para incrementos proprios)
+- Onclick com event (switchTab).
+- Onclick com codigo inline (sessionStorage, location.reload, condicoes).
+- Onclick com jQuery inline (fadeOut).
+- Onclick com argumentos string via esc_js (exigem codificacao propria do
+  argumento para atributo).
+- Onclick gerados dentro de blocos script (HTML montado por JavaScript): poupados
+  por mascara dos blocos script no conversor.
+
+VERIFICADORES DE JAVASCRIPT EMBEBIDO
+- As vistas admin sao varridas e mantem-se verdes.
+
+DESPACHANTE
+- smoke-inline-frontend confirma o contrato data-sige-noargs, data-sige-args,
+  data-sige-arg, data-sige-self e data-sige-prevent.
+
+CATRACA
+- check-inline-frontend: maximo de onclick de 149 para 93 (sem folga).
+- style mantem-se em 2051; blocos script mantem-se em 7.
+
+NOTA SOBRE O ENFORCE DO SHELL ADMIN
+- Esta vaga NAO acrescenta cabecalho CSP. O enforce do shell admin so vem depois de
+  tratados os onclick restantes (93) e os estilos inline (2051).
+
+INVARIANTES
+- Superficie de accao 199 (enforce 33), vistas 60, opcoes 132, dependencias
+  externas 9. Sem alteracao de esquema. Calculo financeiro byte-identico.
+- Corredor 99. Release gate verde a partir de pasta limpa.
+- Rediagnostico adversarial: Zero P0 e Zero P1.
+
+VERSAO
+- Cinco fontes sincronizadas em 12.12.60 (cabecalho do plugin, SIGE_VERSION,
+  BUILD.json, SIGE_GOV_VERSION, base da superficie de inventario).
+- Zero travessoes em todo o codigo, documentacao e changelog.

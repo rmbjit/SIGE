@@ -1,0 +1,53 @@
+SIGE SoftGenial v12.11.9.88.2 - Financeiro Mensalidade Virtual & Classe Canonical Hotfix
+Data: 10/06/2026
+
+Contexto
+- Após a v12.11.9.88.1, o lançamento de mensalidades podia processar o aluno, mas terminar com 0 mensalidades criadas/actualizadas e 1 item ignorado.
+- No pagamento pelo cartão mensal, o POST recebia itens virtuais como MENS_01, mas o processador podia terminar em “Erro interno: Nenhuma dívida processada”.
+- A causa principal era uma inconsistência entre a resolução moderna de serviço/classe e a validação legacy de classe: serviços como “2º/3º Ano”, “1º Ano”, “1ª Classe” ou classes vindas de Excel podiam ser resolvidos num ponto e rejeitados noutro.
+
+Correções aplicadas
+1. Normalização canónica de classe no core financeiro
+- A função sige_fin_servico_permitido_para_classe() agora delega para SIGE_FinanceClasseHelper::servicoAplicavelAoAluno() quando disponível.
+- Isto corrige classes compostas/ranges e nomenclaturas importadas por Excel, sem abrir cobrança para serviços incompatíveis.
+
+2. Compatibilidade com servidores sem mbstring
+- SIGE_FinanceClasseHelper passou a usar helper interno lower() com fallback para strtolower().
+- Evita fatal error em servidores PHP sem extensão mbstring.
+
+3. Pagamento de itens virtuais MENS_MM/TRAN_MM/PACK_MM
+- Antes de tentar criar nova dívida, o processador procura lançamento aberto por tipo+mês:
+  • mensalidade + mês
+  • transporte + mês
+- Se já existir dívida pendente/parcial, o pagamento usa essa dívida real em vez de falhar ou tentar recriar.
+
+4. Diagnóstico melhorado
+- Quando MENS_MM não consegue materializar dívida, o erro passa a explicar a causa provável:
+  • sem serviço mensalidade para a turma/classe;
+  • mensalidade incompatível com a turma/classe;
+  • bloqueio por aluno inactivo;
+  • mês bloqueado;
+  • erro de insert.
+
+5. Safety net do upsert financeiro
+- A validação de classe no upsert deixou de depender de m.status_matricula = 'activa' estrito.
+- Agora usa a resolução canónica sige_fin_obter_classe_actual_aluno() quando disponível, aceitando activa/ativa/activo/ativo e respeitando escola/ano.
+
+Ficheiros alterados
+- admin/finance/financeiro-pagamentos.php
+- includes/finance-core.php
+- includes/fin-classe-helper.php
+- sige-softgenial.php
+- BUILD.json
+
+Ficheiro novo
+- tools/smoke-financeiro-mensalidade-virtual-classe-v12-11-9-88-2.php
+
+Sem alterações em
+- cálculos financeiros;
+- recibos;
+- estornos;
+- reconciliação/fecho de caixa;
+- exportações;
+- permissões;
+- estrutura da base de dados.

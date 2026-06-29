@@ -1,0 +1,38 @@
+SIGE SoftGenial v12.11.9.132 - AUDITORIA DE DESIGN (permissions-ui)
+==================================================================
+
+Gestão de permissões e papéis de utilizador (1294 linhas).
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 8 pesos, 850 (10x), 900 (7x). MAIS 1 peso 800 INLINE
+  (L1199, fora do bloco <style>).
+- RAIOS: 9 valores. SOMBRAS: 16. CORES: 117 hex.
+
+CORRECÇÃO (bloco <style> 467-1078; JS preservado)
+1. Hierarquia de 3 níveis: 8 pesos do CSS -> 500/600/700. 1 legenda
+   (small cinza) afinada para 400. 1 peso 800 INLINE (L1199) -> 700.
+2. Raios da escala: 9 -> 4. Sombras da escala: 16 -> 6.
+3. 143 cores migradas (CSS + 3 estilos inline). ZERO hex restantes.
+
+LIÇÃO DA ABERTURA APLICADA
+- Verificados os pesos no FICHEIRO INTEIRO. Encontrado 1 peso 800 inline
+  (L1199) fora do <style> e corrigido ANTES do gate. A lição da v130 já
+  está a evitar problemas proactivamente.
+
+PROVA VISUAL
+- permissions-ui-antes-depois.png: papéis de utilizador. Cor por papel
+  preservada (admin roxo, secretaria azul, professor verde); nome do
+  papel domina, descritivo recua.
+
+GATES
+- smoke-regression-pack: 240 -> 243 invariantes.
+- permissions-ui adicionado aos ecrãs auditados.
+- Baseline de mágicos: 5927 -> 5784 (-143).
+- Baseline de tipografia: 171 -> 156 (-15).
+- 12 gates verdes.
+
+MARCO: 22 ecrãs auditados. Desde o início: mágicos 9925 -> 5784; pesos
+não-canónicos 665 -> 156.
+
+PRÓXIMO
+- jardim_presencas (15 pesos), pauta-final (15), whatsapp_central (14)...

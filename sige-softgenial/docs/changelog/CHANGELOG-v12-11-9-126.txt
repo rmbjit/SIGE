@@ -1,0 +1,42 @@
+SIGE SoftGenial v12.11.9.126 - AUDITORIA DE DESIGN (dashboard)
+=============================================================
+
+Dashboard (888 linhas). Caso especial: foi o PILOTO de COR da v108
+(fundação do Design System). Esta versão acrescenta a SEGUNDA camada.
+
+DIAGNÓSTICO
+- CORES: ZERO hex. A migração de cor da v108 (231 hex -> tokens)
+  manteve-se 100% intacta.
+- TIPOGRAFIA: 9 pesos (500-950), 850 (11x), 800 (7x). A v108 focou-se
+  na cor; tipografia/raios/sombras ficaram para a auditoria de design.
+- RAIOS: 13 valores (4 a 38px). SOMBRAS: 22 distintas.
+
+CORRECÇÃO (bloco <style> 404-663; redirects JS preservados)
+1. Hierarquia de 3 níveis: 9 pesos -> 500/600/700.
+2. Raios da escala: 13 -> 5. Sombras da escala: 22 -> 6.
+3. Cores: nada a fazer (v108 já tratou).
+
+DECISÃO CASO-A-CASO
+- .sg-day-meta chama-se "meta" mas é um PILL de destaque (tem background,
+  border-radius:999px, cor de marca), não uma legenda de apoio cinza.
+  MANTIDO a 700 (seria erro afiná-lo a 400 só pelo nome). A verificação
+  caso-a-caso a evitar um erro.
+
+PROVA VISUAL
+- dashboard-tipografia-antes-depois.png: KPIs (cor da v108 preservada) +
+  hierarquia nova. O chip HOJE mantém 700, a legenda ao lado recua.
+
+GATES
+- smoke-regression-pack: 216 -> 219 invariantes. Os 6 invariantes de COR
+  da v108 continuam verdes ao lado dos 3 novos de tipografia - as duas
+  camadas confirmadas.
+- dashboard adicionado aos ecrãs auditados de tipografia.
+- Baseline de mágicos: mantém 6838 (sem cores a migrar).
+- Baseline de tipografia: 274 -> 256 (-18).
+- 12 gates verdes.
+
+MARCO: 16 ecrãs auditados. Desde o início: mágicos 9925 -> 6838; pesos
+não-canónicos 665 -> 256.
+
+PRÓXIMO
+- pautas (18 pesos), acta (18), estatisticas-demograficas (17)...

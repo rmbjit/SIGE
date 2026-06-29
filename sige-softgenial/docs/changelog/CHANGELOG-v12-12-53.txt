@@ -1,0 +1,98 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.53
+Data: 2026-06-23
+Titulo: Fase 4 incr 2 - Onclick de navegacao e template JS para funcoes nomeadas
+Tipo: Incremento de funcionalidade (migracao de inline, a caminho do CSP)
+Base: 12.12.52
+Canal: validated-feature
+
+================================================================
+CONTEXTO
+================================================================
+O CSP em enforcement (incremento final da Fase 4) bloqueia manipuladores de evento
+inline (onclick). Esta versao converte os onclick de NAVEGACAO (abrir recibo, mailto)
+e os gerados em TEMPLATE JS para funcoes nomeadas globais, ligadas pelo despachante
+data-sige-act. Sequencia as vagas anteriores (v12.12.46 a v12.12.52).
+
+================================================================
+DESPACHANTE: data-sige-prevent
+================================================================
+EDIT  assets/sige-ui.js
+      - [data-sige-prevent] -> ev.preventDefault() antes de disparar a funcao.
+        Substitui o "return false" de onclick em links (por exemplo abrir o recibo
+        numa janela sem navegar a pagina). Aditivo; as regras anteriores
+        (data-sige-args, data-sige-arg, data-sige-noargs, data-sige-self e o caso
+        por omissao) ficam inalteradas.
+      - O gate check-inline-frontend passa a exigir data-sige-prevent no despachante.
+
+================================================================
+FUNCOES NOMEADAS GLOBAIS (assets/sige-ui.js)
+================================================================
+  sigeAbrirReciboJanela(el)  -> abre el.href numa janela de recibo
+  sigeIrPara(url)            -> window.location.href = url (ex.: mailto)
+
+================================================================
+CONVERSAO DE ONCLICK (7 trocas em 4 vistas)
+================================================================
+EDIT  admin/academic/aluno-portal-view.php   (2: links de recibo)
+      onclick="window.open(this.href,'ReciboSIGE',...);return false;"
+      -> data-sige-act="sigeAbrirReciboJanela" data-sige-prevent   (href preservado)
+
+EDIT  includes/hub/class-sige-hub-billing.php (3)
+      onclick="window.location.href='mailto:...<?php rawurlencode ?>'"
+      -> data-sige-act="sigeIrPara" data-sige-arg="<?php echo esc_attr('mailto:...' . rawurlencode(...)); ?>"
+      onclick="window.sigeHubBillSnooze()" (x2)
+      -> data-sige-act="sigeHubBillSnooze" data-sige-noargs
+
+EDIT  admin/academic/disciplinas-view.php     (1: template JS)
+      onclick="delCriterio(${c.id}, this)"
+      -> data-sige-act="delCriterio" data-sige-args='[${c.id}]' data-sige-self
+
+EDIT  admin/academic/matriz-view.php           (1: template JS)
+      onclick="removerDaMatriz(${item.id})"
+      -> data-sige-act="removerDaMatriz" data-sige-args='[${item.id}]'
+
+EDIT  tools/check-inline-frontend.php
+      - SIGE_INLINE_ONCLICK_MAX de 171 para 164. style 2051 e script 81 inalterados.
+
+EXCLUIDOS por desenho (vagas proprias, depois):
+  - Cadeias jQuery e IIFE: fecho de modal de clonagem (matriz), reabertura de painel
+    de pendentes (whatsapp). Precisam de reescrita vanilla fiel.
+  - Onclick em ficheiros com janela autonoma ou em popups.
+  - Ficheiros canonicos.
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- Nao toca em regras de calculo nem em ficheiros canonicos.
+- As regras anteriores do despachante ficam inalteradas.
+- Superficie de accao: 199 itens (enforce 33). Vistas: 60. Opcoes: 132.
+- Dependencias externas: 9 (inalteradas). Sem alteracao de esquema.
+- Calculo financeiro byte-identico. Comportamento dos botoes identico.
+- Versao sincronizada nas cinco fontes. Zero travessoes. Ficheiros de codigo em LF.
+
+================================================================
+VALIDACAO
+================================================================
+- node -c assets/sige-ui.js                -> limpo
+- php tools/check-inline-frontend.php        -> OK (onclick 164 de 164, sem folga; data-sige-prevent verificado)
+- php tools/smoke-inline-frontend.php          -> OK
+- php tools/smoke-regression-pack.php            -> OK
+- php tools/diag-responsivo.php                   -> OK (0 antipadroes)
+- php tools/check-governance-docs.php              -> OK (21 documentos v12.12.53)
+- php tools/smoke-release-gate.php                   -> verde a partir de pasta limpa
+- gates de pagamentos, cofre, Fase 1 e Fase 4 incr 1 -> sem regressao
+- extractor de superficie / opcoes / hosts          -> 199 / 132 / 9
+- php -l nas 4 vistas tocadas                        -> limpo
+
+================================================================
+INSTALACAO E REVERSAO
+================================================================
+- Instalacao: backup, desactivar, substituir a pasta sige-softgenial, reactivar.
+- Reversao: reinstalar a versao anterior. Sem alteracao de esquema; reversao directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Cadeias jQuery e IIFE reescritas em vanilla, depois os blocos script inline, e por
+  fim o CSP em enforcement (nonce por pedido e flip do cabecalho).

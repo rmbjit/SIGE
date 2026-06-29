@@ -1,0 +1,14 @@
+v12.15.20 - Recibo respeita a data efectiva do pagamento
+
+- Correccao pontual no modulo de pagamentos.
+- O recibo (individual e consolidado) imprimia a data de registo (data_pagamento = hoje) em vez da data efectiva.
+- O extracto/KPI ja usavam COALESCE(data_efectiva, ...), pelo que o recibo contradizia o extracto.
+- Um pagamento recebido em dia anterior e registado depois saia no recibo com a data de hoje.
+- O recibo individual passa a mostrar a data efectiva como DATA DO PAGAMENTO.
+- Quando a data efectiva difere do registo, acrescenta em pequeno (registado em DD/MM/YYYY HH:MM).
+- O recibo consolidado mostra a data efectiva por linha, com marca ef. discreta e data de registo no title.
+- Novo helper de exibicao sige_fin_recibo_data_efectiva_dia em finance-data-efectiva.php. Provado por 6 cenarios em CLI.
+- Ambos os recibos passam a usar sige_doc_fin_date (wp_date) em vez de date(), corrigindo a violacao de fuso horario nesses pontos.
+- Nao altera formulas, valores, saldos nem queries financeiras.
+- data_pagamento (carimbo de registo) continua intocado; muda-se so qual data o recibo exibe.
+- Acrescentado o gate check-recibo-data-efectiva-v12-15-20 e registado no corredor.

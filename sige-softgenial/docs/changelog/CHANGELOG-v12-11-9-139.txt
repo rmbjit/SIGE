@@ -1,0 +1,39 @@
+SIGE SoftGenial v12.11.9.139 - AUDITORIA DE DESIGN (financeiro-devedores)
+========================================================================
+
+Lista de devedores / cobrança (1872 linhas). Dinheiro em falta  - 
+semântica de dívida sagrada.
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 8 pesos, muito pesado: 900 (11x), 850 (9x), 800 (7x).
+  Pesos inline no corpo (700) já canónicos.
+- RAIOS: 12 valores. SOMBRAS: 25 (segundo maior). CORES: 149 hex.
+
+CORRECÇÃO (bloco <style> 466-1205; JS e template de impressão preservados)
+1. Hierarquia de 3 níveis: 8 pesos -> 500/600/700.
+2. Raios da escala: 12 -> 4. Sombras da escala: 25 -> 7.
+3. 212 cores migradas (CSS + corpo HTML). Inclui semântica de dívida:
+   .sige-debt-amount (valor da dívida, vermelho) -> danger;
+   .cobranca_formal (laranja-aviso) -> warning; .sgcc-kpi-debt vermelho.
+   Tudo preservando o significado. PRESERVADOS: template de impressão
+   ("Lista de Cobrança", <!doctype> com <style> próprio e @media print, 7
+   hex) e tema (--sg-theme-primary com fallback). ZERO hex de estilo
+   restantes (só template).
+
+PROVA VISUAL
+- financeiro-devedores-antes-depois.png: lista de cobrança. Valor em
+  dívida vermelho preservado, tipo de cobrança (formal laranja, lembrete
+  neutro); nome e valor destacam-se, detalhe recua.
+
+GATES
+- smoke-regression-pack: 268 -> 273 invariantes.
+- financeiro-devedores adicionado aos ecrãs auditados.
+- Baseline de mágicos: 4920 -> 4708 (-212).
+- Baseline de tipografia: 73 -> 61 (-12).
+- 12 gates verdes.
+
+MARCO: 29 ecrãs auditados. Desde o início: mágicos 9925 -> 4708; pesos
+não-canónicos 665 -> 61.
+
+PRÓXIMO
+- turmas (12 pesos), auditoria_notas (12), dec (11)...

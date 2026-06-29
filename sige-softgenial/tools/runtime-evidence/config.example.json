@@ -1,0 +1,123 @@
+{
+  "schema": "sige-runtime-evidence-v12.16.1",
+  "baseUrlEnv": "SIGE_EVIDENCE_BASE_URL",
+  "allowProductionEnv": "SIGE_EVIDENCE_ALLOW_PRODUCTION",
+  "outputDir": "artifacts/runtime-evidence",
+  "timeoutMs": 15000,
+  "viewports": [
+    {
+      "name": "mobile-360",
+      "width": 360,
+      "height": 740
+    },
+    {
+      "name": "mobile-390",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "name": "mobile-430",
+      "width": 430,
+      "height": 932
+    },
+    {
+      "name": "tablet-768",
+      "width": 768,
+      "height": 1024
+    },
+    {
+      "name": "desktop-1366",
+      "width": 1366,
+      "height": 768
+    }
+  ],
+  "roles": [
+    {
+      "role": "administrador",
+      "storageStateEnv": "SIGE_EVIDENCE_STORAGE_ADMINISTRADOR",
+      "views": [
+        "dashboard",
+        "config_center",
+        "sige_core_status",
+        "sige_permissoes"
+      ]
+    },
+    {
+      "role": "director",
+      "storageStateEnv": "SIGE_EVIDENCE_STORAGE_DIRECTOR",
+      "views": [
+        "dashboard",
+        "alunos_lista",
+        "turmas",
+        "financeiro-dashboard"
+      ]
+    },
+    {
+      "role": "financeiro",
+      "storageStateEnv": "SIGE_EVIDENCE_STORAGE_FINANCEIRO",
+      "views": [
+        "financeiro-dashboard",
+        "financeiro-pagamentos",
+        "financeiro-extratos",
+        "financeiro-devedores"
+      ]
+    },
+    {
+      "role": "secretaria",
+      "storageStateEnv": "SIGE_EVIDENCE_STORAGE_SECRETARIA",
+      "views": [
+        "dashboard",
+        "alunos_lista",
+        "aluno_portal",
+        "turmas"
+      ]
+    },
+    {
+      "role": "professor",
+      "storageStateEnv": "SIGE_EVIDENCE_STORAGE_PROFESSOR",
+      "views": [
+        "minhas_turmas",
+        "notas",
+        "pautas"
+      ],
+      "mustNotContain": [
+        "#038;view",
+        "&#038;view"
+      ]
+    },
+    {
+      "role": "guarda",
+      "storageStateEnv": "SIGE_EVIDENCE_STORAGE_GUARDA",
+      "views": [
+        "portaria"
+      ],
+      "mustNotContain": [
+        "Matriz de permissões activa"
+      ]
+    },
+    {
+      "role": "encarregado",
+      "storageStateEnv": "SIGE_EVIDENCE_STORAGE_ENCARREGADO",
+      "views": [
+        "aluno_portal"
+      ]
+    },
+    {
+      "role": "aluno",
+      "storageStateEnv": "SIGE_EVIDENCE_STORAGE_ALUNO",
+      "views": [
+        "aluno_portal"
+      ]
+    }
+  ],
+  "fatalMarkers": [
+    "Fatal error",
+    "Parse error",
+    "Warning:",
+    "Critical error",
+    "Erro crítico",
+    "white screen",
+    "#038;view",
+    "&#038;view"
+  ]
+}

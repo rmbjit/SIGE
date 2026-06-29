@@ -1,0 +1,31 @@
+DEPLOY - SIGE SoftGenial v12.12.30
+Fase 9 incremento 3: Sobreposicao reversivel do papel WordPress
+Data: 2026-06-22
+
+O QUE MUDA NESTA VERSAO
+- A forma como o sistema mexe no papel WordPress de um utilizador ao atribuir-lhe um perfil SIGE passa a ser reversivel e nao destrutiva.
+- Antes: atribuir um perfil SIGE a um utilizador (que nao seja administrador) substituia o papel WordPress dele por um papel sige_*, e o papel original perdia-se para sempre; remover o perfil depois nao repunha nada, e a pessoa ficava num papel sige_* desactualizado.
+- Agora: ao atribuir um perfil SIGE, o papel WordPress original e guardado numa copia antes de ser substituido. Ao remover o perfil SIGE, o papel original e reposto e a copia e limpa. Se o perfil sair por outra via, a pessoa deixa de ficar presa num papel sige_*: na sessao seguinte, o sistema repoe o papel original sozinho.
+- Os menus continuam a funcionar como antes enquanto o perfil esta activo. O administrador do sistema (administrador WordPress) nunca e tocado.
+
+PASSOS DE INSTALACAO (CloudPanel / File Manager)
+1. Faca uma copia de seguranca do plugin actual e da base de dados (rotina normal).
+2. Em Plugins, desactive o SIGE SoftGenial (nao apague: os dados ficam).
+3. Substitua a pasta do plugin pelo conteudo deste ZIP (a pasta sige-softgenial na raiz do ZIP). Em alternativa, instale o ZIP por cima pela administracao do WordPress.
+4. Reactive o plugin. Nao ha migracao de base de dados nesta versao: a copia do papel original e guardada em user meta, a medida que cada utilizador e atribuido ou removido.
+
+VERIFICACAO RAPIDA (5 minutos)
+1. Crie ou escolha um utilizador comum com um papel WordPress conhecido (por exemplo, subscritor). Atribua-lhe um perfil SIGE em Perfis e Permissoes.
+2. Confirme (por exemplo, na ficha de utilizador do WordPress) que ele passou ao papel sige_* correspondente, como antes.
+3. Remova o perfil SIGE desse utilizador. Confirme que ele voltou ao papel WordPress original (o que tinha antes da atribuicao), e que a mensagem diz que o papel original foi reposto.
+4. Confirme que um administrador do sistema, ao receber e perder um perfil SIGE (caso de teste), nunca tem o seu papel alterado por este modulo (continua protegido, como na versao anterior).
+
+NOTAS
+- Sem migracao de esquema: a versao do esquema nao muda. A copia do papel original vive em user meta.
+- Sem alteracoes a regras de calculo financeiro ou academico.
+- Sem novo ecra e sem nova superficie de accao: o inventario de seguranca mantem-se em 199 accoes (33 em modo enforce).
+- Estado legado: utilizadores que ja estavam num papel sige_* de versoes anteriores nao tem copia do original guardada. Quando forem removidos, sao repostos para o papel por omissao do WordPress (um estado limpo), em vez de ficarem presos no papel sige_*.
+- Nota tecnica: a variante totalmente aditiva (nunca tocar no papel WordPress e conceder as capacidades em tempo de execucao) e uma mudanca maior, a validar com um ambiente de teste a serio; esta versao ja remove o risco de bloqueio e de perda do papel ao tornar a operacao reversivel.
+
+REVERSAO
+- Reinstale o pacote da versao anterior (v12.12.29). Esta versao nao altera esquema; a reversao do codigo nao deixa o sistema inconsistente (as copias em user meta ficam, inertes).

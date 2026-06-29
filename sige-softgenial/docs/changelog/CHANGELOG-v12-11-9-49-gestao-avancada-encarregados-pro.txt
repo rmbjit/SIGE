@@ -1,0 +1,28 @@
+SIGE SoftGenial v12.11.9.49 - Gestão Avançada de Encarregados PRO
+
+Escopo
+- Evolução do módulo Alunos e Matrículas para gestão avançada de encarregados.
+- Mantém a Ficha 360º e o Índice de Qualidade dos Dados já validados.
+
+Implementado
+- Campo de encarregado principal: pai/mãe/política padrão, pai, mãe ou outro encarregado.
+- Canal preferencial de comunicação: WhatsApp, e-mail, chamada ou SMS.
+- Consentimentos separados para WhatsApp, e-mail, chamada e SMS.
+- Dados de outro encarregado principal, quando aplicável: nome, parentesco, telemóvel e e-mail.
+- Contacto alternativo: nome, parentesco e telemóvel.
+- Pessoa autorizada a buscar o aluno: nome, parentesco, telemóvel e documento.
+- Observações controladas sobre comunicação/autorização.
+- Validação client-side e server-side de números móveis moçambicanos.
+- Ficha 360º passa a apresentar resumo minimizado da gestão avançada de encarregados.
+- Índice de Qualidade dos Dados passa a considerar encarregado principal, canal preferencial e autorização de recolha.
+- Helpers de notificação passam a respeitar consentimento explícito, preservando comportamento legado quando a coluna ainda não existe.
+
+Segurança e privacidade
+- Sem exposição técnica adicional na Ficha 360º.
+- Sem alteração de regras académicas ou financeiras.
+- Sem alteração em notas, pautas, boletins, DEC, pagamentos, mensalidades, multas, recibos, importação de alunos, histórico de lotes ou anulação segura.
+- Migração defensiva: novas colunas só são usadas quando existem; bases antigas não quebram.
+
+Validação
+- Sintaxe PHP validada nos ficheiros alterados.
+- Smoke test específico da versão v12.11.9.49.

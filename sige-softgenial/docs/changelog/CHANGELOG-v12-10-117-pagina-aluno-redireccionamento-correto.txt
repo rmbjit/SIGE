@@ -1,0 +1,50 @@
+SIGE SoftGenial v12.10.117 - Página do Aluno: Redireccionamento Correcto
+
+Base
+- Construído por cima da v12.10.116 - Página do Aluno: Dívida e Modo Leitura.
+
+Problema corrigido
+- O sistema ainda redireccionava encarregados/alunos para o endpoint antigo:
+  /portal-do-aluno/
+- Esse modelo dependia de uma página WordPress/shortcode antigo e já não corresponde à nova Página do Aluno integrada no App Shell.
+
+Nova regra canónica
+- A Página do Aluno correcta passa a ser sempre:
+  admin.php?page=sige-app&view=aluno_portal&aluno_id=ID_DO_ALUNO
+- O aluno_id é obtido a partir do utilizador logado, usando os metadados:
+  - sige_aluno_id
+  - aluno_id
+  - sige_portal_aluno_id
+
+Correções aplicadas
+1. Login
+- Encarregado/aluno deixa de ir para /portal-do-aluno/.
+- Após login, passa a ir para a view integrada aluno_portal.
+
+2. Endpoint antigo
+- Qualquer tentativa de abrir /portal-do-aluno/ ou /portal-aluno/ redirecciona automaticamente para a Página do Aluno integrada.
+- Se o utilizador não estiver autenticado, é enviado para login com redirect_to apontando para a Página do Aluno correcta.
+
+3. Página principal da escola
+- Se um encarregado/aluno logado abrir o domínio principal da escola, também é encaminhado para a Página do Aluno integrada.
+
+4. Bloqueio do backend
+- Encarregado/aluno pode aceder apenas a:
+  admin.php?page=sige-app&view=aluno_portal
+- Qualquer tentativa de abrir outro ecrã administrativo redirecciona de volta para a Página do Aluno.
+
+5. Escopo do aluno
+- Mesmo que alguém tente alterar aluno_id no URL, o portal usa o aluno associado ao utilizador logado.
+- Staff autorizado continua a poder abrir a página de qualquer aluno a partir da Gestão de Alunos.
+
+6. Compatibilidade
+- O ficheiro portal-logic.php foi mantido como compatibilidade.
+- Shortcodes/páginas antigas que ainda chamem sige_render_portal_aluno() passam a orientar para a Página do Aluno integrada.
+
+Garantias
+- Mantém bloqueio de notas/boletins por dívida.
+- Mantém modo leitura.
+- Sem alterar base de dados.
+- Sem alterar pagamentos, mensalidades, multas ou recibos.
+- Sem alterar notas, Pauta, DEC, ACTA ou boletins.
+- Sem alterar regras académicas.

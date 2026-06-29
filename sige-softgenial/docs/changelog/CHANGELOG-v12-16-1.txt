@@ -1,0 +1,28 @@
+SIGE SoftGenial v12.16.1
+============================
+
+Runtime Evidence & Technical Debt Closure.
+
+Escopo aplicado:
+- Suite de evidência browser preparada em tools/runtime-evidence.
+- Gates v12.16.1 ligados ao corredor oficial.
+- Contrato de shell reforçado para allowlist, rotas e matriz de permissões.
+- Manifesto BUILD.json enriquecido com origem v12.16.0, hash, contratos protegidos e honestidade de QA.
+- Duplicados historicos da allowlist removidos sem alterar o conjunto unico de views.
+- Documentos de charter, DoD, riscos, QA, staging, rollback e rastreabilidade adicionados.
+
+Contratos protegidos:
+- Sem alteração de formulas financeiras.
+- Sem alteração de formulas académicas.
+- Sem alteração de schema ou dados historicos.
+- Sem alargamento de permissões reais.
+- Sem refactor de alunos_lista.php.
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+- run-gates executado antes do ZIP final.
+- release gate executado antes do ZIP final.
+- unzip -t executado no ZIP final.

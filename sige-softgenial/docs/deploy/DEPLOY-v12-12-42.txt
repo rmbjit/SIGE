@@ -1,0 +1,70 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.42
+Data: 2026-06-22
+Titulo: Fase 3 - Reconciliacao de pagamentos digitais - resolucao com escrita (quatro-olhos)
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+A reconciliacao passa a ser accionavel, mas com CONTROLO DUPLO (quatro-olhos). Na
+area de Pagamentos Moveis e agora possivel:
+1. PROPOR conciliar uma transacao pendente (registar o pagamento).
+2. PROPOR rejeitar uma transacao (por exemplo, uma que o gateway diz ter falhado).
+
+A proposta NAO e executada de imediato. Fica a aguardar a aprovacao de um SEGUNDO
+utilizador autorizado, que decide em Aprovacoes. Quem propoe nao pode aprovar a sua
+propria proposta: sao sempre precisas duas pessoas. So depois da aprovacao e que o
+pagamento e registado (pelo caminho normal do sistema) ou a transacao e rejeitada.
+
+Os botoes directos de Conciliar e Rejeitar continuam a existir, exactamente como
+antes. A novidade e o caminho com quatro-olhos, para quando se quer uma segunda
+confirmacao.
+
+Seguranca: o registo do pagamento usa sempre o caminho normal do sistema; esta
+funcionalidade nunca calcula valores por fora. No momento da aprovacao, o sistema
+volta a verificar o estado da transacao (pode ter mudado entretanto): nao concilia
+duas vezes e nunca rejeita uma transacao que ja foi conciliada.
+
+================================================================
+QUEM PODE PROPOR E APROVAR
+================================================================
+- Propor e aprovar exigem a mesma permissao que ja era necessaria para gerir os
+  pagamentos moveis (Direccao e Secretaria Geral). Nao ha permissoes novas.
+- A separacao e por utilizador: o segundo aprovador tem de ser uma pessoa diferente
+  de quem propos.
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+
+================================================================
+VERIFICACAO
+================================================================
+1. Em Pagamentos Moveis, confirme que a seccao "Resolucao com quatro-olhos" aparece
+   por baixo da lista de transacoes, com as transacoes pendentes.
+2. Com um utilizador, proponha conciliar ou rejeitar uma transacao pendente: deve
+   surgir a mensagem de que o pedido ficou a aguardar aprovacao.
+3. Confirme que o MESMO utilizador NAO consegue aprovar o seu proprio pedido em
+   Aprovacoes (e necessario um segundo utilizador autorizado).
+4. Com um segundo utilizador, aprove o pedido em Aprovacoes: a transacao deve ficar
+   conciliada (pagamento registado) ou rejeitada, conforme o pedido.
+5. Confirme que os botoes directos de Conciliar e Rejeitar continuam a funcionar.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera o
+esquema da base de dados, pelo que a reversao e directa. Pedidos de aprovacao ja
+criados ficam no registo de aprovacoes.
+
+================================================================
+A SEGUIR (FASE 3)
+================================================================
+- Ajuste dos codigos de falha do gateway com base no sandbox das operadoras.
+- Opcionalmente, escolha de um lancamento especifico na proposta de conciliacao com
+  quatro-olhos (hoje usa a correspondencia automatica).

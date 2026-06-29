@@ -1,0 +1,65 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.44
+Data: 2026-06-23
+Titulo: Fase 3 - Ajuste fino dos codigos e estados por operadora
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+A verificacao automatica das transacoes contra o gateway passa a ser afinavel por
+operadora. Ate agora, as regras que decidem se uma transacao foi confirmada ou
+falhou eram comuns ao M-Pesa e ao e-Mola. A partir desta versao, cada operadora tem
+o seu proprio conjunto de estados e codigos, com defaults sensatos:
+
+- M-Pesa (Vodacom): o sistema le o estado real da transacao (por exemplo, Completed)
+  que o M-Pesa devolve. Um pedido de consulta com sucesso nao significa, por si so,
+  que a transacao foi paga; o que conta e o estado da transacao.
+- e-Mola (Movitel): mantem-se conservador (na duvida, fica a rever), porque a
+  documentacao oficial da consulta ainda nao esta disponivel.
+
+Continua a valer a regra de seguranca: se o estado nao for claro, a transacao fica
+"a rever" e nunca e dada por falsa sem certeza. Nada disto altera valores nem regras
+financeiras.
+
+================================================================
+AFINACAO POR OPERADORA (OPCIONAL, PARA TECNICOS)
+================================================================
+As listas passam a poder ser afinadas por operadora, com um unico filtro que recebe
+o nome da operadora ("mpesa" ou "emola"):
+  sige_mpesa_estados_sucesso(lista, operadora)
+  sige_mpesa_estados_falha(lista, operadora)
+  sige_mpesa_codigos_falha(lista, operadora)
+Assim, uma regra definida para uma operadora nao afecta a outra. Isto permite afinar
+os valores exactos de cada operadora apos os testes de sandbox, sem mexer no codigo
+do plugin e sem precisar de uma nova versao.
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+
+================================================================
+VERIFICACAO
+================================================================
+1. O ecra de Pagamentos Moveis e a reconciliacao continuam a funcionar como antes.
+2. Com um gateway configurado, a verificacao diaria continua a registar divergencias,
+   agora classificadas com as regras da operadora correspondente.
+3. Nao ha alteracoes visiveis de interface alem do comportamento mais exacto da
+   verificacao; nenhum pagamento e alterado por esta versao (a verificacao e so
+   leitura).
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera o
+esquema da base de dados, pelo que a reversao e directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Ajuste fino definitivo dos valores exactos de cada operadora, com o sandbox. A
+  estrutura ja esta pronta: basta um filtro por operadora.

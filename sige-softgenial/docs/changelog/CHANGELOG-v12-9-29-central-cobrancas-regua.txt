@@ -1,0 +1,19 @@
+SIGE SoftGenial v12.9.29 - Central de Cobranças: Régua de Cobrança
+
+Base: v12.9.28 validada.
+
+Alterações incrementais:
+- Adicionada régua operacional de cobrança na Central de Cobranças.
+- Novas categorias: Lembrete cordial, Cobrança formal, Aviso prioritário e Actualizar contacto.
+- Novo filtro por Régua de Cobrança.
+- Novos botões de selecção inteligente por régua: Aviso prioritário e Cobrança formal.
+- A tabela passa a mostrar a régua recomendada por aluno, com orientação operacional.
+- A lista de cobrança para impressão passa a incluir a régua e orientação de abordagem.
+- O resumo operacional da selecção passa a destacar casos de aviso prioritário e cobrança formal.
+
+Garantias:
+- Não altera fórmulas financeiras.
+- Não altera fórmulas académicas.
+- Não altera lançamentos, pagamentos, estornos ou saldos.
+- Não altera o motor WhatsApp/e-mail; apenas orienta a operação antes do envio.
+- Não cria novas tabelas.

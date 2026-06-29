@@ -1,0 +1,17 @@
+SIGE SoftGenial v12.9.44 - Email Templates em Mensalidades e Cobranças
+
+Base: v12.9.43 validada.
+
+Melhorias:
+- Lançamento de mensalidades passa a usar o template "Mensalidade emitida" pela fila PRO.
+- Cobrança de devedores passa a usar o template "Cobrança amigável" pela fila PRO.
+- Lembretes financeiros automáticos passam também pela fila, usando o template de cobrança amigável.
+- Mantido fallback legado apenas para ambientes onde a fila/templates não estejam carregados.
+- Mantido SMTP nativo, Reply-To, From Name e integração de pagamentos já validada.
+
+Teste recomendado:
+1. Editar template "Mensalidade emitida".
+2. Lançar mensalidade com notificação por e-mail.
+3. Editar template "Cobrança amigável".
+4. Enviar cobrança de devedores por e-mail.
+5. Confirmar que os e-mails recebidos usam os templates novos.

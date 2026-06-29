@@ -1,0 +1,21 @@
+SIGE SoftGenial v12.10.16 - Relatório Mensal: Harmonia Visual
+
+Objectivo
+- Alinhar o módulo Relatório Mensal ao padrão visual já aprovado no Painel Principal e nos módulos financeiros anteriores.
+
+Melhorias visuais
+- Novo hero claro e amplo para o Relatório Mensal.
+- Remoção da duplicação de cabeçalho nesta página.
+- KPIs redesenhados para total líquido, bruto, estornos e taxa de cobrança.
+- Filtro de mês e centro reorganizado em barra visual consistente.
+- Tabela de movimentos por dia redesenhada com badges de estado e leitura mais limpa.
+- Bloco de taxa de cobrança reorganizado com barra de progresso e cartões de apoio.
+- Despesas do mês e balanço mensal harmonizados com o mesmo padrão visual.
+- Tabelas preparadas para rolagem horizontal controlada em ecrãs pequenos.
+
+Garantias
+- Sem alteração de fórmulas financeiras.
+- Sem alteração de mensalidades, multas, descontos, pagamentos, cobranças, recibos, estornos ou base de dados.
+- Sem alteração de notas, pautas, DEC, boletins ou regras académicas.
+- Ícones continuam visíveis e consistentes.
+- Mantida a abordagem mobile-friendly.

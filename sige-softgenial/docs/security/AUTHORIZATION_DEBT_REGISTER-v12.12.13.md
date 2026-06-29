@@ -1,0 +1,15 @@
+# AUTHORIZATION DEBT REGISTER - v12.12.13
+
+## current_user_can
+Divida legada de current_user_can inalterada (475). Os guards de tenant nao introduzem current_user_can; sao ortogonais a autorizacao e correm depois da verificacao de permissao existente.
+
+## sige_can
+sige_can inalterado (60). Nenhuma verificacao de permissao foi alterada.
+
+## baseline
+Baseline em AUTHORIZATION_DEBT_BASELINE-v12.12.11.json (sige_can 60, current_user_can 475), igual a v12.12.8.
+
+## v12.12.13 (painel de controlo de seguranca MFA)
+
+- Sem nova divida de autorizacao. O acesso ao painel usa o gate canonico sige_is_real_wp_admin_user (so administrator/super admin real), e nao um perfil ou capacidade SIGE. O filtro existente que retira capacidades tecnicas aos perfis SIGE continua a aplicar-se.
+- O endpoint admin_post:sige_mfa_settings_save tem legacy_caps apenas ['administrator'] (sem perfis SIGE) e o handler recusa qualquer nao-super-admin com wp_die 403.

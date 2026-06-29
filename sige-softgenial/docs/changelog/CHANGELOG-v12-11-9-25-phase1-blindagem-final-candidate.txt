@@ -1,0 +1,49 @@
+SIGE SoftGenial v12.11.9.25 - Fase 1 Blindagem Final Candidate
+Data: 2026-05-31
+Canal: test
+
+Objectivo
+- Fechar tecnicamente a Fase 1 - Blindagem imediata no código, mantendo o pacote em canal test até validação final em staging.
+
+Intervenções
+1) Tenant guard alargado
+- A guarda central passa a validar mais campos sensíveis: acta_id, nota_id, queue_id, id_vinculo, turma_disciplina_id.
+- Campos genéricos id/ids/user_id passam a ter mapas por acção, incluindo equipa/RH, WhatsApp queue, matriz curricular e impressões internas.
+- user_id de colaboradores/portal passa a ser validado contra a escola actual usando meta, professor_id/e-mail em sige_professores ou aluno vinculado.
+
+2) Impressões internas autenticadas
+- ?sige_print=recibo, recibo_massa, factura e extracto passam por validação tenant explícita também em template_redirect.
+- Isto cobre links de impressão que não disparam admin_init.
+
+3) Recibos públicos/WhatsApp
+- A geração de novos links públicos deixa de gerar URL quando o recibo é ambíguo.
+- Recibos agrupados/familiares exigem aluno_id resolvido com segurança.
+- Links continuam públicos, sem login, mas com token tenant-aware/aluno-aware.
+
+4) Documentos do aluno
+- O portal antigo em includes/portal-logic.php passa a usar o endpoint autenticado sige_secure_document_download.
+- O portal novo já usava o endpoint seguro.
+
+5) Anexos RH/equipa
+- Novo endpoint autenticado: sige_secure_staff_document_download.
+- Suporta doc_bi, doc_cv e doc_cert.
+- Valida login, nonce, escola actual, permissão RH/equipa e ficheiro local em uploads.
+- AJAX de detalhe sensível passa a disponibilizar docs_secure para consumo seguro.
+
+6) Backup/restauro
+- Directório sige-secure-backups reforçado com .htaccess, web.config, index.php e index.html.
+- Snapshots JSON passam a ter manifest interno com versão, site, data e schema.
+- Adicionado snapshot leve da escola antes de restauro de configuração.
+- Adicionada limpeza automática de snapshots antigos por retenção configurável.
+
+Validação
+- PHP lint completo sem erros.
+- Smoke test Phase 1 final sem falhas.
+- ZIP validado com unzip -t.
+
+Não alterado
+- Fórmulas financeiras.
+- Fórmulas académicas.
+- Cálculo de notas.
+- Cálculo de mensalidades.
+- Multas, descontos, pautas e boletins.

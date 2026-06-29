@@ -1,0 +1,592 @@
+/*
+ * SIGE SoftGenial v12.15.11 - Alunos: Stability Rollback + Safe Modal Layering
+ * Escopo: somente body.sige-admin-app.sige-view-alunos_lista.
+ * Regra: não normalizar globalmente botões, inputs, tabelas, modais ou cards de outros módulos.
+ */
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page {
+    --sg-alunos-surface: var(--color-white);
+    --sg-alunos-muted-surface: var(--color-slate-50);
+    --sg-alunos-line: rgba(226, 232, 240, .92);
+    --sg-alunos-ink: var(--color-ink-900);
+    --sg-alunos-muted: var(--color-slate-600);
+    --sg-alunos-primary: var(--sg-theme-primary, var(--color-brand-500));
+    --sg-alunos-primary-strong: var(--sg-theme-primary-800, var(--color-brand-700));
+    --sg-alunos-soft: var(--sg-theme-soft, var(--color-brand-50));
+    --sg-alunos-radius: var(--radius-xl);
+    --sg-alunos-radius-sm: var(--radius-lg);
+    --sg-alunos-shadow: var(--shadow-md);
+    --sg-alunos-shadow-hover: var(--shadow-lg);
+    color: var(--sg-alunos-ink);
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page > *,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-card,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-toolbar,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-modal-content {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-toolbar,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-results-counter,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-empty-state,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-card,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-stat-card {
+    border: 1px solid var(--sg-alunos-line) !important;
+    box-shadow: var(--sg-alunos-shadow) !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero {
+    border-radius: var(--sg-alunos-radius) !important;
+    background: linear-gradient(135deg, var(--sg-alunos-surface) 0%, var(--sg-alunos-surface) 52%, var(--sg-alunos-soft) 100%) !important;
+    overflow: hidden !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero h1,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-nome,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-stat-value {
+    color: var(--sg-alunos-ink) !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    hyphens: auto !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero-subtitle,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-processo,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-stat-label,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-results-counter {
+    color: var(--sg-alunos-muted) !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-toolbar {
+    border-radius: var(--sg-alunos-radius) !important;
+    background: var(--sg-alunos-surface) !important;
+    display: grid !important;
+    grid-template-columns: minmax(260px, 1fr) minmax(160px, .32fr) minmax(160px, .32fr) auto auto !important;
+    gap: var(--space-3) !important;
+    align-items: center !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-toolbar .sige-search-box,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-toolbar .sige-search-box input,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-toolbar .sige-filter-select {
+    min-width: 0 !important;
+    width: 100% !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-search-box input,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-filter-select {
+    border-radius: var(--sg-alunos-radius-sm) !important;
+    border-color: var(--sg-alunos-line) !important;
+    background-color: var(--sg-alunos-muted-surface) !important;
+    min-height: 48px !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-btn-hero,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-btn-toolbar {
+    border-radius: var(--sg-alunos-radius-sm) !important;
+    min-height: 46px !important;
+    touch-action: manipulation !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-btn-toolbar.btn-search,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-toolbar .btn-search {
+    background: linear-gradient(135deg, var(--sg-alunos-primary), var(--sg-alunos-primary-strong)) !important;
+    color: var(--color-white) !important;
+    border-color: transparent !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-stats-grid {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: var(--space-4) !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-stat-card {
+    border-radius: var(--sg-alunos-radius) !important;
+    background: var(--sg-alunos-surface) !important;
+    min-width: 0 !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)) !important;
+    gap: var(--space-5) !important;
+    align-items: stretch !important;
+    position: relative !important;
+    overflow: visible !important;
+    isolation: isolate !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-card {
+    position: relative !important;
+    z-index: auto !important;
+    display: grid !important;
+    grid-template-columns: 82px minmax(0, 1fr) !important;
+    grid-auto-rows: min-content !important;
+    column-gap: var(--space-4) !important;
+    row-gap: var(--space-3) !important;
+    align-items: start !important;
+    border-radius: var(--sg-alunos-radius) !important;
+    background: var(--sg-alunos-surface) !important;
+    min-height: 154px !important;
+    overflow: visible !important;
+    padding: var(--space-5) var(--space-6) !important;
+    transition: border-color var(--duration-normal) ease, box-shadow var(--duration-normal) ease, transform var(--duration-normal) ease !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-card:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: var(--sg-alunos-shadow-hover) !important;
+    border-color: rgba(var(--sg-theme-primary-rgb, 90, 63, 214), .24) !important;
+    z-index: var(--z-dropdown) !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista.sige-alunos-actions-open .sige-alunos-page .sige-aluno-card:not(.sige-card-actions-open):hover {
+    z-index: var(--z-dropdown) !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-card.sige-card-actions-open,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-card:has(> details.sige-card-actions[open]) {
+    z-index: var(--z-popover) !important;
+    isolation: isolate !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-foto {
+    width: 78px !important;
+    height: 78px !important;
+    border-radius: var(--sg-alunos-radius-sm) !important;
+    object-fit: cover !important;
+    flex: 0 0 auto !important;
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-info {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    padding-right: 66px !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-nome {
+    max-width: 100% !important;
+    padding-right: 0 !important;
+    line-height: 1.28 !important;
+    margin-bottom: 6px !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-tags {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: var(--space-2) !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-tag-turma,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-status-badge,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-data-quality-badge,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-finance-badge,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-tag-transporte,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-wa-btn {
+    max-width: 100% !important;
+    min-width: 0 !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    border-radius: var(--radius-pill) !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-mobile-card-actions-row {
+    display: none !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page details.sige-card-actions {
+    position: absolute !important;
+    top: 18px !important;
+    right: 18px !important;
+    display: block !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    z-index: var(--z-dropdown) !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page details.sige-card-actions[open] {
+    z-index: var(--z-popover) !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page details.sige-card-actions > summary {
+    list-style: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    padding: 0 !important;
+    border-radius: var(--radius-md) !important;
+    border: 1px solid var(--sg-alunos-line) !important;
+    background: var(--sg-alunos-surface) !important;
+    color: var(--sg-alunos-primary) !important;
+    box-shadow: var(--shadow-sm) !important;
+    cursor: pointer !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page details.sige-card-actions > summary::-webkit-details-marker {
+    display: none !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page details.sige-card-actions > summary::marker {
+    content: "" !important;
+    font-size: 0 !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page details.sige-card-actions[open] > summary,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page details.sige-card-actions > summary:hover {
+    color: var(--color-white) !important;
+    background: linear-gradient(135deg, var(--sg-alunos-primary), var(--sg-alunos-primary-strong)) !important;
+    border-color: transparent !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page details.sige-card-actions .sige-actions-trigger-label {
+    display: none !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page details.sige-card-actions:not([open]) > .sige-actions-menu {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page details.sige-card-actions[open] > .sige-actions-menu {
+    position: absolute !important;
+    top: 48px !important;
+    right: 0 !important;
+    z-index: var(--z-popover) !important;
+    pointer-events: auto !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: var(--space-2) !important;
+    width: min(278px, calc(100vw - 52px)) !important;
+    min-width: 240px !important;
+    padding: var(--space-2) !important;
+    border-radius: var(--sg-alunos-radius-sm) !important;
+    border: 1px solid var(--sg-alunos-line) !important;
+    background: var(--sg-alunos-surface) !important;
+    box-shadow: var(--shadow-lg) !important;
+    overflow: visible !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-actions-menu:before {
+    display: none !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-actions-menu .sige-btn-action {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: var(--space-3) !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 42px !important;
+    min-height: 42px !important;
+    padding: 0 var(--space-3) !important;
+    border-radius: var(--radius-md) !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-actions-menu .sige-btn-action svg {
+    width: 18px !important;
+    height: 18px !important;
+    flex: 0 0 18px !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-actions-menu .sige-action-label {
+    display: inline !important;
+    font-size: var(--fs-sm) !important;
+    font-weight: 700 !important;
+    line-height: 1.15 !important;
+    color: currentColor !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-empty-state {
+    border-radius: var(--sg-alunos-radius) !important;
+    padding: clamp(var(--space-10), 7vw, calc(var(--space-10) + var(--space-8))) var(--space-6) !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-modal {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-modal-content {
+    max-height: calc(100vh - 34px) !important;
+    overflow: hidden !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-modal-body {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page a:focus-visible,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page button:focus-visible,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page input:focus-visible,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page select:focus-visible,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page textarea:focus-visible,
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page summary:focus-visible {
+    outline: 3px solid rgba(var(--sg-theme-primary-rgb, 90, 63, 214), .32) !important;
+    outline-offset: 3px !important;
+}
+
+@media (max-width: 1360px) {
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-toolbar {
+        grid-template-columns: minmax(260px, 1fr) minmax(150px, .42fr) minmax(150px, .42fr) !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-toolbar > .sige-btn-toolbar,
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-toolbar > a.sige-btn-toolbar {
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 1180px) {
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-card {
+        grid-template-columns: 78px minmax(0, 1fr) !important;
+        padding: calc(var(--space-4) + var(--space-1) / 2) !important;
+    }
+}
+
+@media (min-width: 901px) and (max-width: 1180px) {
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-grid {
+        grid-template-columns: repeat(2, minmax(360px, 1fr)) !important;
+    }
+}
+
+@media (max-width: 900px) {
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-toolbar {
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        gap: var(--space-3) !important;
+        padding: calc(var(--space-3) + var(--space-1) / 2) !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-toolbar .sige-search-box {
+        grid-column: 1 / 2 !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-mobile-filter-toggle {
+        grid-column: 2 / 3 !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-toolbar > select,
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-toolbar > .sige-btn-toolbar,
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-toolbar > a.sige-btn-toolbar {
+        grid-column: 1 / -1 !important;
+        width: 100% !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-card {
+        grid-template-columns: 74px minmax(0, 1fr) !important;
+        row-gap: var(--space-3) !important;
+        column-gap: calc(var(--space-3) + 1px) !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-info {
+        padding-right: 0 !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-mobile-card-actions-row {
+        grid-column: 1 / -1 !important;
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)) !important;
+        gap: var(--space-2) !important;
+        margin-top: 0 !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-mobile-primary-action {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: var(--space-2) !important;
+        width: 100% !important;
+        min-height: 44px !important;
+        border-radius: var(--radius-lg) !important;
+        white-space: normal !important;
+        text-align: center !important;
+        line-height: 1.12 !important;
+        touch-action: manipulation !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page details.sige-card-actions {
+        grid-column: 1 / -1 !important;
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        width: 100% !important;
+        margin: 0 !important;
+        z-index: var(--z-sticky) !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-card.sige-card-actions-open,
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-card:has(> details.sige-card-actions[open]) {
+        z-index: var(--z-sticky) !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page details.sige-card-actions > summary {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 44px !important;
+        height: auto !important;
+        gap: var(--space-2) !important;
+        padding: 0 var(--space-3) !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page details.sige-card-actions .sige-actions-trigger-label {
+        display: inline !important;
+        font-size: var(--fs-sm) !important;
+        font-weight: 700 !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page details.sige-card-actions[open] > .sige-actions-menu {
+        position: static !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        margin: var(--space-3) 0 0 !important;
+        grid-template-columns: 1fr !important;
+        box-shadow: var(--shadow-sm) !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-actions-menu .sige-btn-action {
+        min-height: 44px !important;
+        height: auto !important;
+        white-space: normal !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-actions-menu .sige-action-label {
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+    }
+}
+
+@media (max-width: 760px) {
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page {
+        gap: calc(var(--space-3) + var(--space-1) / 2) !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero {
+        padding: var(--space-6) calc(var(--space-4) + var(--space-1) / 2) !important;
+        min-height: 0 !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero-actions {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: var(--space-3) !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-card {
+        grid-template-columns: 72px minmax(0, 1fr) !important;
+        padding: calc(var(--space-3) + 3px) !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-foto {
+        width: 68px !important;
+        height: 68px !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-mobile-card-actions-row {
+        grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)) !important;
+    }
+}
+
+@media (max-width: 420px) {
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-stats-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-card {
+        grid-template-columns: 64px minmax(0, 1fr) !important;
+        padding: calc(var(--space-3) + var(--space-1) / 2) !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-aluno-foto {
+        width: 60px !important;
+        height: 60px !important;
+    }
+
+    body.sige-admin-app.sige-view-alunos_lista .sige-mobile-card-actions-row {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+
+/* v12.15.11 - Hotfix profissional: recuperar estabilidade da página de Alunos.
+   Reverte a abordagem de portal/move DOM dos modais e corrige a sobreposição
+   com a sidebar usando apenas stacking context controlado.
+   Contrato: sem MutationObserver, sem dispatcher extra, sem mover modais no DOM. */
+body.sige-admin-app.sige-view-alunos_lista.sige-aluno-modal-open .sg-product-pro-shell .sg-app-content,
+body.sige-admin-app.sige-view-alunos_lista.sige-aluno-modal-open .sg-product-pro-shell main.sg-app-content {
+    position: relative !important;
+    z-index: calc(var(--z-modal, 1000) + 149000) !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista.sige-aluno-modal-open .sg-product-pro-shell .sg-app-sidebar,
+body.sige-admin-app.sige-view-alunos_lista.sige-aluno-modal-open .sg-product-pro-shell .sg-app-topbar,
+body.sige-admin-app.sige-view-alunos_lista.sige-aluno-modal-open .sg-mobile-global-bottom-nav,
+body.sige-admin-app.sige-view-alunos_lista.sige-aluno-modal-open .sige-mobile-bottom-nav {
+    z-index: var(--z-base, 10) !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista.sige-aluno-modal-open #modal-aluno.sige-aluno-modal-pro,
+body.sige-admin-app.sige-view-alunos_lista.sige-aluno-modal-open #modal-import-alunos.sige-import-modal-pro,
+body.sige-admin-app.sige-view-alunos_lista.sige-aluno-modal-open #modal-aluno-360.sige-aluno360-modal-pro {
+    z-index: calc(var(--z-modal, 1000) + 159000) !important;
+}
+
+body.sige-admin-app.sige-view-alunos_lista.sige-aluno-modal-open #modal-aluno .sige-modal-content,
+body.sige-admin-app.sige-view-alunos_lista.sige-aluno-modal-open #modal-import-alunos .sige-modal-content,
+body.sige-admin-app.sige-view-alunos_lista.sige-aluno-modal-open #modal-aluno-360 .sige-modal-content {
+    z-index: calc(var(--z-modal, 1000) + 159001) !important;
+}
+
+@media (min-width: 861px) {
+    body.sige-admin-app.sige-view-alunos_lista.sige-aluno-modal-open .sg-product-pro-shell .sg-app-sidebar {
+        pointer-events: none !important;
+    }
+}

@@ -1,0 +1,19 @@
+SIGE SoftGenial v12.11.9.6 - Equipa e Professores Desactivação Efectiva PRO (TEST)
+
+Objectivo
+- Corrigir a regressão reportada em que a acção Desactivar mudava o indicador visual, mas não tinha efeito real sobre o acesso do utilizador.
+
+Alterações
+- O endpoint sige_toggle_status_staff passa a gravar status_ativo em sige_professores e também nos metas sige_staff_status_ativo/sige_status_ativo.
+- Ao desactivar, as sessões do utilizador alvo são invalidadas com WP_Session_Tokens::destroy_all().
+- O motor de permissões passa a negar sige_can() para colaboradores RH inactivos, antes do bypass legado de roles com manage_options.
+- O page guard passa a bloquear colaboradores RH inactivos antes de qualquer fallback/bypass legado de roles SIGE.
+- O admin_init passa a expulsar/bloquear utilizadores inactivos já autenticados.
+- O login WordPress passa a negar autenticação de colaboradores RH inactivos.
+- A edição de ficha preserva o estado activo/inactivo actual, evitando reactivação acidental por edição normal.
+- A listagem passa a preferir a ficha vinculada por sige_professor_id e ordena duplicados por id, evitando que uma ficha antiga faça parecer que a desactivação não teve efeito.
+
+Sem alterações
+- Sem alterações em fórmulas financeiras.
+- Sem alterações em regras académicas.
+- Sem alteração da matriz de permissões, apenas aplicação efectiva do estado RH.

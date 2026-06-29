@@ -1,0 +1,55 @@
+OK   Versão sincronizada nas 3 fontes (header=12.12.1, const=12.12.1, build=12.12.1)
+OK   Zero ficheiros com CRLF em código
+OK   Zero CR isolado em código
+OK   Zero BOM em código
+OK   Zero travessões (em/en-dash) em código
+OK   Todos os tools/*.php têm guarda CLI
+OK   Raiz contém apenas os 7 ficheiros canónicos (.gitignore, BUILD.json, CHANGELOG.md, README.md, index.php, sige-softgenial.php, uninstall.php)
+OK   Raiz sem pastas fora da lista canónica
+OK   Pasta docs/changelog/ presente
+OK   Pasta docs/deploy/ presente
+OK   Pasta docs/qa/ presente
+OK   Pasta docs/relatorios/ presente
+OK   Pasta docs/legado/ presente
+OK   Pasta languages/ presente
+OK   Pasta tools/ presente
+OK   tools/.htaccess presente
+OK   index.php de silêncio em admin/
+OK   index.php de silêncio em includes/
+OK   index.php de silêncio em assets/
+OK   index.php de silêncio em tools/
+OK   index.php de silêncio em admin/finance/
+OK   index.php de silêncio em admin/academic/
+OK   index.php de silêncio em includes/settings/
+OK   Ficheiro órfão sedw9tqQh ausente
+OK   Rota 'vincular' mapeada
+OK   Rota 'whatsapp_central' mapeada
+OK   Rota 'whatsapp_diag' mapeada
+OK   Rota 'whatsapp_circulares' mapeada
+OK   Rota 'presencas' mapeada
+OK   Rota 'financeiro-mpesa' mapeada
+OK   Todas as views da allowlist resolvem para ficheiro
+OK   Diagnóstico WhatsApp sem badge de versão obsoleta
+OK   Diagnóstico usa 'Tarefas automáticas de envio'
+OK   Central WhatsApp sem jargão pending/backfill na copy
+OK   Central WhatsApp sem referência de versão na copy
+OK   Acta sem referência de versão na copy
+OK   Acta usa 'Censo' em vez de 'snapshot' na copy
+OK   Extractos: selo 'Reconciliação concluída'
+OK   Extractos: cabeçalho humano da nota de fecho
+OK   Extractos: marcador de reconciliação intacto
+OK   Mensagens '(nonce)' substituídas por linguagem de sessão
+OK   Pagamentos: nova mensagem de sessão presente
+OK   Currículos: copy de produto
+OK   Permissões: copy de produto
+OK   Extractos: data-labels pré-AO90
+OK   CSS: pseudo-elemento Seleccionar pré-AO90
+OK   db-handler: mensagem actualizada pré-AO90
+OK   Lançamentos: Reactivação pré-AO90
+OK   Contrato de acção 'reativar_lancamento' intocado
+OK   Dupla grafia de compatibilidade na camada de dados intocada
+OK   uninstall.php presente e guardado
+OK   CHANGELOG.md contém a entrada da versão corrente
+OK   Changelog detalhado da versão corrente em docs/changelog/
+------------------------------------------------------------
+RELEASE GATE OK - 53 verificações passaram (v12.12.1).

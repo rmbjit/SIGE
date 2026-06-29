@@ -1,0 +1,8 @@
+v12.14.3 - Privileged Account Recovery & Staff Visibility
+
+- Corrige desaparecimento de utilizadores com perfil SIGE activo mas WP role subscriber.
+- Adiciona recuperação break-glass auditada para Admin TI/Direcção.
+- Introduz snapshots de integridade para perfis privilegiados.
+- Introduz reconciliador automático de snapshots em admin_init.
+- Adiciona espelho WP controlado para perfis privilegiados.
+- Aposenta snapshots quando a remoção é feita por administrador WordPress real.

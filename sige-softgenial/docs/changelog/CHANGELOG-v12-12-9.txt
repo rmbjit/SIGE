@@ -1,0 +1,35 @@
+SIGE SoftGenial - CHANGELOG v12.12.9
+Tenant Read Isolation & Resolver Hardening (Fase 3, incremento final)
+Data: 2026-06-19
+Base: v12.12.8.1
+
+RESUMO
+Remocao definitiva do fallback cego para a escola 1 em toda a resolucao de
+contexto de tenant. A resolucao passa a ser determinista (escola unica activa)
+ou fail-closed (0), nunca uma suposicao de id=1.
+
+ALTERACOES
+- Resolvedor sige_get_escola_id(): passo final passa de "return SIGE_ESCOLA_MALISA"
+  (constante = 1) para resolucao por escola unica activa; senao 0 (auditado).
+- Novo helper sige_multitenancy_single_active_school_id(): id real da unica escola
+  activa sse existir exactamente uma; senao 0.
+- Constante SIGE_ESCOLA_MALISA marcada OBSOLETA (mantida definida, sem uso).
+- 132 ternarios mortos ": 1" (com/sem cast) -> ": 0" (fail-closed).
+- 7 fallbacks fixos "= 1" -> resolucao por escola unica activa.
+- 9 defaults de linha "escola_id ?? 1" (inc. max(1, ...)) -> "?? 0" (fail-closed).
+- Webhooks M-Pesa/e-Mola: resolucao por token+payload confirmada; resolvedor
+  apenas secundario fail-closed. Cron de email: escola por linha.
+- Novo gate check-tenant-read-resolver.php (impede as 4 classes de id=1 cego).
+- Nova smoke smoke-tenant-read-resolver-v12-12-9.php (16 verificacoes).
+
+QUALIDADE
+- Baseline de fallbacks de tenant: 138 -> 0.
+- Funcoes de calculo financeiro byte-identicas a v12.12.8.1.
+- Smokes congeladas v12.12.8/v12.12.8.1 a passar; guards de escrita intactos.
+- Lint integral 0 falhas. Zero em-dash em codigo.
+- Rediagnostico adversarial: Zero P0/P1.
+
+COMPATIBILIDADE
+- Mono-escola com escola id=1: sem alteracao.
+- Mono-escola com escola id diferente de 1: resolucao passa a ser correcta.
+- Multi-escola: ja era fail-closed (0); inalterado.

@@ -1,0 +1,56 @@
+SIGE SoftGenial v12.10.1 - Produto PRO: App Shell, Navegação e Design System Unificado
+
+Objectivo
+- Criar a primeira base visual e estrutural do SoftGenial como produto acabado.
+- Melhorar a experiência de navegação, consistência visual e linguagem da interface.
+- Manter intactas todas as fórmulas, cálculos e regras de negócio já validadas.
+
+Alterações realizadas
+1. App Shell
+- Refinamento do layout principal do painel.
+- Identidade visual mais limpa para o menu lateral, topo e área de conteúdo.
+- Cabeçalho contextual por módulo, com área, título e descrição curta.
+- Navegação mais parecida com uma aplicação escolar profissional.
+
+2. Navegação
+- Rótulos ajustados para linguagem de produto e de escola.
+- Removidos termos técnicos visíveis em estados de bloqueio e indisponibilidade.
+- Área técnica renomeada para Administração quando visível a perfis autorizados.
+- Organização visual mais clara para Secretaria, Académico, Financeiro, Docentes, Operação Escolar e Administração.
+
+3. Design System
+- Adicionados componentes globais para cabeçalho de página, estado vazio, estado de acesso indisponível e botão padrão.
+- Criado ficheiro includes/ui-components.php para centralizar metadados visuais dos módulos e componentes reutilizáveis.
+- Adicionadas classes CSS Produto PRO no assets/style.css.
+
+4. Limpeza de linguagem visível
+- Estados antes expunham view, feature, nomes de ficheiros ou mensagens técnicas.
+- Agora apresentam mensagens orientadas ao utilizador final.
+- Centro de Configuração recebeu pequenos ajustes de linguagem para reduzir ruído técnico.
+
+Garantias de não regressão
+- Não foram alteradas fórmulas financeiras.
+- Não foram alteradas fórmulas académicas.
+- Não foram alteradas regras de multas, mensalidades, pagamentos, notas, pautas ou transições.
+- Não foram alteradas migrações de base de dados.
+- Não foram alterados handlers financeiros/académicos de negócio.
+
+Validação executada
+- php -l executado em todos os ficheiros PHP do plugin.
+- Todos os ficheiros PHP passaram sem erros de sintaxe.
+
+Ficheiros adicionados
+- includes/ui-components.php
+- CHANGELOG-v12-10-1-produto-pro-app-shell.txt
+
+Ficheiros modificados
+- sige-softgenial.php
+- BUILD.json
+- includes/admin-shell.php
+- assets/style.css
+- admin/system/config-center-view.php
+- includes/settings/class-sige-settings-view-renderer.php
+- includes/hub/sige-feature.php
+- admin/system/core-status-view.php
+- admin/system/permissions-ui.php
+- admin/finance/financeiro-extratos.php

@@ -1,0 +1,33 @@
+SIGE SoftGenial v12.10.141 - Security Baseline PRO: Webhook Off & REST Hardening
+
+Base: v12.10.140 - Security Baseline PRO.
+Escopo: segurança, redução de superfície pública e endurecimento de endpoints operacionais.
+
+1. WhatsApp webhook desligado por defeito
+- O endpoint /wp-json/sige/v1/whatsapp-webhook deixa de ser registado por defeito.
+- Como o cliente informou que já não usa webhook, esta porta pública deixa de existir em operação normal.
+- Tentativas directas ao endpoint desligado são bloqueadas com 404 e log de segurança.
+- A rota só volta a existir se for activada explicitamente por constante, opção ou filtro:
+  - SIGE_WPP_WEBHOOK_ENABLED = true; ou
+  - option sige_wpp_webhook_enabled = 1; ou
+  - filtro sige_wpp_webhook_enabled.
+
+2. Remoção de GET no webhook quando activado
+- Caso o webhook seja reactivado no futuro, a rota passa a aceitar apenas POST no Recovery Mode.
+- GET foi removido por não ser necessário para payloads de webhook e por aumentar superfície de ataque.
+
+3. Cron/Process Queue mais seguro
+- O endpoint process-queue passa a preferir header seguro X-SIGE-Cron-Key ou Authorization: Bearer.
+- Segredo em query string (?key=...) fica desactivado por defeito.
+- Se for indispensável por compatibilidade temporária, pode ser reactivado via:
+  - SIGE_ALLOW_CRON_KEY_IN_QUERY = true; ou
+  - option sige_allow_cron_key_in_query = 1; ou
+  - filtro sige_allow_cron_key_in_query.
+- Foi adicionado rate limit nos endpoints REST/admin-post de processamento da fila.
+
+4. Segredos mais limpos
+- O segredo whatsapp_webhook já não é gerado automaticamente em instalações que não usam webhook.
+- Reduz ruído operacional e evita manter segredos mortos sem utilidade.
+
+5. Zero alteração de regras de negócio
+- Não altera mensalidades, multas, pagamentos, recibos, notas, pautas, DEC, boletins, Jardim, Portal ou cálculos financeiros.

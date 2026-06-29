@@ -1,0 +1,55 @@
+SIGE SoftGenial v12.11.9.110 - NORMALIZAÇÃO ÓPTICA DE ÍCONES
+============================================================
+
+Resposta a um problema de UI reportado com imagens: os ícones dentro
+dos cartões não pareciam do mesmo tamanho. A causa não era cor nem
+arrumação - era GEOMETRIA do desenho, o erro de UI mais comum.
+
+O DIAGNÓSTICO (medido com render real, não a olho)
+- Os 34 ícones SVG eram desenhados preenchendo fracções DIFERENTES do
+  viewBox 24x24. Mesmo forçados à mesma caixa em px, o desenho lá dentro
+  variava: dispersão de DIAGONAL aparente de 8.2px (de 15.8 a 24.0).
+- Resultado visível: a paleta de "Aparência" parecia a maior (preenchia
+  todo o quadro); a casa e os utilizadores maiores que o visto; etc.
+- Desvios declarados adicionais: palette a width=24 (resto a 18), plus
+  com stroke-width 2.25.
+
+A SOLUÇÃO (profissional, não paliativa)
+- tools/normalizar-icones.py: mede a bounding box REAL de cada ícone
+  (via render de alta resolução) e reescala/centra o conteúdo num
+  <g transform> para TODOS terem a mesma DIAGONAL aparente (~21 de 24).
+  O stroke-width é compensado pela escala (2/escala) para manter a
+  espessura óptica CONSTANTE mesmo com escalas diferentes.
+- Normalizar por DIAGONAL (não por largura/altura) é a chave: é o que o
+  olho percebe como "tamanho". Resultado: dispersão 8.2px -> 1.2px.
+  Ferramenta IDEMPOTENTE (re-correr dá 0.0px).
+- sige_ui_icon() reforçada: nova sige_ui_icon_canonizar() força a tag
+  <svg> raiz a atributos canónicos (24x24, fill none, stroke
+  currentColor, linecaps) ao servir CADA ícone - qualquer SVG futuro,
+  venha como vier, sai com invólucro uniforme.
+- Regra base .sg-svg-icon no design system (sige-tokens.css): tamanho
+  via --icon-size (default 20px) e cor herdada. Contentores específicos
+  sobrepõem o tamanho conforme necessário.
+
+PROVA
+- Comparação antes/depois renderizada (prova-icons-final.png): os
+  ícones dos cartões reportados (casa, pin, documento, paleta,
+  utilizadores, visto) ficam com tamanho aparente uniforme.
+
+GUARDIÃO (regra dos smoke tests)
+- tools/smoke-icones.php (11 verificações): garante que TODOS os SVG
+  têm invólucro canónico idêntico, o <g transform scale> de
+  normalização, stroke-width compensado, e que a função canoniza ao
+  servir. É o 11º gate do corredor. Impede o regresso da inconsistência.
+
+GATES
+- Corredor: 10 -> 11 gates. smoke-regression-pack: 155 -> 160.
+- Todos os 11 gates verdes.
+
+NOTA DE PROCESSO (honestidade)
+- A 1ª tentativa de normalização usou uma medição ingénua de
+  coordenadas (svgelements) que deu spans errados e AMPLIOU ícones para
+  fora do quadro. Detectado na verificação RENDERIZADA (não a olho),
+  revertido a partir do ZIP v109, e refeito com medição por render real
+  + normalização por diagonal. A verificação visual apanhou o erro que
+  a medição estática deixou passar.

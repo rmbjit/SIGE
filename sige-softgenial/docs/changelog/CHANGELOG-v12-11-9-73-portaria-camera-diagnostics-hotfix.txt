@@ -1,0 +1,21 @@
+SIGE SoftGenial v12.11.9.73 - Portaria Camera Permission Diagnostics Hotfix
+
+Escopo:
+- Portaria Digital / Câmara / QR Code / UX mobile e tablet.
+
+Correções:
+- Mensagem "Permissão negada" deixou de apontar apenas para o cadeado quando o browser não grava permissão Camera no site.
+- Erros de getUserMedia agora são diferenciados:
+  - NotAllowedError / PermissionDeniedError: bloqueio de navegador, sistema operativo ou política.
+  - NotFoundError: nenhuma câmara disponível.
+  - NotReadableError / AbortError: câmara ocupada ou bloqueada pelo sistema.
+  - OverconstrainedError: câmara traseira inexistente no dispositivo.
+  - SecurityError: HTTPS/política/iframe.
+- Fluxo de arranque agora tenta câmara traseira como ideal, cai para qualquer câmara e escolhe a primeira câmara disponível em desktop/tablet quando não há câmara traseira.
+- Melhor microcopy para Edge/Windows quando o cadeado não mostra a opção “Câmara”.
+
+Blindagem preservada:
+- Sem alteração de base de dados.
+- Sem alteração de permissões de negócio.
+- Sem alteração de pagamentos, mensalidades, notas, pautas, DEC, ACTA ou importações.
+- Perfil Guarda / Portaria preservado.

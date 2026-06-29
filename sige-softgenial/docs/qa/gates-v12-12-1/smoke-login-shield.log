@@ -1,0 +1,18 @@
+OK   4 falhas: ainda livre
+OK   5ª falha tranca por 600s (<= 600)
+OK   Bloqueio de utilizador expira após a janela
+OK   Falhas fora da janela não acumulam (3 antigas + 4 novas = livre)
+OK   Sucesso faz reset ao contador do utilizador
+OK   Spray de 20 utilizadores tranca o IP (1800s)
+OK   Outro IP continua livre
+OK   Falhas de A não trancam B (abaixo do tecto de IP)
+OK   OTP tem 6 dígitos
+OK   OTP fica pendente após emissão
+OK   Código errado devolve "errado"
+OK   Código certo devolve "ok"
+OK   OTP consumido deixa de estar pendente
+OK   Reutilizar o código devolve "ausente"
+OK   OTP expira após 600s
+OK   Código certo após esgotar tentativas é recusado
+------------------------------------------------------------
+SMOKE LOGIN SHIELD OK - 16 verificações passaram.

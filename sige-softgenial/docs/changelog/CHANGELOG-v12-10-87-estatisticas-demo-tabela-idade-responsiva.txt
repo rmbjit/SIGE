@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.10.87 - Estatísticas Demográficas: Ajuste Responsivo da Tabela Por Idade
+
+Objectivo
+- Corrigir o problema visual remanescente da secção "Por Idade", que ainda saía da escala da tela.
+
+Ajustes aplicados
+- A linha de secções "Por Turno" e "Por Idade" recebeu um layout próprio e mais estável.
+- Cada uma destas secções passa a respeitar min-width: 0 para evitar rebentamento do grid.
+- A tabela "Por Idade" passa a ocupar 100% da largura disponível no seu cartão.
+- Scroll horizontal controlado mantido de forma segura quando necessário.
+- Em larguras intermédias e menores, "Por Turno" e "Por Idade" passam automaticamente para uma coluna, evitando compressão excessiva.
+- Mantida a nota orientadora "Deslize a tabela para ver todas as colunas."
+
+Garantias
+- Sem alteração na lógica estatística de género validada na versão anterior.
+- Sem alteração nas matrículas consideradas.
+- Sem alteração em ACTA, DEC, pautas, pauta final, boletins, notas ou regras académicas.
+- Sem alteração em pagamentos, multas, mensalidades ou base de dados financeira.

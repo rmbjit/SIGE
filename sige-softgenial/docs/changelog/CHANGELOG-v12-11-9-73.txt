@@ -1,0 +1,10 @@
+SIGE SoftGenial v12.11.9.73
+============================
+
+Portaria Camera Diagnostics Fallback UX PRO
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.

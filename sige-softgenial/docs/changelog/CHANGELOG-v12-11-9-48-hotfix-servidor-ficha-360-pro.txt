@@ -1,0 +1,32 @@
+SIGE SoftGenial v12.11.9.48 - Hotfix Servidor Ficha 360º PRO
+
+Objectivo
+- Corrigir a mensagem "O servidor não respondeu ao carregar a ficha 360º" reportada após a blindagem de privacidade.
+
+Intervenções
+1. Handler AJAX da Ficha 360º
+- Adicionado wrapper defensivo com try/catch para impedir queda silenciosa do endpoint.
+- Em caso de erro controlável, o frontend passa a receber JSON de erro em vez de falha sem resposta.
+- Erros técnicos ficam registados no log do servidor, sem exposição ao navegador.
+
+2. Compatibilidade e robustez
+- Helpers de sanitização da Ficha 360º deixam de usar retorno/tipagem rígida para evitar TypeError em dados antigos ou servidores com comportamento diferente.
+- Sanitização de texto passa a lidar com strings malformadas/encoding irregular.
+- Links documentais seguros ficam protegidos por try/catch e nunca devolvem URL directo como fallback.
+
+3. Consultas auxiliares
+- Matrículas, notas, portaria e fila WhatsApp passam a verificar colunas antes de consultar campos opcionais.
+- Mantida a minimização de dados: sem telefone/erro técnico da fila WhatsApp; sem URL directa de documentos; sem pagamentos recentes no payload.
+
+Não alterado
+- Base de dados principal.
+- Notas, pautas, boletins e DEC.
+- Pagamentos, mensalidades, multas e recibos.
+- Importação em duas etapas, histórico de lotes e anulação segura.
+- Regras académicas e financeiras.
+
+Testes
+- php -l nos ficheiros alterados.
+- Smoke test estático da Ficha 360º.
+- Verificação de preservação da blindagem de privacidade.
+- Integridade do ZIP final.

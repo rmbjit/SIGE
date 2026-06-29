@@ -1,0 +1,21 @@
+SIGE SoftGenial v12.10.14 - Pagamentos por Turma: Harmonia Visual
+
+Objectivo
+- Alinhar o módulo Pagamentos por Turma ao padrão visual aprovado no Painel Principal, Painel Financeiro, Registar Pagamento e Central de Cobranças.
+
+Alterações realizadas
+- Removida a apresentação do cabeçalho genérico nesta página para evitar duplicação visual.
+- Novo hero claro e amplo para Pagamentos por Turma, usando a mesma linguagem visual do Painel Principal.
+- Filtros redesenhados com melhor leitura, espaçamento e responsividade.
+- KPIs modernizados para pagos, parciais, pendentes e total da turma.
+- Cartões de leitura da cobrança e estado dos alunos organizados em grelha.
+- Tabela de alunos redesenhada com badges limpos, acções mais claras e rolagem horizontal controlada em ecrãs pequenos.
+- Corrigida a apresentação visual do estado "Em plano", sem alterar a regra que calcula esse estado.
+- Mantida impressão limpa da lista.
+
+Garantias
+- Sem alteração de fórmulas.
+- Sem alteração de mensalidades, multas, descontos, pagamentos, recibos, cobranças, estornos ou base de dados.
+- Sem alteração de notas, pautas, DEC, boletins ou actas.
+- Sem termos técnicos internos visíveis ao utilizador final.
+- Mantido o padrão mobile-friendly.

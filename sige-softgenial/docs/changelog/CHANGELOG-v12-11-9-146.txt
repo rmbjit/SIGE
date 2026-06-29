@@ -1,0 +1,52 @@
+SIGE SoftGenial v12.11.9.146 - AUDITORIA DE DESIGN (financeiro-config)
+====================================================================
+                  *** O ÚLTIMO ECRÃ - AUDITORIA COMPLETA ***
+
+Configuração financeira (1835 linhas).
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 5 pesos, já quase limpo: 700 (15x), 600 (6x), apenas 800
+  (1x) e 850 (1x) por afinar. Pesos inline no corpo já canónicos.
+- RAIOS: 9 valores. SOMBRAS: 7. CORES: 117 hex.
+
+CORRECÇÃO (bloco <style> 731-979; redirects JS e <script> finais preservados)
+1. Hierarquia de 3 níveis: 5 pesos -> 600/700.
+2. Raios da escala: 9 -> 5. Sombras da escala: 7 -> 4.
+3. 159 cores migradas (CSS + corpo HTML). Inclui validação vermelha
+   (erro), sucesso verde (confirmação) e estados de configuração,
+   migrados para tokens semânticos preservando o significado. Tema
+   dinâmico (--sg-theme-primary, 13 referências) preservado com fallback
+   migrado para token. ZERO hex restantes.
+
+PROVA VISUAL
+- financeiro-config-antes-depois.png: parâmetros de configuração. Estados
+  preservados (Activo verde, Por configurar laranja); parâmetro domina,
+  estado ênfase.
+
+GATES
+- smoke-regression-pack: 297 -> 301 invariantes. Passou as 300!
+- financeiro-config adicionado aos ecrãs auditados.
+- Baseline de mágicos: 4131 -> 3972 (-159). Abaixo de 4000!
+- Baseline de tipografia: 1 -> 0. ZERO em todo o sistema!
+- 12 gates verdes.
+
+═══════════════════════════════════════════════════════════════════
+  AUDITORIA DE DESIGN COMPLETA - 36 ECRÃS
+
+  Desde o início da auditoria:
+  - Pesos não-canónicos: 665 -> 0 (100% eliminados)
+  - Valores mágicos: 9925 -> 3972 (60% eliminados)
+  - Invariantes de regressão: passaram a 301
+
+  Todos os 36 ecrãs do sistema agora têm:
+  - Hierarquia tipográfica de 3 níveis (700 títulos/valores, 600
+    ênfase/labels, 400 legendas)
+  - Raios da escala canónica (4/8/12/16/22/pill)
+  - Sombras da escala de elevação (xs/sm/md/lg)
+  - Cores migradas para tokens semânticos, com TODA a semântica
+    preservada (mapas de classificação, valores monetários, estados de
+    sistema, templates de impressão, exportação Excel, temas dinâmicos)
+═══════════════════════════════════════════════════════════════════
+
+PRÓXIMO (fora da auditoria de design)
+- VPS: cron backups (urgente), Git+CI, deploys em teste.softgenial.

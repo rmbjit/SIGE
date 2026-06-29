@@ -1,0 +1,9 @@
+SIGE SoftGenial v12.9.30.5 - Hotfix definitivo do header da Central de Cobranças
+
+Base: v12.9.30.4
+
+Alterações:
+- Removidos definitivamente os ícones decorativos do header da Central de Cobranças.
+- Eliminada a duplicação visual de ícones verticais/horizontais.
+- Mantidos título, subtítulo e badges operacionais.
+- Sem alteração de lógica financeira, académica, pagamentos, lançamentos ou dados.

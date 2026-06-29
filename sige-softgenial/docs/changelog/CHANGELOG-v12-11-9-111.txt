@@ -1,0 +1,52 @@
+SIGE SoftGenial v12.11.9.111
+============================
+
+Auditoria de design (Config Center piloto) - hierarquia tipografica de 3 niveis (17 pesos para 400/600/700), raios e sombras da escala canonica, cores migradas para tokens; gate de tipografia (12o gate) com baseline anti-regressao
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+SIGE SoftGenial v12.11.9.111 - AUDITORIA DE DESIGN (Config Center piloto)
+========================================================================
+
+Mudança de postura: de "consolidar o que existe" para "corrigir o que
+não funciona segundo os princípios de design de UI". O Config Center é
+o piloto da auditoria visual.
+
+DIAGNÓSTICO (medido, com parecer fundamentado)
+1. TIPOGRAFIA sem hierarquia: 17 pesos de fonte no sistema (650, 750,
+   850, 950...), a maioria inexistente nas fontes (renderizam
+   arredondados). Peso 950 dominante no Config Center. Resultado: tudo
+   "grita", nada se destaca.
+2. RAIOS inconsistentes: 13 valores num ecrã (8 a 26px).
+3. SOMBRAS pesadas: 10 distintas, várias gigantes (até 0 24px 70px).
+
+CORRECÇÃO (regras da área, validadas com prova visual)
+1. Hierarquia de 3 níveis: 400 (corpo/legendas recuam), 600
+   (ênfase/labels), 700 (títulos/valores dominam). As legendas
+   ("Logótipos e cabeçalho", etc.) passaram a 400 para o valor brilhar.
+   Config Center: 8 pesos -> 3 (400/600/700).
+2. Raios da escala canónica: 13 valores -> 5 (4/8/12/16/22/pill).
+3. Sombras da escala de elevação: 10 -> 5 (xs/sm/md/lg + realce marca).
+4. Cores do <style> migradas para tokens (183 cores). As 8 cores de
+   LÓGICA JS (defaults de personalização da escola) preservadas.
+
+PROVA VISUAL
+- config-center-antes-depois.png: a fila de 4 cartões antes/depois. As
+  legendas recuam, o valor domina, sombras subtis, cantos sóbrios.
+
+GUARDIÃO (regra dos smoke tests)
+- tools/check-typography.php (12º gate): baseline de pesos
+  não-canónicos (665), só pode reduzir; ecrãs auditados com hierarquia
+  limpa garantida. Impede o regresso de 850/950.
+
+GATES
+- Corredor: 11 -> 12 gates. smoke-regression-pack: 160 -> 164.
+- Baseline de mágicos: 9925 -> 9742 (183 cores do Config Center).
+
+NOTA DE PROCESSO
+- A 1ª passagem de pesos foi agressiva demais (empurrou legendas para
+  600). Corrigido para 400 após rever - a hierarquia precisa do peso
+  LEVE para o corpo respirar. Validado com render antes/depois.

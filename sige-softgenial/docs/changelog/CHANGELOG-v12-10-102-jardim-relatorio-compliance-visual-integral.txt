@@ -1,0 +1,30 @@
+SIGE SoftGenial v12.10.102 - Jardim Relatório: Compliance Visual Integral
+
+Base
+- Construído por cima da v12.10.101 - Jardim Boletim: Wide Layout Responsivo.
+
+Objectivo
+- Aplicar o padrão visual Produto PRO ao módulo &view=jardim_relatorio.
+- Garantir wide layout real dentro do App Shell.
+- Melhorar a responsividade em desktop, laptop 17", tablet e mobile.
+- Manter intervenção visual, sem alterar queries, cálculos, gráficos, envio aos pais, permissões, notas, pagamentos, base de dados ou handlers.
+
+Ajustes aplicados
+- Header genérico removido desta view via lista de views com cabeçalho próprio.
+- Hero antigo escuro substituído por hero claro no padrão Painel Principal / Dashboard V2 MJS-grade.
+- Sequência visual aplicada: ícone canónico, área Pré-Escolar, título Diários e Análises, subtítulo, chips de contexto e painel lateral.
+- Adicionados KPIs de alunos na turma, registos no período, cobertura média e dias úteis analisados.
+- Cartão de envio mensal aos encarregados redesenhado.
+- Filtros de turma, período, data/mês e aluno redesenhados em toolbar responsiva.
+- Tabs Vista da Turma e Aluno Individual harmonizadas com o padrão Produto PRO.
+- Cards, gráficos, tabelas e vista individual passam a respeitar melhor a largura útil e os breakpoints.
+- Tabelas ficam com scroll horizontal controlado quando necessário, evitando corte da página.
+- Breakpoints revistos para 1450px, 1280px, 980px e 760px.
+
+Garantias
+- Sem alterar cálculo de resumo por aluno.
+- Sem alterar cálculo de cobertura, sono, humor, comportamento ou presenças.
+- Sem alterar gráficos Chart.js.
+- Sem alterar envio mensal ou envio individual aos encarregados.
+- Sem alterar handlers, nonces ou acções admin-post.
+- Sem alteração em notas, Pauta, DEC, ACTA, boletins, pagamentos, permissões ou base de dados.

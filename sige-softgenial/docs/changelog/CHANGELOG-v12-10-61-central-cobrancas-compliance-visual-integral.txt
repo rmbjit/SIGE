@@ -1,0 +1,21 @@
+SIGE SoftGenial v12.10.61 - Central de Cobranças: Compliance Visual Integral
+
+Objectivo
+- Rever o desenho do módulo &view=financeiro-devedores e garantir alinhamento rigoroso com o Painel Principal / Dashboard V2 MJS-grade.
+- Manter a intervenção exclusivamente visual, sem alterar fórmulas, saldos, cobranças, WhatsApp, filtros, centro de custo ou queries.
+
+Ajustes aplicados
+- Hero antigo escuro foi substituído visualmente por um hero claro no padrão Produto PRO.
+- Título “Central de Cobranças” alinhado com a hierarquia tipográfica do Painel Principal.
+- Kicker, subtítulo, botões principais e painel lateral do fluxo de cobrança harmonizados.
+- KPIs receberam ícones canónicos e foram alinhados ao modelo de cartões do Painel Principal.
+- Bloco “Filtros da cobrança” recebeu ícone canónico, espaçamento, cartões, campos e botões no padrão aprovado.
+- Acções rápidas, tabela e rodapé da tabela receberam reforço visual para consistência.
+- Header genérico permanece removido, respeitando a regra de header único para páginas com hero próprio.
+
+Garantias
+- Sem alteração em cálculos financeiros.
+- Sem alteração em saldos, cobranças, mensalidades, multas ou estados.
+- Sem alteração em WhatsApp, envio de cobranças, templates, guardrails ou fila.
+- Sem alteração em centro de custo, filtros, queries ou base de dados.
+- Sem alteração em notas, pautas, DEC, boletins ou regras académicas.

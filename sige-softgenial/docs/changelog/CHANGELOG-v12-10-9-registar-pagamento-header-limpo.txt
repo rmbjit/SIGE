@@ -1,0 +1,20 @@
+SIGE SoftGenial v12.10.9 - Registar Pagamento: cabeçalho limpo
+
+Objectivo
+- Corrigir a duplicação visual de cabeçalhos nas páginas modernizadas com hero próprio, mantendo o padrão visual MJS-grade aprovado e linguagem final de produto.
+
+Alterações realizadas
+- O App Shell deixou de renderizar o cabeçalho genérico nas páginas que já possuem hero próprio aprovado: Dashboard, Painel Financeiro, Registar Pagamento e Centro de Configuração.
+- Registar Pagamento deixou de mostrar dois blocos de título consecutivos.
+- A etiqueta visível "Tesouraria Produto PRO" foi removida da interface e substituída por "Tesouraria".
+- O texto principal do hero foi simplificado para uma orientação directa ao utilizador da escola.
+- Adicionado reforço CSS para garantir que o cabeçalho genérico não apareça em Registar Pagamento.
+
+Perímetro de segurança
+- Não foram alteradas fórmulas financeiras.
+- Não foram alteradas regras de mensalidades, multas, pagamentos, cobranças, recibos ou estornos.
+- Não foram alteradas regras académicas, notas, pautas, DEC, boletins ou actas.
+- Não houve migração nem alteração de schema da base de dados.
+
+Validação
+- Verificação de sintaxe PHP em todos os ficheiros do plugin: sem erros.

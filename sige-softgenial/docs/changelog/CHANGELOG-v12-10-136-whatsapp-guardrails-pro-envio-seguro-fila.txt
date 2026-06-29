@@ -1,0 +1,64 @@
+SIGE SoftGenial v12.10.136 - WhatsApp Guardrails PRO: Envio Seguro por Fila
+
+Base
+- Construído por cima da v12.10.135 - Agregados Familiares: Migração Segura.
+
+Objectivo
+- Reduzir de forma substancial o risco operacional de restrição/banimento do número WhatsApp/Z-API.
+- Transformar o clique do utilizador em agendamento seguro, não em envio imediato.
+
+Melhorias aplicadas
+
+1. Envio sempre por fila
+- O clique já não dispara o processador da fila no mesmo pedido HTTP.
+- Cobranças individuais, cobranças em lote e confirmações de pagamento ficam agendadas.
+- O cron central continua a ser o único responsável pelo envio real.
+
+2. Intervalo mínimo reforçado
+- Mínimo global de 2 minutos entre mensagens.
+- Recibos/pagamentos: 2-4 minutos.
+- Cobranças/lembretes: 4-10 minutos.
+- Mensagens com links: 5-15 minutos.
+
+3. Janela horária segura
+- Mantida a janela 07:30-19:30 no fuso horário Africa/Maputo.
+- Mensagens fora da janela são reagendadas para a próxima janela segura.
+
+4. Limites prudentes
+- Limite diário operacional reduzido de 250 para 180 mensagens por escola/número.
+- Limite horário reforçado para 25 mensagens/hora.
+- Batch de processamento mantido em 1 mensagem por ciclo.
+
+5. Duplicados e cooldown
+- Bloqueio silencioso de mensagens exactamente iguais já pendentes/enviadas nas últimas 2 horas.
+- Cobranças/lembretes repetidos para o mesmo aluno + telefone + tipo ficam em cooldown de 24 horas.
+- O bloqueio seguro é registado em log, sem incentivar cliques repetidos.
+
+6. Pausa automática por risco
+- Erros críticos da API/Z-API/WhatsApp accionam pausa/revisão automática.
+- HTTP 401/403/423 levam o canal para revisão.
+- HTTP 429 e instabilidades críticas levam a pausa cautelar.
+
+7. Compatibilidade e não-regressão
+- Não altera regras de pagamento.
+- Não altera mensalidades, multas, descontos, recibos ou fórmulas financeiras.
+- Não altera notas, Pauta, DEC, ACTA, boletins ou documentos académicos.
+- Não altera Jardim, Portal, Hub Control Alignment ou agregados familiares.
+- Não cria dependência de painel novo; funciona como camada defensiva invisível.
+
+Ficheiros alterados
+- sige-softgenial.php
+- BUILD.json
+- includes/finance-core.php
+- includes/notification-policy.php
+- includes/cron-tasks.php
+- includes/whatsapp-guardrails-pro.php
+
+Teste recomendado
+1. Instalar em ambiente de teste.
+2. Clicar numa cobrança individual e confirmar que a fila recebe status pendente com scheduled_at futuro.
+3. Confirmar que não há envio imediato no clique.
+4. Processar o cron e confirmar que respeita intervalo mínimo.
+5. Tentar repetir a mesma cobrança e confirmar bloqueio seguro de duplicado/cooldown.
+6. Registar pagamento e confirmar que o recibo fica com prioridade alta, mas scheduled_at futuro.
+7. Confirmar que módulos financeiros/académicos continuam sem alterações funcionais.

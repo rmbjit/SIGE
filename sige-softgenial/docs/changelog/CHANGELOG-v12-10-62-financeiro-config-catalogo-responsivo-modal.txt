@@ -1,0 +1,21 @@
+SIGE SoftGenial v12.10.62 - Preços e Serviços: Catálogo Responsivo com Modal
+
+Objectivo
+- Resolver a falta de responsividade da secção “Lista de Serviços” no módulo &view=financeiro-config.
+- Libertar largura útil da lista removendo o formulário permanente “Adicionar Serviço” da coluna esquerda.
+
+Ajustes aplicados
+- O formulário Adicionar/Editar Serviço passa a abrir em modal/pop-up.
+- Foi adicionado botão “Adicionar Serviço” na barra do catálogo e no cabeçalho da lista.
+- A Lista de Serviços passa a ocupar a largura total da área do catálogo.
+- A tabela da Lista de Serviços recebeu scroll horizontal controlado.
+- A coluna final de acções fica fixa à direita, mantendo “Editar/Eliminar” visível sem exigir zoom manual.
+- Ao clicar em “Editar”, o mesmo formulário abre automaticamente em modal já preenchido.
+- O modal respeita Escape, clique fora e botão fechar; em edição, fechar limpa o parâmetro edit e volta ao catálogo.
+- Substituídos elementos visuais soltos por ícones canónicos onde aplicável.
+
+Garantias
+- Sem alteração no CRUD de serviços.
+- Sem alteração em valores, centros de custo, fórmulas, multas, descontos ou regras financeiras.
+- Sem alteração em lançamentos, pagamentos, mensalidades, base de dados ou consultas.
+- Intervenção limitada à estrutura visual/UX e responsividade do catálogo.

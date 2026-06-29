@@ -1,0 +1,39 @@
+SIGE SoftGenial v12.11.9.128 - AUDITORIA DE DESIGN (pautas)
+==========================================================
+
+Pauta de avaliação (2374 linhas). Documento oficial de notas, par do
+acta. Imprime-se muito (dois blocos @media print).
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 10 pesos, 850 (10x), 900 (9x).
+- RAIOS: 8 valores. SOMBRAS: 14. CORES: 100 hex.
+
+CORRECÇÃO (dois blocos <style> 761-1043 e 1328-1520, ambos com @media print; JS preservado)
+1. Hierarquia de 3 níveis: 10 pesos -> 500/600/700.
+2. Raios da escala: 8 -> 5. Sombras da escala: 14 -> 6.
+3. 148 cores migradas (CSS + inline + mapa de situação). Inclui:
+   - classes de NOTA NEGATIVA (.th-neg/.td-neg vermelho) -> danger;
+   - MAPA PHP de cor por SITUAÇÃO (PROGRIDE verde, TRANSITA laranja,
+     REPROVA vermelho, PENDENTE cinza) -> tokens semânticos;
+   - cabeçalhos de tabela de impressão (azul-escuro, cinza).
+   Tudo preservando o significado. As DUAS @media print (impressão da
+   pauta) PRESERVADAS. ZERO hex restantes.
+
+PROVA VISUAL
+- pautas-antes-depois.png: pauta final. Situação preservada (PROGRIDE
+  verde, REPROVA vermelho, TRANSITA laranja), alinhada com a média; nome
+  e nota destacam-se, situação ênfase.
+
+GATES
+- smoke-regression-pack: 223 -> 228 invariantes.
+- pautas adicionado aos ecrãs auditados.
+- Baseline de mágicos: 6687 -> 6539 (-148).
+- Baseline de tipografia: 238 -> 220 (-18).
+- 12 gates verdes.
+
+MARCO: 18 ecrãs auditados. Desde o início: mágicos 9925 -> 6539; pesos
+não-canónicos 665 -> 220.
+
+PRÓXIMO
+- estatisticas-demograficas (17 pesos), abertura (16), financeiro-
+  pagamentos (16)...

@@ -1,0 +1,31 @@
+SIGE SoftGenial v12.12.3 - Notas Beta nos Módulos em Validação
+
+Objectivo
+- Identificar claramente áreas ainda beta para operadores e clientes, sem alterar regras funcionais.
+
+Views marcados como beta
+- financeiro-mpesa
+- whatsapp_circulares
+- comunicacoes_central
+- presencas
+
+Alterações
+- `includes/ui-components.php`: adicionados metadados `status=beta` e `beta_note` para os views alvo.
+- `includes/ui-components.php`: o cabeçalho central passa a renderizar selo `BETA` e nota beta quando o catálogo do view declarar esse estado.
+- `assets/style.css`: adicionados estilos canónicos para a linha título/selo, badge beta e nota beta.
+- `tools/smoke-beta-views-v12-12-3.php`: criado smoke test dedicado.
+- `tools/run-gates.php`: integrado novo gate `Views beta (notas operacionais)`.
+
+Fora do escopo
+- Não altera permissões.
+- Não altera cálculo financeiro.
+- Não altera M-Pesa/e-Mola.
+- Não altera envio WhatsApp.
+- Não altera presenças.
+- Não altera schema de base de dados.
+- Não força bloqueio funcional das áreas beta.
+
+Validação esperada
+- PHP lint verde.
+- Gate específico de views beta verde.
+- `tools/run-gates.php` verde.

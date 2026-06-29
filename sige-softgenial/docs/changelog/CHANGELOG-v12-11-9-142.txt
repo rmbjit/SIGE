@@ -1,0 +1,37 @@
+SIGE SoftGenial v12.11.9.142 - AUDITORIA DE DESIGN (dec)
+=======================================================
+
+Documento DEC / Detalhe Estatístico de Classe (604 linhas). Documento
+académico que se imprime.
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 7 pesos, 850 (9x), 800 (6x). Pesos inline (L518) já
+  canónicos (700).
+- RAIOS: 4 valores. SOMBRAS: 10. CORES: 72 hex.
+
+CORRECÇÃO (bloco <style> 186-429, inclui @media print; template impressão e JS preservados)
+1. Hierarquia de 3 níveis: 7 pesos -> 500/600/700. .dec-meta-pill mantido
+   a 700 (é pill de destaque, não legenda).
+2. Raios da escala: 4 -> 3. Sombras da escala: 10 -> 5.
+3. 85 cores migradas (CSS + corpo HTML). Inclui cabeçalhos de tabela
+   verdes e lógica de classificação NS (Não Satisfatório, vermelho)
+   migrados para tokens preservando o significado. PRESERVADOS: template
+   de impressão (<!DOCTYPE> com <style> próprio, 10 hex) e @media print.
+   ZERO hex de estilo restantes (só template).
+
+PROVA VISUAL
+- dec-antes-depois.png: DEC. Classificação NS vermelha preservada; título
+  e disciplinas destacam-se, metadados recuam.
+
+GATES
+- smoke-regression-pack: 282 -> 286 invariantes.
+- dec adicionado aos ecrãs auditados.
+- Baseline de mágicos: 4426 -> 4341 (-85).
+- Baseline de tipografia: 37 -> 26 (-11). Abaixo de 30!
+- 12 gates verdes.
+
+MARCO: 32 ecrãs auditados. Desde o início: mágicos 9925 -> 4341; pesos
+não-canónicos 665 -> 26.
+
+PRÓXIMO
+- aprovar_notas (11 pesos) e a cauda final <11.

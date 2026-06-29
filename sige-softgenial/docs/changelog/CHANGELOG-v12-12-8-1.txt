@@ -1,0 +1,11 @@
+## v12.12.8.1 - Tenant Write Isolation (2026-06-19)
+
+- Remedia o P1 do rediagnostico da v12.12.8 (enumeracao de escrita incompleta): a superficie de escrita por tenant foi reclassificada por analise de fluxo, deslocando o endurecimento para a camada de SUMIDOURO. Nenhuma escrita pode agora visar `escola_id <= 0`, independentemente de como o chamador resolveu a escola.
+- Adiciona o helper auditado `sige_tenant_write_guard(int $escola_id, string $contexto): bool` em `includes/multitenancy.php`: devolve `true` se a escola e valida; caso contrario regista `tenant_write_blocked` e devolve `false` para o chamador abortar com o retorno tipado adequado (sem `wp_die`, seguro para cron).
+- Categoria A: guard fail-closed em 24 sumidouros que recebem `escola_id`/`eid` por parametro, com aborto tipado por contrato (array `ok/error`, array `ok/message`, bool, void, null). Inclui sumidouros financeiros (estorno, cancelamento, isencao, fecho de turno, agregados) e academicos (abertura, encerramento, nota votada).
+- Categoria B: guard fail-closed em 22 funcoes com escrita inline `'escola_id' => sige_get_escola_id()`. Handlers AJAX abortam com `wp_send_json_error`; funcoes de biblioteca com retorno tipado (`null`, `WP_Error`). Duas funcoes ficam por design como excecao de logging resiliente (`sige_audit_log`, `sige_registar_log`): registam o evento mesmo sem escola, para nao perder o rasto da anomalia.
+- Fecha o handler delegado `acta-pdf-handler.php:1610` (aprovacao de nota votada), perdido na v12.12.8: resolvedor fail-closed na origem (`sige_require_escola_id`) e guard no sumidouro.
+- Fecha a lacuna de auditoria silenciosa da v12.12.8: todo bloqueio de escrita passa agora por um caminho auditado.
+- Adiciona o gate `check-tenant-write-sinks.php` (governa a superficie real: falha se surgir um sumidouro com parametro de escola sem guard ou uma escrita inline sem guard, fora da allowlist de logging) e o smoke `smoke-tenant-write-isolation-v12-12-8-1.php`.
+- Baseline de fallbacks `': 1'` desce de 139 para 138; o baseline da v12.12.8 fica congelado a 139 (ratchet monotonico mantido). Em mono-escola o comportamento nao muda. Sem alteracoes a regras de calculo financeiro ou academico.
+

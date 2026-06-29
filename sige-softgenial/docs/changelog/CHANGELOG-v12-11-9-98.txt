@@ -1,0 +1,75 @@
+SIGE SoftGenial v12.11.9.98
+============================
+
+Hotfix estrutural - kit migrado para namespace sgk (colisao com style.css provada e corrigida); Enter respeita confirmacao; gates novos de JS embebido e colisoes CSS
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+DETALHE COMPLETO DO HOTFIX (paragem por bugs relatados em teste.softgenial)
+===========================================================================
+
+BUG RELATADO: "clicar para adicionar disciplinas no horário; a tela
+fica blur, mas nada aparece."
+
+ROOT CAUSE (provada, não adivinhada)
+- O style.css da casa JÁ ERA DONO do prefixo sg-. Em particular:
+  .sg-modal { ... opacity: 0; transform: scale(0.95); ... } que só fica
+  visível quando alguém adiciona a classe .active (o sistema de modais
+  antigo). O modal do UI Kit usava o mesmo nome .sg-modal e nunca põe
+  .active: o overlay escurecia o ecrã (o "blur") e o modal nascia
+  INVISÍVEL por cima dele.
+- Censo completo da contaminação (o gate novo, corrido sobre a versão
+  anterior, acusa 10 colisões): classes sg-modal, sg-btn, sg-btn-sm,
+  sg-btn-ghost, sg-card, sg-toast, sg-toast-info, sg-badge,
+  sg-badge-info + a variável --sg-radius. A contaminação era nos DOIS
+  sentidos: os !important da casa mastigavam os componentes do kit, e
+  as regras do kit podiam tocar componentes históricos sg- da casa.
+- A falha de processo: afirmei "namespaced, logo zero impacto" sem um
+  único grep ao codebase. Namespace afirma-se com grep, não com fé.
+  Lição gravada no UI-GUIA como regra permanente.
+
+CORRECÇÃO 1: MIGRAÇÃO COMPLETA DO KIT PARA O NAMESPACE VIRGEM sgk-
+- 148 ocorrências de classes, 97 variáveis (--sg-* para --sgk-*) e 2
+  keyframes migrados em 7 ficheiros de código + o guia: sige-ui.css,
+  sige-ui.js, ui-kit.php e as views tocadas nos sprints UX
+  (whatsapp_central, financeiro-pagamentos, mpesa-view,
+  jardim_relatorio). O style.css NÃO foi tocado (regra: nunca mexer no
+  design system da casa). Verificado que sgk- estava 100% virgem antes.
+- Visual esperado em live: os componentes do kit passam a renderizar
+  como desenhados (o "visual partido" que existia nos ecrãs do kit era
+  ESTE bug, não intenção).
+
+CORRECÇÃO 2 (da auto-revisão): ENTER RESPEITA A CONFIRMAÇÃO
+- Submeter um formulário com a tecla Enter contornava o
+  data-sige-confirm (o enhancer só interceptava cliques). O kit ganhou
+  um interceptor de 'submit' em fase de captura que usa o ev.submitter
+  real: no Jardim, Enter passou a abrir o mesmo modal do clique.
+
+INSTRUMENTOS NOVOS (a "visão 360" instrumentada, não prometida)
+- 6º GATE tools/check-js-views.php: extrai os 64 blocos <script> das 57
+  views, neutraliza o PHP embebido com sensibilidade ao contexto e
+  valida tudo no node. Fecha o ponto cego onde as conversões
+  async/await viviam sem verificação. Os 2 alarmes que levantou
+  (notas-view, pauta-final) foram triados na fonte: artefactos do
+  neutralizador, views correctas; o neutralizador foi afinado até
+  varrer 64/64 limpo.
+- 7º GATE tools/check-css-collisions.php: extrai classes e variáveis
+  definidas no kit e nos CSS de views e FALHA se alguma também existir
+  no style.css/mobile-tablet-ux.css; política extra: o kit só pode
+  definir sgk-*. Este gate, a existir antes, teria chumbado a v94 no
+  forno com 10 colisões.
+
+QUALIDADE - GATES
+- tools/smoke-regression-pack.php: 87 -> 95 invariantes (secções N+O:
+  ponto cego JS fechado, Enter interceptado, namespace sgk cadeado).
+- Bateria da release passa a ter 7 gates: release, regressão,
+  presenças, M-Pesa, login, JS-views, colisões CSS.
+
+O QUE NÃO MUDOU
+- Nenhuma regra financeira ou académica; nenhum byte do style.css;
+  scores do PAINEL-UX inalterados (isto é correcção estrutural, não
+  progresso de programa).

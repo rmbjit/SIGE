@@ -1,0 +1,12 @@
+SIGE SoftGenial v12.9.30.7 - Fix definitivo dos ícones da Central de Cobranças
+
+Base: v12.9.30.6
+
+O que foi corrigido:
+- Identificada a origem real dos ícones persistentes: não era um ficheiro CSS externo; estavam no próprio admin/finance/financeiro-devedores-view.php.
+- Removidos os blocos .sige-stat-icon dos KPIs da Central de Cobranças que criavam a colisão visual no header.
+- Mantidos título, subtítulo, badges, KPIs, filtros, selecção e tabela.
+- Sem alteração de fórmulas financeiras, académicas, lançamentos, pagamentos ou WhatsApp.
+
+Validação:
+- php -l sem erros no ficheiro alterado.

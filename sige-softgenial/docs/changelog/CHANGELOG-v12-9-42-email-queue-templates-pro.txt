@@ -1,0 +1,16 @@
+SIGE SoftGenial v12.9.42 - Email Queue + Templates PRO
+
+Base: v12.9.41 SMTP Reply-To + From Name validado.
+
+Novidades:
+- Adiciona fila profissional de e-mails em tabela própria: sige_email_queue.
+- Adiciona motor de templates inteligentes com variáveis dinâmicas.
+- Adiciona cron automático a cada 5 minutos para processar e-mails pendentes.
+- Adiciona processamento manual da fila nas Configurações Gerais → Comunicação.
+- Adiciona teste de template pela fila, usando o SMTP já validado.
+- Mantém SMTP nativo, Reply-To, From Name e credenciais encriptadas sem regressão.
+- Não altera fórmulas financeiras, permissões, WhatsApp nem regras académicas.
+
+Notas:
+- A fila usa wp_mail(), portanto herda o SMTP nativo configurado no SIGE.
+- Os módulos futuros podem chamar sige_email_enqueue_template() ou sige_email_queue_enqueue().

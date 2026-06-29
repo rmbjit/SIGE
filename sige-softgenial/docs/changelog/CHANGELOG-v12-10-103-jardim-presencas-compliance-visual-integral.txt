@@ -1,0 +1,29 @@
+SIGE SoftGenial v12.10.103 - Jardim Presenças: Compliance Visual Integral
+
+Base
+- Construído por cima da v12.10.102 - Jardim Relatório: Compliance Visual Integral.
+
+Objectivo
+- Aplicar o padrão visual Produto PRO ao módulo &view=jardim_presencas.
+- Garantir wide layout real dentro do App Shell.
+- Melhorar a responsividade em desktop, laptop 17", tablet e mobile.
+- Manter intervenção visual, sem alterar handler de gravação, nonces, base de dados, permissões, notas, pagamentos ou regras de presença.
+
+Ajustes aplicados
+- Header genérico removido desta view via lista de views com cabeçalho próprio.
+- Hero antigo escuro substituído por hero claro no padrão Painel Principal / Dashboard V2 MJS-grade.
+- Sequência visual aplicada: ícone canónico, área Pré-Escolar, título Presenças do Jardim, subtítulo, chips de contexto e painel lateral.
+- KPIs de Presente, Atraso, Falta e Falta Justificada redesenhados com ícones canónicos.
+- Filtro de turma/data redesenhado como toolbar responsiva.
+- Lista de chamada redesenhada com cabeçalho profissional, botões harmonizados e scroll horizontal controlado quando necessário.
+- Estados de presença passam a ter cartões radio mais claros e amigáveis.
+- Campo de observação harmonizado no padrão Produto PRO.
+- Botões Guardar Presenças e Filtrar harmonizados.
+- Breakpoints revistos para 1450px, 1280px, 980px e 760px.
+
+Garantias
+- Sem alterar action sige_jardim_presencas_salvar.
+- Sem alterar nonce _jpres_nonce.
+- Sem alterar nomes dos campos enviados no POST.
+- Sem alterar tabela de presenças nem queries.
+- Sem alteração em notas, Pauta, DEC, ACTA, boletins, pagamentos, permissões ou base de dados.

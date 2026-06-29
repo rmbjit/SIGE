@@ -1,0 +1,64 @@
+v12.11.9.28 - Cobranca da licenca humanizada (regua faseada no cliente)
+
+Contexto
+--------
+O corpo da mensagem de cobranca ja vinha humanizado pelo Hub, mas a MOLDURA
+desenhada no cliente (titulo, contador "Dias ate suspensao", linha "Suspensao
+automatica em X") continuava a liderar com a ameaca e a assustar a Direccao.
+Esta versao humaniza essa moldura, mantendo a confidencialidade ja existente
+(so perfis financeiros/decisores veem ref/valor/prazo) e SEM tocar em regras
+financeiras ou academicas.
+
+Ficheiro: includes/hub/class-sige-hub-billing.php
+
+Regua faseada (nova) - notice_framing()
+---------------------------------------
+- renew (antes do vencimento): titulo "Renovacao da licenca SoftGenial"; mostra
+  "Vence em N dia(s)"; NAO menciona pausa/suspensao; lead "enquanto estiver em
+  dia, o seu acesso ao SIGE mantem-se activo".
+- open (vencido, pausa ainda > 5 dias): "renovacao em aberto"; "Venceu ha N dia(s)";
+  ainda sem contagem de suspensao; pede regularizacao com oferta de contacto.
+- soon (pausa em 3-5 dias): passa a mostrar a data de pausa e pede regularizacao
+  ate essa data (cor ambar).
+- final (pausa <= 2 dias): pede regularizacao ate a data OU contacto para combinar
+  prazo (cor vermelha). Tom firme mas humano.
+
+Barra de topo (admin_notice)
+----------------------------
+- Titulo deixa de ser "SoftGenial Hub - cobranca da licenca pendente".
+- Deixa de exibir "Suspensao automatica em X (N dia(s) restante(s))" de forma fixa.
+- Na fase renew mostra "Vence a <data>"; a "Pausa automatica em <data>" so aparece
+  nas fases soon/final.
+
+Modal flutuante (render_popup)
+------------------------------
+- Titulo faseado ("Renovacao da licenca" / "Renovacao em aberto").
+- O contador grande deixa de ser sempre "Dias ate suspensao": passa a "Vence em" /
+  "Venceu ha" / "Dias ate a pausa" conforme a fase, com cor neutra/ambar/vermelha.
+- A linha "Pausa:" no bloco de meta so aparece nas fases soon/final.
+- O corpo continua a usar a mensagem cordial enviada pelo Hub.
+- Botoes "Contactar SoftGenial" e "Lembrar mais tarde" mantidos.
+
+Ecra de pausa (enforce_auto_suspension)
+---------------------------------------
+- "Acesso temporariamente suspenso" -> "Acesso temporariamente em pausa".
+- Acrescenta: reactivacao imediata apos confirmacao do pagamento + contacto
+  (info@softgenial.edu.mz). Mantem "dados preservados".
+- Perfis sem mandato financeiro continuam a ver o aviso generico (sem ref/valor/prazo).
+
+E-mail de fallback
+------------------
+- Assunto e corpo passam a falar em "renovacao" e "pausa" (nao "interrupcao
+  operacional"); oferece prazo/contacto. Continua a ser enviado apenas quando o
+  Hub nao suprime o e-mail (o Hub envia o e-mail real).
+
+Nao alterado
+------------
+- Regras financeiras e academicas (intactas).
+- Confidencialidade/whitelist de perfis (intacta).
+- Mecanismo de auto-suspensao e contrato com o Hub (campos due_date/suspend_at).
+
+Versionamento sincronizado
+--------------------------
+- Header Version (sige-softgenial.php), define('SIGE_VERSION'), BUILD.json -> 12.11.9.28.
+  (Este build nao inclui demo-loader; SIGE_DEMO_MAIN_VERSION nao se aplica.)

@@ -1,0 +1,53 @@
+SIGE SoftGenial v12.11.9.147 - CORRECÇÃO CRÍTICA (bug de entidades HTML)
+=======================================================================
+
+O QUE CORRERA MAL (v131 pagamentos, v146 config)
+- Durante a auditoria de design, o script de migração de cor usava o regex
+  #[0-9a-fA-F]{6} para encontrar cores hex.
+- Os ficheiros tinham EMOJIS codificados em entidades HTML decimais, ex:
+  a família 👨‍👩‍👧 = &#128104;&#8205;&#128105;&#8205;&#128103;
+- O regex apanhou os 6 dígitos (128104, etc.) por serem dígitos válidos em
+  hex, e converteu-os em var(--color-...), deixando &var(--color-...);
+  como TEXTO VISÍVEL na página.
+- Resultado visível: títulos como "&var(--color-success-500);" no ecrã, e
+  emojis destruídos.
+- Afectou: financeiro-pagamentos.php (20 ocorrências) e
+  financeiro-config.php (7 ocorrências).
+
+A CORRECÇÃO
+1. Os dois ficheiros foram RESTAURADOS a partir do original limpo
+   (v12.11.9.109, confirmado idêntico ao v130, sem perda de trabalho
+   funcional).
+2. A auditoria de design foi RE-APLICADA com um script BLINDADO: todas as
+   entidades HTML (&#NNN; e &nome;) são mascaradas ANTES de tocar em cores
+   e restauradas no fim. As cores que eram MESMO cores migraram para
+   tokens; emojis e acentos ficaram intactos.
+3. Verificado: zero &var( em todo o sistema; emojis preservados (família
+   👨‍👩‍👧, 🚀, 💡, 📚, ⚠, ☑, etc.); acentos preservados (ç, ã, º, í, ê, ú).
+
+PROTECÇÃO PERMANENTE
+- Novo invariante GLOBAL no smoke-regression-pack: "PROTECCAO
+  ANTI-ENTIDADE" verifica que NENHUM ficheiro admin tem &var( partido.
+  Este bug nunca mais pode passar sem ser apanhado.
+
+ESTADO
+- 12 gates verdes. Regressão: 302 invariantes (inclui o novo).
+- Tipografia: 0 pesos não-canónicos (mantido).
+- Mágicos: 4011 (subiu de 3972 porque o restauro trouxe os hex reais que a
+  versão bugada tinha corrompido; é o estado correto).
+- Os dois ecrãs mantêm a hierarquia de 3 níveis, raios/sombras da escala e
+  cores em tokens - mas agora SEM destruir conteúdo.
+
+DESCOBERTA ADICIONAL (a tratar a seguir)
+- A varredura revelou ficheiros em includes/ com pesos não-canónicos que
+  NUNCA foram auditados (estavam fora do âmbito admin/*-view.php):
+  documents-engine.php (23), portaria-camera-safe-page.php (20),
+  admin-shell.php (8), aluno-accounts.php (8), dica-do-dia.php (4),
+  class-sige-hub-billing.php (1). A auditoria de design NÃO estava tão
+  completa quanto se julgava.
+
+NOTA DE HONESTIDADE
+- Este foi um erro meu, do tipo que os gates de então não cobriam (eles
+  verificavam pesos, raios, cores e chavetas - mas não "entidades HTML
+  intactas"). O ecrã visível do Rogério apanhou o que os meus gates não
+  apanharam. A lição está agora codificada num gate.

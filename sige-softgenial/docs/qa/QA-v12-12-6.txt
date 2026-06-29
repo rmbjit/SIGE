@@ -1,0 +1,15 @@
+QA v12.12.6 - Security Kernel Query Runtime & Tenant Guard Closure
+
+Resultado:
+- PHP lint: 346 ficheiros, 0 falhas.
+- Gates oficiais: 37/37 verdes.
+- Schema: sem alteracao.
+- P0 aberto: 0.
+- P1 aberto: 0.
+
+Comandos executados:
+- php tools/run-gates.php
+- find . -name '*.php' ... | xargs php -l
+- php tools/smoke-security-kernel-v12-12-6.php
+- php tools/smoke-settings-tenant-guard-v12-12-6.php
+- php tools/check-security-kernel-negative-tests.php

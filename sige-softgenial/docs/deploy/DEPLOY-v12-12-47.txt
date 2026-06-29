@@ -1,0 +1,49 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.47
+Data: 2026-06-23
+Titulo: Fase 4 incr 2 vaga 2 - Estilos academicos para utilitarios
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+Continuacao do trabalho de front-end seguro. Nesta versao, o codigo de estilo que
+estava escrito directamente dentro das paginas academicas (alinhamentos, pesos de
+letra, margens) passa a usar classes reutilizaveis, num unico ficheiro de estilo.
+
+O aspecto dos ecrans academicos e exactamente o mesmo. A mudanca e interna: o estilo
+fica mais organizado e preparado para o passo final desta fase (a politica de
+seguranca de conteudo, CSP), que exige que o estilo nao esteja embutido nas paginas.
+
+Nao ha qualquer alteracao visivel de funcionamento.
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+
+================================================================
+VERIFICACAO
+================================================================
+1. Abra algumas vistas academicas e confirme que estao visualmente identicas:
+   - Pauta e boletim (alinhamentos das colunas, numeros a negrito).
+   - Abertura e encerramento do ano (tabelas e cabecalhos).
+   - Estatisticas demograficas (tabelas e totais).
+   - Matriz curricular e lista de turmas.
+2. Confirme que nada mudou no aspecto (mesmos alinhamentos, mesmos negritos).
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera o
+esquema da base de dados, pelo que a reversao e directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Vagas seguintes: continuar a mover o estilo e os cliques embutidos das restantes
+  areas (recursos humanos, jardim, sistema), depois os blocos de script, e por fim
+  impor a politica de seguranca de conteudo (CSP).

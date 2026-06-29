@@ -1,0 +1,23 @@
+SIGE SoftGenial v12.10.88 - Saúde do Sistema: Compliance Visual Integral
+
+Objectivo
+- Redesenhar visualmente o módulo &view=sige_core_status com o mesmo rigor do Painel Principal / Dashboard V2 MJS-grade.
+- Manter a intervenção exclusivamente visual, sem alterar diagnósticos, licença, segurança, permissões, tabelas, logs, fila, base de dados, notas, ACTA, DEC, pautas ou regras académicas.
+
+Ajustes aplicados
+- Removido o cabeçalho genérico do App Shell para esta view, garantindo header único.
+- Hero antigo escuro substituído por hero claro no padrão Produto PRO.
+- Sequência visual obrigatória aplicada: ícone canónico, área Configurações, título, subtítulo, chips técnicos e painel lateral de estado da licença.
+- Cards de Licenciamento central, Resumo operacional, Tabelas críticas, Fila de notificações, Avisos/bloqueios, Módulos do plano e Logs harmonizados.
+- Formulários de licença redesenhados com campos arredondados, foco visual, notas de segurança e botões canónicos.
+- Botões Guardar configuração e Validar agora recebem ícones canónicos, hover e cursor adequados.
+- Tabelas críticas, módulos do plano e logs recebem melhor hierarquia visual e melhor adaptação a telas menores.
+- Alertas de licença, tolerância, fuso horário e avisos harmonizados no padrão Produto PRO.
+- Layout responsivo revisto para desktop, tablet e mobile.
+
+Garantias
+- Sem alteração na recolha de diagnósticos.
+- Sem alteração no fluxo de licença, validação, tolerância local ou endpoint central.
+- Sem alteração nas permissões, segurança, logs, tabelas ou fila.
+- Sem alteração em notas, ACTA, DEC, pautas, pauta final, boletins ou regras académicas.
+- Sem alteração em pagamentos, multas, mensalidades ou base de dados financeira.

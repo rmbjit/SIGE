@@ -1,0 +1,72 @@
+SIGE SoftGenial v12.10.105 - Jardim: Critérios PRO e Migração Segura
+
+Base
+- Construído por cima da v12.10.104 - Jardim de Infância: Fluxo PRO e Fonte de Verdade.
+
+Objectivo
+- Preparar o módulo Jardim de Infância para gestão PRO de critérios.
+- Eliminar a dependência estrutural de SQL manual/phpMyAdmin.
+- Criar campos de escopo e versionamento sem inventar critérios pedagógicos.
+- Limpar duplicados previsíveis de forma idempotente antes de criar índices.
+- Preservar cálculos, design validado e fluxos funcionais.
+
+Migração segura aplicada em admin_init
+- Executa uma vez através da option sige_jardim_criterios_pro_v105_done.
+- Não cria critérios pedagógicos novos.
+- Não altera descrições de critérios existentes.
+- Não altera respostas ou níveis existentes, excepto remoção de duplicados lógicos mantendo o ID mais recente.
+
+Estrutura PRO dos critérios
+Tabela sige_jardim_criterios:
+- classe
+- ano_lectivo
+- trimestre
+- ativo
+- versao
+- created_at
+- updated_at
+- índice idx_jcrit_scope_v105
+
+Respostas de critérios
+Tabela sige_jardim_criterios_respostas:
+- adiciona turma_id.
+- preenche turma_id histórico a partir da matrícula do aluno no mesmo ano lectivo quando possível.
+- limpa duplicados por escola/aluno/turma/critério/trimestre/ano.
+- cria:
+  - uniq_jresp_scope_v105
+  - idx_jresp_turma_v105
+
+Avaliações qualitativas
+Tabela sige_jardim_avaliacoes:
+- limpa duplicados por escola/aluno/turma/disciplina/trimestre/ano.
+- cria:
+  - uniq_javal_scope_v105
+  - idx_javal_turma_v105
+
+Diário e Saúde
+Tabela sige_jardim_diario:
+- limpa duplicados por escola/aluno/turma/data/ano.
+- cria:
+  - uniq_jdiario_scope_v105
+  - idx_jdiario_turma_v105
+
+Tabela sige_jardim_saude:
+- limpa duplicados por escola/aluno/turma/data/ano.
+- cria:
+  - uniq_jsaude_scope_v105
+  - idx_jsaude_turma_v105
+
+Views e handlers ajustados
+- Diário e Boletim passam a ler critérios activos quando o campo ativo existir.
+- Diário e Boletim passam a respeitar ano lectivo e trimestre nos critérios quando esses campos existirem.
+- Respostas de critérios passam a respeitar turma_id quando a coluna existir, mantendo compatibilidade com respostas antigas sem turma_id.
+- Handler de critérios passa a gravar turma_id nas respostas quando a coluna existir.
+- Mensagem antiga que mandava executar SQL manual no phpMyAdmin foi substituída por orientação institucional do sistema.
+
+Garantias
+- Sem inventar critérios pedagógicos.
+- Sem alterar função de cálculo MB/B/S/NS.
+- Sem alterar design validado das views.
+- Sem alterar pagamentos, multas, mensalidades, recibos ou histórico financeiro.
+- Sem alteração em notas, Pauta, DEC, ACTA ou boletins académicos principais.
+- Migração idempotente e compatível com prefixo dinâmico WordPress.

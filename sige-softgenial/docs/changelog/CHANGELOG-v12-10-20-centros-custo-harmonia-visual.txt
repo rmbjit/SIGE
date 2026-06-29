@@ -1,0 +1,23 @@
+SIGE SoftGenial v12.10.20 - Centros de Custo: Harmonia Visual
+
+Objectivo
+- Alinhar o módulo Centros de Custo ao padrão visual aprovado do Painel Principal.
+- Manter progressão contínua, sem regressões e sem termos técnicos visíveis ao utilizador final.
+
+Alterações visuais e de experiência
+- Removida duplicação de cabeçalho no módulo Centros de Custo.
+- Novo hero claro, amplo e consistente com o padrão aprovado.
+- KPIs para centros registados, centros activos, serviços activos e serviços por classificar.
+- Formulário de criação/edição reorganizado em cartão moderno e responsivo.
+- Lista de centros redesenhada com badges, acções visíveis e leitura mais limpa.
+- Área de orientação de uso acrescentada com linguagem simples para a escola.
+- Ferramenta de movimentação de serviços entre centros redesenhada.
+- Eliminar centro e executar movimentação passaram a usar pop-up real de confirmação.
+- Criado ícone SVG local plus.svg para manter consistência e visibilidade.
+- Layout mobile-friendly, com rolagem horizontal controlada na tabela.
+
+Garantias
+- Sem alteração de fórmulas.
+- Sem alteração de mensalidades, multas, descontos, pagamentos, cobranças, recibos, estornos ou base de dados.
+- Sem alteração de notas, pautas, DEC, boletins ou actas.
+- Mantido o Painel Principal como referência visual inegociável.

@@ -1,0 +1,308 @@
+OK   Handler salvar_aluno existe
+OK   Handler remover_aluno existe
+OK   salvar_aluno: nonce + matriz de permissões
+OK   salvar_aluno exige alunos.editar/criar conforme o caso
+OK   remover_aluno: nonce + alunos.apagar
+OK   Helper de visualização de documentos presente
+OK   Helper de emissão de documentos presente
+OK   Helper de exportação presente
+OK   Whitelist de purpose no export AJAX
+OK   Contagem de alunos sem duplicar por joins
+OK   Joins de matrícula/turma com escopo de escola
+OK   Perfil Guarda/Portaria preservado no seed
+OK   Portaria devolve acesso_permitido
+OK   Portaria devolve ui_estado coerente
+OK   Portaria devolve selo coerente
+OK   Portaria devolve som coerente
+OK   Migration tenant-aware existe
+OK   Substituição segura de UNIQUE indexes existe
+OK   Backfill de escola_id por relação canónica existe
+OK   Nenhuma UNIQUE KEY global em tabelas tenant-scoped
+OK   Fórmula canónica sige_fin_saldo_sql presente
+OK   Fórmula canónica sige_fin_saldo_lancamento presente
+OK   Sincronizador de status de lançamento presente
+OK   Marcador de reconciliação [SIGE_RECON_V1] presente
+OK   Enfileirador WhatsApp financeiro presente
+OK   Allowlist de views presente no router
+OK   Allowlist aplicada antes do include
+OK   Escudo de login ligado aos hooks de autenticação
+OK   Escudo de login carregado no bootstrap
+OK   Motor de presenças: derivação pura presente
+OK   Presenças: AJAX de correcção registado
+OK   Presenças: whitelist de estados de excepção
+OK   Presenças nunca escrevem no log da Portaria
+OK   Schema: UNIQUE de excepção por escola+aluno+data
+OK   Conciliação M-Pesa chama a função financeira canónica
+OK   Conciliação M-Pesa NUNCA insere directamente em tabelas financeiras
+OK   Conciliação M-Pesa tem caminho de decisão humana
+OK   Webhook M-Pesa valida o token com hash_equals
+OK   Webhook M-Pesa verifica idempotência por referência
+OK   Schema: UNIQUE de idempotência (escola_id, referencia_mpesa)
+OK   Cliente M-Pesa cifra o bearer com RSA PKCS1
+OK   Presenças: view usa sige_view_assets (regra do escuteiro paga)
+OK   Presenças: zero blocos <style> no PHP
+OK   Assets extraídos existem em assets/views/
+OK   Código CSS morto removido (consolidado candidato + ferramenta obsoleta)
+OK   Cobrança push: capacidade + nonce verificados
+OK   Cobrança push usa o cliente oficial
+OK   Cobrança push NUNCA insere em tabelas financeiras
+OK   Interruptores de saúde: nonce + capacidade verificados
+OK   Conciliação regista pelo método do provider (mpesa/emola), não hardcoded
+OK   Webhook e-Mola valida o token com hash_equals
+OK   Webhook e-Mola insere com provider=emola no funil partilhado
+OK   e-Mola usa a MESMA conciliação canónica do M-Pesa
+OK   Webhook e-Mola NUNCA insere em tabelas financeiras
+OK   Parser monetário partilhado (anglo + europeu) presente
+OK   Relatório oficial alimentado pelo agregador do motor
+OK   Ramo do relatório fica DEPOIS da guarda de visualização
+OK   Totais por dia (rodapé oficial) como função pura
+OK   UI Kit: os 3 ficheiros da fundação existem
+OK   UI Kit carregado no bootstrap
+OK   UI Kit declara dependência do design system (carrega depois)
+OK   sigeUi exposto globalmente
+OK   Piloto WhatsApp Central: zero alert() nativos
+OK   Piloto WhatsApp Central: zero confirm() nativos
+OK   Piloto usa os diálogos canónicos do kit
+OK   Piloto: terminologia 100% canónica (Remover/Guardar/Pesquisar)
+OK   Auditor UX presente (medição repetível)
+OK   Pagamentos: zero alert() nativos
+OK   Pagamentos: zero confirm() nativos
+OK   Pagamentos: regista SEMPRE pela função financeira canónica (2 caminhos)
+OK   Pagamentos: view NUNCA insere directo em tabelas financeiras
+OK   Pagamentos: escudo anti duplo-clique no botão que move dinheiro
+OK   Pagamentos: zero botões sem classe
+OK   Auditor v2: AO90 medido só em contexto visível (sem falsos positivos SQL)
+OK   Config: rótulos BR canonizados (ficha do aluno)
+OK   Pagamentos Móveis: zero diálogos nativos (alert/confirm/prompt)
+OK   Rejeitar: prompt do kit com a referência da transacção
+OK   Pagamentos Móveis: banners, cartões e badges do kit
+OK   Kit JS expõe sigeUi.prompt
+OK   Auditor conta prompt( nativos
+OK   Jardim relatório: confirms declarativos do kit (envio mensal + individual)
+OK   Jardim relatório: zero botões sem classe
+OK   Estatísticas: zero alert(), feedback por toast
+OK   Turmas: horário edita com sigeUi.prompt (disciplina + professor)
+OK   Kit: sigeUi.prompt aceita valor inicial
+OK   Verificador de JS embebido nas views existe (6º gate)
+OK   Kit: confirmação declarativa intercepta também a submissão por teclado
+OK   Kit: usa o submitter real do formulário quando disponível
+OK   Gate de colisões CSS existe (7º gate)
+OK   Kit CSS vive no namespace sgk- (classes e variáveis)
+OK   Kit CSS NUNCA redefine classes sg- da casa
+OK   Kit JS cria elementos com classes sgk-
+OK   Helpers PHP do kit emitem classes sgk-
+OK   Acta: aprovação à pauta com confirmação do kit (zero confirm nativo)
+OK   Acta: botão Carregar na hierarquia do kit
+OK   Planos: prestações pagam SEMPRE pela função financeira canónica
+OK   Planos: view NUNCA insere directo em tabelas financeiras
+OK   Planos: zero botões sem classe (HTML real)
+OK   Devedores: zero alert(); cobrança em massa SEMPRE com confirmação própria
+OK   Auditor v2.4: botões em HTML puro e termos sem comentários
+OK   Portal do aluno: estados vazios existentes (notas + financeiro) protegidos
+OK   Encerramento: as 3 acções de ano pedem confirmação do kit
+OK   Encerramento: Encerrar o ano é vermelho e mantém a classe local
+OK   Encerramento: zero botões sem classe (HTML real)
+OK   Lançamentos: zero alert() nativos
+OK   Lançamentos: view NUNCA insere directo em tabelas financeiras
+OK   Auditor v2.5: vazios genéricos e tolerância de dados excluída do AO90
+OK   Jardim diário: botões na hierarquia do kit (violeta de marca preservado)
+OK   Alocação: zero diálogos nativos
+OK   Alocação: remover da turma confirma com o NOME do aluno
+OK   Alocação: estado vazio existente protegido
+OK   Circulares: zero alert() nativos
+OK   Circulares: envio em massa SEMPRE atrás da confirmação consciente (checkbox + botão bloqueado)
+OK   Auditor v2.5d: fragmentos de schema fora do AO90; vazios reconhecem formulações
+OK   Calendário: agregado usa a saldo CANÓNICA e conta devedores distintos
+OK   Calendário: devedor do mês exige saldo em aberto positivo
+OK   Calendário: motor é LEITURA PURA (zero escritas na BD)
+OK   Devedores: calendário reutiliza as MESMAS condições da lista (sem o mês)
+OK   Devedores: tiles clicáveis aplicam o filtro de mês existente
+OK   Calendário: CSS em ficheiro próprio (gate de colisões cobre) e enfileirado
+OK   Calendário: smoke do motor puro existe (8º conjunto)
+OK   Corredor de gates existe e cobre os 8 (exit codes nunca mascarados)
+OK   EXTINÇÃO GLOBAL: zero prompt() nativos em TODAS as views
+OK   EXTINÇÃO GLOBAL: zero alert() nativos em TODAS as views
+OK   EXTINÇÃO GLOBAL: zero confirm() nativos em TODAS as views
+OK   Kit: confirmação declarativa cobre também links <a> (preservando href/nonce)
+OK   EXTINÇÃO GLOBAL: zero rótulos AO90 visíveis (usuário/cadastro) em todas as views
+OK   EXTINÇÃO GLOBAL: zero botões sem classe em todas as views
+OK   Dashboard: classes utilitárias semânticas usam tokens canónicos
+OK   Dashboard: zero inline de cor real (migrado para classes)
+OK   Dashboard: papéis de cor preservados via tokens (sucesso/perigo/marca)
+OK   Auditor v2.7: custom properties e estilo dinâmico PHP não contam como inline-dívida
+OK   Equipe: larguras da tabela de staff em classes (col-* semânticas)
+OK   Equipe: zero inline estático de largura/margem (migrado para classes)
+OK   Equipe: larguras de coluna preservadas (pixel-perfect)
+OK   Equipe: alternância JS do detalhe de confirmação intacta
+OK   Disciplinas: larguras de tabela e estado vazio em classes
+OK   Disciplinas: zero inline estático de largura/padding
+OK   Disciplinas: estados vazios gémeos usam a mesma classe (consolidação real)
+OK   Disciplinas: sem atributos órfãos (input da sigla íntegro)
+OK   Disciplinas: animação jQuery do box-esg2 intacta (display inicial preservado)
+OK   Design tokens: ficheiro canónico existe (fonte única da verdade)
+OK   Design tokens: paleta de marca e neutros ancorada nas cores reais
+OK   Design tokens: 7 familias completas (info azul incluida)
+OK   Dashboard: ZERO cores hex mágicas (100% migrado para tokens)
+OK   Dashboard: cores vêm da fonte da verdade (var(--color-*))
+OK   Dashboard: azul informativo e marca usam tokens semânticos correctos
+OK   style.css: ZERO cores hex mágicas (100% migrado para tokens)
+OK   style.css: ponte --sg-* -> --color-* instalada (uma só fonte da verdade)
+OK   style.css: cores vêm da fonte da verdade (700+ referências)
+OK   Smoke do design system existe (10º conjunto de garantias)
+OK   Ícones: função de canonização do invólucro <svg> existe
+OK   Ícones: sige_ui_icon canoniza cada ícone ao servir
+OK   Ícones: ferramenta de normalização e smoke versionados
+OK   Ícones: os dos cartões (school/pin/file/palette/users/check) estão normalizados
+OK   Ícones: regra base canónica no design system (tamanho + cor herdada)
+OK   Config Center: hierarquia de 3 níveis (só pesos reais, zero 850/950)
+OK   Config Center: raios da escala canónica (4/8/12/16/22/pill)
+OK   Config Center: cores do <style> migradas para tokens
+OK   Gate de tipografia e baseline registados
+OK   alunos_lista: hierarquia de pesos reais (zero 850/950 em todo o ficheiro)
+OK   alunos_lista: CSS principal migrado para tokens (450+ referências)
+OK   alunos_lista: todas as referências de cor resolvem no canónico
+OK   alunos_lista: CSS bem-formado (chavetas balanceadas)
+OK   financeiro-extratos: hierarquia de pesos reais (zero 850/950)
+OK   financeiro-extratos: CSS principal migrado para tokens (200+ referências)
+OK   financeiro-extratos: template de impressão preservado
+OK   financeiro-extratos: semântica financeira de reconciliação preservada no termo impresso
+OK   financeiro-extratos: CSS bem-formado (chavetas balanceadas)
+OK   matriz: hierarquia de pesos reais (zero 850/950)
+OK   matriz: CSS migrado para tokens (150+ referências)
+OK   matriz: CSS bem-formado (chavetas balanceadas)
+OK   aluno-portal: hierarquia de pesos reais (zero 850/950)
+OK   aluno-portal: CSS e inline migrados para tokens (100+ referências)
+OK   aluno-portal: tema dinâmico da escola preservado (fallback intacto)
+OK   aluno-portal: CSS bem-formado (chavetas balanceadas)
+OK   disciplinas: hierarquia de pesos reais (zero 850/950)
+OK   disciplinas: CSS e ícones de ciclo migrados para tokens (180+ referências)
+OK   disciplinas: CSS bem-formado (chavetas balanceadas)
+OK   boletim: hierarquia de pesos reais (zero 850/950)
+OK   boletim: CSS e inline migrados para tokens (110+ referências)
+OK   boletim: função de cor por nota preservada (semântica de classificação em lógica)
+OK   boletim: template de impressão do aproveitamento preservado
+OK   boletim: CSS bem-formado (chavetas balanceadas)
+OK   equipe: hierarquia de pesos reais (zero 850/950)
+OK   equipe: CSS migrado para tokens (200+ referências)
+OK   equipe: CSS bem-formado (chavetas balanceadas)
+OK   minhas_turmas: hierarquia de pesos reais (zero 850/950)
+OK   minhas_turmas: CSS e cores de estado migrados para tokens (100+ referências)
+OK   minhas_turmas: CSS bem-formado (chavetas balanceadas)
+OK   portaria: hierarquia de pesos reais no CSS (zero 850/950)
+OK   portaria: CSS migrado para tokens (100+ referências)
+OK   portaria: CSS bem-formado (chavetas balanceadas)
+OK   encerramento: hierarquia de pesos reais (zero 850/950)
+OK   encerramento: CSS, inline e lógica migrados para tokens (110+ referências)
+OK   encerramento: lógica de cor por taxa de aprovação preservada (via tokens)
+OK   encerramento: CSS bem-formado (chavetas balanceadas)
+OK   curriculum-engine: hierarquia de pesos reais (zero 850/950)
+OK   curriculum-engine: CSS e inline migrados para tokens (100+ referências)
+OK   curriculum-engine: tema dinâmico preservado (com fallback em token)
+OK   curriculum-engine: CSS bem-formado (chavetas balanceadas)
+OK   transporte: hierarquia de pesos reais (zero 850/950)
+OK   transporte: CSS, inline e lógica migrados para tokens (90+ referências)
+OK   transporte: lógica de cor por lotação preservada (via tokens)
+OK   transporte: CSS bem-formado (chavetas balanceadas)
+OK   jardim_saude: hierarquia de pesos reais (zero 850/950)
+OK   jardim_saude: CSS e inline de saúde migrados para tokens (120+ referências)
+OK   jardim_saude: CSS bem-formado (chavetas balanceadas)
+OK   jardim_diario: hierarquia de pesos reais (zero 850/950)
+OK   jardim_diario: CSS, inline e mapa de avaliação migrados (120+ referências)
+OK   jardim_diario: mapa de cor por avaliação MB/B/S/NS preservado (via tokens)
+OK   jardim_diario: CSS bem-formado (chavetas balanceadas)
+OK   dashboard: hierarquia de pesos reais (zero 850/950)
+OK   dashboard: zero cores mágicas (migração de cor da v108 intacta)
+OK   dashboard: CSS bem-formado (chavetas balanceadas)
+OK   acta: hierarquia de pesos reais (zero 850/950)
+OK   acta: CSS e inline migrados para tokens (130+ referências)
+OK   acta: regra de impressão preservada
+OK   acta: CSS bem-formado (chavetas balanceadas)
+OK   pautas: hierarquia de pesos reais (zero 850/950)
+OK   pautas: CSS, inline e mapa de situação migrados (130+ referências)
+OK   pautas: mapa de cor por situação (PROGRIDE/TRANSITA/REPROVA) preservado
+OK   pautas: regras de impressão preservadas
+OK   pautas: CSS bem-formado (chavetas balanceadas)
+OK   estatisticas-demograficas: hierarquia de pesos reais (zero 850/950)
+OK   estatisticas-demograficas: CSS e inline migrados (90+ referências)
+OK   estatisticas-demograficas: template de impressão preservado
+OK   estatisticas-demograficas: CSS bem-formado (chavetas balanceadas)
+OK   abertura: hierarquia de pesos reais (zero 850/950)
+OK   abertura: CSS e inline migrados para tokens (120+ referências)
+OK   abertura: regra de impressão do log preservada
+OK   abertura: CSS bem-formado (chavetas balanceadas)
+OK   financeiro-pagamentos: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   financeiro-pagamentos: CSS, corpo e recibos migrados (300+ referências)
+OK   financeiro-pagamentos: classes de estado de pagamento (pago/vencido) preservadas
+OK   financeiro-pagamentos: CSS bem-formado (chavetas balanceadas)
+OK   permissions-ui: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   permissions-ui: CSS e inline migrados para tokens (130+ referências)
+OK   permissions-ui: CSS bem-formado (chavetas balanceadas)
+OK   jardim_presencas: hierarquia de pesos reais (zero 850/950)
+OK   jardim_presencas: CSS e mapa de presença migrados (70+ referências)
+OK   jardim_presencas: mapa de cor por estado de presença (presente/atraso/falta) preservado
+OK   jardim_presencas: CSS bem-formado (chavetas balanceadas)
+OK   pauta-final: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   pauta-final: CSS e corpo migrados para tokens (90+ referências)
+OK   pauta-final: template de impressão preservado
+OK   pauta-final: classes de situação (progride/reprova) preservadas
+OK   pauta-final: CSS bem-formado (chavetas balanceadas)
+OK   whatsapp_central: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   whatsapp_central: CSS, corpo e mapa de estado migrados (170+ referências)
+OK   whatsapp_central: mapa de cor por estado de mensagem (enviada/falhou/pendente) preservado
+OK   whatsapp_central: CSS bem-formado (chavetas balanceadas)
+OK   notas: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   notas: CSS e corpo migrados para tokens (170+ referências)
+OK   notas: tema dinâmico preservado (com fallback em token)
+OK   notas: CSS bem-formado (chavetas balanceadas)
+OK   jardim_relatorio: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   jardim_relatorio: CSS, corpo e mapas migrados (170+ referências)
+OK   jardim_relatorio: mapas de avaliação (estado emocional + desempenho) preservados
+OK   jardim_relatorio: CSS bem-formado (chavetas balanceadas)
+OK   core-status: hierarquia de pesos reais (zero 850/950)
+OK   core-status: CSS migrado para tokens (75+ referências)
+OK   core-status: classes de estado de sistema (ok/warn) preservadas
+OK   core-status: CSS bem-formado (chavetas balanceadas)
+OK   financeiro-devedores: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   financeiro-devedores: CSS e corpo migrados (200+ referências)
+OK   financeiro-devedores: template de impressão (Lista de Cobrança) preservado
+OK   financeiro-devedores: classe de valor de dívida preservada
+OK   financeiro-devedores: CSS bem-formado (chavetas balanceadas)
+OK   turmas: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   turmas: blocos CSS e corpo migrados (170+ referências)
+OK   turmas: templates de impressão (Mapa de Turmas, Lista de Alunos, Horário) preservados
+OK   turmas: template de exportação Excel preservado
+OK   turmas: CSS bem-formado (chavetas balanceadas)
+OK   auditoria_notas: hierarquia de pesos reais (zero 850/950)
+OK   auditoria_notas: CSS, mapa de módulo e estado de erro migrados (75+ referências)
+OK   auditoria_notas: lógica de estado de erro (vermelho) preservada
+OK   auditoria_notas: CSS bem-formado (chavetas balanceadas)
+OK   dec: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   dec: CSS e corpo migrados para tokens (75+ referências)
+OK   dec: template de impressão preservado
+OK   dec: CSS bem-formado (chavetas balanceadas)
+OK   aprovar_notas: hierarquia de pesos reais (zero 850/950)
+OK   aprovar_notas: CSS e inline migrados para tokens (65+ referências)
+OK   aprovar_notas: estado de aprovação (pendente/rejeitar) preservado
+OK   aprovar_notas: CSS bem-formado (chavetas balanceadas)
+OK   jardim_boletim: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   jardim_boletim: CSS e corpo migrados para tokens (75+ referências)
+OK   jardim_boletim: mapa de avaliação MB/B/S/NS preservado
+OK   jardim_boletim: CSS bem-formado (chavetas balanceadas)
+OK   financeiro-lancamentos: hierarquia de pesos reais (zero 850/950)
+OK   financeiro-lancamentos: CSS migrado para tokens (40+ referências)
+OK   financeiro-lancamentos: CSS bem-formado (chavetas balanceadas)
+OK   financeiro-config: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   financeiro-config: CSS e corpo migrados para tokens (150+ referências)
+OK   financeiro-config: tema dinâmico preservado (com fallback em token)
+OK   financeiro-config: CSS bem-formado (chavetas balanceadas)
+OK   PROTECCAO ANTI-ENTIDADE: nenhum ficheiro com &var( partido
+OK   RESPONSIVO: tabelas do financeiro-config com wrapper de scroll
+OK   RESPONSIVO: tabela do whatsapp_central com wrapper de scroll
+OK   RESPONSIVO: tabelas do financeiro-pagamentos protegidas
+OK   RESPONSIVO: modal do equipe com max-height (botões acessíveis)
+OK   Design tokens: raios, sombras e durações canónicos definidos
+OK   Design tokens: animações de entrada canónicas partilhadas
+OK   Design tokens: carregam ANTES do kit e das views (cascata correcta)
+OK   Design tokens: gate guardião e baseline registados
+------------------------------------------------------------
+REGRESSÃO OK - 306 invariantes verdes.

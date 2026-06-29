@@ -1,0 +1,35 @@
+SIGE SoftGenial - Versionamento Automático PRO v12.9.38
+===============================================================
+
+Objectivo
+---------
+Evitar definitivamente o erro em que o ZIP tem nome de versão nova, mas o WordPress mostra a versão antiga.
+
+O que esta versão adiciona
+--------------------------
+1. Header do plugin actualizado para 12.9.38.
+2. SIGE_VERSION actualizado para 12.9.38.
+3. BUILD.json no pacote, com build_id e versão.
+4. includes/versioning.php, que compara:
+   - Version do header WordPress;
+   - SIGE_VERSION;
+   - versão do BUILD.json.
+5. Estado do Sistema passa a mostrar o estado do versionamento.
+6. tools/build-release.php para gerar futuras versões com menos erro humano.
+
+Como usar em novas builds
+-------------------------
+Antes de compactar o plugin final:
+
+php tools/build-release.php 12.9.39 "Resumo da nova versão"
+
+Depois executar validação:
+
+find . -name "*.php" -print0 | xargs -0 -n1 php -l
+
+Regra de ouro
+-------------
+Nunca mais entregar ZIP apenas com nome novo. A versão deve estar alinhada em:
+- header do plugin;
+- SIGE_VERSION;
+- BUILD.json.

@@ -1,0 +1,19 @@
+SIGE SoftGenial v12.9.32 - WhatsApp Conversacional / Recibos sob pedido
+
+Base: v12.9.31 validada.
+
+Alterações aplicadas:
+1. Confirmações de pagamento/recibo deixam de enviar link automaticamente.
+2. Quando a mensagem de recibo contém link, o sistema envia primeiro uma confirmação humana e pergunta se o encarregado quer receber o link.
+3. O link do recibo fica pendente por até 48h e só é enfileirado após resposta positiva via webhook Z-API (SIM/OK/quero/pode/recibo/pago).
+4. Resposta negativa (NÃO/PARAR/STOP) cancela pendência e respeita opt-out.
+5. Mensagens de mensalidade, cobrança e recibo passam por biblioteca modular de aberturas e perguntas finais, gerando muitas combinações humanas.
+6. Todas as mensagens financeiras terminam com pergunta ou incentivo à conversa.
+7. Queue WhatsApp ficou mais conservadora: 1 mensagem por ciclo de processamento, limites diários normais reduzidos e links mais controlados.
+8. Cobranças automáticas continuam desactivadas; envios de cobrança permanecem sob acção humana na Central de Cobranças.
+
+Não alterado:
+- Fórmulas financeiras.
+- Fórmulas académicas.
+- Lançamentos/pagamentos/estornos.
+- Estrutura de recibos/documentos.

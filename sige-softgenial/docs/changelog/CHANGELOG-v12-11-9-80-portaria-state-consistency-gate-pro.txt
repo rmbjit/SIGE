@@ -1,0 +1,36 @@
+SIGE SoftGenial v12.11.9.80 - Portaria State Consistency Gate PRO
+Data: 2026-06-09
+
+Objectivo:
+- Corrigir a inconsistência visual/sonora em que um aluno bloqueado podia aparecer com selo/cor/som de Autorizado.
+
+Alterações:
+- O frontend da Portaria passou a usar um único estado final de decisão.
+- acesso_permitido/permitido=false ou bloqueado=true vence qualquer cor/som herdado.
+- Cor e som deixaram de ser fontes de autorização.
+- Estado bloqueado força:
+  - selo BLOQUEADO;
+  - título ACESSO BLOQUEADO;
+  - classe visual vermelha;
+  - som de negação;
+  - vibração de alerta;
+  - histórico como erro/bloqueio.
+- Estado autorizado força:
+  - selo AUTORIZADO;
+  - título ENTRADA AUTORIZADA;
+  - classe visual verde;
+  - som positivo;
+  - histórico como sucesso.
+- O backend passou a devolver campos explícitos de UI:
+  - resultado;
+  - ui_estado;
+  - ui_selo;
+  - ui_classe;
+  - ui_cor;
+  - ui_som.
+- Em mobile/tablet, os controlos inferiores ficam ocultos quando o resultado está activo, deixando a operação focada em Ler próximo crachá ou Processo manual.
+
+Blindagem preservada:
+- Sem alteração de base de dados.
+- Sem alteração em pagamentos, mensalidades, notas, pautas, boletins, DEC/ACTA ou importação de alunos.
+- Permissões e isolamento do perfil Guarda preservados.

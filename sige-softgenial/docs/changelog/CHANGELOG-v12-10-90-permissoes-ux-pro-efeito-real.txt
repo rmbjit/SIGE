@@ -1,0 +1,29 @@
+SIGE SoftGenial v12.10.90 - Permissões: UX PRO e Efeito Real
+
+Objectivo
+- Simplificar a experiência do módulo &view=sige_permissoes.
+- Evitar que permissões ainda não ligadas a guards/acções reais pareçam ter efeito operacional.
+- Manter a intervenção segura, sem alterar regras de segurança, Permission Engine, atribuição/remoção de perfis ou base de dados.
+
+Diagnóstico técnico
+- Registry de permissões: 113 permissões.
+- Permissões com aplicação real detectada nesta build: 75.
+- Permissões registadas/preparadas, mas ainda sem ligação directa a guard/action nesta build: 38.
+
+Ajustes aplicados
+- Matriz de permissões passa a mostrar, por padrão, apenas permissões com efeito real nesta build.
+- Permissões ainda em preparação aparecem numa secção informativa separada, não editável, para não dar uma falsa sensação de controlo.
+- Ao guardar, a UI edita apenas permissões com efeito real e preserva permissões preparadas já existentes para compatibilidade futura.
+- Grupos de permissões passam a ser recolhíveis/expansíveis, reduzindo o scroll longo.
+- Adicionada pesquisa da matriz de permissões por nome, módulo, descrição ou código da permissão.
+- Adicionado botão Guardar no topo da matriz, além do botão no rodapé.
+- Toolbar da matriz fica sticky dentro da área de edição para acelerar o trabalho.
+- KPI passa a distinguir permissões com efeito real.
+- Mantidos perfis, atribuições, nonces, POST actions e auditoria existentes.
+
+Garantias
+- Sem alteração na Permission Engine.
+- Sem alteração na lógica de atribuição ou remoção de perfis.
+- Sem alteração nas queries principais de permissões, utilizadores ou perfis.
+- Sem alteração em notas, ACTA, DEC, pautas, pauta final, boletins ou regras académicas.
+- Sem alteração em pagamentos, multas, mensalidades ou base de dados financeira.

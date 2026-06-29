@@ -1,0 +1,35 @@
+SIGE SoftGenial v12.11.9.122 - AUDITORIA DE DESIGN (curriculum-engine)
+=====================================================================
+
+Motor de currículo (449 linhas) - pequeno e direto.
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 8 pesos, 850 DOMINANTE (15 de 29 ocorrências) - o caso
+  mais extremo de uniformidade de peso ("tudo grita").
+- RAIOS: 10 valores. SOMBRAS: 17. CORES: 80 hex.
+
+CORRECÇÃO (bloco <style> 55-200 + estilos inline; sem JS/template)
+1. Hierarquia de 3 níveis: 8 pesos -> 500/600/700. 1 legenda (small
+   cinza) afinada para 400.
+2. Raios da escala: 10 -> 4. Sombras da escala: 17 -> 7.
+3. 118 cores migradas (CSS + KPIs/ícones/passos inline via custom
+   properties --kpi-*, --icon-*, --qbg/--qcolor, --step-*). Tema
+   dinâmico (--sg-theme-primary, nas linhas 67-69 do :root) PRESERVADO,
+   já com fallback em token. ZERO hex restantes.
+
+PROVA VISUAL
+- curriculum-engine-antes-depois.png: KPIs e passo. Valores dominam,
+  rótulos secundários, legenda recua. Ícones por categoria mantidos.
+
+GATES
+- smoke-regression-pack: 201 -> 205 invariantes.
+- curriculum-engine adicionado aos ecrãs auditados.
+- Baseline de mágicos: 7425 -> 7290 (-135).
+- Baseline de tipografia: 351 -> 331 (-20).
+- 12 gates verdes.
+
+MARCO: 12 ecrãs auditados. Desde o início: mágicos 9925 -> 7290; pesos
+não-canónicos 665 -> 331.
+
+PRÓXIMO
+- transporte (19 pesos), e a cauda mais leve...

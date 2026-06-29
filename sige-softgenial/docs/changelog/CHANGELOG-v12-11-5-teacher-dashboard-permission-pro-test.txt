@@ -1,0 +1,13 @@
+SIGE SoftGenial v12.11.5 - Teacher Dashboard Permission PRO (TEST)
+
+Objectivo:
+- Tornar o Painel Principal uma permissão efectiva, não automática para Professores.
+
+Alterações:
+- Remove academico.dashboard_ver do perfil Professor por defeito.
+- Migra instalações existentes, removendo academico.dashboard_ver do perfil Professor.
+- Mantém DEC/ACTA/Pauta/Notas controlados pela matriz real de permissões.
+- Recalcula permissões quando o dashboard é redireccionado para a primeira área permitida, evitando bloqueio falso.
+- Renomeia a permissão academico.dashboard_ver na UI para Ver Painel Principal, deixando claro o seu efeito real.
+
+Sem alterações em regras financeiras, notas, pautas, DEC, ACTA, mensalidades ou base de dados de negócio.

@@ -1,0 +1,37 @@
+SIGE SoftGenial v12.12.64
+Hotfix: Financeiro histórico de classe preservado
+Data: 2026-06-25
+Base: v12.12.63
+
+Problema corrigido
+- Quando um aluno era mudado de classe/turma a meio do ano, por exemplo da 4ª classe para a 2ª classe em Maio, os meses já pagos com o serviço financeiro da classe anterior podiam reaparecer como dívida virtual no ecrã de Pagamentos.
+- A causa era a validação do mês pago pelo servico_id actualmente resolvido para a classe activa do aluno. Como Janeiro-Abril tinham sido pagos com o servico_id da 4ª classe, e em Maio o aluno passou a resolver para o servico_id da 2ª classe, a UI deixava de reconhecer esses meses como mensalidade paga.
+
+Correcção aplicada
+1. includes/finance-core.php
+   - Adicionado sige_fin_tipo_servico_canonico(): mensalidade/mensal passam a ser a mesma obrigação recorrente.
+   - Adicionado sige_fin_tipos_equivalentes(): expande tipos equivalentes para consultas SQL.
+   - Adicionado sige_fin_lancamento_recorrente_existente_por_tipo_mes(): procura lançamento por aluno + mês + tipo canónico, independente da classe actual.
+   - sige_fin_find_lancamento_aberto_por_tipo_mes() passa a usar tipos equivalentes.
+   - sige_fin_upsert_lancamento() ganhou idempotência histórica antes da elegibilidade de classe: se já existe lançamento pago, isento ou em plano para o mesmo aluno/mês/tipo, não recria, não duplica e não bloqueia por classe actual.
+   - A detecção de duplicata recorrente deixa de depender de LOWER(s.tipo)=tipo exacto e passa a aceitar tipos equivalentes via IN (...).
+
+2. admin/finance/financeiro-pagamentos.php
+   - O mapa de lançamentos existentes passa a carregar s.tipo, s.nome e l.descricao.
+   - Criados índices por tipo canónico: $mapa_tipo_stats, $mapa_tipo_saldo, $mapa_tipo_multa e $mapa_tipo_status_real.
+   - O estado pago/isento do mês passa a reconhecer mensalidade/transporte por tipo canónico no mês, não apenas pelo servico_id da classe actual.
+   - Valores reais de saldo/multa passam a ser usados também quando o lançamento pertence a um serviço da classe anterior.
+
+Resultado esperado
+- Janeiro-Abril pagos como 4ª classe continuam pagos depois do aluno passar para 2ª classe em Maio.
+- Maio em diante pode ser lançado/cobrado com o serviço da 2ª classe sem duplicar Janeiro-Abril.
+- Lançamentos históricos pagos/isentos/em plano não são alterados.
+- Lançamentos pendentes/parciais continuam a aparecer como dívida real.
+
+Sem alteração de schema
+- Esta correcção não adiciona colunas nem altera tabelas.
+- A preservação é feita por leitura canónica dos lançamentos existentes.
+
+Validação executada
+- php -l nos ficheiros financeiros tocados.
+- Smoke específico: tools/smoke-financeiro-historico-classe-v12-12-64.php.

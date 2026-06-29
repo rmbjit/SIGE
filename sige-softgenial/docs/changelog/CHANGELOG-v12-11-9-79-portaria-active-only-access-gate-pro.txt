@@ -1,0 +1,10 @@
+SIGE SoftGenial v12.11.9.79 - Portaria Active-Only Access Gate PRO
+
+- A Portaria Digital passa a autorizar entrada apenas para alunos em situação Activo.
+- Situações Suspenso, Transferido, Desistente, Cancelado, Inactivo ou desconhecidas são bloqueadas.
+- Mensagem visível: ACESSO BLOQUEADO, com nota clara sobre a situação do aluno/matrícula.
+- O leitor seguro mobile/tablet deixa de tratar respostas AJAX bloqueadas como sucesso visual.
+- Som de negação e vibração de erro são usados para alunos bloqueados.
+- A acção operacional fica explícita: Bloquear entrada / Encaminhar à Secretaria.
+- A tentativa continua registada no histórico da Portaria para auditoria operacional.
+- Não altera base de dados, pagamentos, notas, importação, criação/edição/remoção de alunos ou permissões do Guarda.

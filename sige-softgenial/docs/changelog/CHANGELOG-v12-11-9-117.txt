@@ -1,0 +1,41 @@
+SIGE SoftGenial v12.11.9.117 - AUDITORIA DE DESIGN (boletim)
+===========================================================
+
+Boletim de aproveitamento (1341 linhas) - DOCUMENTO que vai para casa.
+Cuidado de semântica como nos extratos: a cor das notas é informação.
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 8 pesos, 900 (17x) e 950 (14x) dominam.
+- RAIOS: 11 valores. SOMBRAS: 17. CORES: 123 hex.
+
+CUIDADO ESPECÍFICO (documento de classificação)
+- FUNÇÃO PHP de cor por nota (nota<10 vermelho, <=13 laranja, <=16 azul,
+  <=18 verde, >18 roxo) PRESERVADA: é semântica de classificação em
+  lógica, cor calculada como dado, não estilo CSS.
+- Classes de classificação (.sige-nt-neg vermelho, .reprova) migraram
+  para tokens semânticos (danger/success), preservando o significado.
+- Template de impressão do "Aproveitamento" (boletim que vai para casa,
+  embebido em JS com <style> próprio) PRESERVADO com cores absolutas.
+
+CORRECÇÃO (bloco CSS 519-700 + estilos inline; template/função/JS preservados)
+1. Hierarquia de 3 níveis: 8 pesos -> 400/600/700. Afinadas 2 legendas
+   reais para 400 (verificadas uma a uma; o valor <strong> ficou 700).
+2. Raios da escala: 11 -> 5. Sombras da escala: 17 -> 6.
+3. 147 cores migradas (CSS + 17 estilos inline). Os 49 hex restantes
+   estão TODOS em zonas preservadas (39 template, 6 função de nota, 4
+   fallback de tema).
+
+PROVA VISUAL
+- boletim-antes-depois.png: notas com semântica de cor PRESERVADA
+  (positivas verde, negativa vermelho); situação recua, disciplina e
+  nota destacam-se, média final em destaque.
+
+GATES
+- smoke-regression-pack: 183 -> 188 invariantes.
+- boletim adicionado aos ecrãs auditados.
+- Baseline de mágicos: 8203 -> 8056 (-147).
+- Baseline de tipografia: 465 -> 440 (-25).
+- 12 gates verdes.
+
+PRÓXIMO
+- equipe (23 pesos), portaria (22), minhas_turmas (22)...

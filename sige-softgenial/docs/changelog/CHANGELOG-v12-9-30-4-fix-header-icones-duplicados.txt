@@ -1,0 +1,13 @@
+SIGE SoftGenial v12.9.30.4 - Hotfix Header Central de Cobranças
+
+Base: v12.9.30.3
+
+Alterações:
+- Mantidos os ícones horizontais no header da Central de Cobranças.
+- Ocultados definitivamente ícones antigos/legados que apareciam em coluna vertical.
+- Actualizada versão interna do plugin para 12.9.30.4.
+
+Garantias:
+- Sem alteração de fórmulas financeiras.
+- Sem alteração de fórmulas académicas.
+- Sem alteração de lançamentos, pagamentos, saldos ou WhatsApp engine.

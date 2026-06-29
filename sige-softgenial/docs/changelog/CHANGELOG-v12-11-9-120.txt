@@ -1,0 +1,36 @@
+SIGE SoftGenial v12.11.9.120 - AUDITORIA DE DESIGN (portaria)
+============================================================
+
+Controlo de entradas/saídas (1332 linhas).
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 8 pesos, 850 (13x) e 900 (7x) dominam.
+- RAIOS: 11 valores. SOMBRAS: 22. CORES: 93 hex.
+
+CORRECÇÃO (bloco CSS 35-234; JS preservado)
+1. Hierarquia de 3 níveis: 8 pesos -> 500/600/700. 2 legendas (small
+   cinza) afinadas para 400.
+2. Raios da escala: 11 -> 5. Sombras da escala: 22 -> 6.
+3. 130 cores migradas (CSS + 2 ícones inline). As 8 cores em JS
+   (lógica de badges/estados dinâmicos) PRESERVADAS - JS exige
+   tratamento próprio, não é CSS estático.
+
+NOTA DE MÉTODO
+- O invariante de pesos deste ecrã mede SÓ o bloco <style> (o JS tem
+  cores e pesos próprios de lógica). Adaptação correcta do método para
+  ecrãs com JS rico.
+
+PROVA VISUAL
+- portaria-antes-depois.png: registo de entradas/saídas. Semântica de
+  cor preservada (entrada verde, saída vermelho); nome domina, hora
+  ênfase, categoria recua.
+
+GATES
+- smoke-regression-pack: 194 -> 197 invariantes.
+- portaria adicionado aos ecrãs auditados.
+- Baseline de mágicos: 7700 -> 7568 (-132).
+- Baseline de tipografia: 395 -> 373 (-22).
+- 12 gates verdes.
+
+PRÓXIMO
+- encerramento (22 pesos), curriculum-engine (20), transporte (19)...

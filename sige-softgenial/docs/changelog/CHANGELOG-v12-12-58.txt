@@ -1,0 +1,55 @@
+CHANGELOG - SIGE SoftGenial v12.12.58
+Fase 4 (CSP e front-end seguro) - incremento 2
+onclick de impressao das autonomas em addEventListener
+Data: 2026-06-23
+
+RESUMO
+Conversao dos onclick de impressao das paginas autonomas para addEventListener,
+preparando o caminho para o CSP enforce nessas paginas. Na v12.12.57 todas as tags
+script inline alcancaveis passaram a levar nonce; faltava remover os handlers
+inline (onclick), que um CSP estrito baseado em nonce bloqueia. Como estas paginas
+nao carregam o despachante global, a ligacao e feita por addEventListener local
+dentro do script ja com nonce de cada pagina.
+
+CONVERSAO (13 handlers, 4 paginas)
+- pauta-pdf-template: 2 (imprimir, fechar)
+- boletim-pdf-template: 2 (imprimir, fechar)
+- jardim_boletim-view: 2 (imprimir todos, imprimir um)
+- documents-engine: 7 (imprimir e fechar nos tres caminhos de render)
+A pagina da camara da portaria ja nao tinha handlers inline.
+
+LIGACAO
+- Os botoes passam a usar atributos data: data-sige-print, data-sige-close,
+  data-sige-print-all, data-sige-print-one.
+- A ligacao addEventListener corre ao nivel de topo do script de cada pagina, fora
+  dos IIFE, para correr mesmo quando o IIFE de QRious retorna cedo por falta da
+  biblioteca.
+- No imprimir um boletim, o indice e passado por atributo data e reconvertido a
+  numero com parseInt, preservando o tipo esperado pela funcao sigeImprimirBoletins.
+
+COMPORTAMENTO
+- Identico: os botoes continuam a imprimir, fechar e imprimir boletins como antes.
+
+CABECALHOS DE SEGURANCA EXISTENTES (intactos)
+- Motor de documentos: tres cabecalhos Content-Security-Policy mantidos.
+- Camara da portaria: Permissions-Policy mantido.
+- O CSP enforce e a substituicao de unsafe-inline por nonce ficam para o incremento
+  seguinte.
+
+VERIFICADORES DE JAVASCRIPT EMBEBIDO
+- Os modelos PDF em admin sao varridos e mantem-se verdes com a nova ligacao.
+
+CATRACA
+- check-inline-frontend: maximo de onclick de 162 para 149 (sem folga).
+- style mantem-se em 2051; blocos script mantem-se em 7.
+
+INVARIANTES
+- Superficie de accao 199 (enforce 33), vistas 60, opcoes 132, dependencias
+  externas 9. Sem alteracao de esquema. Calculo financeiro byte-identico.
+- Corredor 99. Release gate verde a partir de pasta limpa.
+- Rediagnostico adversarial: Zero P0 e Zero P1.
+
+VERSAO
+- Cinco fontes sincronizadas em 12.12.58 (cabecalho do plugin, SIGE_VERSION,
+  BUILD.json, SIGE_GOV_VERSION, base da superficie de inventario).
+- Zero travessoes em todo o codigo, documentacao e changelog.

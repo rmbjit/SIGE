@@ -1,0 +1,32 @@
+DEPLOY - SIGE SoftGenial v12.12.11 (MFA de Operacao: TOTP)
+Base: v12.12.10.1. Sem migracao de base de dados. Sem alteracao de regras de calculo.
+
+O QUE MUDA
+- Adiciona TOTP (aplicacao autenticadora) como segundo factor alternativo ao OTP por email, no step-up de operacoes criticas.
+- Quem inscrever uma aplicacao autenticadora confirma as operacoes criticas com o codigo da aplicacao, sem depender do email.
+- Desligado por defeito. Nada muda para quem nao inscrever.
+
+PASSOS
+1. Backup do plugin actual e da base de dados (rotina habitual).
+2. Substituir a pasta do plugin pela desta versao (ou actualizar via ZIP). Os 7 ficheiros canonicos da raiz mantem-se.
+3. Confirmar a versao: cabecalho do plugin, SIGE_VERSION e BUILD.json em 12.12.11.
+4. Sem passos de base de dados. O segredo TOTP de cada utilizador e criado em user meta apenas quando esse utilizador se inscreve.
+
+ACTIVACAO (por utilizador)
+1. O step-up de operacoes criticas continua a ligar-se como na v12.12.10.1 (option sige_mfa_stepup = on; perfis sige_director, sige_admin_ti).
+2. Cada utilizador abre Perfil > Autenticador SIGE e clica Iniciar inscricao.
+3. Le o codigo QR na aplicacao autenticadora (ou introduz a chave manualmente) e confirma com um codigo de 6 digitos.
+4. A partir dai, as operacoes criticas pedem o codigo da aplicacao em vez do email.
+
+REVERSAO
+- Para um utilizador: Perfil > Autenticador SIGE > Desactivar (volta a confirmar por email).
+- De emergencia (global): manter SIGE_MFA_STEPUP_OFF para desligar o step-up por completo.
+
+VERIFICACAO RAPIDA
+- Com o step-up ligado e um utilizador inscrito, iniciar uma operacao critica (por exemplo, estorno) deve pedir o codigo da aplicacao, sem enviar email.
+- Um codigo errado e recusado; ao fim de varias tentativas surge a mensagem de demasiadas tentativas.
+- Um utilizador nao inscrito continua a receber o codigo por email, como antes.
+
+NOTAS
+- O codigo QR e gerado no servidor (SVG), sem JavaScript nem CDN. Se a chave for muito longa, a pagina mostra apenas a chave para introducao manual.
+- A hora do telemovel deve estar correcta (TOTP depende do tempo); ha tolerancia de um passo para pequenos desvios.

@@ -1,0 +1,38 @@
+{
+  "baseUrl": "https://demo.softgenial.edu.mz",
+  "loginPath": "/wp-login.php",
+  "appPage": "/wp-admin/admin.php?page=sige-app",
+  "pluginRoot": "",
+  "adminUser": "ENV:SIGE_ADMIN_USER",
+  "adminPass": "ENV:SIGE_ADMIN_PASS",
+  "thresholdRatio": 0.0008,
+  "settleMs": 1200,
+  "waitSelector": "#sige-layout, .sg-app-content, .sg-dashboard-v2, .sige-rh",
+  "maskSelectors": [".sg-app-clock", "[data-volatile]", ".sige-server-time"],
+  "afterStripCmd": "",
+  "viewports": [
+    { "name": "desktop", "width": 1440, "height": 900 },
+    { "name": "laptop",  "width": 1366, "height": 768 },
+    { "name": "tablet",  "width": 820,  "height": 1180 },
+    { "name": "mobile",  "width": 390,  "height": 844 }
+  ],
+  "modules": [
+    { "name": "login",               "url": "/wp-login.php?loggedout=true", "auth": "none", "waitSelector": "#login", "file": "includes/login-page.php" },
+    { "name": "portal_aluno",         "url": "/portal/", "auth": "none", "waitSelector": ".sp-wrap, #loginform", "file": "includes/portal-logic.php" },
+    { "name": "dashboard",            "view": "dashboard",            "file": "admin/system/dashboard-view.php" },
+    { "name": "equipe",               "view": "equipe",               "file": "admin/hr/equipe-view.php" },
+    { "name": "alunos_lista",         "view": "alunos_lista",         "file": "admin/academic/alunos_lista.php" },
+    { "name": "turmas",               "view": "turmas",               "file": "admin/academic/turmas-view.php" },
+    { "name": "disciplinas",          "view": "disciplinas",          "file": "admin/academic/disciplinas-view.php" },
+    { "name": "matriz",               "view": "matriz",               "file": "admin/academic/matriz-view.php" },
+    { "name": "boletim",              "view": "boletim",              "file": "admin/academic/boletim-view.php" },
+    { "name": "notas",                "view": "notas",                "file": "admin/academic/notas-view.php" },
+    { "name": "financeiro-devedores", "view": "financeiro-devedores", "file": "admin/finance/financeiro-devedores-view.php" },
+    { "name": "financeiro-extratos",  "view": "financeiro-extratos",  "file": "admin/finance/financeiro-extratos.php" },
+    { "name": "portaria",             "view": "portaria",             "file": "admin/system/portaria-view.php" },
+    { "name": "config_center",        "view": "config_center",        "file": "admin/system/config-center-view.php" },
+    { "name": "jardim_presencas",     "view": "jardim_presencas",     "file": "admin/jardim/jardim_presencas-view.php" },
+    { "name": "whatsapp_central",     "view": "whatsapp_central",     "file": "admin/whatsapp_central-view.php" },
+    { "name": "comunicacoes_central", "view": "comunicacoes_central", "file": "admin/comunicacoes_central-view.php" }
+  ]
+}

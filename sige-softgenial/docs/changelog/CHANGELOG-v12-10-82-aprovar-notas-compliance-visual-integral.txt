@@ -1,0 +1,21 @@
+SIGE SoftGenial v12.10.82 - Aprovar Notas: Compliance Visual Integral
+
+Objectivo
+- Redesenhar visualmente o módulo &view=aprovar_notas com o mesmo rigor do Painel Principal / Dashboard V2 MJS-grade.
+- Manter a intervenção exclusivamente visual, sem alterar aprovação, rejeição, permissões, queries, estados das notas, cálculos, pautas ou regras académicas.
+
+Ajustes aplicados
+- Removido o cabeçalho genérico do App Shell para esta view, garantindo header único.
+- Hero claro no padrão Produto PRO, com área Académico, título, subtítulo e painel lateral de estado.
+- KPIs de notas pendentes e submissões agrupadas redesenhados no padrão dos cartões do Painel Principal.
+- Cards de grupos de submissão harmonizados com ícones canónicos, título claro, metadados em chips e melhor hierarquia visual.
+- Tabela de notas redesenhada com scroll controlado, cabeçalhos limpos, valores de notas em chips e melhor leitura em ecrãs menores.
+- Botões Aprovar e Rejeitar harmonizados com ícones canónicos, hover e cursor adequados.
+- Estado vazio redesenhado sem emojis visuais.
+- Aviso de ano lectivo encerrado redesenhado como alerta Produto PRO.
+
+Garantias
+- Sem alteração no fluxo de aprovação ou rejeição.
+- Sem alteração em permissões, nonces, queries ou estados das notas.
+- Sem alteração em fórmulas, pautas, DEC, ACTA, Pauta Final, boletins ou regras académicas.
+- Sem alteração em pagamentos, multas, mensalidades ou base de dados financeira.

@@ -1,0 +1,35 @@
+SIGE SoftGenial v12.11.9.15 - Escopo Docente DEC Aproveitamento Acta PRO (TEST)
+
+Objectivo
+- Fechar o mesmo padrão de segurança já aplicado na PAUTA para DEC, Aproveitamento e Acta do Conselho.
+- Professor só vê turmas atribuídas ao seu perfil SIGE.
+- Bloqueio reforçado contra tentativa manual via URL.
+
+Alterações principais
+1. DEC
+   - Professor passa a poder aceder ao DEC apenas das suas turmas.
+   - Dropdown de turmas mostra somente turmas atribuídas por director_turma_id ou sige_turma_disciplinas.
+   - URL manual com turma não atribuída é bloqueado e mostra aviso de escopo docente.
+
+2. Aproveitamento do Aluno
+   - Pesquisa de alunos limitada às turmas do professor.
+   - Filtro de turma mostra apenas as turmas atribuídas.
+   - Abertura directa de aluno/turma fora do escopo docente é bloqueada.
+   - MAP individual, MAP por turma, Declaração e Boletim de Passagem também validam escopo por turma no handler.
+
+3. Acta do Conselho
+   - Professor consulta apenas actas das suas turmas.
+   - Impressão da Acta valida escopo docente no handler.
+   - Gravação da Acta também tem defesa por escopo caso o professor receba permissão explícita de edição.
+   - No modo docente sem permissão de edição, a Acta fica em leitura/impressão.
+
+4. Censo Escolar - 3 de Março
+   - A interface agora explica claramente quem confirma: Direcção Pedagógica, Direcção, Secretaria Geral/Admin ou outro perfil autorizado a guardar a Acta.
+   - A interface explica como confirmar: conferir M/HM com o mapa oficial de 3 de Março, indicar fonte/observação, assinalar confirmação e guardar.
+   - Quando já existe snapshot confirmado, a Acta mostra também quem confirmou, além da data/hora.
+
+Garantias
+- Não altera fórmulas de notas.
+- Não altera regras de situação final.
+- Não altera estrutura da base de dados.
+- Não altera Financeiro, RH, WhatsApp, Pauta ou regras de mensalidades.

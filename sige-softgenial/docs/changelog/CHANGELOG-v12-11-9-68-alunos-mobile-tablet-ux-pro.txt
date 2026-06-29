@@ -1,0 +1,62 @@
+SIGE SoftGenial v12.11.9.68 - Alunos Mobile + Tablet UX PRO
+================================================================
+
+Objectivo
+---------
+Aplicar ao módulo Alunos o mesmo rigor usado no Painel Principal e na camada Guarda/Portaria: fit-on-screen real em mobile/tablet, navegação intuitiva, interface táctil, leitura rápida e alinhamento visual às permissões efectivas do utilizador.
+
+Melhorias principais
+--------------------
+1. Hero e entrada do módulo
+   - O bloco inicial de Alunos foi reforçado para não provocar overflow horizontal em mobile.
+   - O texto de introdução adapta-se ao modo de consulta/read-only.
+   - Foi adicionada uma faixa de fluxo recomendado: Pesquisar → Abrir Ficha 360º → Confirmar identidade ou actualizar/matricular.
+
+2. Filtros e pesquisa mobile
+   - Chips rápidos agora têm estado acessível com aria-pressed.
+   - Pesquisa local e chips rápidos passam a combinar resultados de forma determinística.
+   - Contagem local visível via área aria-live informa quantos alunos estão visíveis na página.
+   - O chip Devedores só aparece para perfis com escopo financeiro.
+
+3. Cards de alunos
+   - Cards reforçados contra cortes de nomes, turmas, badges e etiquetas longas.
+   - Ações rápidas foram ajustadas para toque em mobile/tablet.
+   - Menus de ações são fecháveis por Escape e têm clamp para não sair do ecrã.
+   - Badge financeiro e data-has-debt só ficam operacionais para perfis com permissão financeira.
+
+4. Ficha 360º
+   - Modal da Ficha 360º ganhou fit dedicado para ecrãs pequenos.
+   - Texto da Ficha 360º adapta-se quando o utilizador não tem escopo financeiro.
+   - O AJAX da Ficha 360º deixa de enviar resumo financeiro para perfis sem permissão financeira.
+   - O isolamento do perfil Guarda/Portaria permanece preservado.
+
+5. Navegação inferior
+   - Bottom nav do módulo Alunos agora respeita permissões reais:
+     * Dashboard só aparece para quem pode abrir o Painel Principal.
+     * Portaria só aparece para quem pode usar a Portaria.
+     * Pagamentos só aparece para quem pode registar/abrir pagamentos.
+     * Configurações/Mais só aparece para quem tem escopo técnico/configuração.
+   - A navegação passa a adaptar a quantidade de itens sem forçar colunas vazias rígidas.
+
+6. Tablet
+   - KPIs, cards, toolbar e grelha de alunos foram ajustados para a faixa 761px-1100px.
+   - Conteúdo ganha melhor aproveitamento em duas colunas, mantendo limites seguros.
+
+Blindagem preservada
+--------------------
+- Sem alteração de schema/base de dados.
+- Sem alteração de cálculos financeiros.
+- Sem alteração de pagamentos, mensalidades, dívidas, multas ou recibos.
+- Sem alteração de notas, pautas, boletins, DEC, ACTA ou fórmulas académicas.
+- Sem alteração da importação de alunos.
+- Sem alteração das regras de criação, edição ou remoção.
+- Sem quebra do perfil Guarda/Portaria.
+
+Validação esperada
+------------------
+- PHP lint completo.
+- JS check do asset mobile-tablet global.
+- Smoke específico Alunos v12.11.9.68.
+- Smoke de regressão Guarda/Portaria.
+- Smoke de regressão Painel Principal Mobile Fit.
+- ZIP final validado.

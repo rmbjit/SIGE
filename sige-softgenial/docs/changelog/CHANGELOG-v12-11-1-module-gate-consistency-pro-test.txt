@@ -1,0 +1,30 @@
+SIGE SoftGenial v12.11.1 - Module Gate Consistency PRO (TEST)
+
+Objectivo
+- Corrigir inconsistência entre Módulos activos, Feature Flags/Hub e menu lateral.
+- Resolver o caso em que Transporte aparece activo localmente e no Hub, mas não aparece no menu.
+
+Causa técnica corrigida
+- O menu de Transporte dependia de $ff_logistica, enquanto o Hub/feature map e a rota usam a feature canónica transporte.
+- Existiam aliases legados de módulo em camadas diferentes: mod_logistica/logistica vs mod_transporte; mod_jardim vs mod_preescolar.
+- O Admin Shell lia o JSON cru de modulos_ativos, sem normalização central.
+
+Alterações
+- Criada normalização canónica de módulos em includes/tenant-profiles.php.
+- mod_logistica/logistica passa a ser entendido como mod_transporte.
+- mod_jardim/jardim/creche passa a ser entendido como mod_preescolar.
+- Admin Shell passa a usar sige_get_modulos_ativos() como fonte normalizada.
+- Menu Transporte passa a depender de transporte + mod_transporte, não de logistica.
+- Feature aliases do Hub passam a tratar logistica como alias de transporte.
+- View curriculos passa a estar mapeada para a feature academico.
+- Permissões padrão relevantes passaram a incluir transporte para direcção/secretaria/assistência/recepção quando aplicável.
+- Gestão de rotas no módulo Transporte foi separada de simples consulta: ver transporte não autoriza criar/remover rotas.
+
+Sem alteração
+- Não altera regras de pagamentos, mensalidades, multas, recibos, notas, pautas, DEC, boletins ou motor curricular.
+- Não altera schema de negócio.
+- Não altera o funcionamento financeiro.
+
+Validação
+- Todos os ficheiros PHP passaram no lint.
+- ZIP testado com unzip -t.

@@ -1,0 +1,1334 @@
+{
+  "version": "12.12.1",
+  "scope": "all PHP files in package",
+  "command": "php -l executed in chunks/manual batches in container; all listed files returned success",
+  "total_checked": 331,
+  "failures": 0,
+  "generated_at_utc": "2026-06-16T06:55:00Z",
+  "files": [
+    {
+      "file": "admin/academic/abertura-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/acta-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/alocacao-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/aluno-portal-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/aluno_contas-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/alunos_lista.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/aprovar_notas-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/auditoria_notas-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/boletim-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/dec-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/disciplinas-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/encerramento-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/estatisticas-demograficas-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/matriz-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/minhas_turmas-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/notas-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/pauta-final-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/pautas-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/presencas-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/turmas-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/academic/vincular-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/acta-oficial-template.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/boletim-pdf-template.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/comunicacoes_central-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/finance/financeiro-auditoria-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/finance/financeiro-centros-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/finance/financeiro-config.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/finance/financeiro-dashboard.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/finance/financeiro-despesas-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/finance/financeiro-devedores-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/finance/financeiro-extratos.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/finance/financeiro-gerador.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/finance/financeiro-inscricoes-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/finance/financeiro-lancamentos-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/finance/financeiro-pagamentos.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/finance/financeiro-planos-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/finance/financeiro-relatorio-mensal-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/finance/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/finance/mpesa-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/finance/pagamentos-turma-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/hr/equipe-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/hr/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/jardim/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/jardim/jardim_boletim-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/jardim/jardim_diario-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/jardim/jardim_presencas-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/jardim/jardim_relatorio-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/jardim/jardim_saude-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/logistics/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/logistics/transporte-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/map-oficial-template.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/pauta-pdf-template.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/system/config-center-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/system/config-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/system/core-status-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/system/curriculum-engine-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/system/dashboard-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/system/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/system/permissions-ui.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/system/portaria-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/whatsapp_central-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/whatsapp_circulares-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "admin/whatsapp_diag-view.php",
+      "status": "ok"
+    },
+    {
+      "file": "assets/audio/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "assets/icons/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "assets/icons/sg/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "assets/img/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "assets/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "docs/changelog/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "docs/deploy/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "docs/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "docs/legado/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "docs/qa/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "docs/relatorios/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/academic-logic.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/acta-pdf-handler.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/admin-shell.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/ajax-handlers.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/alertas-core.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/alertas-cron.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/alertas-templates.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/aluno-accounts.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/aluno-fetch-ajax.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/audit-hooks.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/backup-safety.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/boletim-pdf-handler.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/cdn-scripts.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/centros-helpers.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/circulares.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/class-sige-migration.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/comunicacoes-core.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/config-layer.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/core-helpers.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/core/class-sige-core.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/core/class-sige-diagnostics.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/core/core-loader.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/core/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/cron-tasks.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/curriculum-engine.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/db-handler.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/db-migration-engine.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/despesa-state-machine.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/dica-do-dia.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/documents-engine.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/email-central.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/email-engine.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/email-queue-templates.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/encarregados-advanced.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/feature-registry-sync.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/fin-action-service.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/fin-classe-helper.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/fin-devedores-calendario.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/fin-familia-service.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/fin-fecho-turno.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/fin-fsm-php74.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/fin-fsm-php81.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/fin-fsm.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/fin-item-dispatcher.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/fin-kpi-engine.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/finance-core.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/finance-data-efectiva.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/financeiro-historico-aluno-pro.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/hub/class-sige-hub-admin.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/hub/class-sige-hub-billing.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/hub/class-sige-hub-client.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/hub/class-sige-hub-commands.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/hub/class-sige-hub-heartbeat.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/hub/class-sige-hub-update-checker.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/hub/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/hub/sige-feature.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/infra/class-sige-logger.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/infra/class-sige-queue.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/infra/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/jardim-handlers.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/licensing/class-sige-license.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/licensing/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/login-page.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/map-pdf-handler.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/multitenancy.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/notas-reaprovacao-migracao.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/notificacoes-encarregados.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/notification-humanization-pro.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/notification-policy.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/observability-layer.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/page-guard.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/passagem-docs-handler.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/pauta-excel-handler.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/pauta-pdf-handler.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/payments/emola-client.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/payments/emola-config.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/payments/emola-webhook.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/payments/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/payments/mpesa-client.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/payments/mpesa-cobranca.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/payments/mpesa-conciliacao.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/payments/mpesa-config.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/payments/mpesa-webhook.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/permissions-layer.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/portal-handlers.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/portal-logic.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/portaria-camera-safe-page.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/presencas-engine.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/regime-mensalidade-core.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/relatorio-mensal-email.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/saude-operacional.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/secure-document-download.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/security-baseline-pro.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/security-hardening.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/security-login-shield.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/security-roles.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/security-scope-guard.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-audit.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-controller.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-legacy.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-policy.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-registry.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-repository.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-sanitizer.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-technical-mode.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/settings/class-sige-settings-view-renderer.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/settings/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/settings/settings-bootstrap.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/sri-hashes.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/tenant-profiles.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/theme-engine.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/ui-components.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/ui-kit.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/update-checker.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/versioning.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/view-assets.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/whatsapp-central.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/whatsapp-destinatarios-policy.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/whatsapp-diagnostics.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/whatsapp-engine.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/whatsapp-guardian.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/whatsapp-guardrails-pro.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/whatsapp-helper.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/whatsapp-human-advanced.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/whatsapp-recovery-mode.php",
+      "status": "ok"
+    },
+    {
+      "file": "includes/whatsapp-templates-conversacional.php",
+      "status": "ok"
+    },
+    {
+      "file": "index.php",
+      "status": "ok"
+    },
+    {
+      "file": "languages/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "sige-softgenial.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/arnes-visual/strip-important.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/build-release.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-action-surface-manifest.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-authorization-baseline.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-consistencia-visual.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-css-collisions.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-design-tokens.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-external-dependencies-register.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-governance-docs.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-governance-negative-tests.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-js-views.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-php-compat.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-public-endpoints-policy.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-query-handler-surface.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-secrets-options-register.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-tenant-fallbacks.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-tenant-sensitive-queries.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-tokens-fora-de-contexto.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-typography.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/check-view-permission-map.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/controlador-consistencia-visual.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/diag-responsivo.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/governance-lib.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/index.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/inventory-surface.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/migrar-status-canonico.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/run-gates.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/simular-callback-mpesa.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-academico-af-map-turma-v12-11-9-12.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-academico-filtro-turma-aproveitamento-v12-11-9-13.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-aluno-360-hotfix-v12-11-9-48.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-aluno-360-privacidade-v12-11-9-47.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-aluno-360-v12-11-9-46.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-alunos-bottom-more-deep-v12-11-9-70.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-alunos-bottom-more-v12-11-9-70.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-alunos-bottom-nav-mais-v12-11-9-70.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-alunos-deep-audit-v12-11-9-69.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-alunos-deep-regression-v12-11-9-70.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-alunos-final-qa-gate-v12-11-9-71.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-alunos-mobile-header-cards-v12-11-9-56.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-alunos-mobile-redesign-v12-11-9-54.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-alunos-mobile-redesign-v12-11-9-55.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-alunos-mobile-tablet-ux-v12-11-9-68.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-alunos-ux-responsivo-v12-11-9-52.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-auditoria-avancada-encarregados-v12-11-9-50.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-dashboard-deep-mobile-tablet-v12-11-9-66.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-dashboard-mobile-fit-v12-11-9-67.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-dashboard-mobile-tablet-ux-v12-11-9-64.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-design-system.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-devedores-calendario.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-equipe-professores-v12-11-9-3.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-equipe-professores-v12-11-9-4.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-equipe-professores-v12-11-9-5.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-equipe-professores-v12-11-9-6.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-equipe-professores-v12-11-9.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-finance-lancamento-notificacoes-v12-11-9-32.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-financeiro-extratos-cash-reconciliation-v12-11-9-88.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-financeiro-extratos-deep-gate-v12-11-9-87-1.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-financeiro-extratos-pro-ux-hardening-v12-11-9-87.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-financeiro-extratos-ux-state-hotfix-v12-11-9-86.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-financeiro-extratos-ux-ui-v12-11-9-85.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-financeiro-mensalidade-virtual-classe-v12-11-9-88-2.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-financeiro-status-sync-v12-11-9-88-1.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-gestao-avancada-encarregados-v12-11-9-49.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-guarda-portaria-readonly-v12-11-9-65.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-guarda-portaria-regression-v12-11-9-70.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-guarda-portaria-regression-v12-11-9-72.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-guarda-portaria-regression-v12-11-9-73.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-guarda-portaria-regression-v12-11-9-74.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-guarda-portaria-v12-11-9-65.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-guarda-regression-v12-11-9-66.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-guarda-regression-v12-11-9-67.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-guarda-regression-v12-11-9-69.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-guarda-regression-v12-11-9-70.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-historico-financeiro-aluno-pro-v12-11-9-81.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-historico-financeiro-aluno-v12-11-9-81.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-historico-financeiro-documento-administrativo-ux-pro-v12-11-9-83.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-historico-financeiro-hotfix-multitenant-v12-11-9-84.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-historico-financeiro-oficial-excel-pro-v12-11-9-82.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-icones.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-importacao-alunos-v12-11-9-37.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-importacao-alunos-v12-11-9-38.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-importacao-alunos-v12-11-9-39.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-importacao-alunos-v12-11-9-40.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-importacao-alunos-v12-11-9-41.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-importacao-alunos-v12-11-9-42.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-importacao-alunos-v12-11-9-43.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-importacao-alunos-v12-11-9-45.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-lancamento-notificacoes-v12-11-9-32.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-login-shield.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-mobile-tablet-ux-v12-11-9-63.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-mobile-ux-compliance-v12-11-9-59.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-mpesa.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-pagina-aluno-pendencias-v12-11-9-14.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-payment-methods-pos-bancos-v12-11-9-31.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-phase1-blindagem-v12-11-9-24.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-phase1-final-v12-11-9-25.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-phase1-hotfix-v12-11-9-26.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-phase2-tenant-schema-v12-11-9-27.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-portaria-active-only-access-gate-v12-11-9-79.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-portaria-active-only-gate-v12-11-9-79.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-portaria-camera-diagnostics-v12-11-9-73.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-portaria-camera-permission-ux-v12-11-9-72.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-portaria-camera-safe-bootstrap-v12-11-9-75.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-portaria-clean-room-scanner-v12-11-9-76.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-portaria-copy-essencial-v12-11-9-78.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-portaria-onscreen-result-retake-v12-11-9-77.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-portaria-permissions-policy-camera-v12-11-9-74.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-portaria-state-consistency-gate-v12-11-9-80.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-portaria-user-copy-cleanup-v12-11-9-78.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-presencas.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-regression-pack.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-release-gate.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-rh-equipe-v12-11-9-7.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-rh-equipe-v12-11-9-8.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-rh-equipe-v12-11-9-9.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-rh-preservation-v12-11-9-11.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-role-guarda-portaria-v12-11-9-65.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-transporte-v12-11-9-10.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-transporte-v12-11-9-11.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-whatsapp-pt-mz-v12-11-9-29.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-whatsapp-render-servicos-v12-11-9-30.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/smoke-whatsapp-servicos-contextuais-v12-11-9-30.php",
+      "status": "ok"
+    },
+    {
+      "file": "tools/ux-audit.php",
+      "status": "ok"
+    },
+    {
+      "file": "uninstall.php",
+      "status": "ok"
+    }
+  ]
+}

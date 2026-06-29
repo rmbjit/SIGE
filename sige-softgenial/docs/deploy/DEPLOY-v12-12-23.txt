@@ -1,0 +1,27 @@
+DEPLOY - SIGE SoftGenial v12.12.23
+Fase 8 incremento 1: Inventario de Dados Pessoais (governanca de PII, so leitura)
+Data: 2026-06-21
+
+PRE-REQUISITOS
+- Plugin actual instalado (v12.12.22 ou anterior da linha 12.12.x).
+- Acesso ao File Manager do Hostinger (CloudPanel) ou ao wp-admin de cada site. Sem SSH.
+
+INSTALACAO (por site)
+1. Fazer backup do plugin actual (pasta wp-content/plugins/sige-softgenial) e da base de dados.
+2. Substituir a pasta sige-softgenial pelo conteudo do ZIP v12.12.23 (a pasta sige-softgenial fica na raiz do ZIP).
+3. Entrar no wp-admin como administrador. A migracao de permissoes corre sozinha no primeiro carregamento de admin (admin_init): regista a permissao privacidade.inventario_ver e concede-a a administracao e direccao. Eleva a versao do motor de permissoes para 12.12.23.
+4. Nao ha migracao de esquema: a versao do esquema (SCHEMA_VERSION) nao muda. Nenhuma tabela e criada ou alterada.
+
+VERIFICACAO POS-DEPLOY
+- Confirmar a versao em Plugins (deve ler 12.12.23).
+- Como Direcao ou administrador, abrir no menu lateral a seccao PRIVACIDADE E DADOS, item Inventario de Dados. Deve abrir o ecra com os cartoes de resumo, os agregados da escola e o mapa de dados pessoais por tabela.
+- Confirmar que um utilizador de tesouraria, secretaria ou docencia NAO ve o item de menu e, ao forcar o endereco, ve a mensagem de area reservada.
+- Confirmar que a pagina nao tem botoes de gravar nem formularios (e so leitura).
+
+REVERSAO
+- Repor a pasta do plugin a partir do backup. A permissao nova fica registada mas inofensiva (so abre um ecra de leitura); pode ser ignorada.
+
+NOTAS
+- Manifesto e Security Kernel mantem-se em 197 (enforce 31). Sem nova superficie.
+- As contagens por escola sao agregados; nenhum dado individual e exposto.
+- A base legal apresentada e uma classificacao por omissao, a rever pela instituicao.

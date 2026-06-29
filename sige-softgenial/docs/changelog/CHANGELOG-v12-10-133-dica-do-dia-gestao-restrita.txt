@@ -1,0 +1,44 @@
+SIGE SoftGenial v12.10.133 - Dica do Dia: Gestão Restrita
+
+Base
+- Construído por cima da v12.10.132 - Dica do Dia: Apenas Gestão Escolar.
+
+Pedido aplicado
+- Nesta fase, professor, educador e director pedagógico também não devem ver a Dica do Dia.
+
+Nova regra
+- A Dica do Dia aparece apenas para gestão administrativa/operacional:
+  - Administrador
+  - Direcção geral / director
+  - Secretaria
+  - Tesouraria / financeiro
+
+Bloqueio explícito
+- A Dica do Dia nunca aparece para:
+  - aluno
+  - encarregado
+  - professor
+  - educador
+  - pedagógico
+  - director pedagógico
+
+Implementação
+- O helper sige_dica_do_dia_is_school_staff_v132() foi tornado mais restritivo.
+- Primeiro bloqueia explicitamente roles/perfis não autorizados.
+- Depois só permite perfis administrativos/operacionais.
+- A validação considera:
+  - WordPress roles;
+  - active_role SIGE;
+  - capabilities;
+  - permissões internas via sige_can().
+
+Mantido
+- Uma vez por utilizador por dia.
+- Conteúdo local no plugin.
+- Sem dependência de internet.
+- AJAX com nonce para gravar "Entendi".
+- Não aparece durante primeiro acesso obrigatório/senha provisória.
+- Pode ser desligado por opção/filtro.
+- Sem alteração de base de dados académica/financeira.
+- Sem alteração de pagamentos.
+- Sem alteração de notas, Pauta, DEC, ACTA ou boletins.

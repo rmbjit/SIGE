@@ -1,0 +1,21 @@
+SIGE SoftGenial v12.10.31 - Aparência da Escola: Design System Seguro
+
+Objectivo
+- Criar um motor de temas visuais centralizado para permitir personalização controlada das cores da escola sem quebrar o padrão visual aprovado do Painel Principal.
+
+Incluído
+- Nova área "Aparência da escola" no Centro de Configuração.
+- Opção entre "Padrão SoftGenial" e "Usar cores da escola".
+- Cor principal, cor secundária e cor de destaque.
+- Pré-visualização visual antes de guardar.
+- Botão para restaurar o padrão SoftGenial.
+- Motor runtime de CSS variables seguro, com validação de contraste para evitar ícones/textos invisíveis.
+- Aplicação centralizada das cores ao App Shell, sidebar, botões, destaques, KPIs, pop-ups, menus e módulos já harmonizados.
+- Ícone SVG local palette.svg.
+
+Garantias
+- Sem alteração de fórmulas.
+- Sem alteração de mensalidades, multas, pagamentos, recibos, cobranças, estornos ou base de dados.
+- Sem alteração de notas, pautas, DEC, boletins ou actas.
+- Sem migração obrigatória de base de dados: as preferências visuais ficam guardadas nas opções do WordPress da instalação da escola.
+- Padrão roxo SoftGenial permanece como padrão oficial.

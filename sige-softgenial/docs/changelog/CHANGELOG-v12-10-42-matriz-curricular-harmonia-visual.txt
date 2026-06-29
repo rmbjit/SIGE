@@ -1,0 +1,19 @@
+SIGE SoftGenial v12.10.42 - Matriz Curricular: Harmonia Visual
+
+Resumo
+- Módulo Matriz Curricular alinhado ao padrão visual aprovado do Painel Principal.
+- Removida duplicação de cabeçalho nesta página.
+- Novo hero claro, amplo e consistente com o Dashboard.
+- Indicadores superiores para classes configuradas, disciplinas vinculadas, catálogo e carga horária.
+- Navegação por ciclos e classes redesenhada com melhor leitura e badges consistentes.
+- Área de vinculação de disciplinas reorganizada com formulário mais limpo.
+- Tabela da matriz harmonizada com ícones visíveis, badges e acções claras.
+- Pop-ups reais para avisos e remoção de disciplina da matriz.
+- Modal de clonagem alinhado ao padrão visual actual.
+- Cores personalizadas da escola respeitadas.
+- Mobile-friendly preservado.
+
+Garantias
+- Não altera fórmulas.
+- Não altera notas, pautas, DEC, boletins, mensalidades, multas, pagamentos, recibos, estornos ou base de dados.
+- Mantém a lógica académica existente; intervenção focada em estrutura visual, linguagem e experiência.

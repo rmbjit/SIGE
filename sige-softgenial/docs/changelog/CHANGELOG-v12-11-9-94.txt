@@ -1,0 +1,64 @@
+SIGE SoftGenial v12.11.9.94
+============================
+
+Sprint UX-1 - Auditoria medida, UI Kit (tokens, componentes, sigeUi), canone de interface e modulo piloto WhatsApp Central conforme
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+DETALHE COMPLETO DO SPRINT UX-1
+===============================
+
+UX - AUDITORIA MEDIDA (NOVO INSTRUMENTO PERMANENTE)
+- tools/ux-audit.php: varre as 53 views de admin/ e quantifica estilos
+  inline, alert()/confirm() nativos, botões sem classe, tabelas sem
+  estado vazio, fugas AO90/BR e terminologia divergente; score heurístico
+  ordena o programa de correcção. Linha de base do sistema: 951,4
+  (1.804 inline, 38 alert, 18 confirm, 35 botões sem classe, 126 fugas).
+- docs/dev/UX-AUDIT.md: relatório com o ranking completo e as decisões
+  de cânone. Repetir o auditor após cada sprint prova o progresso.
+
+UX - FUNDAÇÃO: UI KIT v1 (TOKENS + COMPONENTES + sigeUi)
+- assets/sige-ui.css: tokens da marca em CSS custom properties
+  (--sg-primario #0d1259, estados ok/erro/aviso/info, raios, sombras,
+  anel de foco) + componentes canónicos namespaced: .sg-btn (primário/
+  sec/perigo/ghost/sm), .sg-banner, .sg-card, .sg-badge, .sg-empty,
+  .sg-modal, .sg-toast, .sg-spinner, .sg-table-wrap. Por ser tudo
+  .sg-*, views não tocadas não mudam um pixel.
+- assets/sige-ui.js: API global sigeUi com toast() (feedback não
+  bloqueante, aria-live), confirm() (Promise, ESC/Enter/overlay, foco
+  gerido, botão com o verbo da acção) e aCarregar(); enhancer
+  declarativo [data-sige-confirm] para formulários sem JS por ecrã.
+- includes/ui-kit.php: helpers sige_ui_banner()/sige_ui_empty() e
+  carregamento auto-suficiente com dependência declarada do
+  design system (zero alterações no admin-shell).
+- docs/dev/UI-GUIA.md: o cânone (terminologia única Guardar/Remover/
+  Pesquisar/Editar/Cancelar; diálogos nativos proibidos; confirmação
+  destrutiva com o NOME do objecto; estado vazio com próxima acção;
+  feedback humano em toda a acção; um botão primário por ecrã;
+  pré-AO90; dd/mm/aaaa; 1.234,56 MT).
+
+UX - MÓDULO PILOTO: CENTRAL WHATSAPP (score 77,5 -> 7,3)
+- 6 confirm() nativos viram sigeUi.confirm com título, nome do objecto
+  e verbo no botão (handlers convertidos a async/await, corpos
+  intactos): acções por linha, operações em lote, link do recibo,
+  marcar como tratado, redistribuir agendadas, preparar respostas.
+- 10 alert() viram sigeUi.toast com mensagens humanas (sucesso 'ok'
+  com reload suave; erros explicam o que fazer a seguir; falhas de
+  rede dizem "verifique a internet").
+- Terminologia canonizada: Eliminar -> Remover em botões, títulos,
+  rótulos de lote e textos de confirmação.
+- 3 botões sem classe ganharam hierarquia do kit; estado vazio dos
+  pendentes usa .sg-empty ("Tudo tratado" com explicação).
+- Os 7,3 pontos restantes são os 73 inline de layout, tolerados de
+  propósito até à consolidação CSS (regra 8 do cânone).
+
+QUALIDADE - GATES
+- tools/smoke-regression-pack.php: 59 -> 68 invariantes. Novos: os 3
+  ficheiros do kit existem e carregam após o design system; sigeUi
+  global; piloto com zero alert/confirm nativos, diálogos canónicos e
+  terminologia 100% conforme; auditor presente.
+- Score total do sistema: 951,4 -> 881,2.

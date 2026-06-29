@@ -1,0 +1,28 @@
+# Changelog - v12.17.0 Alunos Performance & Modularization Contract
+
+## Tipo de release
+Release funcional tecnica de performance e modularizacao controlada para o modulo Alunos.
+
+## Alteracoes
+- Versao actualizada para 12.17.0.
+- Criado `includes/alunos-performance-contract.php` como camada partilhada de SELECT leve, exportacao minima e payload inline minimo.
+- A listagem principal de Alunos deixa de usar `SELECT a.*` directo e passa a carregar apenas campos necessarios aos cards, Ficha 360 resumida, filtros, badges e documentos rapidos.
+- A edicao permanece preservada via `sige_get_aluno_full`, que continua a carregar o registo completo apenas quando o utilizador abre o modal.
+- O endpoint `sige_get_alunos_export` passa a usar SELECT minimo por finalidade: Excel ou cartoes.
+- O payload inline usado para cartao, boletim e declaracao passa a ser minimizado, reduzindo HTML e exposicao desnecessaria de dados.
+- Scripts pesados de ExcelJS, FileSaver e QRious passam a usar tags com `defer` na pagina de Alunos.
+- Adicionados gates v12.17.0 para performance, payload minimo, manifestos e preservacao de modulos sensiveis.
+
+## Nao alterado
+- Formulas financeiras.
+- Regras academicas.
+- Permissoes reais.
+- Tenant isolation.
+- Schema de base de dados.
+- Dados historicos.
+- Portaria.
+- Admin shell.
+- Financeiro core.
+
+## QA esperado
+Executar lint PHP, release gate, run-gates, zip integrity e validacao humana em staging por Secretaria, Direccao, Financeiro, Guarda e mobile.

@@ -1,0 +1,47 @@
+SIGE SoftGenial v12.10.119 - Página do Aluno: Compliance Visual PRO
+
+Base
+- Construído por cima da v12.10.118 - Página do Aluno: Permissão Real de Portal.
+
+Problema tratado
+- A Página do Aluno já abria correctamente, mas ainda não estava visualmente 100% alinhada ao padrão do Painel Principal.
+- O hero tinha hierarquia diferente, a foto competia com o título e alguns elementos pareciam mais administrativos do que portal de aluno.
+- No contexto aluno/encarregado, ainda havia botão "Voltar aos alunos", que fazia sentido para staff, mas não para o aluno.
+
+Melhorias aplicadas
+1. Hero
+- Reorganizado para seguir mais de perto a lógica do Painel Principal:
+  - kicker com ícone e secção;
+  - título forte;
+  - subtítulo claro;
+  - botões/chips com a mesma linguagem visual;
+  - painel lateral de estado geral com melhor presença visual.
+- Foto do aluno passa a ficar integrada na identidade do aluno, sem quebrar a hierarquia do título.
+
+2. Cartões KPI
+- Ajustados para ficarem mais próximos dos cards do Dashboard V2:
+  - ícone em bloco arredondado;
+  - peso visual mais consistente;
+  - sombra suave;
+  - fundo decorativo subtil;
+  - melhor espaçamento.
+
+3. Menu interno e cards
+- Menu interno e cards harmonizados em espaçamento, peso tipográfico, ícones e bordas.
+- Melhor responsividade em telas menores.
+- Tabelas continuam com scroll horizontal seguro quando necessário.
+
+4. Contexto aluno/encarregado
+- O botão "Voltar aos alunos" passa a aparecer apenas para staff.
+- Para aluno/encarregado, aparece indicador de "Portal em modo leitura".
+- Elementos administrativos laterais são escondidos no contexto aluno/encarregado quando aplicável.
+
+Mantido
+- Permissão real de portal.
+- Aluno/encarregado só entra na Página do Aluno.
+- Modo leitura.
+- Bloqueio de notas/boletins por dívida.
+- Staff continua a poder abrir a página de qualquer aluno.
+- Sem alteração de base de dados.
+- Sem alteração de pagamentos.
+- Sem alteração de notas, Pauta, DEC, ACTA ou boletins.

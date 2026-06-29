@@ -1,0 +1,18 @@
+DEPLOY - SIGE SoftGenial v12.12.1
+
+Ambiente recomendado: staging primeiro.
+
+1. Instalar o plugin v12.12.1.
+2. Limpar cache do servidor/navegador, se existir.
+3. Validar login administrativo.
+4. Validar modulo Financeiro > Despesas:
+   - abrir comprovativo de uma despesa;
+   - imprimir relatorio filtrado;
+   - confirmar que link antigo sem nonce e bloqueado por seguranca.
+5. Validar Central de Configuracoes, porque `wp_ajax:sige_settings_save` entrou no manifesto.
+6. Validar recibo publico tokenizado, Portaria camera e impressao universal `sige_print`.
+
+Rollback:
+
+- Repor v12.12.0 apenas se a validacao de staging indicar regressao funcional.
+- Em caso de rollback, notar que a v12.12.0 tem P0/P1 conhecidos no rediagnostico e nao deve ser promovida a producao sem compensacao operacional.

@@ -1,0 +1,53 @@
+SIGE SoftGenial v12.11.9.112 - AUDITORIA DE DESIGN (alunos_lista)
+================================================================
+
+O ecrã mais usado do sistema (9228 linhas) e o que tinha mais dívida de
+design. Auditado com as 3 regras, com cuidado cirúrgico pela dimensão.
+
+DIAGNÓSTICO (medido)
+- TIPOGRAFIA: 12 pesos de fonte (500/550/650/750/780/850/920/950...).
+  900 usado 36x, 800 30x, 850 22x. Hierarquia destruída.
+- RAIOS: 20 valores diferentes (4 a 38px).
+- SOMBRAS: 110 sombras distintas.
+- CORES: 579 linhas com hex à mão (695 ocorrências).
+
+ABORDAGEM (segura num ficheiro de 9228 linhas)
+- Tratado o CSS PRINCIPAL (zonas 33-242 e 687-5668), que é o ecrã que o
+  utilizador vê. Os templates de impressão (PDF, zonas 8382+) e o
+  JavaScript (6927+) foram PRESERVADOS - são casos especiais para
+  tratamento próprio.
+- Migração por camadas verificadas: pesos -> raios -> sombras -> cores,
+  com validação entre cada passo.
+
+CORRECÇÃO
+1. Hierarquia de 3 níveis: 12 pesos -> 400/500/600/700. As legendas
+   (matrícula, metadados) e textos com cor cinza-clara passaram a 400
+   para recuarem; nomes e valores a 700. (Zero pesos não-canónicos em
+   TODO o ficheiro.)
+2. Raios da escala canónica: 20 valores -> 6 (4/8/12/16/22/pill). Raios
+   gigantes (26-38px) encostados a 22 (máximo sóbrio).
+3. Sombras da escala de elevação: 110 -> 9.
+4. 695 cores migradas para tokens. Validado: zero referências a tokens
+   inexistentes, CSS bem-formado. Cores em templates de impressão e JS
+   (lógica) preservadas.
+
+PROVA VISUAL
+- alunos-lista-antes-depois.png: cartão de aluno antes/depois. A
+  matrícula recua para metadado leve, o nome domina, hierarquia clara.
+
+GATES
+- smoke-regression-pack: 164 -> 168 invariantes (4 selam o alunos_lista).
+- alunos_lista adicionado aos ecrãs auditados do gate de tipografia.
+- Baseline de mágicos: 9742 -> 9047 (-695).
+- Baseline de tipografia: 665 -> 611 (-54, todos eram do alunos_lista).
+- Todos os 12 gates verdes.
+
+NOTA DE PROCESSO
+- Contagem "695 cores" vs "579 linhas com hex" parecia erro, mas era a
+  diferença entre ocorrências e linhas (várias cores por linha).
+  Verificado antes de prosseguir - disciplina de não confiar em números
+  que não batem à primeira.
+
+PRÓXIMO
+- financeiro-extratos (47 pesos), matriz (40), aluno-portal (32)...
+- Eventual 2ª passagem ao alunos_lista para os templates de impressão.

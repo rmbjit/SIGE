@@ -1,0 +1,31 @@
+SIGE SoftGenial v12.11.9.53 - Hotfix UX Mobile Cards de Alunos PRO
+
+Objectivo
+- Corrigir a experiência dos cards de alunos em telemóveis/tablets após a v12.11.9.52.
+- Eliminar o painel branco gigante de acções que aparecia fechado e empurrava os cards para baixo.
+
+Intervenções
+- O painel de acções dos alunos fica fechado por defeito em mobile/tablet.
+- O marcador nativo do <summary> foi removido.
+- O botão de abertura passa a mostrar texto claro: Ver acções.
+- As acções passam a ter labels reais no HTML: Ficha 360º, Página do Aluno, Acesso Portal, Cartão, BI Digital, Declaração, Boletim, Editar e Remover.
+- Em ecrãs tácteis, as acções abrem em grelha compacta com ícone + texto.
+- A área branca gigante, os três círculos soltos e o excesso de altura foram eliminados.
+- Badges e espaçamentos dos cards foram ajustados para leitura mobile.
+- Removida uma aba duplicada "Dados gerais" no modal do aluno, sem alterar campos ou lógica de gravação.
+
+Preservado sem alterações
+- Base de dados.
+- Importação em duas etapas.
+- Histórico e anulação segura de lotes.
+- Modelo Excel controlado.
+- Ficha 360º e blindagem de privacidade.
+- Gestão avançada de encarregados e auditoria.
+- Notas, pautas, boletins, DEC, pagamentos, mensalidades, multas e recibos.
+- Fórmulas e regras académicas/financeiras.
+
+Validação recomendada
+- Abrir Alunos e Matrículas em telemóvel.
+- Confirmar que cada card mostra apenas o botão Ver acções.
+- Tocar em Ver acções e confirmar a grelha compacta.
+- Tocar fora / executar uma acção e confirmar que o painel fecha.

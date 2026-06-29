@@ -1,0 +1,50 @@
+SIGE SoftGenial v12.9.84 - Centro de Configuração da Escola
+Base: v12.9.83 - Configuração PRO Foundation validado
+
+Objectivo
+---------
+Transformar a fundação de configurações num primeiro Centro de Configuração da Escola, com escrita segura e auditada apenas para campos institucionais e documentais de baixo risco operacional.
+
+O que foi adicionado
+--------------------
+1. Centro de Configuração da Escola
+   - Nova experiência com separadores:
+     • Configuração da Escola
+     • Áreas protegidas
+     • Diagnóstico técnico (apenas técnico/core admin)
+   - A escola passa a ter um ponto central para identidade, contactos, marca e documentos.
+
+2. Escrita segura e auditada
+   - Novo controller AJAX: sige_settings_save_school_profile.
+   - Nonce próprio: sige_settings_school_profile.
+   - Verificação de permissões via matriz SIGE/configuracoes.editar.
+   - Sanitização por tipo de campo.
+   - Validação de email, URL e cor.
+   - Auditoria de cada alteração em sige_logs_auditoria, com valores sensíveis mascarados.
+
+3. Protecção de campos sensíveis
+   - Assinatura do director e dados bancários aparecem mascarados.
+   - Edição apenas por substituição: campo vazio mantém o valor actual.
+   - Não expõe tokens, SMTP, licença, WhatsApp ou segredos técnicos.
+
+4. Separação clara por níveis
+   - Escola pode editar apenas dados institucionais e documentos.
+   - Académico, financeiro, WhatsApp, SMTP, Hub/licença e configurações legadas ficam em leitura/protegidos.
+   - Diagnóstico técnico permanece disponível apenas para equipa técnica.
+
+O que NÃO muda
+--------------
+- Não altera cálculos financeiros.
+- Não altera regras de mensalidades, descontos, multas ou transporte.
+- Não altera WhatsApp/Z-API, fila, guardrails ou templates activos.
+- Não altera pautas, boletins, DEC, documentos ou regras académicas.
+- Não altera permissões existentes.
+- Não altera schema da base de dados.
+- Não remove configurações duplicadas, mortas ou legadas nesta fase.
+
+Próximo passo sugerido
+----------------------
+v12.9.85 - Configuração Académica Protegida
+- Migrar de forma controlada apenas a visualização/edição segura de calendário académico, ano lectivo e parâmetros não críticos.
+- Manter fórmulas e regras SNE intactas.
+- Começar a preparar saneamento real de campos mortos apenas após mapa de uso.

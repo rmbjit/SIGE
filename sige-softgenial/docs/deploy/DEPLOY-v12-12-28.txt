@@ -1,0 +1,32 @@
+DEPLOY - SIGE SoftGenial v12.12.28
+Fase 9 incremento 1: Blindagem do modulo de permissoes
+Data: 2026-06-22
+
+O QUE MUDA NESTA VERSAO
+- O modulo de Perfis e Permissoes (menu Configuracoes) fica seguro por desenho.
+- Contas que sao administrador WordPress real deixam de ser geriveis pelo modulo: aparecem na lista so de leitura, com o selo Protegido. A sua gestao faz-se pela gestao de utilizadores do WordPress, como deve ser.
+- Ninguem consegue, a partir do modulo: dar um perfil a uma conta protegida; atribuir um perfil que confira a gestao de permissoes sem ser administrador WordPress; despromover-se ou remover-se a si proprio da gestao; deixar a escola sem nenhum gestor de permissoes. Qualquer tentativa e recusada com mensagem e fica registada na auditoria.
+- O link Perfis e Permissoes passa a aparecer a quem tem a permissao de gerir permissoes (por exemplo, o admin TI), e nao apenas ao administrador do sistema. Saude do Sistema e Centro de Configuracao continuam reservados ao administrador do sistema.
+
+PASSOS DE INSTALACAO (CloudPanel / File Manager)
+1. Faca uma copia de seguranca do plugin actual e da base de dados (rotina normal).
+2. Em Plugins, desactive o SIGE SoftGenial (nao apague: os dados ficam).
+3. Substitua a pasta do plugin pelo conteudo deste ZIP (a pasta sige-softgenial na raiz do ZIP). Em alternativa, instale o ZIP por cima pela administracao do WordPress.
+4. Reactive o plugin.
+5. Entre uma vez na administracao com um utilizador administrador. A migracao de reconciliacao corre sozinha (admin_init) e garante a concessao da gestao de permissoes ao perfil admin_ti na base de dados. Nao e preciso fazer mais nada.
+
+VERIFICACAO RAPIDA (5 minutos)
+1. Como administrador do sistema, abra Configuracoes > Perfis e Permissoes. Na lista de utilizadores, a sua conta de administrador (e qualquer outra que seja administrador WordPress) aparece com o selo Protegido e sem botoes de atribuir/remover.
+2. Tente, num utilizador protegido, atribuir um perfil (nao havera formulario; o desenho impede-o). Confirmado que nao ha accao perigosa oferecida.
+3. Inicie sessao com o admin TI. Confirme que ja ve o menu Perfis e Permissoes e que consegue abri-lo.
+4. Como admin TI, experimente atribuir a outro utilizador um perfil que confira gestao de permissoes (por exemplo, direccao geral). Deve ser recusado com mensagem de escalada. Atribuir um perfil normal (por exemplo, secretaria) a outro utilizador deve funcionar.
+5. Como admin TI, tente remover o seu proprio perfil. Deve ser recusado (auto-proteccao).
+
+NOTAS
+- Sem migracao de esquema: a versao do esquema nao muda. A reconciliacao e so de dados (permissoes de perfil).
+- Sem alteracoes a regras de calculo financeiro ou academico.
+- Sem novo ecra e sem nova superficie de accao: o inventario de seguranca mantem-se em 199 accoes (33 em modo enforce).
+- Nota tecnica honesta: nas versoes anteriores, o administrador WordPress ja nao corria o risco de ficar trancado (a troca de papel WordPress era saltada para administradores e a verificacao central de permissoes faz bypass para administradores). Esta versao torna essa proteccao explicita e fecha o vector que faltava, que era o bloqueio de gestores que nao sao administradores.
+
+REVERSAO
+- Reinstale o pacote da versao anterior (v12.12.27). A migracao desta versao e aditiva e idempotente; a reversao do codigo nao deixa o sistema inconsistente.

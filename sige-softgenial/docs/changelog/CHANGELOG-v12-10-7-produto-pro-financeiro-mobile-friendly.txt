@@ -1,0 +1,41 @@
+SIGE SoftGenial v12.10.7 - Produto PRO: Financeiro Mobile Friendly
+====================================================================
+
+Objectivo
+---------
+Garantir que o App Shell Produto PRO e o Painel Financeiro MJS-grade tenham uma experiência mais confortável em tablets e telemóveis, sem alterar regras de negócio, fórmulas ou base de dados.
+
+O que foi feito
+---------------
+1. App Shell mobile-friendly
+   - Sidebar premium passa a funcionar como menu lateral off-canvas em ecrãs menores.
+   - Overlay com blur ao abrir o menu.
+   - Bloqueio de scroll do body quando o menu está aberto.
+   - Topbar adaptada para ecrãs menores, com melhor quebra de linha e espaçamento.
+   - Conteúdo ganha padding seguro para não ficar por baixo do botão de menu.
+
+2. Painel Financeiro responsivo
+   - Hero financeiro reorganizado em mobile.
+   - Botões principais passam a ocupar largura confortável em telemóveis.
+   - KPIs passam para uma coluna em ecrãs pequenos.
+   - Filtros financeiros passam a empilhar de forma limpa.
+   - Cards, gráficos, atalhos e blocos operacionais passam a respeitar larguras menores.
+   - Tabelas financeiras ganham rolagem horizontal controlada para evitar cortes.
+
+3. Preservação do padrão aprovado
+   - Mantido o padrão visual MJS-grade.
+   - Mantida a sidebar roxa premium.
+   - Mantidos cartões arredondados, ícones visíveis e linguagem limpa.
+
+Garantias
+---------
+- Não foram alteradas fórmulas financeiras.
+- Não foram alteradas mensalidades, multas, pagamentos, cobranças ou estornos.
+- Não foram alteradas notas, pautas, boletins, DEC ou actas.
+- Não foram adicionadas migrações de base de dados.
+- Intervenção limitada à camada visual/responsiva.
+
+Validação técnica
+-----------------
+- Todos os ficheiros PHP passaram em php -l.
+- ZIP gerado para instalação segura em ambiente de testes.

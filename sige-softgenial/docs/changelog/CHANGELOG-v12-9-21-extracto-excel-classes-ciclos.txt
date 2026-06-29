@@ -1,0 +1,24 @@
+SIGE SoftGenial v12.9.21 - Extracto Excel por Classes e Ciclos
+
+Alteração cirúrgica sobre o ficheiro:
+- admin/finance/financeiro-extratos.php
+
+Melhorias aplicadas:
+1) O Excel do Extracto / Caixa passa a apresentar, no fim da folha, o bloco:
+   - PAGAMENTOS CUMULATIVOS POR CLASSE
+   - Total por cada classe, com número de movimentos.
+
+2) O mesmo Excel passa a apresentar o bloco:
+   - PAGAMENTOS CUMULATIVOS POR CICLO
+   - Primário: 1ª à 6ª classe
+   - Secundário: 7ª à 12ª classe
+   - Outro: registos sem classe detectada ou fora desse intervalo.
+
+3) A grelha visual da página, os botões, o fecho de caixa, recibos, estornos,
+   filtros e totais já existentes foram mantidos intactos.
+
+4) A classe é obtida de forma segura pela matrícula/turma mais recente do aluno,
+   dando prioridade à matrícula activa.
+
+Validação técnica:
+- PHP lint executado com sucesso em admin/finance/financeiro-extratos.php.

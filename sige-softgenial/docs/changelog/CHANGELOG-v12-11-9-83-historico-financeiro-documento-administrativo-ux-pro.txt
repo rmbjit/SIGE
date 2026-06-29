@@ -1,0 +1,82 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.83
+Histórico Financeiro: Documento Administrativo + UX PRO (Extractos/Caixa) + Excel institucional
+
+Data: 2026-06-09
+Build: sige-12.11.9.83-historico-financeiro-documento-administrativo-ux-pro
+Canal: validated-incremental (sobre o v12.11.9.82 já validado)
+Âmbito: Alunos / Ficha 360º / Extractos e Caixa / Histórico financeiro do aluno
+
+------------------------------------------------------------------
+1. EXTRACTOS / CAIXA: activação e intuitividade do separador "Histórico de aluno"
+------------------------------------------------------------------
+Problema observado: ao clicar em "Histórico de aluno" não se notava qualquer
+diferença e o próprio separador não ficava activo. A causa era a activação do
+separador depender apenas de existir um aluno já seleccionado, e não do modo
+escolhido pelo utilizador.
+
+Correcções:
+- Separa-se o "modo pretendido" (separador escolhido) do "aluno efectivamente
+  carregado". O separador acende sempre que o utilizador o escolhe, mesmo antes
+  de seleccionar um aluno.
+- O hero passa a reflectir o modo: mostra o rótulo "Histórico de aluno", um convite
+  claro ("Seleccione um aluno para abrir o histórico financeiro oficial") e " - "
+  em vez de um total 0,00 enganador enquanto não há aluno carregado.
+- Acessibilidade: o separador activo expõe aria-current e ganha realce de foco
+  (focus-visible) e de estado activo.
+- Painel de transferência do histórico redesenhado: cabeçalho com ícone, texto mais
+  claro, botões "Abrir documento / PDF" e "Baixar Excel" com estados de hover, foco
+  e carregamento. Ao clicar, o botão dá retorno visível ("A abrir...") porque o
+  documento abre numa nova aba.
+
+Importante: nenhuma regra de cálculo, consulta financeira ou de escola activa foi
+alterada. O uso de $aluno_id / $modo_aluno nas consultas permanece intacto.
+
+------------------------------------------------------------------
+2. DOCUMENTO IMPRESSO (PDF/Guardar): de "dashboard" a folha administrativa oficial
+------------------------------------------------------------------
+O documento de Histórico Financeiro do Aluno deixa de parecer um painel (gradientes,
+cartões grandes, barras de progresso, sombras) e passa a ser uma folha administrativa
+sóbria, adequada a arquivo e assinatura:
+- Folha A4 branca, tipografia serifada institucional (Georgia/Times) nos títulos e
+  Calibri/Segoe no corpo.
+- Cabeçalho institucional (logótipo + escola) com caixa de controlo do documento
+  (referência, data de emissão, ano lectivo, finalidade).
+- "Identificação do aluno" em ficha.
+- "Quadro da situação financeira" em tabela de linhas finas (total lançado, entradas,
+  estornos, entradas líquidas, dívida em aberto/plano/total, crédito disponível,
+  último pagamento) com Parecer.
+- Tabelas sóbrias de Pagamentos e de Lançamentos e obrigações.
+- Entradas por método e próximos acompanhamentos.
+- Três assinaturas: Tesouraria, Secretaria, Direcção / Carimbo.
+- Regras de impressão A4 retrato, cabeçalho de tabela repetido, sem cortes de linha,
+  cores preservadas na impressão.
+
+O ambiente de ecrã (barra de acções com "Guardar PDF / Imprimir", "Baixar Excel" e
+Fechar) mantém-se e não é impresso.
+
+------------------------------------------------------------------
+3. EXCEL (.xlsx): aspecto institucional sóbrio
+------------------------------------------------------------------
+- Tipografia Calibri (universal) em todas as folhas (substitui Aptos/Aptos Display).
+- Faixas em azul-marinho institucional (#0F2747 no título, #1E3A5F nos cabeçalhos de
+  coluna), bandas de secção em cinza-azulado claro.
+- Grelha do Excel oculta, de modo que apenas as células com contorno desenham o
+  documento.
+- Alturas de linha cuidadas no título, banda de secção e cabeçalhos.
+- Alinhamentos: valores monetários e percentagens à direita, cabeçalhos centrados,
+  rótulos à esquerda. Valores neutros deixam de ser a negrito; o destaque a negrito
+  fica reservado a dívida (vermelho) e crédito (verde).
+- Preservado: formato monetário #,##0.00 "MT", percentagem, as quatro folhas
+  (Resumo 360, Pagamentos, Obrigacoes, Metodos 360), fixação de painéis, filtros
+  automáticos, fusões de células e o empacotador ZIP manual (sem ZipArchive).
+
+------------------------------------------------------------------
+4. Sincronização de versão e qualidade
+------------------------------------------------------------------
+- Versão 12.11.9.83 sincronizada em: cabeçalho do plugin, constante SIGE_VERSION e
+  BUILD.json.
+- php -l sem erros em toda a árvore (237 ficheiros).
+- Smoke v12.11.9.83: 36/36 verificações OK (contrato funcional do v82 preservado +
+  novas verificações de documento, UX e Excel).
+- XLSX gerado validado: pacote OOXML bem formado (10 partes), abre como
+  "Microsoft Excel 2007+".

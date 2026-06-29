@@ -1,0 +1,56 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.162
+Data: 2026-06-14
+Ambito: Central de Comunicacoes - fila UNIFICADA (e-mail + WhatsApp) + accoes em massa
+
+O QUE MUDA
+----------
+A Central de Comunicacoes deixa de ter o e-mail num separador e o WhatsApp noutro
+(por ligacao). Passa a ter UMA fila unica que mostra os dois canais juntos, com
+seleccao multipla e accoes em massa. E a "central a serio".
+
+CAMADA DE NORMALIZACAO - includes/comunicacoes-core.php
+------------------------------------------------------
+Modelo canonico comum (canal, destinatario, resumo, contexto, estado, data,
+erro, tentativas), com estados canonicos:
+    pendente | a_enviar | enviado | falhou | cancelado
+Mapeamento raw->canonico por canal:
+    e-mail:   pending->pendente, sending->a_enviar, sent->enviado,
+              failed->falhou, cancelled->cancelado
+    whatsapp: pendente/agendada/forcar_envio->pendente, enviado->enviado,
+              falhou->falhou, cancelado->cancelado
+A consulta sige_comm_query() faz UNION ALL das duas filas, projectadas para as
+mesmas colunas, ORDER BY data DESC, LIMIT/OFFSET - paginacao em SQL, escola-scoped.
+Validado o alinhamento placeholders/parametros do prepare em todos os filtros.
+
+VISTA - separador unico "Fila de envios"
+----------------------------------------
+  - Cartoes de estatistica (ambos os canais).
+  - Filtros: canal (todos/e-mail/whatsapp, com contagem) e estado (canonico).
+  - Coluna de canal por linha (badge e-mail/WhatsApp).
+  - Checkboxes + "seleccionar todos" + barra de accoes em massa.
+  - Accoes (linha e massa): cancelar / reenviar / eliminar, cada item segundo as
+    regras do seu canal. Pre-visualizacao cross-canal (HTML para e-mail, texto
+    para WhatsApp). "Processar e-mails" e link "Ferramentas WhatsApp".
+  - Separador "Modelos" mantido (editor de texto dos e-mails).
+
+ISOLAMENTO E SEGURANCA
+----------------------
+  - NAO altera o subsistema de WhatsApp: a camada le as tabelas e aplica as
+    MESMAS regras de estado que o Central de WhatsApp ja usa.
+  - Endpoint unico sige_comm_action (1..200 itens) e sige_comm_get_full.
+  - nonce sige_emc_nonce + capability multi-papel + escola_id em todas as queries
+    + prepared statements + auditoria sige_fin_log.
+  - UX nos dialogos canonicos do kit (sigeUi). Tokens do design system.
+
+VALIDACAO
+---------
+  php -l limpo; alinhamento de prepare verificado por harness; 15/15 gates;
+  306 invariantes de regressao verdes; release gate OK.
+
+NAO TOCADO
+----------
+  Nenhuma regra financeira ou academica.
+
+NORTE (futuro, nao incluido)
+----------------------------
+  Historico por encarregado agnostico ao canal (nivel CRM escolar).

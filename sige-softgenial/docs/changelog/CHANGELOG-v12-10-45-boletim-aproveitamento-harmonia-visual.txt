@@ -1,0 +1,24 @@
+SIGE SoftGenial v12.10.45 - Aproveitamento/Boletim: Harmonia Visual
+
+Escopo
+- Redesenho visual do módulo view=boletim / Aproveitamento do Aluno.
+- Mantém o Painel Principal como referência visual inegociável.
+- Não altera fórmulas, regras académicas, pautas, notas, DEC, boletins, mensalidades, pagamentos, recibos ou base de dados.
+
+Melhorias
+- Hero claro e amplo, alinhado ao padrão de App já validado.
+- Indicadores superiores para disciplinas, média anual, vista actual e situação do aluno.
+- Pesquisa de aluno e resultados harmonizados.
+- Ficha do aluno redesenhada em cartões.
+- Vistas trimestrais e anual com separadores modernos.
+- Tabelas de aproveitamento com cabeçalhos, notas, badges e escala visual mais legíveis.
+- Guia de leitura sem linguagem técnica interna.
+- Histórico escolar harmonizado.
+- Impressão/boletim gerado no popup passa a respeitar a cor dos documentos da escola.
+- Botões de documentos finais harmonizados ao tema activo.
+- Responsividade reforçada para tablet e telemóvel.
+
+Validação
+- php -l aplicado aos ficheiros PHP.
+- BUILD.json alinhado com SIGE_VERSION.
+- ZIP testado.

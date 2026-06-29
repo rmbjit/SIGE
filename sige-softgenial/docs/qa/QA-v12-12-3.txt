@@ -1,0 +1,23 @@
+SIGE SoftGenial v12.12.3 - QA
+
+Escopo: Notas Beta nos módulos em validação.
+
+Validação executada:
+- Smoke dedicado: php tools/smoke-beta-views-v12-12-3.php - 26 verificações OK.
+- Release gate: incluído em php tools/run-gates.php - 53 verificações OK.
+- PHP lint: 334 ficheiros PHP verificados, 0 falhas.
+- Gates oficiais completos: php tools/run-gates.php - 29/29 verdes.
+- Gates de governação revalidados para SIGE_GOV_VERSION 12.12.3: OK.
+- ZIP final validado com unzip -t: OK.
+
+Evidências:
+- docs/qa/PHP-LINT-v12.12.3.json
+- docs/qa/PHP-LINT-v12.12.3.txt
+- docs/qa/GATES-v12.12.3.txt
+- docs/qa/QA-SMOKE-v12-12-3-beta-views.md
+- docs/qa/ZIP-TEST-v12.12.3.txt
+
+Decisão:
+- P0 aberto: 0
+- P1 aberto: 0
+- Schema/database: sem alteração

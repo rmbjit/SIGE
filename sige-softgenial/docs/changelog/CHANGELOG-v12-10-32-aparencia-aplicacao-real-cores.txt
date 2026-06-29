@@ -1,0 +1,18 @@
+# SIGE SoftGenial v12.10.32 - Aparência da Escola: Aplicação Real das Cores
+
+## Objectivo
+Garantir que as cores definidas em Aparência da escola tenham efeito real no sistema, mantendo o padrão visual aprovado e evitando confusão com a cor usada nos documentos.
+
+## Ajustes realizados
+- As cores personalizadas passam a activar automaticamente o tema da escola.
+- O motor de temas reconhece cores personalizadas já guardadas, mesmo quando o selector ainda estava em Padrão SoftGenial.
+- A pré-visualização reflecte com maior fidelidade o modo activo.
+- O botão Restaurar padrão SoftGenial volta às cores oficiais sem deixar personalizações activas.
+- A cor na área Marca e documentos foi separada semanticamente como Cor dos documentos.
+- Foi acrescentada orientação visual clara: as cores da aplicação alteram menu, botões, cartões e destaques; a cor dos documentos continua separada.
+
+## Segurança
+- Sem alteração de fórmulas.
+- Sem alteração de mensalidades, multas, pagamentos, recibos, cobranças ou base de dados.
+- Sem alteração de notas, pautas, DEC, boletins ou actas.
+- Alteração limitada ao motor visual e à experiência do Centro de Configuração.

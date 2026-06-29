@@ -1,0 +1,37 @@
+SIGE SoftGenial v12.11.0 - Curriculum Engine Foundation PRO (TEST)
+
+Base: v12.10.142 - Security Baseline PRO: Update Origin Hotfix.
+Ambiente recomendado: teste.softgenial.edu.mz ou outro ambiente de testes.
+
+O que foi adicionado:
+- Novo módulo includes/curriculum-engine.php.
+- Nova página interna: &view=curriculos.
+- Menu académico: Currículos (BETA).
+- Tabelas fundacionais para motor multicurrículo:
+  - sige_curriculum_profiles
+  - sige_curriculum_levels
+  - sige_curriculum_grades
+  - sige_curriculum_subjects
+  - sige_curriculum_periods
+  - sige_curriculum_assessment_rules
+  - sige_curriculum_document_templates
+  - sige_curriculum_school_settings
+- Perfis curriculares iniciais:
+  - Moçambique / SNE
+  - Cambridge
+  - Angola
+  - Brasil
+  - Currículo Personalizado
+- Sincronização segura da matriz curricular actual para o perfil Moçambique/SNE.
+- Perfil activo guardado em modo legacy_safe.
+
+Garantias de segurança funcional:
+- Não muda fórmulas de notas.
+- Não muda regras de progressão/transição.
+- Não muda Pauta, DEC, ACTA, boletins ou documentos oficiais.
+- Não muda pagamentos, mensalidades, multas, recibos ou financeiro.
+- Não substitui a tabela sige_matriz_curricular actual.
+- Apenas cria fundação estrutural e observacional para evolução por fases.
+
+Objectivo da versão:
+Preparar o SoftGenial para se tornar uma plataforma multicurrículo escalável, sem quebrar o funcionamento actual validado.

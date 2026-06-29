@@ -1,0 +1,63 @@
+CHANGELOG - SIGE SoftGenial v12.12.62
+Fase 4 (CSP e front-end seguro) - incremento 2
+switchTab e args com esc_js das vistas admin em data-sige-act
+Data: 2026-06-23
+
+RESUMO
+switchTab e onclick com argumentos string via esc_js das vistas admin para o
+despachante data-sige-act, continuando a preparar o CSP enforce do shell admin.
+Duas conversoes que exigiam cuidado proprio.
+
+SWITCHTAB (4 call-sites)
+- Era switchTab(event, tabId) e usava event.target para marcar a aba activa.
+- Refeito para switchTab(el), lendo o tabId do atributo data-tab que as abas ja
+  possuem. Os 4 call-sites passam a data-sige-act (a via por omissao do despachante
+  passa o proprio elemento).
+- As abas sao div sem filhos, pelo que event.target era ja o elemento; comportamento
+  identico. Confirmou-se que switchTab so e chamado por esses 4 onclick.
+
+ARGUMENTOS STRING VIA ESC_JS (9 onclick)
+- alocarProfessores, verAlunos, apagarTurma, verAcesso, apagarAluno, toggleStatus,
+  removerUser, sigeAbrirAnular, plAbrirPagar passam a data-sige-act mais
+  data-sige-args.
+- Os argumentos sao serializados por esc_attr(wp_json_encode([...])):
+  - wp_json_encode preserva os tipos (inteiros, decimais e cadeias);
+  - esc_attr codifica para o atributo HTML (aspas, menor, e-comercial).
+- Testou-se o round-trip ate JSON.parse com um valor dificil (aspa simples, aspa
+  dupla, menor e e-comercial) e recuperou-se o valor exacto.
+- Cada funcao alvo e global (funcao ou window.nome), encontrada pelo despachante via
+  window. A ordem dos argumentos espelha a chamada original.
+
+CONVERSOES POR VISTA (13 total)
+- alunos_lista: 4 switchTab, verAcesso, apagarAluno
+- turmas-view: alocarProfessores, verAlunos, apagarTurma
+- equipe-view: toggleStatus, removerUser
+- financeiro-extratos: sigeAbrirAnular
+- financeiro-planos-view: plAbrirPagar
+
+COMPORTAMENTO
+- Identico: as abas trocam como antes; os botoes recebem os mesmos argumentos.
+
+VERIFICADORES DE JAVASCRIPT EMBEBIDO E DESPACHANTE
+- As vistas admin sao varridas e mantem-se verdes.
+- smoke-inline-frontend confirma o contrato do despachante.
+
+CATRACA
+- check-inline-frontend: maximo de onclick de 79 para 66 (sem folga).
+- style mantem-se em 2051; blocos script mantem-se em 7.
+
+NOTA SOBRE O ENFORCE DO SHELL ADMIN
+- Esta vaga NAO acrescenta cabecalho CSP. O enforce do shell admin so vem depois de
+  tratados os onclick restantes (66, incluindo codigo inline) e os estilos inline
+  (2051).
+
+INVARIANTES
+- Superficie de accao 199 (enforce 33), vistas 60, opcoes 132, dependencias
+  externas 9. Sem alteracao de esquema. Calculo financeiro byte-identico.
+- Corredor 99. Release gate verde a partir de pasta limpa.
+- Rediagnostico adversarial: Zero P0 e Zero P1.
+
+VERSAO
+- Cinco fontes sincronizadas em 12.12.62 (cabecalho do plugin, SIGE_VERSION,
+  BUILD.json, SIGE_GOV_VERSION, base da superficie de inventario).
+- Zero travessoes em todo o codigo, documentacao e changelog.

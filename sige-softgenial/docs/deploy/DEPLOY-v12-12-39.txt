@@ -1,0 +1,66 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.39
+Data: 2026-06-22
+Titulo: Fase 2 - Cofre de segredos - rotacao e segredos por escola
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+Mais capacidades do cofre de segredos, todas internas e aditivas:
+1. Segredos por escola: cada escola pode ter os seus proprios segredos, cifrados e
+   isolados dos das outras escolas.
+2. Rotacao de segredos: o sistema sabe ha quanto tempo cada segredo foi definido e
+   pode assinalar os que ja devem ser rodados (por omissao, ao fim de 180 dias).
+3. Rotacao do token de webhook de pagamento por escola: gera e instala um novo
+   token forte, deixando registo de auditoria (sem o valor).
+A forma como os segredos ja existentes sao guardados e lidos NAO muda. Nao ha
+alteracao a base de dados.
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+5. Nao e preciso limpar cache do navegador: as alteracoes sao de servidor.
+
+================================================================
+AJUSTE OPCIONAL (constante, no wp-config.php)
+================================================================
+- define('SIGE_SECRET_ROTATION_DAYS', 180);  // idade maxima de um segredo, em dias
+Se nao definir nada, fica o valor por omissao (180 dias).
+
+================================================================
+VERIFICACAO
+================================================================
+1. Confirme que o email (SMTP/Zoho) e os pagamentos moveis (M-Pesa, e-Mola)
+   continuam a funcionar normalmente.
+2. Se rodar o token de webhook de um fornecedor por escola, copie o novo token que
+   e devolvido e configure-o no painel do fornecedor; confirme no registo de
+   auditoria um evento "segredo_rodado" com o fornecedor e a escola, sem o valor.
+
+================================================================
+NOTA IMPORTANTE SOBRE OS SALTS DO WORDPRESS
+================================================================
+A cifra dos segredos usa os salts do WordPress (AUTH_KEY, SECURE_AUTH_KEY e os
+respectivos sais, no wp-config.php). Se rotar (mudar) esses salts, os segredos
+cifrados deixam de poder ser lidos e terao de ser re-introduzidos. Ordem segura:
+antes de mudar os salts, re-introduza os segredos depois da mudanca, ou guarde os
+valores em local seguro para os repor. O sistema degrada com seguranca: um segredo
+que nao consiga ser decifrado e tratado como vazio (a integracao falha de forma
+clara), nunca com um valor errado.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera dados
+nem esquema, pelo que a reversao e directa.
+
+================================================================
+A SEGUIR (FASE 2)
+================================================================
+A cobertura central do cofre fica completa. Possiveis passes futuros: interface de
+gestao de segredos e relatorio de segredos a vencer, e re-cifra assistida para a
+rotacao de salts.

@@ -1,0 +1,28 @@
+SIGE SoftGenial v12.10.124 - Página do Aluno: Texto Mais Humano
+
+Base
+- Construído por cima da v12.10.123 - Página do Aluno: Menu Legível e Recibos Filtráveis.
+
+Problema tratado
+- A frase do hero da Página do Aluno soava técnica e interna:
+  "Perfil integrado do aluno, com leitura académica, financeira, documental e familiar no mesmo espaço do sistema."
+- Para aluno/encarregado, esse tipo de texto não ajuda muito e parece mais uma anotação de produto.
+
+Ajuste aplicado
+- A frase foi substituída por:
+  "Acompanhe aqui os dados essenciais do aluno, a turma, a situação financeira, documentos e contactos da família."
+
+Objectivo
+- Tornar a Página do Aluno mais humana.
+- Usar linguagem simples e útil para o utilizador final.
+- Evitar termos técnicos como "perfil integrado" e "leitura académica/financeira/documental".
+
+Mantido
+- Menu lateral legível.
+- Recibos filtráveis.
+- Modo leitura.
+- Bloqueio de notas/boletins por dívida.
+- Validação de propriedade dos recibos.
+- Sem alteração de base de dados.
+- Sem alteração de pagamentos.
+- Sem alteração de notas, Pauta, DEC, ACTA ou boletins.

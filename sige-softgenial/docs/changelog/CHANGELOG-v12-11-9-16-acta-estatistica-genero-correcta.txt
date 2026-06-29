@@ -1,0 +1,59 @@
+SIGE SoftGenial v12.11.9.16 - ACTA: Estatística por Género Correcta (alinhada ao DEC)
+
+Problema reportado
+- O DEC apresentava a estatística por género correcta, mas as estatísticas
+  demográficas que aparecem na ACTA do Conselho de Notas (colunas M = Mulheres
+  e HM = Total) não batiam certo.
+
+Causa-raiz (verificação 360°)
+- Toda a estatística demográfica da ACTA passa por uma única função de
+  normalização de género: sige_acta_norm_genero().
+- Essa função só reconhecia exactamente 'F' ou 'FEMININO' como feminino:
+      if ($g === 'F' || $g === 'FEMININO') return 'F';
+      return 'M';
+  Qualquer outro valor caía no return 'M' (Masculino). Em bases com dados
+  migrados/importados (ex.: Malisa), alunas guardadas como "Mulher",
+  "Feminina", "Female", "Fêmea", "Mulheres" ou com acentos eram contadas como
+  homens e desapareciam da coluna M (Mulheres) da ACTA.
+- O género em branco/desconhecido era ainda forçado para Masculino.
+- O DEC, em contraste, já usava normalização robusta (remove_accents +
+  maiúsculas + remoção de não-letras + lista alargada de tokens) e contava o
+  total como count(all). Daí a divergência: DEC certo, ACTA errada.
+
+Correcção aplicada (cirúrgica, em includes/acta-pdf-handler.php)
+- sige_acta_norm_genero() reescrita para usar a MESMA lógica canónica do DEC
+  (v12.10.73), mapeada para a convenção interna da ACTA:
+    • remove acentos, normaliza maiúsculas, remove caracteres não alfabéticos;
+    • M / Masc / Masculino / Masculina / Macho / Male / Homem / Homens / H → 'M';
+    • F / Fem / Feminino / Feminina / Fêmea / Mulher / Mulheres / Female → 'F';
+    • em branco / desconhecido → 'U' (NÃO é forçado para sexo nenhum).
+- sige_acta_map_mined_cols() passa a calcular:
+    • M (MINED)  = cnt['F']                  (Mulheres)
+    • HM (MINED) = cnt['M'] + cnt['F'] + cnt['U']  (total real, inclui
+      desconhecido, exactamente como o DEC faz count(all)).
+- Inicializadores de contagem ([M,F]) passam a incluir o balde 'U' nos quatro
+  pontos (censo 3 de Março, contador demográfico, ramo de status estendido e
+  situação positiva), evitando avisos de chave indefinida em PHP 8.
+
+Validação
+- Teste comparativo sobre um conjunto misto (M/F + palavras por extenso +
+  variantes + acentos + desconhecidos):
+    DEC (correcto):  M = 8 · HM = 15
+    ACTA antiga:     M = 3 · HM = 15   (subcontava 5 Mulheres)
+    ACTA nova:       M = 8 · HM = 15   (== DEC)  ✔
+- php -l sem erros nos ficheiros alterados.
+
+Garantias (anti-regressão)
+- Sem alteração em fórmulas académicas (MT, MFD, AF, MF, MG, médias, negativas).
+- Sem alteração em progressão, transição ou reprovação.
+- Sem alteração na Nota Votada nem na aprovação do Director Pedagógico.
+- Sem alteração no Censo 3 de Março já confirmado (snapshot oficial continua a
+  ser usado quando existir; só muda a SUGESTÃO automática, que agora conta bem).
+- Sem alteração no DEC, Pauta, Pauta Final, Boletins, Estatísticas por
+  Disciplina, Quadro de Honra.
+- Sem alteração em Financeiro, RH, WhatsApp, permissões ou base de dados.
+- Apenas duas funções e quatro inicializadores tocados, todos em
+  includes/acta-pdf-handler.php.
+
+Versionamento sincronizado
+- Header do plugin, SIGE_VERSION e BUILD.json → 12.11.9.16.

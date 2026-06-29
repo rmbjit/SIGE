@@ -1,0 +1,24 @@
+SIGE SoftGenial v12.10.89 - Perfis e Permissões: Compliance Visual Integral
+
+Objectivo
+- Redesenhar visualmente o módulo &view=sige_permissoes com o mesmo rigor do Painel Principal / Dashboard V2 MJS-grade.
+- Manter a intervenção exclusivamente visual, sem alterar matriz, perfis, atribuição, remoção, auditoria, permissões, segurança, base de dados ou regras funcionais.
+
+Ajustes aplicados
+- Removido o cabeçalho genérico do App Shell para esta view, garantindo header único.
+- Hero antigo escuro substituído por hero claro no padrão Produto PRO.
+- Sequência visual obrigatória aplicada: ícone canónico, área Configurações, título, subtítulo, chips técnicos e painel lateral de estado da matriz.
+- Adicionados KPIs visuais para perfis activos, permissões registadas, utilizadores staff e utilizadores com perfil SIGE.
+- Lista de perfis redesenhada com cartões limpos, estado activo claro e scroll controlado.
+- Matriz de permissões harmonizada com grupos, linhas, checkboxes, código de permissão e badges de risco.
+- Botões Cancelar, Guardar permissões, Aplicar e Remover harmonizados com ícones canónicos, hover e cursor adequado.
+- Área de atribuição de perfis a utilizadores staff redesenhada com aviso institucional, pesquisa, contadores e tabela responsiva.
+- Tabela de utilizadores passa a ter wrapper com scroll horizontal controlado para telas menores.
+- Layout responsivo revisto para desktop, tablet e mobile.
+
+Garantias
+- Sem alteração nas queries de perfis/permissões.
+- Sem alteração em nonces, acções POST, gravação, atribuição ou remoção de perfis.
+- Sem alteração na Permission Engine, auditoria, segurança ou bypass controlado desta página.
+- Sem alteração em notas, ACTA, DEC, pautas, pauta final, boletins ou regras académicas.
+- Sem alteração em pagamentos, multas, mensalidades ou base de dados financeira.

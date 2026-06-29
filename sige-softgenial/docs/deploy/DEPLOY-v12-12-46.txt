@@ -1,0 +1,55 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.46
+Data: 2026-06-23
+Titulo: Fase 4 incr 2 - Migracao de inline (vaga 1) e catraca
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+E uma melhoria tecnica de seguranca do front-end, sem qualquer alteracao visivel de
+funcionamento. Comeca a retirar-se o codigo de interface (os comportamentos de
+clique) de dentro das paginas, para que mais tarde se possa impor uma politica de
+seguranca de conteudo (CSP) que bloqueia codigo nao autorizado no navegador.
+
+Em concreto:
+- Foi criado um mecanismo unico e reutilizavel que liga os botoes as suas accoes,
+  em vez de cada botao trazer o codigo embutido.
+- O ecra de Lancamentos (financeiro) foi o primeiro a ser convertido: os botoes de
+  exportar, ver detalhes, anular, isentar e reactivar passam a usar esse mecanismo.
+- O comportamento dos botoes e exactamente o mesmo de antes.
+
+Nao ha alteracao de dados, de calculos nem de interface. As proximas versoes vao
+continuar esta conversao, ecra a ecra.
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+
+================================================================
+VERIFICACAO
+================================================================
+1. Abra o ecra de Lancamentos (financeiro).
+2. Confirme que os botoes continuam a funcionar como antes:
+   - Exportar para Excel gera o ficheiro.
+   - Ver detalhes abre a janela de detalhes do lancamento.
+   - Anular, isentar e reactivar abrem as respectivas janelas com o lancamento certo.
+   - Os botoes de fechar fecham as janelas.
+3. Nenhum pagamento, valor ou calculo e alterado por esta versao.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera o
+esquema da base de dados, pelo que a reversao e directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Continuar a conversao nos restantes ecrans, e depois mover os estilos e os
+  blocos de codigo embutidos para ficheiros proprios, a caminho de impor a politica
+  de seguranca de conteudo (CSP).

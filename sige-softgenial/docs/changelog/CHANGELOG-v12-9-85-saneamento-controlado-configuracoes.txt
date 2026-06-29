@@ -1,0 +1,70 @@
+SIGE SoftGenial v12.9.85 - Saneamento Controlado de Configurações
+
+Base validada:
+- v12.9.84 - Centro de Configuração da Escola.
+
+Objectivo:
+- Iniciar o saneamento profissional de configurações duplicadas, legadas ou possivelmente mortas, sem alterar lógica operacional e sem remoção automática.
+
+O que foi adicionado:
+1. Nova classe de saneamento
+   - includes/settings/class-sige-settings-sanitation.php
+   - Gera relatório técnico, apenas leitura, com:
+     - grupos canónicos de duplicação;
+     - fonte recomendada por grupo;
+     - candidatos legados preservados;
+     - contagem simples de indícios de uso no código;
+     - colunas existentes em sige_config/sige_fin_configuracoes ainda não mapeadas no registry.
+
+2. Novo separador técnico no Centro de Configuração
+   - "Saneamento controlado"
+   - Visível apenas para perfil técnico/core autorizado.
+   - Mostra protocolo anti-regressão:
+     - identificar;
+     - definir fonte canónica;
+     - migrar/remover apenas numa versão futura, depois de validação.
+
+3. Mapa canónico inicial
+   - Endereço físico da escola.
+   - Prazo de vencimento financeiro.
+   - Tipo de multa.
+   - Percentagem/valor de multa.
+   - Desconto de irmãos.
+   - Desconto de funcionário.
+   - Taxa de inscrição.
+   - SMS legado sem provider activo.
+   - Templates de comunicação legados.
+
+4. Segurança e boas práticas
+   - Valores sensíveis continuam mascarados.
+   - Área restrita ao técnico SoftGenial/Core.
+   - Nenhuma operação destrutiva.
+   - Nenhuma migração automática.
+   - Nenhum token/segredo exportado em claro.
+
+O que NÃO foi alterado:
+- Regras financeiras.
+- Fórmulas, mensalidades, multas, descontos e pagamentos.
+- WhatsApp/Z-API.
+- SMTP.
+- Pautas, boletins e documentos.
+- Hub/licença.
+- Permissões existentes.
+- Estrutura de tabelas.
+- Dados existentes.
+
+Como testar:
+1. Instalar o plugin v12.9.85.
+2. Abrir: SIGE SoftGenial → Sistema Técnico → Centro de Configuração.
+3. Confirmar que os separadores continuam a abrir.
+4. Abrir "Saneamento controlado".
+5. Confirmar que aparecem:
+   - cards de resumo;
+   - mapa canónico;
+   - candidatos legados;
+   - colunas não mapeadas, quando existirem.
+6. Confirmar que não existe botão de apagar/migrar.
+7. Confirmar que financeiro, WhatsApp, documentos, pagamentos e pautas continuam inalterados.
+
+Nota:
+- Esta versão prepara o saneamento real. A remoção de configurações mortas/duplicadas só deve acontecer em fase posterior, com migração, fallback e smoke tests.

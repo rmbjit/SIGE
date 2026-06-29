@@ -1,0 +1,34 @@
+SIGE SoftGenial v12.10.121 - Página do Aluno: Links Visíveis na Lateral
+
+Base
+- Construído por cima da v12.10.120 - Página do Aluno: Menu na Lateral Azul.
+
+Problema corrigido
+- A lateral azul mostrava o título "Página do Aluno", mas os links Resumo, Académico, Financeiro, Documentos e Contactos não apareciam.
+- A causa provável era conflito com a regra global do App Shell que oculta elementos <nav> na lateral quando o utilizador é aluno/encarregado.
+- Como o menu injectado usava <nav>, o título aparecia, mas os links ficavam ocultos.
+
+Correções aplicadas
+1. Estrutura
+- O menu lateral da Página do Aluno deixa de usar <nav>.
+- Passa a usar <div class="sg-student-sidebar-links" role="navigation">.
+- Isto evita conflito com a regra global que esconde menus administrativos.
+
+2. CSS
+- Regras próprias para .sg-student-sidebar-links.
+- Salvaguarda de visibilidade para links e filhos.
+- Item activo continua destacado em branco na lateral azul.
+
+3. JavaScript
+- Após injectar o menu na lateral azul, o sistema força display/visibility/opacity dos links.
+- A injecção tenta posicionar o menu antes do botão "Terminar sessão".
+
+Mantido
+- Menu interno removido do conteúdo no contexto aluno/encarregado.
+- Staff continua a ver menu interno quando acede administrativamente.
+- Modo leitura.
+- Bloqueio de notas/boletins por dívida.
+- Permissão real de portal.
+- Redireccionamento correcto do portal antigo.
+- Sem alteração de base de dados.
+- Sem alteração de pagamentos, notas, Pauta, DEC, ACTA ou boletins.

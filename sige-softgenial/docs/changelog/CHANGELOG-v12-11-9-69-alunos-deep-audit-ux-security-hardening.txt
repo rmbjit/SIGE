@@ -1,0 +1,40 @@
+SIGE SoftGenial v12.11.9.69 - Alunos Deep Audit + UX/Security Hardening
+
+Objectivo
+- Rever novamente o módulo Alunos após a primeira melhoria mobile/tablet, corrigindo pontos de UX, permissões, minimização de dados e coerência operacional que podiam ter escapado numa análise anterior.
+
+Correcções principais
+- Pesquisa server-side passa a incluir turma e classe, alinhando o placeholder à pesquisa real.
+- Paginação/COUNT passa a usar COUNT(DISTINCT a.id) para evitar duplicação com joins.
+- Joins de matrícula e turma reforçados por escola_id.
+- Compatibilidade defensiva de rotas de transporte entre tabela moderna sige_transporte_rotas e tabela/colunas legadas sige_rotas.
+- Exportação Excel e cartões em lote passam a respeitar filtros activos de texto, turma e estado também no servidor.
+- Caso "Todas as turmas" corrigido para exportação/cartões, usando valor 0 de forma consistente.
+- Fetch de alunos em lote passa a ser cacheado por finalidade e filtros.
+- Impressão de cartões passa a usar purpose=cards com payload mínimo: id, nome, processo, foto, classe, turma, turma_id e status.
+- Exportação Excel passa a exigir escopo granular de exportação/documentos/estatísticas; edição de aluno isoladamente não autoriza exportação em lote.
+- BI Digital, cartões, declarações, boletins e Excel deixam de depender apenas de "não ser Guarda" e passam a depender de permissões reais.
+- Download seguro de documentos deixou de aceitar alunos.ver como permissão documental.
+- Ficha 360º passa a enviar scope/permissoes explícitos para documentos, emissão, financeiro, académico, comunicações e dados sensíveis.
+- Ficha 360º minimiza server-side dados documentais, familiares, morada, saúde, auditoria, académico, financeiro e comunicações conforme o perfil.
+- Perfil Guarda/Portaria mantém payload estritamente operacional: identificação básica, turma, estado e portaria.
+- Frontend da Ficha 360º passou a respeitar scope/permissoes antes de renderizar cards sensíveis.
+- Menu de acções dos cards fica oculto quando não há acções extras para o perfil.
+- Imagem do aluno, badge de qualidade e menu de acções ganharam labels/aria mais claros.
+- Filtros rápidos mobile, pesquisa e aniversários foram consolidados para combinarem sem contagens falsas.
+- Toasts passam a usar text node, evitando concatenação HTML desnecessária.
+- CSS de mobile/tablet recebeu reforço contra overflow: min-width:0, overflow-wrap e modal/footer em uma coluna em ecrãs estreitos.
+
+Preservação
+- Sem alterações de schema ou migrations.
+- Sem alterações em cálculos financeiros, pagamentos, mensalidades, multas, dívidas ou recibos.
+- Sem alterações em notas, pautas, boletins, DEC, ACTA ou fórmulas académicas.
+- Sem alterações nas regras de importação, criação, edição ou remoção de alunos.
+- Sem alterações na Portaria Digital, scanner de crachás ou isolamento do perfil Guarda.
+
+Validação
+- PHP lint completo: 210 ficheiros PHP sem erros.
+- node --check assets/mobile-tablet-ux.js: OK.
+- node --check dos scripts inline UX v12.11.9.68 e v12.11.9.69 extraídos: OK.
+- Smoke Alunos Deep Audit v12.11.9.69: 70/70 checks OK.
+- Smoke Guarda/Portaria v12.11.9.69: 18/18 checks OK.

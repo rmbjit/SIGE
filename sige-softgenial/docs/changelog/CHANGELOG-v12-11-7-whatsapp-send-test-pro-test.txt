@@ -1,0 +1,40 @@
+SIGE SoftGenial v12.11.7 - WhatsApp Send Test PRO (TEST)
+
+Base: v12.11.6 - WhatsApp Health Recovery Hotfix PRO (TEST)
+
+Objectivo:
+Adicionar um mecanismo simples, visível e seguro para testar se o envio real de mensagens WhatsApp está a funcionar.
+
+Implementado:
+1. Painel Estado das Mensagens / Diagnóstico WhatsApp:
+   - Novo bloco “Teste real de envio WhatsApp”.
+   - Campo para número WhatsApp de teste com indicativo do país.
+   - Campo opcional para mensagem personalizada.
+   - Botão “Enviar teste agora”.
+   - Resultado visual imediato com HTTP, tempo de resposta, messageId/ID quando devolvido pela API e resposta resumida da Z-API.
+   - Registo do último teste feito por escola, com número mascarado, data/hora, HTTP e estado.
+
+2. Backend AJAX:
+   - Novo endpoint interno: sige_wpp_diag_send_test.
+   - Protegido por nonce sige_wpp_diag.
+   - Protegido por permissões: administrador, director, admin SIGE, financeiro ou secretário.
+   - Usa a configuração activa da escola: whatsapp_url e whatsapp_token.
+   - Usa o mesmo cliente de envio/validação semântica do motor real: sige_wpp_post_json.
+   - Não expõe token, não grava número completo no histórico visual e mascara o telefone no resultado.
+
+3. Acesso operacional:
+   - Adicionado atalho “Testar envio” na Central de Mensagens WhatsApp.
+   - Adicionado item de menu “Testar WhatsApp” abaixo de Mensagens WhatsApp.
+
+Não alterado:
+- Não altera cobranças, recibos, mensalidades, multas, pagamentos, notas, pautas, DEC, ACTA, currículos, permissões, fórmulas ou regras financeiras.
+- Não cria lançamento financeiro.
+- Não cria recibo.
+- Não altera a fila normal.
+- Não remove guardrails do envio produtivo.
+
+Observação técnica:
+O teste é directo e serve para confirmar se a configuração Z-API aceita e envia mensagens. O painel continua a manter também a verificação da sessão e o botão de processamento da queue, permitindo distinguir:
+- problema de configuração/sessão Z-API;
+- problema de envio directo;
+- problema de fila/cadência/guardrails.

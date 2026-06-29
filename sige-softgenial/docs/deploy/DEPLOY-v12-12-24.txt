@@ -1,0 +1,48 @@
+DEPLOY - SIGE SoftGenial v12.12.24
+Fase 8 incremento 2: Direito de acesso e portabilidade (dossie do titular)
+Data: 2026-06-21. Base: v12.12.23.
+
+================================================================
+RESUMO
+================================================================
+Novo ecra de governanca de dados (Privacidade e Dados > Acesso e Portabilidade)
+que procura um aluno da escola activa, mostra o seu dossie de dados pessoais
+(direito de acesso) e exporta-o em JSON (portabilidade), atraves de um endpoint
+admin_post governado no Security Kernel em modo enforce. Nova permissao
+privacidade.acesso_exportar (risco alto). Sem migracao de esquema.
+
+================================================================
+PASSOS DE INSTALACAO (Hostinger / File Manager)
+================================================================
+1. Fazer backup do plugin actual (pasta wp-content/plugins/sige-softgenial/).
+2. Desactivar NAO e necessario; a actualizacao e aditiva.
+3. Carregar o ZIP sige-softgenial-v12_12_24-acesso-portabilidade.zip e extrair,
+   substituindo a pasta sige-softgenial/ (a pasta vem na raiz do ZIP).
+4. Abrir o painel de administracao do WordPress uma vez com um utilizador
+   administrador: a migracao de permissoes corre em admin_init e concede a nova
+   permissao a administracao e direccao (motor de permissoes passa a 12.12.24).
+5. Confirmar a versao no rodape do plugin / cabecalho: 12.12.24.
+
+================================================================
+VERIFICACAO POS-DEPLOY (rapida)
+================================================================
+- Entrar como administrador ou direccao. No menu lateral, seccao PRIVACIDADE E
+  DADOS, deve aparecer "Acesso e Portabilidade".
+- Abrir a pagina, procurar um aluno pelo numero de processo ou nome, abrir o
+  dossie e confirmar que mostra a ficha e as seccoes relacionadas.
+- Carregar em "Exportar dossie (JSON)" e confirmar a transferencia de um ficheiro
+  dossie-dados-pessoais-<processo>-<data>.json bem formado.
+- Entrar como tesoureiro/secretaria/professor: a opcao nao deve aparecer e o
+  acesso directo deve mostrar "area reservada".
+
+================================================================
+NOTAS
+================================================================
+- Sem migracao de esquema: SCHEMA_VERSION mantem-se 20260621.1.
+- Regras de calculo financeiro inalteradas (finance-core.php, academic-logic.php,
+  whatsapp-engine.php byte-identicas a v12.12.21).
+- Superficie de accao 198 (enforce 32); manifesto e Kernel alinhados.
+- Cada exportacao fica registada na auditoria de permissoes (quem, que aluno,
+  quando). Reveja periodicamente este registo.
+- Reversao: repor o ZIP da v12.12.23. A permissao concedida e inofensiva se a
+  funcionalidade for retirada; pode ser revogada na matriz de permissoes.

@@ -1,0 +1,74 @@
+SIGE SoftGenial v12.10.129 - Página do Aluno: Primeiro Acesso e Associação Segura
+
+Base
+- Construído por cima da v12.10.128 - Página do Aluno: Mensagens Claras de Senha.
+
+Objectivo
+- Blindar o primeiro acesso e a associação da conta do aluno/encarregado.
+- Manter o fluxo actual da secretaria para gerar/repor senha com um clique e enviar ao encarregado.
+- Evitar o caso de utilizador criado, mas sem associação completa ao aluno/escola/portal.
+
+Melhorias aplicadas
+
+1. Associação segura da conta ao aluno
+- Ao criar, ligar ou validar uma conta de aluno, o sistema passa a gravar os aliases de associação:
+  - sige_aluno_id
+  - aluno_id
+  - sige_portal_aluno_id
+- Também grava os aliases de escola:
+  - sige_escola_id
+  - escola_id
+  - sige_portal_escola_id
+- Isto reduz regressões entre versões antigas e novas.
+
+2. Permissões de portal garantidas
+- As roles sige_aluno e sige_encarregado recebem automaticamente:
+  - read
+  - portal.ver
+  - portal.ver_pagamentos
+  - portal.ver_documentos
+  - portal.alterar_senha
+- A verificação corre também para roles antigas já existentes nas escolas.
+
+3. Primeiro acesso/senha provisória
+- Quando a conta é criada, ligada pela primeira vez ou a senha é reposta pela secretaria, o utilizador fica marcado como tendo senha provisória.
+- Ao entrar no portal, se houver senha provisória, o sistema conduz automaticamente para a secção Alterar senha.
+- A Página do Aluno mostra aviso claro:
+  "Primeiro acesso ou senha provisória. Por segurança, altere a senha recebida da secretaria antes de continuar a usar o portal."
+- O hero mostra o chip "Senha provisória".
+
+4. Reposição de senha pela secretaria
+- O fluxo actual de a secretaria gerar nova senha e enviar ao encarregado continua.
+- A diferença é que a senha gerada passa a ser tratada como provisória.
+- Depois de o aluno/encarregado alterar a senha, os marcadores de senha provisória são limpos.
+
+5. Validação da associação contra a escola actual
+- A função que descobre o aluno associado ao utilizador passa a validar se o aluno pertence à escola actual.
+- Se o aluno_id no user meta não existir na escola, o portal não abre dados indevidos.
+- Também faz backfill dos aliases correctos quando a associação é válida.
+
+6. Conta não associada
+- A mensagem de conta não associada foi melhorada.
+- Agora orienta a secretaria a gerar/reassociar o acesso do aluno, em vez de mostrar apenas uma mensagem genérica.
+
+7. Alteração de senha
+- Ao alterar a senha com sucesso, o sistema limpa:
+  - sige_portal_force_password_change
+  - sige_password_must_change
+  - sige_primeiro_acesso_pendente
+  - sige_forcar_troca_senha
+- Também grava:
+  - sige_portal_primeiro_acesso_concluido
+  - sige_portal_password_changed_at
+
+Mantido
+- Recuperação/reposição de senha continua a ser feita pela secretaria com um clique.
+- Modo leitura da Página do Aluno.
+- Bloqueio de notas/boletins por dívida.
+- Mensagens claras de senha.
+- Menu lateral do aluno.
+- Recibos filtráveis.
+- Validação de propriedade dos recibos.
+- Sem alteração de base de dados académica/financeira.
+- Sem alteração de pagamentos.
+- Sem alteração de notas, Pauta, DEC, ACTA ou boletins.

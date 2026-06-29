@@ -1,0 +1,44 @@
+SIGE SoftGenial v12.10.94 - Merge Malisa: Transferidos PRO Académico-Financeiro
+
+Base
+- Construído por cima da v12.10.93 - Permissões: Correção Tela Branca, validada.
+- Merge das actualizações Malisa v12.9.91, v12.9.92 e v12.9.93, conforme regra de negócio validada.
+
+Objectivo
+- Consolidar o tratamento de alunos transferidos, desistentes e inactivos em módulos académicos e financeiros.
+- Impedir que alunos fora da operação activa continuem a receber cobranças futuras ou apareçam como activos.
+- Preservar histórico financeiro, académico, recibos, pagamentos, extractos e auditoria.
+
+Regras aplicadas
+- Alunos transferidos/desistentes/inactivos deixam de contar como activos.
+- Matrículas antigas com aluno transferido/desistente/inactivo são reparadas de forma leve e idempotente.
+- Alunos fora da operação activa não recebem novas mensalidades, transporte ou extras recorrentes.
+- Pagamentos não materializam novos itens recorrentes para alunos transferidos/desistentes/inactivos.
+- Devedores passa a ter filtro de situação: activos, transferidos/inactivos com saldo, todos.
+- Cobranças/alertas automáticos deixam de considerar alunos não activos.
+- Alertas financeiros existentes de alunos inactivos são auto-resolvidos.
+- Top devedores operacional exclui transferidos/desistentes/inactivos.
+- Dashboard principal, notas, gerador de mensalidades e inscrições/renovações passam a usar helpers centrais.
+
+Ficheiros principais alterados
+- includes/core-helpers.php
+- includes/db-handler.php
+- includes/finance-core.php
+- includes/fin-kpi-engine.php
+- includes/alertas-core.php
+- admin/system/dashboard-view.php
+- admin/academic/notas-view.php
+- admin/finance/financeiro-inscricoes-view.php
+- admin/finance/financeiro-gerador.php
+- admin/finance/financeiro-pagamentos.php
+- admin/finance/financeiro-devedores-view.php
+
+Garantias
+- Sem apagar histórico.
+- Sem apagar recibos.
+- Sem apagar pagamentos.
+- Sem alterar fórmulas de notas.
+- Sem alterar regras de pauta, DEC, boletins ou progressão.
+- Sem alterar pagamentos históricos.
+- Sem mexer em permissões já validadas na v12.10.93.
+- Compatível com prefixo dinâmico WordPress via $wpdb->prefix.

@@ -1,0 +1,49 @@
+/* SIGE SoftGenial v12.18.0 - Operational UX & Workflow Hardening */
+body.sige-admin-app .sg-operational-workflow-v121800{
+    --sg-ow-accent:var(--brand);
+    --sg-ow-soft:var(--bg-brand-soft);
+    --sg-ow-ink:var(--text-primary);
+    --sg-ow-muted:var(--text-secondary);
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:var(--space-4);
+    align-items:start;
+    margin:0 0 var(--space-5);
+    padding:var(--space-4);
+    border:1px solid var(--border-subtle);
+    border-radius:var(--radius-xl);
+    background:var(--bg-surface);
+    box-shadow:var(--shadow-md);
+    color:var(--sg-ow-ink);
+    isolation:isolate;
+}
+body.sige-admin-app .sg-operational-workflow-v121800[data-tone="financeiro"]{--sg-ow-accent:var(--color-success-500);--sg-ow-soft:var(--bg-success-soft);}
+body.sige-admin-app .sg-operational-workflow-v121800[data-tone="academico"]{--sg-ow-accent:var(--color-info-500);--sg-ow-soft:var(--bg-info-soft);}
+body.sige-admin-app .sg-operational-workflow-v121800[data-tone="portaria"]{--sg-ow-accent:var(--color-danger-500);--sg-ow-soft:var(--bg-danger-soft);}
+body.sige-admin-app .sg-operational-workflow-v121800[data-tone="comunicacao"]{--sg-ow-accent:var(--color-brand-500);--sg-ow-soft:var(--bg-brand-soft);}
+body.sige-admin-app .sg-ow-copy{min-width:0;display:grid;gap:var(--space-3);}
+body.sige-admin-app .sg-ow-kicker{display:inline-flex;align-items:center;gap:var(--space-2);width:max-content;max-width:100%;padding:var(--space-1) var(--space-2);border-radius:var(--radius-pill);background:var(--bg-surface);border:1px solid var(--border-subtle);color:var(--sg-ow-accent);font-size:var(--fs-xs);line-height:var(--lh-tight);font-weight:950;text-transform:uppercase;letter-spacing:.08em;}
+body.sige-admin-app .sg-ow-kicker:before{content:"";width:7px;height:7px;border-radius:var(--radius-pill);background:var(--sg-ow-accent);box-shadow:var(--shadow-xs);}
+body.sige-admin-app .sg-ow-title{margin:0;font-size:var(--fs-md);line-height:var(--lh-tight);font-weight:950;letter-spacing:-.035em;color:var(--sg-ow-ink);}
+body.sige-admin-app .sg-ow-lead{margin:0;color:var(--sg-ow-muted);font-size:var(--fs-sm);line-height:var(--lh-normal);font-weight:750;}
+body.sige-admin-app .sg-ow-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-2);margin:0;padding:0;list-style:none;}
+body.sige-admin-app .sg-ow-step{display:flex;align-items:flex-start;gap:var(--space-2);min-width:0;padding:var(--space-3);border-radius:var(--radius-lg);background:var(--bg-surface);border:1px solid var(--border-subtle);font-size:var(--fs-xs);line-height:var(--lh-normal);font-weight:800;color:var(--sg-ow-ink);}
+body.sige-admin-app .sg-ow-step-num{display:inline-flex;align-items:center;justify-content:center;width:21px;height:21px;min-width:21px;border-radius:var(--radius-pill);background:var(--sg-ow-accent);color:var(--text-on-brand);font-size:var(--fs-xs);font-weight:950;line-height:var(--lh-tight);}
+body.sige-admin-app .sg-ow-guardrail{display:flex;align-items:flex-start;gap:var(--space-2);margin-top:var(--space-1);padding:var(--space-3);border-radius:var(--radius-lg);background:var(--sg-ow-soft);border:1px dashed var(--border-default);color:var(--sg-ow-ink);font-size:var(--fs-xs);line-height:var(--lh-normal);font-weight:800;}
+body.sige-admin-app .sg-ow-guardrail:before{content:"!";display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;min-width:20px;border-radius:var(--radius-pill);background:var(--bg-surface);color:var(--sg-ow-accent);font-weight:950;}
+body.sige-admin-app .sg-ow-actions{display:flex;align-items:center;justify-content:flex-end;gap:var(--space-2);}
+body.sige-admin-app .sg-ow-action{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 var(--space-3);border-radius:var(--radius-lg);background:var(--sg-ow-accent);color:var(--text-on-brand)!important;text-decoration:none!important;font-size:var(--fs-xs);font-weight:950;white-space:nowrap;box-shadow:var(--shadow-md);}
+body.sige-admin-app .sg-ow-close{appearance:none;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:var(--radius-lg);border:1px solid var(--border-subtle);background:var(--bg-surface);color:var(--text-secondary);font-size:var(--fs-lg);line-height:var(--lh-tight);font-weight:950;cursor:pointer;}
+body.sige-admin-app .sg-ow-close:focus,body.sige-admin-app .sg-ow-action:focus{outline:3px solid var(--sg-ow-soft);outline-offset:2px;}
+@media(max-width:900px){
+    body.sige-admin-app .sg-operational-workflow-v121800{grid-template-columns:1fr;}
+    body.sige-admin-app .sg-ow-actions{justify-content:space-between;}
+}
+@media(max-width:760px){
+    body.sige-admin-app .sg-operational-workflow-v121800{margin:0 0 var(--space-4);padding:var(--space-3);border-radius:var(--radius-xl);}
+    body.sige-admin-app .sg-ow-title{font-size:var(--fs-md);}
+    body.sige-admin-app .sg-ow-steps{grid-template-columns:1fr;}
+    body.sige-admin-app .sg-ow-step{padding:var(--space-2);}
+    body.sige-admin-app .sg-ow-actions{align-items:stretch;}
+    body.sige-admin-app .sg-ow-action{flex:1 1 auto;}
+}

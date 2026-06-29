@@ -1,0 +1,359 @@
+/*
+ * SIGE SoftGenial v12.15.6 - Shell, Scroll, Topbar e Sidebar
+ * Escopo: somente o shell principal do SIGE.
+ * Regras: nao normaliza cards, tabelas, botoes internos, menus de accao ou views.
+ */
+
+body.sige-admin-app #sige-layout.sg-product-pro-shell,
+body.sige-admin-app #sige-layout.sg-product-pro-shell *,
+body.sige-admin-app #sige-layout.sg-product-pro-shell *::before,
+body.sige-admin-app #sige-layout.sg-product-pro-shell *::after {
+    box-sizing: border-box;
+}
+
+body.sige-admin-app #sige-layout.sg-product-pro-shell {
+    --sg-shell-sidebar-w: 300px;
+    --sg-shell-topbar-z: 70;
+    --sg-shell-sidebar-z: 10070;
+    --sg-shell-overlay-z: 10060;
+    min-width: 0;
+}
+
+body.sige-admin-app .sg-product-pro-shell .sg-app-content,
+body.sige-admin-app .sg-product-pro-shell .sg-app-page,
+body.sige-admin-app .sg-product-pro-shell .sg-app-topbar,
+body.sige-admin-app .sg-product-pro-shell .sg-app-topbar-headings,
+body.sige-admin-app .sg-product-pro-shell .sg-app-topbar-meta {
+    min-width: 0;
+}
+
+body.sige-admin-app .sg-product-pro-shell .sg-app-sidebar,
+body.sige-admin-app .sg-product-pro-shell .sg-app-sidebar-inner,
+body.sige-admin-app .sg-product-pro-shell .sg-app-nav {
+    min-width: 0;
+}
+
+body.sige-admin-app .sg-product-pro-shell .sg-app-topbar {
+    isolation: isolate;
+}
+
+body.sige-admin-app .sg-product-pro-shell .sg-app-topbar-headings {
+    flex: 1 1 auto;
+}
+
+body.sige-admin-app .sg-product-pro-shell .sg-app-topbar-title {
+    min-width: 0;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+
+body.sige-admin-app .sg-product-pro-shell .sg-app-user,
+body.sige-admin-app .sg-product-pro-shell .sg-app-chip-year {
+    flex: 0 0 auto;
+}
+
+body.sige-admin-app .sg-product-pro-shell .sg-app-user-meta,
+body.sige-admin-app .sg-product-pro-shell .sg-app-user-meta strong,
+body.sige-admin-app .sg-product-pro-shell .sg-app-user-meta small {
+    min-width: 0;
+}
+
+body.sige-admin-app .sg-product-pro-shell .sg-app-nav {
+    scrollbar-width: thin;
+    overscroll-behavior: contain;
+}
+
+body.sige-admin-app .sg-product-pro-shell .sige-menu-item {
+    min-width: 0;
+    align-items: center;
+}
+
+body.sige-admin-app .sg-product-pro-shell .sige-menu-item svg {
+    flex: 0 0 auto;
+}
+
+@media (min-width: 1101px) {
+    html.wp-toolbar,
+    body.sige-admin-app {
+        height: 100% !important;
+        overflow: hidden !important;
+    }
+
+    body.sige-admin-app #wpwrap,
+    body.sige-admin-app #wpcontent,
+    body.sige-admin-app #wpbody,
+    body.sige-admin-app #wpbody-content {
+        height: 100% !important;
+        overflow: hidden !important;
+    }
+
+    body.sige-admin-app #sige-layout.sg-product-pro-shell {
+        display: grid !important;
+        grid-template-columns: var(--sg-shell-sidebar-w) minmax(0, 1fr) !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+        overflow: hidden !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-sidebar {
+        position: sticky !important;
+        top: 0 !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+        overflow: hidden !important;
+        z-index: 2 !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-sidebar-inner {
+        height: 100vh !important;
+        height: 100dvh !important;
+        min-height: 0 !important;
+        max-height: 100vh !important;
+        max-height: 100dvh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-brand,
+    body.sige-admin-app .sg-product-pro-shell .sg-app-sidebar-footer {
+        flex: 0 0 auto !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-nav {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-content {
+        height: 100vh !important;
+        height: 100dvh !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        overscroll-behavior: contain !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-gutter: stable;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar {
+        position: relative !important;
+        top: auto !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-hamburger {
+        display: none !important;
+    }
+}
+
+@media (min-width: 861px) and (max-width: 1100px) {
+    html.wp-toolbar,
+    body.sige-admin-app {
+        height: auto !important;
+        min-height: 100% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+    }
+
+    body.sige-admin-app #wpwrap,
+    body.sige-admin-app #wpcontent,
+    body.sige-admin-app #wpbody,
+    body.sige-admin-app #wpbody-content {
+        height: auto !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+        overflow: visible !important;
+    }
+
+    body.sige-admin-app #sige-layout.sg-product-pro-shell {
+        display: block !important;
+        height: auto !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+        overflow: visible !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-content {
+        height: auto !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+        overflow: visible !important;
+        padding-top: 0 !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: var(--sg-shell-topbar-z) !important;
+        max-width: 100% !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar-headings {
+        flex: 1 1 auto !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar-title {
+        max-width: 44vw !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-sidebar {
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        width: min(86vw, 344px) !important;
+        max-width: 344px !important;
+        transform: translateX(-106%) !important;
+        transition: transform var(--duration-normal) var(--ease-out) !important;
+        z-index: var(--sg-shell-sidebar-z) !important;
+        overflow: hidden !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-sidebar.open {
+        transform: translateX(0) !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-sidebar-inner {
+        height: 100vh !important;
+        height: 100dvh !important;
+        min-height: 0 !important;
+        max-height: 100vh !important;
+        max-height: 100dvh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-nav {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-overlay.show {
+        display: block !important;
+        z-index: var(--sg-shell-overlay-z) !important;
+    }
+
+    body.sige-admin-app.sg-app-menu-open {
+        overflow: hidden !important;
+        touch-action: none;
+    }
+}
+
+@media (max-width: 860px) {
+    html.wp-toolbar,
+    body.sige-admin-app {
+        height: auto !important;
+        min-height: 100% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+    }
+
+    body.sige-admin-app #wpwrap,
+    body.sige-admin-app #wpcontent,
+    body.sige-admin-app #wpbody,
+    body.sige-admin-app #wpbody-content {
+        height: auto !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+        overflow: visible !important;
+    }
+
+    body.sige-admin-app #sige-layout.sg-product-pro-shell {
+        display: block !important;
+        height: auto !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+        overflow: visible !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-content {
+        height: auto !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+        overflow: visible !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: var(--sg-shell-topbar-z) !important;
+        max-width: 100% !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar-headings {
+        flex: 1 1 auto !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar-title {
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-topbar-meta {
+        flex: 0 0 auto !important;
+        width: auto !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-sidebar {
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        width: min(88vw, 324px) !important;
+        max-width: 324px !important;
+        transform: translateX(-106%) !important;
+        transition: transform var(--duration-normal) var(--ease-out) !important;
+        z-index: var(--sg-shell-sidebar-z) !important;
+        overflow: hidden !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-sidebar.open {
+        transform: translateX(0) !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-sidebar-inner {
+        height: 100vh !important;
+        height: 100dvh !important;
+        min-height: 0 !important;
+        max-height: 100vh !important;
+        max-height: 100dvh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-nav {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.sige-admin-app .sg-product-pro-shell .sg-app-overlay.show {
+        display: block !important;
+        z-index: var(--sg-shell-overlay-z) !important;
+    }
+
+    body.sige-admin-app.sg-app-menu-open {
+        overflow: hidden !important;
+        touch-action: none;
+    }
+}

@@ -1,0 +1,19 @@
+SIGE SoftGenial v12.11.9 - Equipa e Professores Security Hardening PRO (TEST)
+
+Escopo: módulo Equipa e Professores (&view=equipe).
+
+Lacunas críticas/altas endereçadas:
+- Autorização mutável centralizada em rh.equipe_gerir/matriz SIGE.
+- Bloqueio server-side de atribuição/edição indevida do perfil sige_admin_ti.
+- Validação obrigatória de pertença do utilizador à escola antes de editar, activar/desactivar, remover ou resetar senha.
+- Neutralização de endpoints legados de staff carregados em db-handler.php.
+- Remoção de dados salariais/bancários/NUIT ocultos do DOM.
+- Carregamento de detalhe sensível apenas via endpoint AJAX autorizado.
+- Exportação da folha salarial via endpoint protegido, sem depender de metadados sensíveis renderizados no HTML.
+- Sanitização defensiva na impressão de crachás individual e em lote.
+- Restrição de tipos de documentos a PDF, imagem e Word, com validação server-side.
+- Índice único seguro para escola_id + email em sige_professores em novas instalações e instalações sem duplicados existentes.
+
+Observações:
+- Não altera fórmulas financeiras, académicas, mensalidades, pagamentos, multas, notas, pautas, DEC ou boletins.
+- Em bases antigas com duplicados reais em sige_professores, a migration não apaga dados; deixa marcador de pendência para limpeza validada antes de aplicar índice único.

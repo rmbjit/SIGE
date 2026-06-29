@@ -1,0 +1,13 @@
+SIGE SoftGenial v12.9.30.3 - Hotfix UI Header Horizontal
+
+Base: v12.9.30.2 validada.
+
+Alterações:
+- Reposicionados os ícones do header da Central de Cobranças em linha horizontal.
+- Mantidos título, subtítulo e badges da direita.
+- Alteração exclusivamente visual/UX.
+
+Garantias:
+- Sem alteração de fórmulas financeiras.
+- Sem alteração de fórmulas académicas.
+- Sem alteração de lançamentos, pagamentos, saldo ou motor WhatsApp.

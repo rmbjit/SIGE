@@ -1,0 +1,15 @@
+SIGE SoftGenial v12.9.26.1 - Hotfix Selecção Central de Cobranças
+
+Base: v12.9.26 validada.
+
+Correcções:
+- Corrigido JavaScript da Central de Cobranças que impedia a actualização do resumo dinâmico da selecção.
+- Corrigida pré-validação de envio para evitar quebra por quebras de linha dentro da mensagem de confirmação.
+- Adicionada selecção ao clicar na linha do aluno, além da checkbox.
+- Mantida selecção inteligente por prioridade.
+
+Garantias:
+- Sem alteração em fórmulas financeiras.
+- Sem alteração em fórmulas académicas.
+- Sem alteração em lançamentos, pagamentos, estornos ou saldo.
+- Sem novas tabelas.

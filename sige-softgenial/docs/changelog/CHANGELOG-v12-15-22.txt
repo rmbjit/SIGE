@@ -1,0 +1,7 @@
+v12.15.22 - P3 Pesquisa Global: correccao de sobreposicao do painel
+
+- Correccao da sobreposicao reportada: em certas larguras o painel de resultados ficava por baixo do conteudo do dashboard.
+- Causa: a barra de topo so cria contexto de empilhamento (z-index) dentro de @media para telemovel; nas restantes larguras o painel, preso a esse contexto, perdia para elementos do conteudo do dashboard.
+- Solucao: o painel passa a ser portado para o body com position:fixed, posicionado sob a caixa por JS e reposicionado ao deslocar/redimensionar, com z-index alto via custom property local (drift inalterado). Sai de qualquer contexto de empilhamento da barra de topo.
+- Sem alteracao do backend nem da logica de pesquisa. Drift, gates e contrato financeiro inalterados.
+- Base: v12.15.21 (P3 entregue).

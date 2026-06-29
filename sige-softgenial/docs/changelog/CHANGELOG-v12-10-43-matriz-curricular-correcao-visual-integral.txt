@@ -1,0 +1,17 @@
+SIGE SoftGenial v12.10.43 - Matriz Curricular: Correção Visual Integral
+
+Objectivo
+- Refazer a camada visual real da Matriz Curricular, mantendo o Painel Principal aprovado como referência inegociável.
+
+Correções
+- Removida a folha visual antiga que ainda estava activa na página e causava hero escuro, blocos gigantes e aparência fora do padrão.
+- Aplicado o design system aprovado directamente na página real, não apenas no estado de acesso restrito.
+- Hero, KPIs, navegação por ciclos/classes, painel principal, tabela, formulários e pop-ups passam a obedecer ao padrão visual validado.
+- Mantidas cores personalizadas da escola.
+- Mantido comportamento mobile-friendly.
+- Sem termos técnicos internos visíveis ao utilizador.
+
+Garantias
+- Não altera fórmulas.
+- Não altera notas, pautas, DEC, boletins ou regras académicas.
+- Não altera mensalidades, multas, pagamentos, recibos, estornos ou base de dados.

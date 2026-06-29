@@ -1,0 +1,9 @@
+Deploy v12.12.6
+
+1. Instalar em staging.
+2. Validar Centro de Configuracao, prints `sige_print`, portaria camera, despesas print.
+3. Validar M-Pesa/e-Mola config.
+4. Executar gates se possivel: `php tools/run-gates.php`.
+5. So promover para producao apos validacao dos perfis criticos.
+
+Rollback: voltar para v12.12.5 se surgir regressao operacional.

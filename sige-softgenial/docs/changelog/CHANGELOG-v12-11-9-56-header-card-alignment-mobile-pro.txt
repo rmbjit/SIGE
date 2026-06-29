@@ -1,0 +1,33 @@
+SIGE SoftGenial v12.11.9.56 - Header & Card Alignment Mobile PRO
+
+Área: Académico / Alunos e Matrículas / UX Mobile
+
+Objectivo:
+- Corrigir o cabeçalho mobile e a arrumação dos cards de alunos, mantendo o screenshot aprovado como referência visual obrigatória.
+
+Intervenções realizadas:
+- Removida a folga superior que fazia o header mobile começar abaixo do topo útil do ecrã.
+- Topbar mobile reforçada para ficar numa única linha: menu, logotipo, SoftGenial, ano lectivo e avatar.
+- Substituído o marcador visual genérico do header por logotipo oficial do sistema quando existir `logo_sistema_url` configurado.
+- Criado fallback seguro de marca quando não houver logotipo configurado, sem quebrar layout.
+- Corrigido alinhamento do avatar dentro da topbar, evitando que ele desça para a área da escola.
+- Resetados conflitos de CSS global do App Shell mobile, incluindo padding-left e width herdados da topbar.
+- Bloco da escola ajustado para ficar imediatamente abaixo da topbar, sem sobreposição indesejada.
+- Hero mobile refinado: título, subtítulo, ilustração e botões com melhor equilíbrio visual.
+- Cards de alunos realinhados: foto, dados, estado e botões rápidos com grelha mais estável.
+- Botões Ver ficha / Matrícula / Mais harmonizados com altura, largura e espaçamento consistentes.
+
+Blindagem:
+- Sem alteração de base de dados.
+- Sem alteração de importação de alunos.
+- Sem alteração da Ficha 360º.
+- Sem alteração da Gestão Avançada de Encarregados.
+- Sem alteração em notas, pautas, boletins, DEC, pagamentos, recibos, mensalidades, multas, fórmulas ou regras académicas/financeiras.
+- Alteração limitada à camada visual/mobile e marcação visual segura no App Shell.
+
+Validação esperada:
+- Abrir Alunos e Matrículas num telemóvel real.
+- Confirmar que a topbar começa no topo, sem faixa branca superior.
+- Confirmar que o logotipo oficial aparece antes do texto SoftGenial quando configurado.
+- Confirmar que o avatar fica alinhado à direita dentro da topbar.
+- Confirmar que os cards dos alunos ficam compactos, alinhados e sem espaços soltos.

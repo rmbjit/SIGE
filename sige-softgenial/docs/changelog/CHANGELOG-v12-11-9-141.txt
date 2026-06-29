@@ -1,0 +1,37 @@
+SIGE SoftGenial v12.11.9.141 - AUDITORIA DE DESIGN (auditoria_notas)
+===================================================================
+
+Auditoria / rastreio de notas (969 linhas).
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 9 pesos, 850 dominante (8x). Pesos inline (600/500/700) já
+  canónicos.
+- RAIOS: 8 valores. SOMBRAS: 12. CORES: 90 hex.
+
+CORRECÇÃO (bloco <style> 205-634; sem JS/template)
+1. Hierarquia de 3 níveis: 9 pesos -> 500/600/700.
+2. Raios da escala: 8 -> 4. Sombras da escala: 12 -> 5.
+3. 101 cores migradas (CSS + zonas HTML/PHP). Inclui o MAPA PHP de cor por
+   MÓDULO de auditoria (Financeiro, Alunos verde, Notas laranja, Turmas
+   azul, Professores, Jardim roxo, Acesso, Sistema cinza) e a LÓGICA de
+   estado de ERRO ($is_erro -> vermelho), migrados para tokens semânticos
+   preservando o significado. Tema (--sg-theme-primary) preservado com
+   fallback. ZERO hex restantes.
+
+PROVA VISUAL
+- auditoria-notas-antes-depois.png: registos de auditoria. Mapa de módulo
+  preservado (Notas laranja, Acesso vermelho, Alunos verde) e estado de
+  erro destacado; descrição domina, módulo ênfase, metadados recuam.
+
+GATES
+- smoke-regression-pack: 278 -> 282 invariantes.
+- auditoria_notas adicionado aos ecrãs auditados.
+- Baseline de mágicos: 4527 -> 4426 (-101).
+- Baseline de tipografia: 49 -> 37 (-12).
+- 12 gates verdes.
+
+MARCO: 31 ecrãs auditados. Desde o início: mágicos 9925 -> 4426; pesos
+não-canónicos 665 -> 37.
+
+PRÓXIMO
+- dec (11 pesos), aprovar_notas (11) e a cauda final <11.

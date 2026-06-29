@@ -1,0 +1,7 @@
+SIGE SoftGenial v12.11.9.82 - Histórico Financeiro Oficial + Excel PRO
+
+- Torna explícito o ambiente de Histórico Financeiro do Aluno ao abrir a partir de Alunos/Ficha 360º.
+- Reposiciona o documento como PDF administrativo oficial através de Guardar PDF / Imprimir.
+- Substitui o CSV por Excel .xlsx moderno com folhas Resumo 360, Pagamentos, Obrigações e Métodos 360.
+- Mantém compatibilidade de URLs antigas com formato=csv, mas entrega Excel .xlsx.
+- Preserva permissões financeiras, isolamento Guarda/Portaria, escola activa e cálculos canónicos.

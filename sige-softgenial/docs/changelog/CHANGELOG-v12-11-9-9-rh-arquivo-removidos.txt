@@ -1,0 +1,19 @@
+SIGE SoftGenial v12.11.9.9 - RH Arquivo de Removidos PRO (TEST)
+
+Resumo
+- Adicionada área “Arquivo de colaboradores removidos” no módulo RH / Equipa e Professores.
+- Colaboradores removidos continuam preservados no backend/WordPress para histórico, auditoria, notas e vínculos antigos.
+- A equipa activa continua limpa: removidos não aparecem na tabela principal.
+- O arquivo é apenas consultivo e visível apenas para perfis com gestão de equipa.
+- Não há botão de reactivação neste fluxo para evitar reentrada acidental de acessos antigos.
+
+Segurança e integridade
+- Mantém soft delete seguro da v12.11.9.8.
+- Mantém revogação de roles/capabilities/sessões/perfil SIGE.
+- Não expõe dados salariais/bancários no arquivo.
+- Não altera regras financeiras, académicas, pautas, notas, DEC ou mensalidades.
+
+Validação
+- PHP lint em todos os ficheiros.
+- Smoke test RH v12.11.9.9.
+- Verificação de versionamento Header / SIGE_VERSION / BUILD.json.

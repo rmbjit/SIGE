@@ -1,0 +1,16 @@
+SIGE SoftGenial v12.11.3 - Notification Concordance PRO (TEST)
+
+Objectivo
+- Refinar a humanização das notificações B2C, removendo marcas residuais de template e corrigindo concordância em português de Moçambique.
+
+Alterações
+- Substituídas aberturas financeiras que usavam "secretaria da {escola}" por formulações mais naturais.
+- Adicionado sujeito institucional com artigo correcto: "O Colégio...", "A Escola...", "O Instituto...".
+- Removidas fórmulas artificiais como "do(a)", "ao(à)" e "o(a)" nas mensagens.
+- Tratamento do encarregado melhorado: usa "Sr."/"Sra." apenas quando há inferência segura pelo primeiro nome; caso contrário usa o nome sem forçar género.
+- Removido markdown visível como _(parcial)_ nas linhas enviadas por WhatsApp.
+- Reforçada limpeza final transversal antes da fila WhatsApp.
+
+Garantias
+- Não altera mensalidades, multas, pagamentos, fórmulas, notas, pautas, boletins, DEC, currículos ou base de dados de negócio.
+- Mantém envio por fila e guardrails anti-ban já existentes.

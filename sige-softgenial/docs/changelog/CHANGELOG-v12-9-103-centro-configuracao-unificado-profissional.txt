@@ -1,0 +1,57 @@
+SIGE SoftGenial v12.9.103 - Centro de Configuração Unificado e Profissional
+
+Base: v12.9.102 validada em ambiente de teste.
+
+Objectivo:
+- Parar a evolução por microcamadas e entregar um Centro de Configuração com aparência e comportamento de produto final.
+- Absorver a Configuração Geral antiga como fonte operacional dentro do Centro de Configuração.
+- Preservar compatibilidade técnica sem usar o legado como caminho normal.
+
+Alterações principais:
+1. Reescrita profissional do Centro de Configuração:
+   - Escola;
+   - Marca e documentos;
+   - Académico;
+   - Financeiro;
+   - Comunicação;
+   - Segurança;
+   - Técnico SoftGenial.
+
+2. Absorção de campos antes existentes na Configuração Geral:
+   - identidade institucional;
+   - contactos e localização;
+   - níveis de ensino;
+   - direcção;
+   - logotipos e documentos;
+   - assinatura, rodapé, recibos e prefixo de matrícula;
+   - sistema de avaliação, ano lectivo, notas, trimestres, turnos, feriados, escalas e tipos de avaliação;
+   - WhatsApp/Z-API e templates de compatibilidade;
+   - SMTP;
+   - módulos locais técnicos.
+
+3. Segurança:
+   - modo técnico governado por botão, nonce, expiração e auditoria;
+   - tokens e senhas mascarados;
+   - campo vazio preserva segredos existentes;
+   - token WhatsApp volta a ser gravado encriptado, respeitando o formato histórico;
+   - SMTP preserva palavra-passe quando vazia;
+   - alterações são auditadas.
+
+4. Compatibilidade:
+   - Configuração Geral antiga preservada apenas como emergência técnica controlada;
+   - sem remoção de colunas;
+   - sem migração automática;
+   - sem alteração de regras financeiras ou académicas.
+
+Testes realizados:
+- Sintaxe PHP validada em todos os ficheiros do plugin.
+- Verificação de versionamento no header, SIGE_VERSION e BUILD.json.
+- ZIP completo e hotfix gerados.
+
+Garantias:
+- Não altera financeiro operacional.
+- Não altera motor/fila WhatsApp.
+- Não altera SMTP de envio em runtime.
+- Não altera Hub/licença.
+- Não altera permissões.
+- Não altera documentos, recibos, pautas, boletins ou schema.

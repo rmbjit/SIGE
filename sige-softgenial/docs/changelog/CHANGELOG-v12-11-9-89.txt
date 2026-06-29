@@ -1,0 +1,117 @@
+SIGE SoftGenial v12.11.9.89
+============================
+Estrutura PRO + Copys de Produto + Blindagem de Utilitários
+Data: 11 de Junho de 2026
+
+OBJECTIVO
+Limpeza de engenharia de produto e de software em todo o pacote: estrutura
+profissional e escalável, texto de interface sem anotações técnicas,
+ortografia pré-AO90 na camada visível, correcção de uma rota quebrada e
+fecho de superfícies de exposição nos utilitários de desenvolvimento.
+Nenhuma regra financeira ou académica aprovada foi tocada.
+
+A) CORRECÇÕES DE BUGS
+1. Rota "vincular" reparada (includes/admin-shell.php). A view estava na
+   allowlist e no mapa de permissões, mas faltava no mapa de ficheiros; o
+   fallback apontava para admin/vincular-view.php (inexistente) e a página
+   "Atribuição de Carga Horária" respondia "Área indisponível". Agora aponta
+   para admin/academic/vincular-view.php.
+2. Rotas whatsapp_central e whatsapp_diag tornadas explícitas no mapa de
+   views (antes dependiam do fallback legado por basename).
+3. Removido admin/academic/sedw9tqQh: fragmento órfão de 93 linhas com erro
+   de sintaxe e nome aleatório, sem qualquer referência. Padrão que dispara
+   scanners de malware em alojamento partilhado/VPS.
+
+B) SEGURANÇA E HARDENING
+1. Guarda CLI aplicada a 86 utilitários em tools/ (mais 2 que já tinham):
+   qualquer acesso via web devolve 403. Antes, os smoke tests eram PHP
+   executável directamente acessível por URL, lendo e imprimindo conteúdo
+   de ficheiros do plugin (divulgação de informação).
+2. tools/.htaccess com "Require all denied" (Apache/LiteSpeed; em Nginx a
+   guarda CLI cobre).
+3. index.php de silêncio criado em todas as pastas (27 no total) contra
+   listagem de directórios.
+4. Fallback dinâmico de includes no router endurecido com filtro de
+   caracteres (defesa em profundidade; a allowlist já protegia).
+5. uninstall.php novo e conservador: NUNCA apaga dados da escola; limpa
+   apenas crons do SIGE e transients sige_. Política documentada no próprio
+   ficheiro.
+6. Guarda do auto-responder WhatsApp tolerante às duas grafias do sentinel
+   "(sem detalhe registado)" para cobrir mensagens antigas já na fila.
+
+C) COPY DE PRODUTO (frontend sem anotações técnicas)
+1. Diagnóstico WhatsApp: removida badge de versão obsoleta "v12.11.8";
+   "Estado do cron WordPress" passou a "Tarefas automáticas de envio".
+2. Central WhatsApp: copy do backfill sem referência a versão e sem
+   "pending"; botão passou a "Preparar resposta automática para N recibo(s)";
+   confirm() reescrito em linguagem humana.
+3. Acta / Censo de 3 de Março: "snapshot" substituído por "Censo" em toda a
+   copy visível; removida referência "(v12.11.9.16)" do aviso de Censo
+   desactualizado.
+4. Extractos/Caixa: selo "Reconciliação PRO" passou a "Reconciliação
+   concluída"; cabeçalho da nota persistida no fecho passou de "FECHO PRO
+   COM RECONCILIAÇÃO" a "FECHO DE CAIXA COM RECONCILIAÇÃO" (apenas registos
+   novos; o parser usa o marcador [SIGE_RECON_V1], intocado).
+5. Mensagens "Pedido inválido (nonce)." (7 ocorrências: Pagamentos ×6 e
+   Transporte ×1) substituídas por "A sessão expirou por segurança.
+   Recarregue a página e tente novamente."
+6. Currículos: painel "Curriculum Engine" passou a "Gestão de Currículos";
+   "migração do schema" passou a "preparação da base de dados"; badge
+   "Legacy safe" passou a "Modo seguro"; referências a "tabelas do
+   Curriculum Engine" passaram a "tabelas de currículos".
+7. Permissões: "Permission Engine activa" passou a "Matriz de permissões
+   activa".
+8. Ficha 360º do aluno: "Excel PRO" passou a "exportação para Excel".
+9. Id interno de estilo "sige-mobile-smoke-hardening-v1211961" renomeado
+   para "sige-mobile-fine-tune" (sem referências externas).
+
+D) ORTOGRAFIA PRÉ-AO90 NA INTERFACE
+Corrigidas as formas AO90 em texto visível: Seleccionar/Seleccione/
+seleccionado(s) (Extractos, Gerador, Pagamentos, Matriz, recibos),
+"Acções" (data-label mobile), "Ficha actualizada", "Erro ao actualizar
+aluno/matrícula", "reactivações"/"Confirmar Reactivação", "selecciona o
+centro correcto", e o pseudo-elemento CSS content:'Seleccionar'.
+IMPORTANTE - fora do âmbito por desenho: a dupla grafia na camada de dados
+('activo'/'ativo' em SQL e listas de valores), nomes de colunas (ativo),
+slugs (atualizar_contacto, reativar_lancamento, atividade_extra,
+diretor_pedagogico) e nomes de funções/acções mantêm-se intocados por serem
+contratos com dados históricos.
+
+E) TIPOGRAFIA
+Eliminados 1.967 travessões e 70 meios-travessões de 225 ficheiros
+.php/.js/.css, substituídos por hífenes, em conformidade com a convenção da
+casa. Verificado previamente que nenhum era usado como delimitador de
+código; o único par sentinel comparado (produtor+comparador) foi blindado
+antes da varredura.
+
+F) ESTRUTURA DO PACOTE
+1. 373 ficheiros históricos movidos da raiz para docs/ organizados:
+   docs/changelog (322 changelogs), docs/deploy, docs/qa, docs/relatorios,
+   docs/legado. Raiz final: sige-softgenial.php, BUILD.json, CHANGELOG.md,
+   README.md, uninstall.php, index.php.
+2. CHANGELOG.md consolidado gerado com as 322 versões históricas + esta.
+3. README.md novo: arquitectura, convenções obrigatórias (incluindo a regra
+   da dupla grafia na camada de dados) e processo de release.
+4. tools/build-release.php actualizado: escreve o changelog em
+   docs/changelog/, prepende a entrada no CHANGELOG.md e emite o BUILD.json
+   no formato rico (name/label/date/scope/build).
+5. Bloco de comentários de versões desordenado no topo do plugin principal
+   substituído por ponteiro para CHANGELOG.md.
+6. languages/ criado para honrar o Domain Path do cabeçalho.
+
+G) VERIFICAÇÕES EXECUTADAS NESTA BUILD
+- php -l em 100% dos ficheiros .php (zero erros).
+- Varredura binária: zero CRLF, zero CR isolado, zero BOM, zero travessões.
+- Gate vivo da versão anterior (smoke v12.11.9.88.2) passa integralmente
+  após todas as alterações.
+- Metades funcionais dos gates 71/27/80/78 passam; as falhas listadas
+  nesses smokes são literais de versão/build congelados à release de cada
+  um (prova documental nos próprios asserts), não comportamento.
+- Novo gate vivo: tools/smoke-release-gate.php valida invariantes desta
+  estrutura (ver ficheiro).
+
+H) NOTA SOBRE SMOKES HISTÓRICOS
+Os smoke tests versionados em tools/ são instantâneos congelados da sua
+release (asserem literais como "Version: 12.11.9.71" e o antigo changelog
+inline do ficheiro principal, agora movido para CHANGELOG.md). O gate vivo
+de cada build é o smoke da própria versão + tools/smoke-release-gate.php.

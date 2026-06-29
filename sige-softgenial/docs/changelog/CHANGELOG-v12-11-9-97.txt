@@ -1,0 +1,49 @@
+SIGE SoftGenial v12.11.9.97
+============================
+
+Sprint UX-4 - jardim_relatorio, estatisticas e turmas conformes; prompt() nativo extinto do sistema com invariante global
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+DETALHE COMPLETO DO SPRINT UX-4
+===============================
+
+UX - MÓDULO 5: JARDIM RELATÓRIO (27,9 -> 13,9; produção Casa Colorida)
+- Os 2 confirm() nativos dos envios (resumo mensal da turma e resumo
+  individual por aluno) viram confirmações declarativas do kit
+  (data-sige-confirm): modal do SIGE com título, explicação do que vai
+  acontecer e botão "Enviar"; ZERO JavaScript novo na view, o enhancer
+  do kit trata de tudo.
+- Os 3 botões sem classe foram baptizados com honestidade: os dois
+  submits da toolbar recebem a classe LOCAL .sige-jrel-btn que o
+  próprio CSS da view já definia (zero risco visual em produção); o
+  botão verde compacto do envio por linha entra no kit (sg-btn
+  sg-btn-sm) preservando a cor e as dimensões.
+
+UX - MÓDULO 6: ESTATÍSTICAS DEMOGRÁFICAS (26,9 -> 18,9)
+- 2 alerts viram toasts com instruções accionáveis: popup bloqueado
+  explica COMO resolver ("Permita popups para este site"); exportação
+  Excel pede para aguardar o carregamento da biblioteca.
+- Residual 18,9 documentado: 15 pontos são ruído de heurística (as 7
+  tabelas vivem todas dentro de um estado vazio GLOBAL "Sem dados para
+  o ano" já existente e bem desenhado) + 3,9 de inline congelado.
+
+UX - MÓDULO 7: TURMAS (20,8 -> 12,8) + EXTINÇÃO DO prompt()
+- O editor de células do horário usava os 2 ÚLTIMOS prompt() nativos
+  do sistema (Disciplina e Professor). Agora: dois modais do kit em
+  sequência, com o dia e o período no título, VALOR PRÉ-PREENCHIDO
+  (editar deixa de ser reescrever), placeholder com exemplo, e a regra
+  preservada de que vazio limpa a célula.
+- Kit: sigeUi.prompt ganhou a opção 'valor' (texto inicial).
+- INVARIANTE GLOBAL NOVO: a regressão varre TODAS as views e falha se
+  alguma voltar a usar prompt() nativo. A extinção é agora permanente
+  por construção.
+
+QUALIDADE - GATES
+- tools/smoke-regression-pack.php: 81 -> 87 invariantes.
+- Sistema: 544,3 -> 514,3. Diálogos nativos restantes no sistema:
+  20 alert + 10 confirm (zero prompt), todos com morada na fila.

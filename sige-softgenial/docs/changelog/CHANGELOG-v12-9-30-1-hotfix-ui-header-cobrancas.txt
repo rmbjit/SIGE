@@ -1,0 +1,5 @@
+v12.9.30.1 - Hotfix UI Header Central de Cobranças
+
+- Corrige versão interna do plugin para 12.9.30.1.
+- Mantém hotfix visual do header da Central de Cobranças.
+- Sem alterações em fórmulas financeiras, académicas, lançamentos ou pagamentos.

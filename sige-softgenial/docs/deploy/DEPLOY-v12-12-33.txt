@@ -1,0 +1,26 @@
+DEPLOY - SIGE SoftGenial v12.12.33
+Correccao do numero de chamada no Mapa de Aproveitamento (varredura canonica)
+Data: 2026-06-22
+
+O QUE MUDA NESTA VERSAO
+- O numero de chamada (No) do Mapa de Aproveitamento Pedagogico passa a coincidir exactamente com a posicao alfabetica do aluno na pauta da turma. Antes, por um defeito tecnico na consulta, um aluno podia aparecer no MAP com um numero diferente do da pauta (por exemplo, o primeiro aluno por ordem alfabetica aparecia com o No 6 em vez do No 1).
+- A correccao unifica a forma de numerar os alunos em todos os documentos: o Mapa de Aproveitamento, a janela de alunos da turma e as pautas passam a usar a mesma regra (ordem alfabetica pelo nome, com desempate estavel). Assim, o numero do aluno e sempre o mesmo, qualquer que seja o documento.
+- Em dados normais, os unicos numeros que mudam sao os que estavam errados; tudo o resto fica igual.
+- Nota de comportamento: a janela de alunos da turma passa a NAO mostrar matriculas inactivas (alunos desistentes), tal como ja acontecia nos documentos oficiais. Os totais (Total, Masculino, Feminino) dessa janela continuam correctos.
+- Nenhuma regra de calculo academico ou financeiro foi alterada. O numero de chamada e apenas de apresentacao.
+
+PASSOS DE INSTALACAO (CloudPanel / File Manager)
+1. Faca uma copia de seguranca do plugin actual e da base de dados (rotina normal).
+2. Em Plugins, desactive o SIGE SoftGenial (nao apague: os dados ficam).
+3. Substitua a pasta do plugin pelo conteudo deste ZIP (a pasta sige-softgenial na raiz do ZIP). Em alternativa, instale o ZIP por cima pela administracao do WordPress.
+4. Reactive o plugin. Nao ha migracao de base de dados.
+
+VERIFICACAO RAPIDA (5 a 10 minutos)
+1. Abra o Mapa de Aproveitamento de uma turma onde o primeiro aluno por ordem alfabetica nao seja o primeiro a ter sido inscrito (por exemplo, a 4a Classe, Turma A). Confirme que o aluno alfabeticamente primeiro aparece com o No 1.
+2. Abra a janela de alunos dessa turma e confirme que a ordem e a numeracao coincidem com o Mapa de Aproveitamento.
+3. Abra a pauta (e, se aplicavel, a DEC e a pauta final) da mesma turma e confirme que a numeracao dos alunos e a mesma do Mapa de Aproveitamento.
+4. Se a turma tiver algum aluno desistente (matricula inactiva), confirme que ele nao aparece na janela de alunos da turma nem nos documentos, e que a numeracao dos restantes coincide entre todos.
+5. Verifique que os totais (Total, Masculino, Feminino) da janela de alunos continuam correctos.
+
+REVERSAO
+- Para reverter, basta reinstalar o pacote da versao anterior (v12.12.32). Nao ha alteracao de base de dados nesta versao, pelo que a reversao e directa.

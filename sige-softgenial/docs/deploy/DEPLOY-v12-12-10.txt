@@ -1,0 +1,37 @@
+DEPLOY - SIGE SoftGenial v12.12.10 (MFA de Operacao, Step-up)
+============================================================
+
+RESUMO
+Primeiro incremento da Fase 4 (MFA critico): re-autenticacao por OTP antes de
+operacoes criticas que movem dinheiro ou alteram credenciais de pagamento.
+DESLIGADO por defeito. Sem migracao de base de dados. Sem alteracao de regras
+de calculo financeiro ou academico. Em instalacoes que nao liguem o step-up, o
+comportamento e exactamente o de v12.12.9.
+
+PASSOS DE DEPLOY
+1. Fazer backup do plugin actual (pasta wp-content/plugins/sige-softgenial).
+2. Substituir a pasta do plugin pelo conteudo deste ZIP.
+3. Nao ha migracao de base de dados nem alteracao de esquema.
+4. Limpar cache de objecto/opcoes se aplicavel.
+5. Verificar versao activa: 12.12.10 (Plugins ou rodape do SIGE).
+
+ACTIVACAO (opcional, recomenda-se staging primeiro)
+- Ligar o step-up:    update_option('sige_mfa_stepup', 'on');
+- Perfis abrangidos:  update_option('sige_mfa_stepup_roles', ['sige_director','sige_admin_ti']);
+- Janela (segundos):  define('SIGE_MFA_STEPUP_WINDOW', 300); // no wp-config, opcional
+- Requisito: SMTP funcional para entrega do codigo por email.
+
+VERIFICACAO POS-DEPLOY (com step-up ligado, em staging)
+- Como sige_director, tentar um estorno ou guardar credenciais M-Pesa/e-Mola.
+- Confirmar que a operacao e bloqueada e que chega um codigo de 6 digitos por email.
+- Introduzir o codigo no formulario de confirmacao; repetir a operacao e confirmar
+  que prossegue durante a janela (defeito 5 minutos).
+
+EMERGENCIA / ANTI-LOCKOUT
+- Desligar de imediato: define('SIGE_MFA_STEPUP_OFF', true); no wp-config.php.
+- Se o SMTP falhar, a operacao e permitida nessa tentativa (com registo), para
+  nunca trancar a gestao financeira.
+
+ROLLBACK
+- Restaurar o backup da pasta do plugin (v12.12.9). Sem efeitos colaterais em
+  dados, por nao haver migracao nem alteracao de calculo.

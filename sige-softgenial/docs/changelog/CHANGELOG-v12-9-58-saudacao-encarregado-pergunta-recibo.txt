@@ -1,0 +1,98 @@
+CHANGELOG v12.9.58 - Saudação por Encarregado + Pergunta sobre link do recibo
+==============================================================================
+Data: 2026-05-04
+Base: v12.9.57 notification-policy
+
+OBJECTIVO
+---------
+Refinamento das mensagens de confirmação de pagamento conforme feedback dos
+clientes (Maio 2026):
+
+1. A saudação volta a ser pelo nome do ENCARREGADO (não do aluno como na v12.9.57).
+2. Quando o nome do encarregado está vazio no formulário do aluno, usar o
+   fallback fixo "Encarregado de Educação".
+3. Mensagem deve TER SEMPRE uma pergunta a convidar o encarregado a pedir o
+   link do recibo digital - em vez de enviarmos o link automaticamente.
+
+ALTERAÇÕES
+----------
+
+includes/whatsapp-templates-conversacional.php
+  - Bloco de variáveis comuns do recibo refactorado: cascata de fontes do
+    nome do encarregado.
+  - Cascata: $vars['encarregado'] (do dual-send) → aluno.nome_pai →
+    aluno.nome_mae → aluno.contacto_encarregado → fallback "Encarregado de
+    Educação".
+  - Marcador "Encarregado(a)" vindo de notificacoes-encarregados.php quando
+    o nome real está vazio → tratado como vazio e cai no fallback.
+  - Pergunta SEMPRE incluída no fim do recibo:
+        "📄 Posso partilhar o link do recibo digital por aqui - quer receber?"
+  - A pergunta termina com "?" propositadamente - assim a regex
+    /\?\s*$/u em sige_wpp_humanize_message() (recovery-mode) reconhece e
+    NÃO anexa outra pergunta. Anti-duplicação garantida.
+
+admin/finance/financeiro-pagamentos.php
+  - Removida passagem de 'link' => $link_recibo_publico nas DUAS chamadas
+    (dual-send principal + fallback legacy).
+  - Razão: se passássemos o link, o engine anexaria-o e o
+    sige_wpp_prepare_queue_messages removeria + adicionaria pergunta
+    automática (duplicação com a nossa pergunta no template).
+  - Sem link nas vars, o template trata da mensagem completa de forma
+    auto-contida, com a nossa pergunta única no fim.
+
+includes/notificacoes-encarregados.php
+  - Revertido o hook sige_notify_normalize_saudacao_aluno.
+  - Razão: a v12.9.57 substituía "Encarregado(a)" por nome do aluno. Com a
+    nova regra (saudação por encarregado), essa substituição deixou de fazer
+    sentido. O fallback "Encarregado de Educação" é tratado directamente no
+    template.
+
+ESTRUTURA FINAL DA MENSAGEM
+----------------------------
+Exemplo com encarregado = Rogério, aluno = Aibo:
+
+  ✅ Pagamento Confirmado - Teste SIGE
+
+  Olá Rogério,
+  Confirmamos o pagamento referente ao(à) aluno(a) Aibo.
+
+  📋 Itens pagos:
+  • Mensalidade Creche (Jan/2026) - 3.000,00 MT
+
+  💰 Total pago: 3.000,00 MT
+  🧾 Recibo: #REC-2026-000002
+  📅 Data: 26/04/2026
+
+  Obrigado(a) pela confiança! 🙏
+
+  📄 Posso partilhar o link do recibo digital por aqui - quer receber?
+
+Exemplo sem nome do encarregado (todos os campos vazios):
+  → "Olá Encarregado de Educação," (fallback)
+
+VALIDAÇÃO
+---------
+- php -l: 100% OK em todo o plugin
+- 6 cenários de saudação testados:
+  A. encarregado nas vars (do dual-send)         → 6/6 PASS
+  B. nome_pai e nome_mae registados              → 6/6 PASS
+  C. só nome_mae (pai vazio)                     → 6/6 PASS
+  D. tudo vazio (fallback "Encarregado de Edu.") → 6/6 PASS
+  E. vars['encarregado'] = "Encarregado(a)"      → 6/6 PASS (cai no fallback)
+  F. contacto_encarregado preenchido             → 6/6 PASS
+  TOTAL: 36/36 PASS
+- End-to-end via humanize_message + prepare_queue_messages: 7/7 PASS
+  Confirma anti-duplicação da pergunta.
+- 8 ficheiros canónicos byte-a-byte intactos:
+  finance-core, academic-logic, whatsapp-engine, whatsapp-recovery-mode,
+  whatsapp-guardian, cron-tasks, class-sige-migration, db-handler.
+
+TRADE-OFF CONHECIDO
+-------------------
+O fluxo "envio do link sob pedido" do recovery-mode (que enviaria o link
+automaticamente quando o pai responde "sim") deixa de disparar - porque
+sem 'link' nas vars, o sige_wpp_store_pending_receipt() não é chamado.
+
+Para esta release, quando o encarregado responder, a secretaria precisa
+enviar o link manualmente. Em iteração futura, podemos religar este pipe
+para enviar automaticamente o link após resposta positiva.

@@ -1,0 +1,38 @@
+SIGE SoftGenial v12.11.9.135 - AUDITORIA DE DESIGN (whatsapp_central)
+====================================================================
+
+Central de mensagens WhatsApp (1507 linhas).
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 8 pesos, distribuição pesada: 850 (12x), 900 (10x), 800
+  (9x), 700 (9x). Pesos inline no corpo (600/700) já canónicos.
+- RAIOS: 10 valores. SOMBRAS: 19. CORES: 151 hex.
+
+CORRECÇÃO (bloco <style> 258-518; JS 929+ preservado)
+1. Hierarquia de 3 níveis: 8 pesos -> 500/600/700. 1 legenda (.lbl cinza
+   uppercase) afinada para 400.
+2. Raios da escala: 10 -> 4. Sombras da escala: 19 -> 7.
+3. 203 cores migradas (CSS + corpo HTML + mapa de estado). Inclui o MAPA
+   PHP de cor por ESTADO DE MENSAGEM (pendente laranja, enviada verde,
+   falhou vermelho, cancelada cinza, forçar-envio tema) migrado para
+   tokens semânticos preservando o significado. Classe .k-fail também.
+   PRESERVADOS: tema (--sg-theme-primary com fallback) e cores em JS
+   (lógica de estado dinâmico de mensagens). ZERO hex de estilo restantes.
+
+PROVA VISUAL
+- whatsapp-central-antes-depois.png: lista de mensagens. Estado
+  preservado (enviada verde, pendente laranja, falhou vermelho); título
+  domina, corpo recua, estado ênfase.
+
+GATES
+- smoke-regression-pack: 252 -> 256 invariantes.
+- whatsapp_central adicionado aos ecrãs auditados.
+- Baseline de mágicos: 5603 -> 5400 (-203).
+- Baseline de tipografia: 126 -> 112 (-14).
+- 12 gates verdes.
+
+MARCO: 25 ecrãs auditados. Desde o início: mágicos 9925 -> 5400; pesos
+não-canónicos 665 -> 112.
+
+PRÓXIMO
+- notas (14 pesos), jardim_relatorio (13), core-status (12)...

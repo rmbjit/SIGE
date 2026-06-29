@@ -1,0 +1,30 @@
+SIGE SoftGenial v12.11.9.54 - Mobile App Redesign Alunos PRO
+
+Área: Académico / Alunos e Matrículas / UX Mobile
+
+Objectivo:
+- Aplicar no mobile o padrão visual definido como inegociável pelo utilizador, aproximando a experiência de uma app nativa moderna.
+
+Intervenções realizadas:
+- Topbar mobile premium em gradiente azul/roxo, com menu, marca SoftGenial, ano lectivo e avatar.
+- Cabeçalho mobile da escola com ícone e nome da escola.
+- Hero mobile compacto com ilustração de escola, título, subtítulo e botões principais no layout aprovado.
+- KPIs em grelha 2x2, com cartões compactos e leitura optimizada.
+- Pesquisa mobile com botão de filtros circular.
+- Chips rápidos: Todos, Activos, Inactivos e Devedores.
+- Cards de alunos redesenhados no estilo app: foto, estado, processo, turma e acções rápidas.
+- Acções rápidas mobile: Ver ficha, Matrícula e Mais.
+- Navegação inferior fixa: Início, Alunos, Pagamentos e Mais.
+
+Blindagem:
+- Sem alterações de base de dados.
+- Sem alterações em importação de alunos.
+- Sem alterações na Ficha 360º.
+- Sem alterações na Gestão Avançada de Encarregados.
+- Sem alterações em notas, pautas, boletins, DEC, fórmulas, pagamentos, recibos, mensalidades ou multas.
+- Alterações limitadas à camada visual/UX mobile e pequenos comportamentos client-side não destrutivos.
+
+Validação esperada:
+- Abrir Alunos e Matrículas em telemóvel.
+- Confirmar topbar mobile, hero, KPIs, pesquisa, chips, cards e bottom nav.
+- Confirmar que desktop/tablet continuam sem regressão funcional.

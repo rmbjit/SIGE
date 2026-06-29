@@ -1,0 +1,59 @@
+SIGE SoftGenial v12.11.9.108 - DESIGN SYSTEM (fonte única da verdade)
+====================================================================
+
+Resposta à exigência de resolver definitivamente a inconsistência
+visual entre módulos. NÃO é mais uma camada cosmética: é a instalação
+de uma fonte única da verdade com um guardião que impede a recaída.
+
+O DIAGNÓSTICO (medido, não impressão)
+- 936 cores hex distintas (10.445 usos). O branco em 2 grafias
+  (#fff 1431x + #ffffff 186x). O roxo da marca fragmentado em 5+ tons
+  quase-iguais (#7c3aed, #5f45dc, #6d5dfc, #3b2f8d, #5a3fd6). Cinzas
+  escolhidos à mão (#666, #555, #333, #999...).
+- 29 raios de borda distintos, 500 sombras, 86 transições, 36 keyframes.
+- 3 ficheiros a competir como "fonte" (style.css, style-consolidado,
+  sige-ui) que quase ninguém seguia.
+
+A FONTE DA VERDADE: assets/sige-tokens.css
+- 7 famílias de cor x escala 50-900 (64+ tokens), cada uma ancorada na
+  cor REAL mais usada do sistema para migração fiel.
+- Decisão de arquitectura validada pelo mercado: azul entra como
+  família semântica 'info' (links/informação - padrão universal);
+  roxos e verdes-água dispersos UNIFICAM nas famílias brand/success
+  (eram ruído sem significado). Critério: significado estável fica,
+  variação acidental colapsa.
+- Tokens semânticos (papel, não cor): --text-*, --bg-*, --border-*,
+  --brand. Mudar a marca = mudar 1 linha.
+- Escalas finitas: raios (xs..pill), sombras (xs..lg), espaçamento
+  (escala 4px), tipografia, durações + easings.
+- Animações de entrada canónicas: sige-fade-in/rise-in/spin partilhadas.
+- Carrega ANTES de toda a cascata (dependência de tudo).
+
+O GUARDIÃO: tools/check-design-tokens.php (9º gate)
+- Conta valores mágicos (hex + raios soltos) fora da fonte da verdade e
+  FALHA se subirem acima da baseline. A migração só pode REDUZIR.
+- Baseline inicial: 12797. Integrado no corredor run-gates.php.
+
+PILOTO PROVADO: dashboard 100% migrado
+- 231 hex mágicos -> 0. Agora 111 referências a var(--color-*).
+- Migrado em camadas: CSS inline, blocos <style>, E os arrays PHP de
+  lógica que alimentam custom properties (var() resolve aninhado, por
+  isso a fonte da verdade chega até à cor dinâmica do donut e dos KPIs).
+- Cores que são dados de regra de negócio: não tocadas.
+- Baseline desceu 12797 -> 12615 (registada como novo mínimo).
+
+HONESTIDADE DE PROCESSO
+- O gate apanhou 2 invariantes MEUS (da v105) que ficaram obsoletos: a
+  migração trocou os hex literais das classes .sg-val-* por tokens, e
+  os invariantes antigos ainda procuravam os hex. Actualizados para
+  verificar a forma nova (mais forte: prova classe + uso de token).
+  É o sistema de qualidade a funcionar, não a falhar.
+
+GATES
+- smoke-regression-pack.php: 142 -> 152 invariantes.
+- Corredor: 8 -> 9 gates. Todos verdes.
+
+PRÓXIMO
+- Migrar os CSS legados (style.css 1544, style-consolidado 1467) e as
+  views pesadas (alunos_lista 1003, financeiro-pagamentos 471), módulo
+  a módulo, baseline a descer monotonicamente até ~zero mágicos.

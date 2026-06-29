@@ -1,0 +1,49 @@
+SIGE SoftGenial v12.10.108 - Jardim: Blindagem PRO Final
+
+Base
+- Construído por cima da v12.10.107 - Jardim: Transferido Reactivado Visível.
+
+Objectivo
+- Fazer uma verificação final do fluxo do Jardim de Infância e corrigir pequenos pontos que ainda poderiam comprometer a robustez PRO em operação real.
+- Não alterar design validado, cálculos pedagógicos, pagamentos, notas, Pauta, DEC, ACTA, permissões ou base de dados financeira.
+
+Ajustes aplicados
+1. Turmas pré-escolares
+- O fallback de identificação de turmas pré-escolares passa a reconhecer melhor nomes como:
+  - Casa 2/3 anos
+  - Casa dos 2/3 anos
+  - Casa 2 e 3 anos
+  - Casa dos 2 e 3 anos
+  - Casa 4 anos
+  - 2/3 anos
+  - variações equivalentes.
+
+2. Aluno transferido e reactivado
+- A reparação de matrícula foi reescrita sem UPDATE com subquery sobre a mesma tabela.
+- Isto evita incompatibilidades em algumas versões MariaDB/MySQL.
+- A regra segura permanece:
+  - só reactiva a matrícula quando o aluno principal já está activo;
+  - não reactiva aluno que continua transferido, desistente ou inactivo;
+  - só corrige se não houver outra matrícula activa no mesmo ano;
+  - apenas a matrícula mais recente do ano é reactivada.
+
+3. Avaliação por critérios
+- O handler de gravação passa a aceitar apenas critérios activos/visíveis para a disciplina, ano, trimestre e turma em causa.
+- Evita gravação indevida de critérios antigos, inactivos ou fora do escopo.
+
+4. Respostas antigas de critérios
+- Quando existem respostas antigas sem turma_id e respostas novas com turma_id correcto, o sistema passa a preferir a resposta exacta da turma.
+- Isto reduz risco de boletim/avaliação mostrar dado antigo por ordem SQL não determinística.
+
+5. Envio de resumos aos encarregados
+- Adicionada protecção curta contra duplo clique/duplo envio.
+- Mensagem específica mostra quando o sistema bloqueia envio duplicado em processamento.
+- Mantém envio manual, controlado e auditável.
+
+Garantias
+- Sem alterar cálculo MB/B/S/NS.
+- Sem alterar critérios, respostas ou avaliações já gravadas.
+- Sem alterar design validado.
+- Sem alterar notas, Pauta, DEC, ACTA ou boletins principais.
+- Sem alterar pagamentos, mensalidades, multas ou base de dados financeira.
+- Sem alteração em Permission Engine, perfis ou permissões.

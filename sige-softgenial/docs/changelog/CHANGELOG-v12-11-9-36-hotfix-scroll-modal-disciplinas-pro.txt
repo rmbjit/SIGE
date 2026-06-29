@@ -1,0 +1,30 @@
+SIGE SoftGenial v12.11.9.36 - Hotfix Scroll Modal Disciplinas PRO
+Data: 2026-06-05
+
+Objectivo
+- Corrigir o popup "Nova Disciplina" / "Editar disciplina" no módulo Disciplinas, onde o conteúdo ultrapassava a altura do ecrã e o botão "Guardar Disciplina" ficava inacessível.
+
+Ficheiros alterados
+- admin/academic/disciplinas-view.php
+- sige-softgenial.php
+- BUILD.json
+
+Alterações aplicadas
+- O modal de Nova/Editar Disciplina passou a ter altura controlada por viewport.
+- O formulário interno passou a usar layout flex vertical seguro.
+- O corpo do modal passou a ter scroll interno real.
+- O rodapé do modal passou a permanecer sempre visível, mantendo os botões Cancelar e Guardar Disciplina acessíveis.
+- Ao abrir o modal para criar ou editar disciplina, o scroll do corpo do modal é reiniciado no topo.
+- Ajustes responsivos para telemóvel: modal em altura total, corpo rolável e botões em coluna.
+
+Preservado sem alterações
+- Regras académicas.
+- Fórmulas de notas.
+- Pautas, boletins e DEC.
+- Base de dados.
+- Nonces e permissões.
+- Processamento POST de criação/edição de disciplina.
+- Matriz curricular.
+
+Validação
+- Sintaxe PHP validada com php -l nos ficheiros alterados.

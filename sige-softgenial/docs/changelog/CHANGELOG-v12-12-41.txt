@@ -1,0 +1,82 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.41
+Data: 2026-06-22
+Titulo: Fase 3 - Reconciliacao de pagamentos digitais - reconciliacao viva
+Tipo: Funcionalidade (incremento 2 da Fase 3)
+Base: 12.12.40
+Canal: validated-feature
+
+================================================================
+CONTEXTO
+================================================================
+Segundo incremento da Fase 3 (reconciliacao de pagamentos digitais), sobre o
+incremento 1 (deteccao de duplicados). Os clientes de gateway ja tinham a consulta
+de estado (M-Pesa via queryTransactionStatus; e-Mola via o seu endpoint de
+consulta). Faltava a orquestracao que usa essa consulta para verificar as
+transacoes locais contra o gateway e reportar divergencias. Esta versao acrescenta
+essa reconciliacao viva, totalmente so de leitura: nunca apaga, cria nem altera
+pagamentos nem transacoes; apenas classifica e regista divergencias para revisao.
+
+================================================================
+ALTERACOES
+================================================================
+NOVO  includes/payments/reconciliacao-viva.php
+      - sige_pagamentos_reconciliar_estado: nucleo puro testavel. Recebe as
+        transacoes locais e uma funcao de consulta ao gateway, e classifica em:
+          confirmadas    - o gateway confirma e o valor bate certo.
+          divergentes    - valor_divergente (gateway confirma mas com valor
+                           diferente) ou rejeitada_gateway (gateway diz falhada
+                           ou nao encontrada, mas temos a transacao localmente).
+          inconclusivas  - desconhecida, erro, ou sem referencia.
+      - sige_pagamentos_normalizar_estado_gateway: traduz a resposta do cliente,
+        de forma conservadora. So afirma confirmada num sucesso claro e falhada
+        num codigo de falha conhecido (lista vazia por omissao, ajustavel pelo
+        filtro sige_mpesa_codigos_falha); resto fica desconhecida.
+      - sige_pagamentos_consultar_gateway: adaptador defensivo aos clientes reais
+        (class_exists e try/catch); cliente indisponivel devolve erro, nunca lanca.
+      - sige_reconciliacao_viva: orquestracao por escola, fail-closed e so leitura,
+        regista as divergencias no log de seguranca. Aceita injeccao da consulta.
+      - Cron sige_evento_diario: guardado pelo modo de teste, limitado e so corre
+        se algum gateway estiver configurado.
+
+EDIT  sige-softgenial.php
+      - Carrega includes/payments/reconciliacao-viva.php.
+
+================================================================
+QUALIDADE
+================================================================
+NOVO  tools/check-reconciliacao-viva.php (gate estatico)
+NOVO  tools/smoke-reconciliacao-viva.php (smoke de runtime, 17 verificacoes)
+EDIT  tools/run-gates.php (corredor passa de 91 para 93 verificacoes)
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- So de leitura: nunca apaga, cria nem altera pagamentos nem transacoes. Nao toca
+  em regras de calculo nem em ficheiros canonicos. A idempotencia de webhooks e a
+  deteccao de duplicados ja existentes nao sao tocadas.
+- Superficie de accao: 199 itens (o cron liga-se a um evento ja existente, sem
+  novo gancho). Regras do Kernel: 199; enforce 33. Views: 60.
+- Opcoes: 132 (nenhuma nova). Dependencias externas: 11 (nenhuma nova).
+- Sem alteracao de esquema. Calculo academico e financeiro byte-identico.
+- Versao sincronizada nas cinco fontes. Zero travessoes. Ficheiros em LF.
+
+================================================================
+VALIDACAO
+================================================================
+- php tools/check-reconciliacao-viva.php   -> OK
+- php tools/smoke-reconciliacao-viva.php     -> OK (17 verificacoes)
+- php tools/smoke-payments-dedup.php          -> OK (sem regressao)
+- php tools/smoke-reconciliacao.php            -> OK (sem regressao)
+- php tools/check-governance-docs.php          -> OK (21 documentos v12.12.41)
+- php tools/smoke-release-gate.php               -> verde a partir de pasta limpa
+- extractor de superficie / opcoes               -> 199 / 132
+- php -l                                          -> limpo nos ficheiros tocados
+
+================================================================
+A SEGUIR (FASE 3)
+================================================================
+- Resolucao de divergencias com escrita (conciliar uma transacao confirmada, ou
+  rejeitar uma rejeitada pelo gateway), com quatro-olhos.
+- Ajuste fino dos codigos de falha do gateway via o filtro sige_mpesa_codigos_falha,
+  com base nos resultados do sandbox das operadoras.

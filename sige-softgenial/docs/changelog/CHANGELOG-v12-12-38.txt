@@ -1,0 +1,90 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.38
+Data: 2026-06-22
+Titulo: Fase 2 - Cofre de segredos - cobertura, mascaramento e nao-vazamento
+Tipo: Funcionalidade (incremento 2 da Fase 2)
+Base: 12.12.37
+Canal: validated-feature
+
+================================================================
+CONTEXTO
+================================================================
+Segundo incremento da Fase 2 (cofre de segredos completo, que completa a Fase 5
+do plano original). O incremento 1 cifrou as credenciais dos gateways de pagamento
+em repouso. Este incremento alarga o cofre com mascaramento, nao-vazamento e
+auditoria de alteracao. Todas as alteracoes sao aditivas e nao mudam a forma como
+os segredos vivos sao guardados ou lidos.
+
+================================================================
+FRENTE 1 - MASCARAMENTO CENTRAL
+================================================================
+EDIT  includes/security-vault.php
+      - Nova funcao sige_secret_mask: esconde um segredo para exibicao, revelando
+        apenas os ultimos caracteres e sem revelar o comprimento real.
+
+================================================================
+FRENTE 2 - PROIBICAO DE SEGREDOS EM REGISTOS
+================================================================
+EDIT  includes/security-vault.php
+      - Novas funcoes sige_secret_names e sige_secret_scrub. A redaccao apaga
+        tokens selados pelo cofre (sige2:, gcm1:) e pares chave=valor de segredos
+        conhecidos.
+EDIT  includes/security-hardening.php
+      - sige_security_log redige o evento e o contexto (sige_secret_scrub) antes de
+        qualquer registo. Um segredo nunca chega aos logs em claro pelo canal de
+        seguranca; o texto normal passa intacto.
+
+================================================================
+FRENTE 3 - PROIBICAO DE SEGREDOS EM URL
+================================================================
+NOVO  tools/check-vault-coverage.php (gate estatico)
+      - Garante que nenhuma chave-credencial (webhook_token, api_key, api_secret,
+        client_secret, password, senha) e colocada num URL via add_query_arg. A
+        redaccao tambem trata URLs que sejam registados.
+
+================================================================
+FRENTE 4 - AUDITORIA DE ALTERACAO
+================================================================
+EDIT  includes/settings/class-sige-settings-repository.php
+      - set() regista um evento segredo_alterado com a chave (nunca o valor) quando
+        um campo cifrado ou SMTP e gravado.
+EDIT  includes/payments/mobile-tenant-options.php
+      - A gravacao de um segredo de pagamento regista segredo_alterado com o
+        fornecedor e a chave (nunca o valor).
+EDIT  includes/security-vault.php
+      - O registo de segredos conhecidos foi alargado para cobrir a chave de
+        licenca, alem das credenciais de pagamento, SMTP e WhatsApp.
+
+================================================================
+QUALIDADE
+================================================================
+NOVO  tools/smoke-vault-coverage.php (smoke de runtime, 14 verificacoes)
+EDIT  tools/run-gates.php (corredor passa de 85 para 87 verificacoes)
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- Ficheiros canonicos (finance-core e outros) nao foram tocados. A redaccao
+  liga-se ao canal de seguranca, nao ao registo de auditoria financeiro.
+- Superficie de accao: 199 itens. Regras do Kernel: 199; enforce 33. Views: 60.
+- Opcoes: 132 (nenhuma nova). Dependencias externas: 11 (nenhuma nova).
+- Sem alteracao de esquema. Calculo academico e financeiro byte-identico.
+- Versao sincronizada nas cinco fontes. Zero travessoes. Ficheiros em LF.
+
+================================================================
+VALIDACAO
+================================================================
+- php tools/check-vault-coverage.php   -> OK
+- php tools/smoke-vault-coverage.php    -> OK (14 verificacoes)
+- php tools/check-vault.php              -> OK (sem regressao)
+- php tools/smoke-vault-v12-12-14.php    -> OK (27 verificacoes, sem regressao)
+- php tools/check-governance-docs.php    -> OK (21 documentos v12.12.38)
+- php tools/smoke-release-gate.php        -> verde a partir de pasta limpa
+- extractor de superficie                 -> 199 itens
+- extractor de dependencias               -> 11 hosts
+- php -l                                   -> limpo nos ficheiros tocados
+
+================================================================
+A SEGUIR (FASE 2)
+================================================================
+Rotacao de segredos e segredos por escola (alem do que ja existe para pagamentos).

@@ -1,0 +1,90 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.52
+Data: 2026-06-23
+Titulo: Fase 4 incr 2 - Expressoes inline em onclick para funcoes nomeadas
+Tipo: Incremento de funcionalidade (migracao de inline, a caminho do CSP)
+Base: 12.12.51
+Canal: validated-feature
+
+================================================================
+CONTEXTO
+================================================================
+O CSP em enforcement (incremento final da Fase 4) bloqueia manipuladores de evento
+inline (onclick). Esta versao converte as EXPRESSOES inline em onclick (logica
+embutida, nao chamadas com argumentos) para funcoes nomeadas globais, ligadas pelo
+despachante data-sige-act. Sequencia as vagas anteriores (v12.12.46 criou o
+despachante; v12.12.50 os onclick simples; v12.12.51 os complexos com argumentos).
+
+================================================================
+FUNCOES NOMEADAS GLOBAIS (assets/sige-ui.js)
+================================================================
+Expostas em window (e nao em sigeUi) para o despachante as encontrar via window[accao]:
+
+  sigeImprimirPagina()            -> window.print()                       (data-sige-noargs)
+  sigeAlternarQuebraTexto(el)     -> alterna el.style.whiteSpace
+  sigeAlternarClasseProximo(el)   -> alterna a classe 'open' do irmao seguinte
+  sigeFecharPopupBackdrop(el)     -> sobe ate .sige-pro-popup-backdrop e remove
+  sigeAlternarSidebar()           -> hamburguer: alterna sidebar/overlay/corpo (noargs)
+  sigeFecharSidebar(el)           -> sobreposicao: remove sidebar/overlay(show)/corpo
+  sigeAlternarSidebarMais(el)     -> mais opcoes: alterna conforme estado + aria-expanded
+
+Cada funcao e fiel a expressao original. As que usavam this recebem o elemento (caso
+por omissao do despachante); o hamburguer e o window.print nao precisam do elemento
+(data-sige-noargs).
+
+================================================================
+CONVERSAO DE ONCLICK-EXPRESSAO (10 trocas em 5 vistas)
+================================================================
+EDIT  admin/academic/abertura-view.php           (2: window.print; alternar grupo de alunos)
+EDIT  admin/academic/encerramento-view.php         (1: window.print)
+EDIT  admin/finance/pagamentos-turma-view.php       (1: window.print)
+EDIT  admin/academic/auditoria_notas-view.php        (2: alternar quebra de texto)
+EDIT  includes/admin-shell.php                        (4: hamburguer, sobreposicao, mais opcoes, fechar aviso)
+
+EDIT  tools/check-inline-frontend.php
+      - SIGE_INLINE_ONCLICK_MAX de 181 para 171. style 2051 e script 81 inalterados.
+
+EXCLUIDOS por desenho (vagas proprias, depois):
+  - Paginas com janela autonoma (history.back, window.close): nem carregam o despachante.
+  - Navegacao: window.open(this.href), window.location (accao por omissao do link).
+  - Cadeias jQuery e IIFE.
+  - Onclick gerados em template JS.
+  - Ficheiros canonicos (por exemplo finance-core.php).
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- Nao toca em regras de calculo nem em ficheiros canonicos.
+- As regras anteriores do despachante (data-sige-args, data-sige-arg, data-sige-noargs,
+  caso por omissao) ficam inalteradas.
+- Superficie de accao: 199 itens (enforce 33). Vistas: 60. Opcoes: 132.
+- Dependencias externas: 9 (inalteradas). Sem alteracao de esquema.
+- Calculo financeiro byte-identico. Comportamento dos botoes identico.
+- Versao sincronizada nas cinco fontes. Zero travessoes. Ficheiros de codigo em LF.
+
+================================================================
+VALIDACAO
+================================================================
+- node -c assets/sige-ui.js                -> limpo
+- php tools/check-inline-frontend.php        -> OK (onclick 171 de 171, sem folga)
+- php tools/smoke-inline-frontend.php          -> OK
+- php tools/smoke-regression-pack.php            -> OK
+- php tools/diag-responsivo.php                   -> OK (0 antipadroes)
+- php tools/check-governance-docs.php              -> OK (21 documentos v12.12.52)
+- php tools/smoke-release-gate.php                   -> verde a partir de pasta limpa
+- gates de pagamentos, cofre, Fase 1 e Fase 4 incr 1 -> sem regressao
+- extractor de superficie / opcoes / hosts          -> 199 / 132 / 9
+- php -l nas 5 vistas tocadas                        -> limpo
+
+================================================================
+INSTALACAO E REVERSAO
+================================================================
+- Instalacao: backup, desactivar, substituir a pasta sige-softgenial, reactivar.
+- Reversao: reinstalar a versao anterior. Sem alteracao de esquema; reversao directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Expressoes com navegacao (window.open(this.href), window.location), cadeias jQuery e
+  IIFE, e onclick de template JS, depois os blocos script inline, e por fim o CSP em
+  enforcement (nonce por pedido e flip do cabecalho).

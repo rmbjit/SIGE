@@ -1,0 +1,60 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.84
+Histórico Financeiro: Hotfix Multi-Tenant (estado da matrícula no documento de extracto)
+
+Data: 2026-06-09
+Build: sige-12.11.9.84-historico-financeiro-hotfix-multitenant-status-matricula
+Canal: validated-incremental (hotfix sobre o v12.11.9.83 já validado)
+Âmbito: Motor de documentos / Histórico financeiro / Extractos
+
+------------------------------------------------------------------
+SINTOMA
+------------------------------------------------------------------
+Em algumas escolas (ex.: Colégio e Jardim Infantil Malisa), ao abrir o documento de
+histórico financeiro/extracto do aluno aparecia, no topo, o aviso:
+
+   "Erro da base de dados do WordPress: [Unknown column 'm.status' in 'SELECT']"
+
+seguido da consulta que lê a turma e o estado da matrícula. Como consequência o
+documento mostrava "Sem turma".
+
+------------------------------------------------------------------
+CAUSA
+------------------------------------------------------------------
+A função sige_gerar_html_extracto (includes/documents-engine.php) lia o estado da
+matrícula com a coluna fixa m.status na tabela _sige_matriculas. Nem todas as bases
+de dados das escolas têm essa coluna (o esquema varia entre instalações), pelo que a
+consulta falhava e a turma deixava de ser determinada. O erro era apenas de leitura
+para o cabeçalho; não afectava os cálculos financeiros, que vêm de outras tabelas, e
+nenhum dado foi perdido.
+
+------------------------------------------------------------------
+CORRECÇÃO
+------------------------------------------------------------------
+A consulta passa a detectar dinamicamente a coluna disponível, pela mesma ordem já
+usada no resto do sistema:
+  1) status_matricula (se existir);
+  2) status (se existir);
+  3) caso nenhuma exista, usa um valor vazio.
+A ordenação que prioriza matrículas "activa/ativo/activo" só é aplicada quando existe
+uma coluna de estado; caso contrário, ordena por ano lectivo e id (mais recente
+primeiro). O alias matricula_status e o LEFT JOIN às turmas mantêm-se, pelo que a
+turma volta a ser apresentada quando existe matrícula com turma.
+
+Nenhuma regra de cálculo financeiro ou académico foi alterada. Não há alterações de
+base de dados (sem CREATE/ALTER/DROP TABLE).
+
+Nota: o documento "PRO" (financeiro-historico-aluno-pro.php) já era resistente a este
+caso desde o v12.11.9.81; esta correcção alinha o documento de extracto antigo
+(documents-engine) ao mesmo comportamento.
+
+------------------------------------------------------------------
+QUALIDADE
+------------------------------------------------------------------
+- Versão 12.11.9.84 sincronizada em: cabeçalho do plugin, constante SIGE_VERSION e
+  BUILD.json.
+- php -l sem erros em toda a árvore (238 ficheiros).
+- Smoke v12.11.9.84: 32/32 verificações OK (contrato do v82/v83 preservado + novas
+  verificações da blindagem multi-tenant).
+- SQL gerado validado nos dois cenários (com e sem coluna 'status'): ambos produzem
+  uma consulta válida; o cenário sem 'status' deixa de referir m.status.
+- Verificado que não restam referências a m.status sem protecção na árvore.

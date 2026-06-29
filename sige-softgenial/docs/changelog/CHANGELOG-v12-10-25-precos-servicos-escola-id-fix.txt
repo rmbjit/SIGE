@@ -1,0 +1,12 @@
+SIGE SoftGenial v12.10.25 - Preços e Serviços: Correção segura da escola
+
+Resumo
+- Corrigida a criação dos serviços padrão no módulo Preços e Serviços.
+- A rotina passa a receber o identificador da escola de forma explícita e segura.
+- Evita avisos de variável indefinida e evita tentativa de gravar escola_id como NULL.
+
+Garantias
+- Sem alteração de fórmulas.
+- Sem alteração de mensalidades, multas, descontos, pagamentos, cobranças, recibos, estornos ou base de dados.
+- Sem alteração de notas, pautas, DEC, boletins ou actas.
+- Mantido o padrão visual Produto PRO já validado.

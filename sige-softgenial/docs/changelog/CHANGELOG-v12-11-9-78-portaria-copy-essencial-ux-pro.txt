@@ -1,0 +1,15 @@
+SIGE SoftGenial v12.11.9.78 - Portaria Copy Essencial UX PRO
+
+Objectivo
+- Remover descrições técnicas da experiência visível da Portaria.
+- Manter apenas copy operacional para Guarda/Recepção.
+- Preservar o fluxo já validado: câmara, resultado no próprio espaço, Foto do QR e processo manual.
+
+Alterações
+- Removidas referências visíveis a wp-admin, página limpa, política do documento, Permission/Policy API, streaming, browser, Edge/Windows, controlador, servidor/CDN/cache/plugins e diagnóstico técnico.
+- Botões e estados simplificados: Iniciar câmara, Câmara activa, Câmara indisponível, Ler próximo crachá, Foto do QR e Processo manual.
+- O painel de diagnóstico técnico deixou de ser apresentado ao utilizador final.
+- Mensagens de erro foram reescritas para orientar acção imediata: tentar novamente, escolher outra câmara, usar Foto do QR ou processo manual.
+
+Blindagem
+- Sem alterações em base de dados, pagamentos, notas, alunos, validação AJAX, nonce, permissões de Portaria ou isolamento do perfil Guarda.

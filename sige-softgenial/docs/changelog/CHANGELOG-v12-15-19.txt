@@ -1,0 +1,14 @@
+v12.15.19 - Correccao dos separadores do modal de aluno
+
+- Pedido pontual: no modal de registo/edicao de aluno, clicar nos separadores Encarregados, Saude e emergencia ou Arquivo digital voltava sempre a Dados gerais.
+- Isto impossibilitava preencher a seccao de encarregados (pai/mae).
+- Causa: o refactor de CSP trocou os onclick por data-sige-act e o dispatcher declarativo passa o elemento para a funcao (fn(elemento)).
+- O override de window.switchTab tinha ficado com a assinatura antiga (event, tabId) e lia event.currentTarget/target de um elemento (undefined), caindo sempre no primeiro separador.
+- Correccao cirurgica do override window.switchTab no bloco sige-alunos-ux-responsivo.
+- Passa a aceitar tres convencoes: elemento do dispatcher, evento legado com tabId, ou id em texto.
+- Resolve o separador via closest('.sige-tab').attr('data-tab'), com fallback para o primeiro.
+- activateTab ja validava o id contra a lista conhecida, pelo que o separador certo passa a abrir.
+- Nenhum outro handler foi tocado.
+- Botoes de accao da lista auditados (Editar, Remover, Ficha 360, Acesso, Cartao, Declaracao, Boletim): usam data-sige-act/data-sige-args, assinaturas batem com o dispatcher, menu clicavel quando aberto. Sem defeito estatico nesses botoes.
+- Acrescentado o gate check-alunos-modal-tabs-v12-15-19 e registado no corredor (o bug existia porque nenhum gate cobria os separadores).
+- Nao altera PHP financeiro, formulas, saldos nem queries financeiras. Nenhuma regra academica foi alterada.

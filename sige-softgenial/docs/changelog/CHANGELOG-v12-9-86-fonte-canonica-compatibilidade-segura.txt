@@ -1,0 +1,55 @@
+SIGE SoftGenial v12.9.86 - Fonte Canónica e Compatibilidade Segura
+
+Base: v12.9.85 - Saneamento Controlado de Configurações validado.
+
+Objectivo
+- Organizar configurações duplicadas sem quebrar lógica operacional.
+- Definir leitura efectiva futura com fonte canónica, fallback legado e default seguro.
+- Expor conflitos entre fonte canónica e legada em modo diagnóstico/leitura.
+
+O que foi adicionado
+- Nova classe includes/settings/class-sige-settings-compatibility.php.
+- Função sige_setting_effective() passa a usar a nova camada de compatibilidade quando disponível.
+- Nova secção no Centro de Configuração: “Fonte canónica e compatibilidade segura”.
+- Relatório de grupos com:
+  - fonte canónica preenchida;
+  - fallback legado activo;
+  - conflitos detectados;
+  - grupos congelados;
+  - política de fallback por grupo.
+
+O que NÃO foi alterado
+- Não remove configurações duplicadas.
+- Não migra valores.
+- Não sincroniza fontes.
+- Não altera cálculos financeiros.
+- Não altera regras académicas.
+- Não altera WhatsApp/Z-API.
+- Não altera SMTP.
+- Não altera Hub/licença.
+- Não altera documentos, pautas ou permissões.
+- Não cria tabelas novas.
+
+Segurança e anti-regressão
+- Segredos continuam mascarados.
+- Área técnica continua restrita.
+- Compatibilidade é apenas de leitura nesta fase.
+- A leitura efectiva só afecta chamadas novas a sige_setting_effective(); fluxos antigos continuam intactos.
+- O objectivo é preparar migração futura com auditoria e reversibilidade.
+
+Como testar
+1. Instalar/actualizar o plugin.
+2. Abrir: SIGE SoftGenial → Sistema Técnico → Centro de Configuração.
+3. Abrir o separador “Saneamento controlado”.
+4. Confirmar que aparece a secção “Fonte canónica e compatibilidade segura”.
+5. Confirmar que o painel mostra fonte efectiva/fallback/conflitos sem alterar valores.
+6. Fazer smoke test rápido em:
+   - login;
+   - dashboard;
+   - pagamentos;
+   - lançamento de mensalidades;
+   - documentos/pautas;
+   - mensagens WhatsApp.
+
+Próxima etapa sugerida
+- v12.9.87 - Sincronização controlada opcional de fonte legada para fonte canónica, apenas com botão técnico, auditoria, dry-run e rollback lógico.

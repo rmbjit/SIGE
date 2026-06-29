@@ -1,0 +1,10 @@
+SIGE SoftGenial v12.10.37 - Equipa e Professores: Compliance Visual
+
+- Reforça o alinhamento do módulo Equipa e Professores com o Painel Principal aprovado.
+- Substitui o hero anterior por hero no mesmo padrão visual do Painel Principal.
+- Reorganiza os indicadores de RH no mesmo modelo de KPI do Painel Principal.
+- Harmoniza botões, cartões, filtros, tabela e espaçamentos com o padrão já validado.
+- Mantém aplicação das cores personalizadas da escola.
+- Mantém pop-ups reais para acções importantes já implementadas.
+- Sem termos técnicos internos visíveis ao utilizador final.
+- Sem alteração de fórmulas, mensalidades, multas, pagamentos, recibos, cobranças, estornos, notas, pautas, DEC, boletins, actas ou base de dados.

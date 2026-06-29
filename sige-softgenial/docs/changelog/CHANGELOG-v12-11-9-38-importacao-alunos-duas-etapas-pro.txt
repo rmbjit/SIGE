@@ -1,0 +1,24 @@
+SIGE SoftGenial v12.11.9.38 - Importação de Alunos em Duas Etapas PRO
+
+Intervenção:
+- Evolução da importação rápida de estudantes para fluxo em duas etapas.
+
+Melhorias implementadas:
+- Etapa 1: pré-validação do CSV sem gravação de alunos.
+- Etapa 2: confirmação explícita antes de gravar e matricular os alunos importáveis.
+- Hash seguro da pré-validação para impedir confirmação se o ficheiro, turma ou opção de pendentes mudar entre as duas etapas.
+- Relatório de pré-validação com linhas, importáveis, pendentes, erros e duplicados.
+- ID de lote na confirmação final para rastreabilidade/auditoria.
+- Registo do lote em auditoria e nas observações dos alunos importados quando a coluna existir.
+- Interface ajustada no padrão Produto PRO, mantendo o visual do Painel Principal.
+
+Preservado sem alteração:
+- Fórmulas de notas, pautas, boletins e DEC.
+- Mensalidades, multas, pagamentos, recibos e regras financeiras.
+- Estrutura principal da base de dados.
+- Permissões, nonce, escopo por escola e ano lectivo activo.
+
+Testes executados:
+- php -l nos ficheiros alterados.
+- Smoke test específico da importação em duas etapas.
+- Verificação de integridade do ZIP final.

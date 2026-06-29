@@ -1,0 +1,41 @@
+SIGE SoftGenial v12.11.9.130 - AUDITORIA DE DESIGN (abertura)
+============================================================
+
+Abertura de período/ano lectivo (1236 linhas). Par do encerramento.
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 7 pesos (no bloco <style>), 850 (8x), 900 (8x). MAIS 2
+  pesos 650 em estilos INLINE fora do bloco <style>.
+- RAIOS: 10 valores. SOMBRAS: 16. CORES: 72 hex.
+
+CORRECÇÃO (bloco <style> 733-890, inclui @media print; scripts preservados)
+1. Hierarquia de 3 níveis: 7 pesos do CSS -> 500/600/700.
+2. Raios da escala: 10 -> 4. Sombras da escala: 16 -> 7.
+3. 138 cores migradas (CSS + 7 estilos inline). A @media print (impressão
+   do log de abertura) PRESERVADA. ZERO hex restantes.
+
+LIÇÃO (apanhada pelos gates)
+- A primeira passagem tratou só o bloco <style>. Dois pesos font-weight:650
+  estavam em estilos INLINE em HTML (L1011, L1196), FORA do bloco. O gate
+  de tipografia FALHOU e apanhou-os antes do ZIP. Corrigidos para 600.
+  Lição: pesos podem estar inline fora do <style>; precisam de passagem
+  própria. Os guardiões funcionaram exactamente como devem.
+
+PROVA VISUAL
+- abertura-antes-depois.png: stepper de abertura. Estado de passo
+  preservado (concluído verde, pendente cinza); título e passos
+  destacam-se, contexto recua.
+
+GATES
+- smoke-regression-pack: 232 -> 236 invariantes.
+- abertura adicionado aos ecrãs auditados.
+- Baseline de mágicos: 6426 -> 6288 (-138).
+- Baseline de tipografia: 203 -> 187 (-16).
+- 12 gates verdes (apos correcção do FAIL inicial).
+
+MARCO: 20 ecrãs auditados. Desde o início: mágicos 9925 -> 6288; pesos
+não-canónicos 665 -> 187.
+
+PRÓXIMO
+- financeiro-pagamentos (16 pesos), permissions-ui (15), jardim_presencas
+  (15), pauta-final (15)...

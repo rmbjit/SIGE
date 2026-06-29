@@ -1,0 +1,20 @@
+SIGE SoftGenial v12.10.17 - Lançamentos Financeiros: Harmonia Visual
+
+Objectivo
+- Alinhar o módulo de Lançamentos Financeiros ao padrão visual aprovado do Painel Principal, mantendo a progressão Produto PRO sem regressões.
+
+Alterações de interface
+- Removida duplicação de cabeçalho para esta página.
+- Novo hero claro, amplo e consistente com o Painel Principal.
+- KPIs redesenhados no padrão visual aprovado.
+- Filtros reorganizados em cartão limpo, com melhor aproveitamento horizontal.
+- Tabela de lançamentos redesenhada para leitura mais clara e rolagem controlada no mobile.
+- Acções da tabela agora têm texto visível: Ver, Cancelar, Isentar e Reativar.
+- Confirmação de reativação passou para pop-up real, sem confirmação nativa do navegador.
+- Mantidos pop-ups reais de cancelamento, isenção e detalhes.
+
+Garantias
+- Sem alterações em fórmulas financeiras.
+- Sem alterações em mensalidades, multas, descontos, pagamentos, cobranças, recibos, estornos ou base de dados.
+- Sem alterações em notas, pautas, DEC, boletins ou actas.
+- Sem termos técnicos internos visíveis ao utilizador final.

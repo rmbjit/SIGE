@@ -1,0 +1,43 @@
+SIGE SoftGenial v12.10.110 - Feedback Visível de Salvamento
+
+Base
+- Construído por cima da v12.10.109 - Jardim: 5 Anos e Pré Reconhecidos.
+
+Objectivo
+- Garantir que acções de guardar/salvar/concluir tenham mensagem visível de sucesso/erro/aviso quando a operação regressa ao App Shell.
+- Corrigir o risco de algumas acções funcionarem tecnicamente, mas sem retorno visual claro ao utilizador.
+- Manter intervenção transversal e segura, sem alterar regras de negócio ou handlers.
+
+Ajustes aplicados
+- Criado helper central sige_app_flash_notice_from_query().
+- Criado renderizador central sige_app_render_flash_notice().
+- O App Shell passa a mostrar um aviso Produto PRO antes do conteúdo da view quando detectar marcadores de operação.
+- Mensagens cobertas:
+  - sg_notice=success/error/warning/info
+  - sg_message=...
+  - feedback + ftipo
+  - saved=1
+  - updated=1
+  - success=1
+  - acta_apply=ok/erro + acta_msg
+  - license=checked/check_failed
+  - wpp_health_updated=1
+  - msg=ok/erro/duplicado em views sem feedback local específico
+- Jardim de Infância mantém os seus avisos locais para evitar duplicação visual.
+
+Exemplos práticos cobertos
+- ACTA guardada.
+- Nota votada da ACTA aplicada/rejeitada.
+- Configurações técnicas/licença guardadas.
+- Política de WhatsApp actualizada.
+- Views que redireccionam com saved/updated/success.
+- Módulos que usam feedback/ftipo.
+- Módulos sem feedback local e que usam msg=ok/msg=erro.
+
+Garantias
+- Sem alterar cálculos.
+- Sem alterar pagamentos, mensalidades, multas ou recibos.
+- Sem alterar notas, Pauta, DEC, ACTA, boletins ou regras académicas.
+- Sem alterar Permission Engine, perfis ou permissões.
+- Sem alterar base de dados.
+- Sem alterar handlers de gravação.

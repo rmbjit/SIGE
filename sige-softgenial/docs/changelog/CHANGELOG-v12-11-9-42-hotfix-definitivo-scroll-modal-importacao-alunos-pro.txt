@@ -1,0 +1,34 @@
+SIGE SoftGenial v12.11.9.42 - Hotfix Definitivo Scroll Modal Importação de Alunos PRO
+
+Data: 05/06/2026
+Área: Académico / Alunos e Matrículas / Importação CSV
+
+Problema corrigido
+- O popup de Importação de Alunos continuava sem scroll efectivo para utilizadores autorizados.
+- Parte dos botões ficava escondida quando o conteúdo incluía regras de validação, anulação segura, histórico de lotes e resultados de pré-validação.
+
+Causa técnica
+- O CSS do hotfix anterior estava colocado dentro do bloco de acesso restrito do módulo, portanto não era carregado na visualização normal do utilizador autorizado.
+
+Correção aplicada
+- Movido/aplicado o CSS de scroll no bloco visual principal do módulo Alunos e Matrículas.
+- O modal de importação passa a usar layout flex real:
+  - cabeçalho fixo;
+  - corpo com scroll interno;
+  - rodapé de acções sempre visível;
+  - bloqueio do scroll da página de fundo.
+- Ajustado comportamento responsivo para ecrãs menores.
+- Mantida a largura premium do modal para acomodar histórico de lotes e anulação segura.
+
+Preservado sem alteração
+- Importação em duas etapas.
+- Histórico de lotes importados.
+- Anulação segura de lote.
+- Validações de CSV.
+- Permissões, nonces e AJAX.
+- Base de dados.
+- Notas, pautas, boletins, DEC, pagamentos, recibos, mensalidades e multas.
+
+Validação
+- Sintaxe PHP validada.
+- Verificação estática confirma que a regra v12.11.9.42 está no bloco principal antes do fechamento do style usado pelo módulo.

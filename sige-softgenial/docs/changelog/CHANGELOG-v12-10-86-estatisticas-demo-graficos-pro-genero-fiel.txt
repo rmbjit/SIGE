@@ -1,0 +1,25 @@
+SIGE SoftGenial v12.10.86 - Estatísticas Demográficas: Gráficos PRO e Género Fiel
+
+Objectivo
+- Corrigir o módulo &view=estatisticas_demo após validação visual.
+- Alinhar os gráficos ao padrão visual do Painel Principal / Dashboard V2 MJS-grade.
+- Melhorar a responsividade das tabelas, sobretudo "Por Idade".
+- Corrigir a fonte da verdade estatística do género, evitando que alunos sem género definido sejam contados como Masculino.
+
+Correções aplicadas
+- Gráficos receberam cards mais próximos do Painel Principal: cartões arredondados, hierarquia visual mais limpa, ícone/área no título, dimensões mais controladas e melhor comportamento em telas menores.
+- Paleta dos gráficos ajustada para o padrão visual Produto PRO.
+- Barras dos gráficos passam a ter cantos mais arredondados.
+- Tabelas recebem scroll horizontal controlado e nota de orientação em telas menores.
+- Tabela "Por Idade" passa a adaptar-se melhor e deixa de extravasar visualmente sem orientação.
+- Normalização de género centralizada em sige_demo_normalizar_genero().
+- Género indefinido, vazio ou não reconhecido deixa de ser forçado para Masculino.
+- Alunos sem género definido entram no total geral, mas são apresentados como "Género por confirmar".
+- KPIs, tabelas e gráficos passam a mostrar também "Género por confirmar" quando existir.
+- Comparação com ano anterior deixa de forçar género indefinido para Masculino.
+
+Garantias
+- Sem alteração nas matrículas consideradas.
+- Sem alteração em queries principais de alunos/turmas.
+- Sem alteração em ACTA, DEC, pautas, pauta final, boletins, notas ou regras académicas.
+- Sem alteração em pagamentos, multas, mensalidades ou base de dados financeira.

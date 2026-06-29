@@ -1,0 +1,17 @@
+SIGE SoftGenial v12.10.26 - Inscrições e Renovações: Harmonia Visual
+
+Escopo desta entrega:
+- Harmonização visual do módulo Inscrições e Renovações ao padrão aprovado do Painel Principal.
+- Inclusão da área no menu e no roteamento da Tesouraria com linguagem limpa.
+- Remoção de cabeçalho duplicado na página.
+- Hero amplo, KPIs, cartões de serviços necessários e formulário mais intuitivo.
+- Confirmação de geração anual em pop-up real, centrado no ecrã.
+- Resultado do processamento apresentado também em pop-up real.
+- Interface mobile-friendly, com botões e campos ajustados para telemóvel.
+- Remoção de termos técnicos visíveis ao utilizador final.
+
+Garantias:
+- Sem alteração de fórmulas.
+- Sem alteração de mensalidades, multas, descontos, pagamentos, cobranças, recibos ou estornos.
+- Sem alteração de notas, pautas, DEC, boletins ou actas.
+- Sem migrações ou alterações de estrutura de base de dados.

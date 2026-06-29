@@ -1,0 +1,62 @@
+# PUBLIC ENDPOINTS POLICY - v12.12.28
+
+## endpoint publico
+A v12.12.11 nao adiciona nem remove endpoints publicos. O incremento endurece a camada de escrita por tenant; nenhum sumidouro tocado e publico. Os endpoints publicos do manifesto permanecem:
+
+- `admin_post_nopriv:sige_process_queue_now` - processamento controlado da fila; chave/token operacional e rate limit.
+- `query_handler:sige_recibo` - documento publico tokenizado; valida token assinado.
+- `rest_route:sige/v1:/emola/callback` - callback e-Mola; token validator tenant-scoped.
+- `rest_route:sige/v1:/hub/instant-refresh` - refresh do hub; autentica origem.
+- `rest_route:sige/v1:/mpesa/callback` - callback M-Pesa; token validator tenant-scoped.
+- `rest_route:sige/v1:/process-queue` - processamento por REST; token operacional e rate limit.
+- `rest_route:sige/v1:/whatsapp-webhook` - webhook WhatsApp; valida token/origem e rate limit.
+- `shortcode:sige_portal` - portal do aluno/encarregado; autenticacao propria no fluxo.
+
+## autenticacao
+M-Pesa/e-Mola usam validator tokenizado no Kernel. Nota tenant: quando uma escrita interna (propria ou delegada) nao resolve a escola em modo estrito, os guards de sumidouro fecham a operacao em vez de gravar com escola 0 ou na escola 1.
+
+## rate limit
+Limites existentes mantidos. O incremento nao altera rate limits.
+
+## v12.12.21 (Fase 7 incr 1: reconciliacao e divergencias)
+
+- O ecra de reconciliacao e so de leitura, sem POST nem accao AJAX/admin-post: nao introduz endpoint publico nem superficie nova. Manifesto 196 inalterado.
+
+## Actualizacao v12.12.21 (Fase 7 incremento 2)
+
+O endpoint publico (sem autenticacao) nao aumenta. O endpoint de decisao (sige_fin_aprovacao_decidir) e autenticado, com nonce e rate limit (sk_view_action_financeiro_aprovacoes_sige_fin_aprovacao_decidir, max 20 / 300s).
+
+## Actualizacao v12.12.22 (release correctiva)
+
+Esta versao e uma correccao de roteamento da Fase 7, construida sobre a v12.12.21. As views financeiro-reconciliacao (Incremento 1) e financeiro-aprovacoes (Incremento 2, regra de quatro-olhos), entregues na Fase 7 mas em falta na allowlist anti-LFI e na matriz de permissoes do admin-shell, ficavam inalcancaveis: a guarda reescrevia o pedido para o painel inicial. Foram repostas em ambas as listas, com as permissoes identicas as guardas internas de cada view. Nao ha alteracao da superficie de accao (manifesto e regras do Security Kernel mantem-se em 197), nao ha migracao de dados (SCHEMA_VERSION inalterada) e as regras de calculo financeiro nao sao tocadas.
+
+Nao ha qualquer endpoint publico novo. A autenticacao e o rate limit das superficies existentes mantem-se exactamente como na v12.12.21. As views repostas sao de administracao, atras de autenticacao e das guardas de permissao.
+
+## Actualizacao v12.12.24 (Fase 8 Incr 1)
+
+Nenhum endpoint publico novo. O inventario de dados pessoais e um ecra interno de administracao, sujeito a autenticacao e a permissao privacidade.inventario_ver, sem POST nem AJAX. Por nao expor superficie publica, nao se aplica rate limit adicional; a politica de endpoints publicos mantem-se sem alteracoes.
+
+## Actualizacao v12.12.24 - Fase 8 incremento 2
+
+- O novo endpoint admin_post:sige_privacidade_exportar NAO e um endpoint publico: exige sessao autenticada e a permissao privacidade.acesso_exportar. Nao ha endpoint publico novo nesta versao.
+- autenticacao: obrigatoria (nonce verificado e permissao aplicada pelo Kernel em enforce). rate limit: 10 pedidos por 300 segundos.
+
+
+## Actualizacao v12.12.25 - Fase 8 incremento 3 (apagamento por anonimizacao)
+
+Este incremento acrescenta a primeira operacao destrutiva do produto: o apagamento por anonimizacao (direito ao apagamento). Foi adicionado um endpoint admin_post governado em modo enforce e risco critico (admin_post:sige_privacidade_apagar), com confirmacao em dois passos por numero de processo, nonce, rate limit (5/300s), isolamento por escola e auditoria antes e depois. A superficie de accao passou de 198 para 199 e o enforce de 32 para 33. Nova permissao critica privacidade.apagamento_executar, semeada so a administracao e direccao e sempre auditada. Sem eliminacao fisica de linhas e sem migracao de esquema (SCHEMA_VERSION inalterada). Manifesto e Kernel mantem-se alinhados (199 == 199).
+
+
+## Actualizacao v12.12.26 - Fase 8 incremento 3.2 (completar o catalogo de PII)
+
+Este incremento classifica as 12 colunas com aspeto de dado pessoal que estavam fora do catalogo (lacunas detectadas pelo inventario da Incr 1), levando o catalogo de 76 para 88 campos e as lacunas de 12 para 0. As nove colunas identificaveis de sige_alunos (incluindo o documento de identidade digitalizado, a fotografia, os contactos de emergencia e os dados da pessoa autorizada a buscar o aluno) passam a ser tratadas pelo dossie de acesso/portabilidade e pelo motor de anonimizacao, fechando o buraco em que sobreviviam a um apagamento. As duas datas operacionais de cobranca sao classificadas mas preservadas na anonimizacao (lista de preservacao); a coluna de notas de funcionario e classificada mas fica fora do ambito do apagamento do aluno. Sem nova superficie: manifesto e Kernel mantem-se em 199 (enforce 33). Sem migracao de esquema (SCHEMA_VERSION inalterada).
+
+
+## Actualizacao v12.12.27 - Fase 8 incremento 4 (retencao e expurgo)
+
+Este incremento acrescenta um ecra de governanca de dados, so de leitura, que mostra o calendario de retencao declarado e quantos registos ja excederam o prazo, de forma agregada por escola. Decisao de seguranca central: neste sistema nao ha expurgo por eliminacao em massa, porque as presencas sao derivadas ao vivo do registo de acessos e os registos financeiros, academicos e de auditoria tem dever de retencao; o expurgo de um titular faz-se pela anonimizacao ja existente (Apagamento), que preserva a integridade. Nova permissao privacidade.retencao_ver (risco medio, so leitura), semeada a administracao e direccao. Sem nova superficie de accao: manifesto e Kernel mantem-se em 199 (enforce 33). Sem migracao de esquema (SCHEMA_VERSION inalterada).
+
+
+## Actualizacao v12.12.28 - Fase 9 incremento 1 (blindagem do modulo de permissoes)
+
+Abre a Fase 9 (seguranca e governanca de acessos). O modulo de Perfis e Permissoes passa a ser seguro por desenho atraves de um avaliador unico de operacao que aplica quatro guardas: alvo protegido (administradores WordPress reais nao sao geriveis pelo modulo, por qualquer actor), anti-escalada (um gestor que nao seja administrador WP real nao pode atribuir um perfil que confira a gestao de permissoes), auto-proteccao (um gestor nao se despromove nem se remove a si proprio) e ultimo gestor (nao se deixa a escola sem nenhum gestor). O handler chama o avaliador e bloqueia nos dois ramos, com auditoria, mesmo com nonce valido. As contas protegidas aparecem na lista so de leitura, com selo Protegido. A porta do menu fica coerente (link mostrado a quem tem usuarios.gerir_permissoes, com Saude do Sistema e Centro de Configuracao restritos ao core admin); migracao idempotente garante a concessao ao admin_ti na base de dados real. Sem novo ecra e sem nova superficie: manifesto e Kernel mantem-se em 199 (enforce 33). Sem migracao de esquema (reconciliacao em role_permissions).

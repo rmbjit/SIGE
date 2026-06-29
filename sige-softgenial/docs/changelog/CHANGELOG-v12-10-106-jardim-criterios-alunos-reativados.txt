@@ -1,0 +1,40 @@
+SIGE SoftGenial v12.10.106 - Jardim: Critérios e Alunos Reactivados
+
+Base
+- Construído por cima da v12.10.105 - Jardim: Critérios PRO e Migração Segura.
+
+Problemas tratados
+1. A avaliação por critérios não mostrava indicadores criados na ficha da disciplina.
+2. Disciplinas associadas à casa/classe "2/3 anos" podiam não aparecer se a matriz curricular usasse uma nomenclatura diferente da turma.
+3. Aluno que tinha sido desactivado e depois reactivado podia continuar fora do Diário de Actividades porque a matrícula do ano permanecia inactiva.
+
+Fonte dos dados da avaliação por critérios
+- A fonte operacional do Jardim é a tabela sige_jardim_criterios.
+- A configuração geral de indicadores da disciplina fica na tabela sige_disciplinas_indicadores.
+- Nesta versão, quando a escola cria indicadores na ficha da disciplina, o sistema sincroniza esses indicadores para sige_jardim_criterios ao carregar os módulos do Jardim.
+- A sincronização não inventa critérios: apenas copia indicadores já existentes e evita duplicados por disciplina + descrição.
+
+Correções aplicadas
+- Criado sincronizador seguro de indicadores gerais da disciplina para critérios do Jardim.
+- A função central de disciplinas do Jardim passa a reconhecer aliases de classe/turma:
+  - 2º/3º Ano
+  - 2/3 anos
+  - Casa 2/3 anos
+  - Casa dos 2/3 anos
+  - variações equivalentes
+- A matriz curricular do Jardim deixa de depender apenas de correspondência exacta do texto da classe.
+- Criada reparação segura de matrículas de alunos reactivados:
+  - só actua quando o aluno está com status activo/ativo/activa/ativa;
+  - não reactiva transferidos, desistentes ou inactivos;
+  - só corrige quando o aluno não possui matrícula activa no ano;
+  - actualiza a matrícula mais recente do ano para activa.
+- Adicionado aviso explicativo na Avaliação por Critérios quando há disciplinas mas não há critérios activos.
+
+Garantias
+- Sem inventar critérios.
+- Sem alterar cálculo MB/B/S/NS.
+- Sem alterar respostas/avaliações já gravadas.
+- Sem alterar design validado.
+- Sem alterar notas, Pauta, DEC, ACTA ou boletins principais.
+- Sem alterar pagamentos, mensalidades, multas ou base de dados financeira.
+- Sem alteração em Permission Engine, perfis ou permissões.

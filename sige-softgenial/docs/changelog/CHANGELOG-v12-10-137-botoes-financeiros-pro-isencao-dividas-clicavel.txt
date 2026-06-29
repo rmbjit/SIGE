@@ -1,0 +1,22 @@
+SIGE SoftGenial v12.10.137 - Botões Financeiros PRO: Isenção de Dívidas Clicável
+
+Base: v12.10.136 - WhatsApp Guardrails PRO.
+
+Objectivo
+- Corrigir o botão/fluxo de isenção de dívidas e reforçar a compatibilidade dos botões financeiros em ambiente WordPress/admin actualizado.
+
+Alterações aplicadas
+- Adicionado fluxo real de isenção de dívida em Dívidas Actuais no módulo Financeiro > Pagamentos.
+- Adicionado modal próprio "Isentar dívida", com motivo obrigatório e motivos rápidos.
+- Adicionado POST handler seguro usando SIGE_FinanceActionService::isentarLancamento().
+- Mantida a regra de permissão restritiva: isenção apenas para manage_options, Director ou Secretário.
+- Reforçado event delegation para botões de cancelar, isentar, bloquear e desbloquear, evitando depender apenas de onclick inline.
+- Adicionado fallback de submissão de formulários para evitar falhas quando o atributo HTML form= ou requestSubmit não se comportar como esperado.
+- Reforçado pointer-events/cursor em botões, selects, inputs, checkboxes e elementos interactivos do fluxo financeiro.
+- Reforçado também o módulo Financeiro > Lançamentos para os botões Ver, Cancelar, Isentar e Reativar.
+
+Garantias
+- Sem alteração de fórmulas financeiras.
+- Sem alteração de regras de mensalidade, multa, desconto, pagamento, recibo ou caixa.
+- Sem alteração de notas, pautas, DEC, boletins, ACTA, Jardim ou Portal.
+- Alteração limitada a usabilidade/compatibilidade de botões e fluxo administrativo de isenção já suportado pelo motor financeiro.

@@ -1,0 +1,13 @@
+SIGE SoftGenial v12.9.33 - WhatsApp Engine Profissional
+
+Base: v12.9.32 validada.
+
+Alterações:
+- Motor real de processamento da tabela sige_whatsapp_queue.
+- Processa status 'pendente' com scheduled_at vencido e status 'forcar_envio'.
+- Endpoint seguro /wp-json/sige/v1/process-queue para teste manual por utilizadores autorizados.
+- Fallback /wp-admin/admin-post.php?action=sige_process_queue_now.
+- Actualiza status, enviado_em, tentativas, erro/ultimo_erro e metadados Guardian quando disponíveis.
+- Mantém Guardian/Recovery Mode activo para controlo de risco.
+- Usa fuso horário Africa/Maputo para timestamps operacionais do SIGE.
+- Sem alterações nas fórmulas financeiras ou académicas.

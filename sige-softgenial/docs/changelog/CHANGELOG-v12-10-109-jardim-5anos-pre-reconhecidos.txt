@@ -1,0 +1,39 @@
+SIGE SoftGenial v12.10.109 - Jardim: 5 Anos e Pré Reconhecidos
+
+Base
+- Construído por cima da v12.10.108 - Jardim: Blindagem PRO Final.
+
+Problema tratado
+- A v12.10.108 reconhecia melhor Casa 2/3 anos, Casa 4 anos e turmas com Pré/Pre/Jardim/Creche.
+- Porém, uma escola pode cadastrar a turma do pré-escolar como:
+  - 5 anos
+  - Casa 5 anos
+  - Casa dos 5 anos
+  - Pré
+  - Pré-escolar
+- Estes casos precisavam ficar explícitos.
+
+Correção aplicada
+- O fallback de identificação de turmas pré-escolares passa a reconhecer:
+  - 5 anos
+  - 5 Anos
+  - Casa 5 anos
+  - Casa dos 5 anos
+  - Pré
+  - Pre
+  - Pré-escolar
+  - Pre-escolar
+- Os aliases usados pela matriz curricular do Jardim também passam a considerar 5 anos e Pré.
+
+Regra de segurança
+- A correção foi feita para não confundir 5 anos com 5ª classe.
+- O sistema só reconhece "5 anos" quando aparece como idade/casa pré-escolar.
+- Não transforma automaticamente "5ª classe" em Jardim.
+
+Garantias
+- Sem alterar cálculo MB/B/S/NS.
+- Sem alterar critérios, respostas ou avaliações já gravadas.
+- Sem alterar design validado.
+- Sem alterar notas, Pauta, DEC, ACTA ou boletins principais.
+- Sem alterar pagamentos, mensalidades, multas ou base de dados financeira.
+- Sem alteração em Permission Engine, perfis ou permissões.

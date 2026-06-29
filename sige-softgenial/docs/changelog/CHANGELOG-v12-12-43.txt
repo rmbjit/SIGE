@@ -1,0 +1,88 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.43
+Data: 2026-06-23
+Titulo: Fase 3 - Afinacao dos codigos do gateway e escolha de lancamento
+Tipo: Afinacao (dois afinamentos sobre os incrementos 1 a 3 da Fase 3)
+Base: 12.12.42
+Canal: validated-feature
+
+================================================================
+CONTEXTO
+================================================================
+Dois afinamentos da reconciliacao de pagamentos digitais, entregues juntos. Nao
+introduzem capacidade nova de raiz: tornam a verificacao contra o gateway mais
+exacta e dao ao maker mais controlo na proposta de conciliacao com quatro-olhos.
+
+================================================================
+(A) AFINACAO DOS CODIGOS DE FALHA DO GATEWAY
+================================================================
+EDIT  includes/payments/reconciliacao-viva.php
+      - sige_pagamentos_normalizar_estado_gateway passa a dar PRIORIDADE ao estado
+        da transacao reportado pelo gateway. O queryTransactionStatus do M-Pesa
+        devolve esse estado em output_ResponseTransactionStatus; um INS-0 apenas
+        diz que a consulta foi processada, nao que a transacao teve sucesso.
+      - Classificacao por estado: estados de sucesso -> confirmada; estados de
+        falha -> falhada; estado presente mas nao mapeado -> desconhecida.
+      - Listas ajustaveis por filtro:
+          sige_mpesa_estados_sucesso (default: completed, complete, success,
+            successful, concluida, concluido, sucesso)
+          sige_mpesa_estados_falha (default: failed, failure, declined, rejected,
+            cancelled, canceled, reversed, expired, error, falhada, falhado,
+            rejeitada, cancelada, revertida, expirada)
+          sige_mpesa_codigos_falha (codigos de resposta de falha; vazio por omissao)
+      - Conservadorismo preservado: nunca acusa uma transacao real de falsa.
+      - Retro-compativel: sem campo de estado, recai na semantica do codigo de
+        resposta, como antes.
+
+================================================================
+(B) ESCOLHA DE LANCAMENTO NA PROPOSTA DE CONCILIACAO (QUATRO-OLHOS)
+================================================================
+EDIT  admin/finance/mpesa-view.php
+      - A seccao "Resolucao com quatro-olhos" carrega os lancamentos em aberto do
+        aluno (sige_mpesa_lancamentos_abertos) e oferece um seletor name=lancamento_id
+        na proposta de conciliacao (com a opcao "automatico").
+      - O handler server-side do maker le o lancamento escolhido e passa-o a
+        sige_recon_propor_conciliacao.
+      - A funcao de execucao sige_recon_executar_conciliar (ja existente) valida que
+        o lancamento pertence a escola e ao aluno, e regista pelo caminho canonico.
+      - A correspondencia automatica continua disponivel.
+
+================================================================
+QUALIDADE
+================================================================
+EDIT  tools/smoke-reconciliacao-viva.php (passa de 17 para 21 verificacoes:
+      estado Completed, estado Failed apesar do INS-0, estado nao mapeado, estado PT)
+EDIT  tools/check-reconciliacao-viva.php (exige a leitura do estado da transacao e
+      as listas por filtro)
+EDIT  tools/check-recon-resolucao.php (exige o seletor de lancamento e a leitura do
+      lancamento escolhido no handler)
+      Corredor estavel em 95 verificacoes (gates editados, nao adicionados).
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- Nao toca em regras de calculo nem em ficheiros canonicos. A escolha de lancamento
+  usa o caminho canonico sige_fin_registar_pagamento.
+- Superficie de accao: 199 itens. Regras do Kernel: 199; enforce 33. Vistas: 60.
+- Opcoes: 132 (a afinacao e por filtro, nao por opcao). Dependencias externas: 11.
+- Sem alteracao de esquema. Calculo academico e financeiro byte-identico.
+- Versao sincronizada nas cinco fontes. Zero travessoes. Ficheiros em LF.
+
+================================================================
+VALIDACAO
+================================================================
+- php tools/check-reconciliacao-viva.php    -> OK
+- php tools/smoke-reconciliacao-viva.php      -> OK (21 verificacoes)
+- php tools/check-recon-resolucao.php          -> OK
+- php tools/smoke-recon-resolucao.php           -> OK (14 verificacoes)
+- php tools/smoke-payments-dedup.php             -> OK (sem regressao)
+- php tools/check-governance-docs.php             -> OK (21 documentos v12.12.43)
+- php tools/smoke-release-gate.php                  -> verde a partir de pasta limpa
+- extractor de superficie / opcoes / vistas        -> 199 / 132 / 60
+- php -l                                            -> limpo nos ficheiros tocados
+
+================================================================
+A SEGUIR
+================================================================
+- Ajuste fino final dos codigos e estados especificos de cada operadora, com base
+  no sandbox (as listas ja sao ajustaveis por filtro).

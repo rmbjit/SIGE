@@ -1,0 +1,38 @@
+SIGE SoftGenial v12.11.9.119 - AUDITORIA DE DESIGN (minhas_turmas)
+=================================================================
+
+FECHA O CICLO: este é o ecrã que o utilizador mostrou no início (a
+imagem com os ícones desproporcionais que motivou a v110). Agora tem
+ícones normalizados E hierarquia tipográfica - a soma das correções.
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 6 pesos, 850 DOMINANTE (15x de 27) - "tudo grita" no
+  extremo. Era parte da sensação pesada das imagens reportadas.
+- RAIOS: 7 valores. SOMBRAS: 17. CORES: 85 hex.
+
+CORRECÇÃO (bloco CSS 178-429; JS preservado)
+1. Hierarquia de 3 níveis: 6 pesos -> 500/600/700.
+2. Raios da escala: 7 -> 4. Sombras da escala: 17 -> 6.
+3. 123 cores migradas. Incluindo CORES DE ESTADO DE PROGRESSO (lógica
+   PHP: pct==100 verde, >=50 laranja, <50 vermelho) migradas para
+   tokens semânticos (success/warning/danger) preservando o significado.
+   Tema dinâmico (--sg-theme-soft) preservado com fallback.
+
+PROVA VISUAL
+- minhas-turmas-antes-depois.png: os KPIs (Turmas/Alunos/Completas) da
+  imagem original. Valor domina, rótulo ênfase, legenda recua. Comparar
+  com a imagem inicial do utilizador: ícones proporcionais (v110) +
+  hierarquia (v119).
+
+GATES
+- smoke-regression-pack: 191 -> 194 invariantes.
+- minhas_turmas adicionado aos ecrãs auditados.
+- Baseline de mágicos: 7824 -> 7700 (-124).
+- Baseline de tipografia: 417 -> 395 (-22). (Abaixo de 400!)
+- 12 gates verdes.
+
+MARCO: 9 ecrãs auditados. Baseline de mágicos 9925 -> 7700 desde o
+início da auditoria; pesos não-canónicos 665 -> 395.
+
+PRÓXIMO
+- portaria (22 pesos), encerramento (22), curriculum-engine (20)...

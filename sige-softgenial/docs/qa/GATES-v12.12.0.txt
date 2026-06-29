@@ -1,0 +1,26 @@
+OK      Release gate (versões/CLI/canónicas)             RELEASE GATE OK - 53 verificações passaram (v12.12.0).
+OK      Regressão (invariantes)                           REGRESSÃO OK - 306 invariantes verdes.
+OK      Presenças (motor puro)                            SMOKE PRESENÇAS OK - 23 verificações passaram.
+OK      M-Pesa/e-Mola (funil)                              SMOKE M-PESA OK - 37 verificações passaram.
+OK      Escudo de login                                    SMOKE LOGIN SHIELD OK - 16 verificações passaram.
+OK      JS embebido nas views                              JS-VIEWS OK - sintaxe limpa em todos os blocos.
+OK      Colisões CSS                                      COLISÕES CSS OK - namespaces limpos (kit em sgk-, zero intersecções com a casa).
+OK      Calendário de devedores (motor puro)              SMOKE CALENDÁRIO DEVEDORES OK - 19 verificações passaram.
+OK      Design System (fonte da verdade + ponte)           SMOKE DESIGN SYSTEM OK - 15 verificações passaram.
+OK      Ícones (consistência visual)                     SMOKE ÍCONES OK - 11 verificações passaram.
+OK      Design tokens (sem regressão de mágicos)         DESIGN TOKENS OK - sem regressão de valores mágicos.
+OK      Tipografia (hierarquia de pesos)                   TIPOGRAFIA OK - sem regressão; ecrãs auditados com hierarquia limpa.
+OK      Consistencia visual (primitivos sem token)         CONSISTENCIA VISUAL OK - sem regressao de primitivos magicos.
+OK      Tokens fora de contexto (login/portal/standalone)  TOKENS FORA DE CONTEXTO OK - 3 contexto(s) sem tokens vigiado(s) (auto-descoberta login/shortcode/popup + semente), todos a usar literais.
+OK      Responsivo (mobile/tablet sem quebras)             RESPONSIVO OK - 0 antipadrões (baseline 0; só desce).
+OK      Governação (inventário técnico)                INVENTARIO OK
+OK      Governação (documentos e baselines)              GOVERNANCE DOCS OK - documentos e baselines obrigatorios presentes.
+OK      Governação (views com permissões)               VIEW PERMISSION MAP OK - 54 views cobertas por matriz.
+OK      Governação (manifesto de acções)               ACTION SURFACE MANIFEST OK - 162 superficies declaradas.
+OK      Governação (endpoints públicos)                 PUBLIC ENDPOINTS POLICY OK - endpoints publicos cobertos.
+OK      Governação (baseline de autorização)           AUTHORIZATION BASELINE OK - divida congelada sem aumento de current_user_can.
+OK      Governação (fallbacks tenant)                    TENANT FALLBACKS OK - nenhum fallback novo fora do registo.
+OK      Governação (segredos e opções)                 SECRETS/OPTIONS REGISTER OK - candidatos sensiveis registados.
+OK      Governação (dependências externas)              EXTERNAL DEPENDENCIES REGISTER OK - hosts classificados.
+================================================================
+TODOS OS GATES VERDES - 24 de 24.

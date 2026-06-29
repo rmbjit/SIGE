@@ -1,0 +1,24 @@
+SIGE SoftGenial v12.10.8 - Produto PRO: Registar Pagamento MJS-grade
+
+Objectivo
+- Aplicar o padrão visual aprovado do Dashboard V2 MJS-grade ao fluxo Registar Pagamento, mantendo a página com aparência de aplicação profissional e não de plugin WordPress.
+
+Alterações visuais e de experiência
+- Novo hero premium para a tesouraria, com fluxo de atendimento em três passos.
+- Pesquisa de alunos redesenhada com layout mais amplo, limpo e responsivo.
+- Resultados de alunos transformados em cards mais elegantes, com badges de estado financeiro mais legíveis.
+- Cartão do aluno seleccionado melhorado visualmente.
+- Blocos de notificações, data efectiva, dívidas actuais, meses futuros, serviços avulsos e confirmação de pagamento alinhados ao padrão Produto PRO.
+- Tabelas de cobrança com leitura mais limpa, linhas arredondadas, rolagem controlada e melhor comportamento mobile.
+- Resumo final de pagamento convertido para bloco premium com maior destaque ao total e ao botão de confirmação.
+
+Perímetro protegido
+- Não foram alteradas fórmulas financeiras.
+- Não foram alteradas regras de mensalidades, multas, pagamentos, cobranças, recibos, estornos ou notificações.
+- Não foram alteradas notas, pautas, DEC, boletins ou regras académicas.
+- Não foram adicionadas migrações nem alterações ao schema da base de dados.
+
+Ficheiros modificados
+- sige-softgenial.php
+- BUILD.json
+- admin/finance/financeiro-pagamentos.php

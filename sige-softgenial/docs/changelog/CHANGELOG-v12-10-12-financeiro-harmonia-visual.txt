@@ -1,0 +1,22 @@
+SIGE SoftGenial v12.10.12 - Financeiro: Harmonia Visual com Painel Principal
+
+Objectivo
+- Corrigir a falta de harmonia visual entre Painel Principal, Painel Financeiro e Registar Pagamento.
+- Manter o Painel Principal aprovado como referência visual inegociável.
+
+Alterações visuais
+- Painel Financeiro passa a seguir a mesma sequência visual do Painel Principal: hero, indicadores principais e grelha operacional.
+- Hero do Painel Financeiro alinhado em proporção, cantos, sombra, tipografia, espaçamento e paleta.
+- Cartões/KPIs financeiros alinhados ao desenho do Painel Principal.
+- Filtros financeiros tratados como barra discreta, sem quebrar a leitura principal.
+- Registar Pagamento deixa de usar hero escuro e passa para o mesmo padrão claro aprovado.
+- Fluxo de atendimento em Registar Pagamento passa a ter cartão suave, com melhor contraste e consistência.
+- Área de confirmação do pagamento fica mais clara e legível, mantendo o modal validado.
+- Mantida a correcção de contraste de “Isentar multas”.
+- Nenhuma anotação técnica interna adicionada à interface do utilizador.
+
+Limites respeitados
+- Sem alteração de fórmulas financeiras.
+- Sem alteração de mensalidades, multas, descontos, pagamentos, cobranças, recibos ou estornos.
+- Sem alteração de notas, pautas, DEC, boletins ou actas.
+- Sem alteração de base de dados ou migrações.

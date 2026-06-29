@@ -1,0 +1,28 @@
+SIGE SoftGenial v12.9.102 - Centro de Configuração Produtizado
+
+Objectivo
+- Consolidar o Centro de Configuração como experiência de produto, sem depender de parâmetros manuais no URL para activar áreas técnicas.
+
+Alterações
+- Criado modo técnico SoftGenial governado por botão.
+- Modo técnico é restrito a utilizadores autorizados, temporário, por utilizador e auditado.
+- Adicionados botões “Entrar no modo técnico SoftGenial” e “Sair do modo técnico”.
+- O modo escola continua limpo por defeito para instalações reais.
+- Comunicação e canais/WhatsApp-ZAPI continuam acessíveis apenas no modo técnico governado.
+- A compatibilidade legada continua preservada, mas já não é caminho diário de configuração.
+
+Segurança
+- Entrada/saída do modo técnico exige nonce, permissões e auditoria.
+- Modo técnico expira automaticamente.
+- Segredos continuam mascarados.
+- Não há exposição de tokens, senhas, SMTP, Z-API, API keys ou dados sensíveis.
+
+Não alterado
+- Financeiro.
+- Académico.
+- WhatsApp engine/fila/cron.
+- SMTP operacional.
+- Hub/licença.
+- Permissões.
+- Documentos, recibos, pautas e boletins.
+- Schema/base de dados.

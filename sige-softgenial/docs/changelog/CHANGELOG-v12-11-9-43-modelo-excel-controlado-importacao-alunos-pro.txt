@@ -1,0 +1,56 @@
+SIGE SoftGenial v12.11.9.43 - Modelo Excel Controlado para Importação de Alunos PRO
+
+Objectivo
+- Acrescentar ao fluxo de importação de alunos um modelo Excel .xlsx profissional, com campos obrigatórios assinalados e listas controladas, mantendo o CSV como alternativa.
+
+Ficheiros intervencionados
+- admin/academic/alunos_lista.php
+- includes/aluno-fetch-ajax.php
+- sige-softgenial.php
+- BUILD.json
+
+Melhorias implementadas
+- Novo botão "Baixar modelo Excel (.xlsx)" no popup de importação de alunos.
+- Modelo .xlsx gerado dinamicamente pelo SoftGenial, sem dependências externas, usando estrutura Office Open XML.
+- Folha "Alunos" com cabeçalhos preparados para importação.
+- Campos obrigatórios assinalados com *:
+  - nome_completo
+  - data_nascimento
+  - genero
+  - nome_pai
+  - telemovel_pai
+  - nome_mae
+  - telemovel_mae
+- Listas controladas no Excel para:
+  - género
+  - classe
+  - turma
+  - tipo de documento
+  - estado/status
+- Folha "Listas" com catálogos usados nas validações.
+- Folha "Instrucoes" com orientações claras para a escola.
+- O modelo puxa classes e turmas existentes no SoftGenial para o ano lectivo activo.
+- O upload de importação passa a aceitar .xlsx, .csv e .txt.
+- Parser interno para leitura de .xlsx, incluindo suporte a shared strings, inline strings e datas seriais do Excel.
+- Preservação do fluxo em duas etapas: pré-validação antes de gravação.
+- Preservação do histórico de lotes e da anulação segura.
+
+Notas de segurança/produto
+- A matrícula final continua a respeitar a turma de destino escolhida no popup do SoftGenial.
+- As colunas classe e turma no Excel servem como padronização e conferência operacional da lista.
+- CSV continua disponível para escolas que preferem fluxo mais simples.
+
+Garantias de não regressão
+- Não foram alteradas fórmulas de notas, pautas, boletins, DEC, pagamentos, multas, recibos ou regras financeiras/académicas.
+- Não foram alteradas tabelas da base de dados nesta versão.
+- Não foram alteradas regras de anulação de lote.
+
+Testes realizados
+- php -l em includes/aluno-fetch-ajax.php.
+- php -l em admin/academic/alunos_lista.php.
+- php -l em sige-softgenial.php.
+- Teste de geração do .xlsx por ZIP puro em PHP.
+- Teste de integridade do .xlsx gerado com unzip -t.
+- Teste de leitura do .xlsx gerado pelo parser interno.
+- Teste de leitura de linha preenchida no parser .xlsx.
+- Smoke test estático da versão 12.11.9.43.

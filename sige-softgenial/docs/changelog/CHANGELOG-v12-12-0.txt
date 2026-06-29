@@ -1,0 +1,32 @@
+SIGE SoftGenial v12.12.0
+
+Tipo: Fase 0 - Engineering Governance Baseline
+Base: v12.11.9.166
+Data: 2026-06-16
+
+1. Governação
+- Criados documentos formais em docs/governance/.
+- Criados registos técnicos em docs/security/.
+- Criada matriz de rastreabilidade requisito -> ficheiros -> testes -> evidência.
+- Criado rediagnóstico adversarial com decisão explícita de P0/P1.
+
+2. Inventário técnico
+- Criado tools/inventory-surface.php.
+- Criado tools/governance-lib.php.
+- Criado ACTION_SURFACE_MANIFEST-v12.12.0.json cobrindo AJAX, admin-post, REST, cron e shortcode.
+- Criados baselines de autorização, tenant, opções sensíveis e dependências externas.
+
+3. Correcção P1
+- Corrigidas views allowlisted sem permissão explícita.
+- Adicionadas permissões: comunicacao.central_ver, comunicacao.whatsapp_ver, comunicacao.whatsapp_diagnostico_ver, comunicacao.circulares_enviar, academico.presencas_ver, academico.presencas_gerir, financeiro.mobile_payments_gerir.
+- Adicionada migração aditiva sige_permissions_migrate_12120_governance_view_permissions.
+- Helpers internos de Central de Comunicações, WhatsApp, Circulares, Presenças e M-Pesa passam a consultar sige_can antes de fallbacks legados.
+
+4. Gates
+- Integrados novos gates no tools/run-gates.php.
+- Gates novos cobrem documentos, views, manifesto, endpoints públicos, autorização, tenant, segredos/opções e dependências externas.
+
+5. Excluído deliberadamente
+- MFA completo, Secret Vault, Financial Ledger, CSP enforcement, tenant fail-closed total, refactor modular, observabilidade e performance estrutural.
+
+Decisão: concluída apenas se PHP lint e run-gates estiverem verdes e o rediagnóstico mantiver zero P0/P1 aberto.

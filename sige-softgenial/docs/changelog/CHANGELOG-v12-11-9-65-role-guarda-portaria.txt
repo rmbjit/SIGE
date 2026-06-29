@@ -1,0 +1,52 @@
+SIGE SoftGenial v12.11.9.65 - Role Guarda / Portaria PRO
+Data: 2026-06-08
+
+Objectivo
+- Criar uma camada de utilizador operacional para Guarda / Portaria.
+- Permitir apenas o uso da Portaria Digital, com validação de crachás/QR Code.
+- Permitir consulta de estudantes/alunos em modo somente-leitura.
+- Bloquear criação, edição, remoção, importação, exportação, impressão de cartões e gestão de acesso ao portal para este perfil.
+
+Alterações principais
+1. Permissões granulares novas:
+   - portaria.ver
+   - portaria.validar_acesso
+
+2. Novo perfil na matriz SIGE:
+   - slug: guarda
+   - nome: Guarda / Portaria
+   - permissões exactas: portaria.ver, portaria.validar_acesso, alunos.ver
+
+3. Nova WordPress role de compatibilidade:
+   - sige_guarda
+   - sem manage_options
+   - sem permissões de financeiro, configurações, académica, RH ou escrita de alunos
+
+4. Portaria Digital:
+   - deixou de depender da permissão genérica configuracoes.ver
+   - agora usa permissões próprias de portaria
+   - validação AJAX de crachá exige portaria.validar_acesso
+
+5. Alunos / Estudantes:
+   - Guarda pode abrir a listagem e consultar ficha do aluno
+   - interface entra em modo consulta/read-only
+   - botões de registar, importar, editar, remover, documentos, cartões, portal e WhatsApp são ocultados ou bloqueados para Guarda
+   - endpoints sensíveis de backend também bloqueiam Guarda
+
+6. Navegação:
+   - Guarda entra directamente na Portaria quando não tem acesso ao dashboard
+   - menu apresenta bloco Portaria dedicado
+   - menu apresenta consulta de Alunos sem módulos de edição
+   - bottom navigation mobile/tablet inclui Portaria quando permitida
+
+Blindagens
+- Não altera base de dados de alunos, pagamentos, notas, pautas, boletins ou fórmulas.
+- Não altera cálculos financeiros.
+- Não altera regras académicas.
+- Não concede manage_options ao Guarda.
+- Não permite alunos.criar, alunos.editar ou alunos.apagar ao Guarda.
+
+Validação
+- PHP lint: 203 ficheiros sem erros de sintaxe.
+- node --check assets/mobile-tablet-ux.js: OK.
+- Smoke test role Guarda / Portaria: 43/43 checks OK.

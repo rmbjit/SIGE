@@ -1,0 +1,9 @@
+v12.15.24 - Pesquisa Global: correccao do erro de comunicacao e blindagem
+
+- Corrige o erro de comunicacao na pesquisa global.
+- Causa: o grupo Despesas usava a coluna data, mas sige_fin_despesas tem data_despesa. O erro SQL corrompia o JSON e o cliente caia em falha.
+- Correccao: coluna data_despesa; pesquisa de despesas tambem por referencia.
+- Blindagem: handler silencia erros de BD durante as consultas (so leitura) e cada grupo corre em try/catch; estado do wpdb restaurado no fim.
+- Cliente mostra o codigo HTTP em caso de falha.
+- Sem alteracao de formulas, valores ou regras financeiras. Drift e gates inalterados.
+- Base: v12.15.23.

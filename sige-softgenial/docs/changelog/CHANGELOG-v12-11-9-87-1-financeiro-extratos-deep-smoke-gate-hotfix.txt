@@ -1,0 +1,51 @@
+SIGE SoftGenial v12.11.9.87.1 - Financeiro Extractos Deep Smoke Gate Hotfix
+Data: 2026-06-10
+
+Contexto
+- Smoke test profundo adicional antes da Fase 2 do módulo Financeiro > Extractos/Caixa.
+- Build base validada: v12.11.9.87 - Financeiro Extractos PRO UX Hardening.
+
+Problemas encontrados no smoke profundo
+1. Fatal error possível em ambientes PHP sem extensão mbstring.
+   - Local: admin/finance/financeiro-extratos.php, função sige_extracto_ciclo_label().
+   - Cenário: relatório mensal/anual ou segmentado por ciclo com movimentos carregados.
+   - Causa: chamadas directas a mb_strtolower().
+   - Correcção: helper sige_extracto_safe_lower() com fallback para strtolower() e regex de ciclo com flag /iu.
+
+2. Notice/warning possível em schemas/fixtures onde despesa não expõe categoria.
+   - Local: lista visual de despesas do dia.
+   - Correcção: fallback seguro para descricao e categoria, exibindo “Despesa” quando a categoria não existir.
+
+3. Notice/warning possível em schemas/fixtures onde pagamento não expõe recibo_numero.
+   - Local: checkbox de recibo unificado e coluna Recibo.
+   - Correcção: fallback seguro para #ID formatado no aria-label e “ - ” na coluna visual.
+
+Garantias
+- Sem alteração de regras financeiras.
+- Sem alteração de cálculos.
+- Sem alteração de permissões.
+- Sem alteração de recibos, estornos ou fecho/reabertura de caixa.
+- Sem alteração de estrutura da base de dados.
+- A build apenas blinda renderização, compatibilidade PHP e estados de schema legado.
+
+Validações executadas
+- Integridade do ZIP original v12.11.9.87: OK.
+- PHP lint completo: 242 ficheiros PHP, OK.
+- Smoke estático PRO UX Hardening actualizado: OK.
+- Deep Smoke Gate estático v12.11.9.87.1: OK.
+- Render smoke com stubs WordPress/DB: 10 cenários, OK.
+- JS syntax check dos scripts renderizados com Node --check: OK.
+- CSS brace balance em assets/style.css e style inline do módulo: OK.
+- ZIP final testado com unzip -t: OK.
+
+Cenários de render smoke cobertos
+- daily-empty
+- student-empty
+- student-loaded
+- student-search
+- density-invalid
+- daily-closed
+- daily-monthly-creche
+- post-close
+- post-reopen
+- post-refund

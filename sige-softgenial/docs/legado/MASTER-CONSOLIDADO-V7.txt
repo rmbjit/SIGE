@@ -1,0 +1,19 @@
+SIGE SoftGenial 12.9.9.8 - MASTER CONSOLIDADO V7
+
+Consolida:
+- Performance Financeiro V7.1
+- Segurança Produção V7.2
+- Scroll/Contexto V7.2.3
+- Controlo de Notificações V7.2.4
+- Escopo Professor V7.2.5
+- Fix Professor Edição de Notas V7.2.6
+
+Base principal:
+- sige-softgenial-12-9-9-7-v7-2-6-fix-professor-edicao-notas.zip
+
+Reincorporação:
+- ficheiros financeiros/notificações do v7.2.4
+
+Validação aplicada:
+- presença de marcadores das funcionalidades consolidadas;
+- integridade ZIP.

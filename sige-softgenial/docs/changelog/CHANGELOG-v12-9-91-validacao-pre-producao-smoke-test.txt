@@ -1,0 +1,80 @@
+SIGE SoftGenial v12.9.91 - Validação Pré-Produção e Smoke Test Guiado
+
+Base validada:
+- v12.9.90 - Assistente de Implantação e Checklist por Escola, validada em ambiente de teste.
+
+Objectivo:
+- Criar uma camada final de controlo antes de instalar versões em escolas reais, mantendo a lógica operacional intacta e reforçando padrão anti-regressão.
+
+Principais alterações:
+
+1. Nova camada de validação pré-produção
+   - Novo ficheiro: includes/settings/class-sige-settings-preproduction.php
+   - Modo apenas leitura.
+   - Não grava, não migra, não remove e não altera regras operacionais.
+
+2. Novo separador no Centro de Configuração
+   - Separador técnico: "Pré-produção".
+   - Mostra score de prontidão, portões aprovados, bloqueios duros e avisos pendentes.
+
+3. Portões de prontidão
+   - Versionamento consistente entre SIGE_VERSION e BUILD.json.
+   - Centro de Configuração carregado.
+   - Acesso técnico controlado.
+   - Itens obrigatórios da implantação.
+   - Maturidade geral da configuração.
+   - Dados mínimos de alunos/turmas.
+   - Base financeira mínima.
+   - Comunicação operacional.
+
+4. Smoke test guiado
+   - Login e painel principal.
+   - Centro de Configuração.
+   - Alunos e turmas.
+   - Lançamento financeiro de teste.
+   - Pagamento e recibo de teste.
+   - Documento escolar de teste.
+   - WhatsApp em fila segura.
+   - Email/SMTP.
+   - Auditoria.
+   - Cache e sessão.
+
+5. Registo de riscos pré-produção
+   - Identifica bloqueios, avisos e riscos antes de go-live.
+   - Apresenta mitigação sem executar acções automáticas.
+
+6. Política de go-live controlado
+   - Backup antes da promoção.
+   - Instalar exactamente a versão validada no teste.
+   - Executar smoke test guiado.
+   - Validar configurações críticas.
+   - Congelar mudanças sensíveis.
+   - Confirmar pós-instalação.
+
+7. Relatório seguro para suporte
+   - Preparado para impressão pelo navegador.
+   - Não mostra tokens, senhas, SMTP, Hub/licença ou segredos em claro.
+
+Garantias de não regressão:
+- Não altera cálculos financeiros.
+- Não altera regras académicas.
+- Não altera WhatsApp/Z-API.
+- Não altera SMTP.
+- Não altera Hub/licença.
+- Não altera permissões.
+- Não altera pautas, boletins, recibos ou documentos finais.
+- Não altera schema da base de dados.
+- Não cria tabelas.
+- Não remove campos legados.
+- Não sincroniza automaticamente.
+
+Como testar:
+1. Instalar em ambiente de teste.
+2. Abrir: Sistema Técnico → Centro de Configuração → Pré-produção.
+3. Confirmar portões de prontidão.
+4. Executar smoke test guiado manualmente.
+5. Confirmar que relatório seguro imprime sem segredos.
+6. Confirmar que financeiro, académico, WhatsApp, permissões e documentos continuam a funcionar como antes.
+
+Próxima etapa recomendada:
+- v12.9.92 - Relatório de Implantação Exportável e Pacote de Go-Live, ainda em modo seguro, para apoiar instalação em escolas reais com checklist assinável/arquivável.

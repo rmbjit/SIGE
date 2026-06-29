@@ -1,0 +1,36 @@
+SIGE SoftGenial v12.11.9.129 - AUDITORIA DE DESIGN (estatisticas-demograficas)
+=============================================================================
+
+Estatísticas demográficas dos alunos (960 linhas).
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 8 pesos, 850 (14x), 700 (12x).
+- RAIOS: 8 valores. SOMBRAS: 13. CORES: 93 hex.
+
+CORRECÇÃO (bloco <style> 237-651 + zona HTML; template impressão e Chart.js preservados)
+1. Hierarquia de 3 níveis: 8 pesos -> 500/600/700.
+2. Raios da escala: 8 -> 4. Sombras da escala: 13 -> 6.
+3. 113 cores migradas (CSS + zona HTML inline). Inclui a LÓGICA PHP de
+   cor por PERCENTAGEM (barras de distribuição: verde abaixo do limiar,
+   laranja/vermelho acima) migrada para tokens semânticos preservando o
+   significado. PRESERVADOS: template de impressão (<!DOCTYPE> com <style>
+   próprio, 17 hex) e cores dos gráficos Chart.js (cM/cF/cI =
+   masculino/feminino/indefinido, linhas de tendência, 8 hex em JS).
+
+PROVA VISUAL
+- estatisticas-demograficas-antes-depois.png: KPIs e distribuição. Cor
+  por percentagem preservada (verde/laranja/vermelho); valores destacam-se,
+  rótulos recuam.
+
+GATES
+- smoke-regression-pack: 228 -> 232 invariantes.
+- estatisticas-demograficas adicionado aos ecrãs auditados.
+- Baseline de mágicos: 6539 -> 6426 (-113).
+- Baseline de tipografia: 220 -> 203 (-17).
+- 12 gates verdes.
+
+MARCO: 19 ecrãs auditados. Desde o início: mágicos 9925 -> 6426; pesos
+não-canónicos 665 -> 203.
+
+PRÓXIMO
+- abertura (16 pesos), financeiro-pagamentos (16), permissions-ui (15)...

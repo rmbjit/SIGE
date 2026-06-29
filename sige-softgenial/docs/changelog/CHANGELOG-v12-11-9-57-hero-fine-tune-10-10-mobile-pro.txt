@@ -1,0 +1,24 @@
+SIGE SoftGenial v12.11.9.57 - Hero Fine-Tune 10/10 Mobile PRO
+
+Área: Académico / Alunos e Matrículas / UX Mobile
+
+Objectivo:
+- Fazer o refino final do mobile redesign para atingir o padrão 10/10, afastando a ilustração do hero do CTA principal e harmonizando a grelha dos cards.
+
+Intervenções realizadas:
+- Recuo adicional do bloco de texto do hero no mobile.
+- Redução e reposicionamento da ilustração da escola no hero para evitar proximidade visual com o botão “Registar Aluno”.
+- Ilustração com opacidade e sombra mais suaves.
+- Pequeno ajuste da altura útil do hero para melhor respiração visual.
+- Refinamento da grelha dos cards mobile: foto, nome, meta, badge de estado e linha de acções.
+- Botões dos cards com altura e raios mais consistentes.
+
+Blindagem:
+- Sem alterações de base de dados.
+- Sem alterações em regras académicas/financeiras.
+- Sem alterações na importação, Ficha 360º ou Gestão Avançada de Encarregados.
+
+Validação esperada:
+- Abrir Alunos e Matrículas em telemóvel.
+- Confirmar mais espaço entre ilustração do hero e botão principal.
+- Confirmar cards mobile mais coesos e alinhados.

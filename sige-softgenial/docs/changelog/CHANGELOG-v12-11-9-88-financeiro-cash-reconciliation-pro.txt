@@ -1,0 +1,75 @@
+SIGE SoftGenial v12.11.9.88 - Financeiro Cash Reconciliation PRO
+Data: 10 de junho de 2026
+
+Âmbito
+- Módulo: admin/finance/financeiro-extratos.php
+- Fase 2 do plano PRO: reconciliação e fecho de caixa profissional.
+- Base: v12.11.9.87.1 - Deep Smoke Gate Hotfix.
+
+Principais melhorias
+1. Assistente de fecho de caixa
+- Substitui o botão simples de fecho por um fluxo guiado em três passos:
+  1) Conferir métodos de pagamento;
+  2) Validar estornos/despesas;
+  3) Fechar com evidência auditável.
+
+2. Reconciliação sistema vs contado
+- O utilizador passa a informar o valor contado/confirmado por método de pagamento.
+- O sistema calcula automaticamente:
+  - total bruto esperado no sistema;
+  - total contado;
+  - diferença/divergência;
+  - saldo estimado após estornos e despesas.
+
+3. Observação obrigatória em caso de divergência
+- Se a diferença entre sistema e contado for diferente de 0,00, o sistema exige observação mínima antes de fechar.
+- A validação existe no JavaScript e também no servidor.
+
+4. Snapshot auditável compatível
+- A fotografia financeira canónica continua em total_por_metodo.
+- A reconciliação PRO é gravada em observacoes com marcador interno [SIGE_RECON_V1].
+- Não há alteração de estrutura de base de dados.
+- Não há migração obrigatória.
+
+5. Reabertura preserva histórico
+- A reabertura deixa de substituir simplesmente as observações do fecho.
+- O módulo preserva a observação/snapshot anterior e acrescenta a nota de reabertura.
+
+6. Resumo de fecho PRO
+- O resumo de caixa fechado mostra:
+  - sistema bruto;
+  - total contado;
+  - diferença;
+  - saldo estimado;
+  - comparação por método;
+  - observações auditáveis.
+
+7. Termo de fecho imprimível
+- Adicionado botão “Imprimir termo” no resumo do fecho.
+- Abre uma vista limpa para impressão/PDF pelo navegador.
+
+8. Histórico de fechos da data
+- Adicionada secção com histórico de registos de fecho/reabertura da data seleccionada.
+- Compatível com instalações com ou sem user_id_turno.
+
+Validações e segurança
+- Validação de nonce preservada.
+- Permissões existentes preservadas.
+- Fecho continua restrito a perfis já autorizados.
+- Dados monetários vindos do POST são normalizados com parser seguro.
+- Payload é filtrado por colunas existentes antes de gravar, evitando falhas em schemas legados.
+
+O que NÃO foi alterado
+- Cálculos financeiros canónicos.
+- Regras de estorno.
+- Geração de recibos.
+- Exportação Excel existente.
+- Estrutura da base de dados.
+- Tabelas financeiras existentes.
+- Permissões base do módulo.
+
+Smoke test específico
+- tools/smoke-financeiro-extratos-cash-reconciliation-v12-11-9-88.php
+
+Resultado esperado
+- Fecho de caixa mais seguro, orientado, auditável e profissional, com menor risco de erro humano.

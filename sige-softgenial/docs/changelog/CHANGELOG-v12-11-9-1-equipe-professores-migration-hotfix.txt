@@ -1,0 +1,14 @@
+SIGE SoftGenial v12.11.9.1 - Equipa e Professores Migration Hotfix PRO (TEST)
+
+Contexto
+- Corrige fatal error introduzido na v12.11.9 durante a migração de índices do módulo Equipa e Professores.
+
+Correcção
+- Adicionado o método SIGE_Migration::add_unique_index_if_no_duplicates().
+- A criação do índice uniq_prof_escola_email em sige_professores passa a ser segura e conservadora.
+- Se existirem duplicados por escola/email, o sistema não força limpeza nem bloqueia o WordPress; regista apenas pendência interna para limpeza futura.
+- Não altera regras financeiras, académicas, permissões funcionais nem dados existentes.
+
+Validação
+- Syntax check PHP obrigatório em todos os ficheiros.
+- Smoke test estático do módulo Equipa e Professores deve continuar OK.

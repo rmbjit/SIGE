@@ -1,0 +1,57 @@
+CHANGELOG - SIGE SoftGenial v12.12.63
+Fase 4 (CSP e front-end seguro) - incremento 2
+CSP Report-Only no shell admin e lote de onclick admin
+Data: 2026-06-23
+
+RESUMO
+Activacao do CSP Report-Only no shell admin e conversao de um grande lote de
+onclick das vistas admin para o despachante data-sige-act. Passo decisivo para o
+enforce do shell admin, feito com seguranca.
+
+CSP REPORT-ONLY NO SHELL ADMIN
+- Como o shell e toda a interface e nao e testavel em browser deste ambiente,
+  seguiu-se o caminho profissional para uma superficie grande: Report-Only primeiro.
+- Via admin_init e so nas paginas page=sige-app (antes do output, protegido por
+  headers_sent e nao-ajax), envia-se um cabecalho
+  Content-Security-Policy-Report-Only com apenas script-src self mais nonce por
+  pedido.
+- Report-Only NAO bloqueia nada: a consola do browser passa a reportar as violacoes
+  reais (handlers inline e scripts sem nonce) que faltam tratar antes do enforce.
+- So script-src e restringido; os restantes tipos de recurso ficam sem restricao,
+  para a consola reportar apenas o que interessa.
+
+FICHEIRO CANONICO
+- Os 2 onclick do finance-core estao em sige_desp_print_page, uma pagina standalone
+  de impressao com DOCTYPE proprio, fora do shell admin, pelo que nao caem sob este
+  CSP nem foram tocados.
+
+CONVERSAO DE ONCLICK (21, vistas admin)
+- 18 com contratos ou wrappers ja existentes: window.print via sigeImprimirPagina;
+  activarTab por data-sige-args; filtrarTabela com data-sige-self; resetSenha e
+  gerirHorario por inteiro; anularLote sem argumentos; carregarHistorico com
+  booleano; fecho de popup backdrop via sigeFecharPopupBackdrop.
+- 3 com dois wrappers novos: sigeAlternarDisplay (alternar a visibilidade por id,
+  em dois toggles de display) e sigeMarcarDownloadSemTransicao.
+- Comportamento identico.
+
+CATRACA
+- check-inline-frontend: maximo de onclick de 66 para 45 (sem folga); passa a
+  exigir o CSP Report-Only com script-src nonce no shell admin.
+- style mantem-se em 2051; blocos script mantem-se em 7.
+
+PROXIMOS PASSOS (reportados pela consola via Report-Only)
+- Onclick restantes das vistas admin: window.open(this.href), this.form, e os
+  gerados dentro de blocos script.
+- Depois disso, e dos estilos inline para o style-src, passar o shell admin a
+  enforce.
+
+INVARIANTES
+- Superficie de accao 199 (enforce 33), vistas 60, opcoes 132, dependencias
+  externas 9. Sem alteracao de esquema. Calculo financeiro byte-identico.
+- Corredor 99. Release gate verde a partir de pasta limpa.
+- Rediagnostico adversarial: Zero P0 e Zero P1.
+
+VERSAO
+- Cinco fontes sincronizadas em 12.12.63 (cabecalho do plugin, SIGE_VERSION,
+  BUILD.json, SIGE_GOV_VERSION, base da superficie de inventario).
+- Zero travessoes em todo o codigo, documentacao e changelog.

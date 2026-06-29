@@ -1,0 +1,36 @@
+SIGE SoftGenial v12.11.9.125 - AUDITORIA DE DESIGN (jardim_diario)
+=================================================================
+
+Diário/agenda do jardim de infância (1098 linhas). Estrutura idêntica ao
+jardim_saude (partilham o módulo).
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 8 pesos, 700 (16x), 850 (12x), 900 (7x).
+- RAIOS: 12 valores. SOMBRAS: 23. CORES: 117 hex.
+
+CORRECÇÃO (bloco <style> 172-546 + zona HTML inline; JS preservado)
+1. Hierarquia de 3 níveis: 8 pesos -> 500/600/700.
+2. Raios da escala: 12 -> 4. Sombras da escala: 23 -> 6.
+3. 179 cores migradas (CSS + zona HTML + mapa de avaliação). Inclui o
+   MAPA PHP de cor por AVALIAÇÃO (MB verde, B azul, S laranja, NS
+   vermelho - escala de classificação) migrado para tokens semânticos
+   preservando o significado. Tema dinâmico (--sg-theme-soft) e cores em
+   JS preservados. ZERO hex de estilo restantes (só tema + JS).
+
+PROVA VISUAL
+- jardim-diario-antes-depois.png: registos diários com avaliação. Escala
+  MB/S/NS preservada (verde/laranja/vermelho); atividade e avaliação
+  destacam-se, observação recua.
+
+GATES
+- smoke-regression-pack: 212 -> 216 invariantes.
+- jardim_diario adicionado aos ecrãs auditados.
+- Baseline de mágicos: 7017 -> 6838 (-179). Abaixo de 7000!
+- Baseline de tipografia: 293 -> 274 (-19).
+- 12 gates verdes.
+
+MARCO: 15 ecrãs auditados. Desde o início: mágicos 9925 -> 6838; pesos
+não-canónicos 665 -> 274.
+
+PRÓXIMO
+- dashboard (18 pesos), pautas (18), acta (18)...

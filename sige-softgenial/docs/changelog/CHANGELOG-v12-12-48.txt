@@ -1,0 +1,92 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.48
+Data: 2026-06-23
+Titulo: Fase 4 incr 2 vaga 3 - Estilos financeiros para utilitarios
+Tipo: Incremento de funcionalidade (vaga de migracao de inline)
+Base: 12.12.47
+Canal: validated-feature
+
+================================================================
+CONTEXTO
+================================================================
+Terceira vaga do incremento 2 da Fase 4 (CSP e front-end seguro). O incremento 2
+migra o inline por vagas, area a area, sob uma catraca que garante que o inline so
+desce. A vaga 1 (v12.12.46) tratou os onclick da area financeira; a vaga 2
+(v12.12.47) tratou os estilos academicos. Esta vaga trata os estilos inline da area
+financeira. Nao muda o comportamento visual nem as regras financeiras.
+
+================================================================
+MIGRACAO DAS VISTAS FINANCEIRAS (32 trocas em 7 ficheiros)
+================================================================
+EDIT  admin/finance/financeiro-config.php                (12 trocas, 8 saltadas por ter class)
+EDIT  admin/finance/financeiro-devedores-view.php         (7)
+EDIT  admin/finance/financeiro-gerador.php                (1)
+EDIT  admin/finance/financeiro-pagamentos.php             (4, 3 saltadas por ter class)
+EDIT  admin/finance/financeiro-planos-view.php            (3)
+EDIT  admin/finance/financeiro-relatorio-mensal-view.php  (4)
+EDIT  admin/finance/mpesa-view.php                        (1)
+      - Reutiliza o assets/sige-utilities.css introduzido na vaga 2. So foram
+        migrados atributos style 100 por cento compostos por declaracoes do mapa
+        seguro, estaticas, sem PHP interpolado e sem class ja existente no elemento.
+        Exemplos:
+          <div style="flex:1;">                 -> <div class="sige-u-flex-1">
+          <th style="text-align: right;">        -> <th class="sige-u-tar">
+          <td style="text-align:right;font-weight:700;"> -> <td class="sige-u-tar sige-u-fw7">
+          <div style="overflow-x:auto;">         -> <div class="sige-u-oxa">
+      - Os casos com class ja existente continuam por migrar, por desenho. Outros
+        atributos do elemento sao preservados.
+
+================================================================
+CATRACA, GATES RESPONSIVOS E SMOKE
+================================================================
+EDIT  tools/check-inline-frontend.php
+      - SIGE_INLINE_STYLE_MAX de 2142 para 2110 (trava a reducao desta vaga).
+        onclick mantem-se em 250 e blocos script em 81.
+EDIT  tools/smoke-regression-pack.php
+      - A verificacao "tabelas do financeiro-pagamentos protegidas" passa a contar
+        tanto o overflow-x auto inline como a classe sige-u-oxa. Sem este ajuste,
+        mover a guarda de scroll para utilitario (uma das 32 trocas) seria lido como
+        regressao. A deteccao de tabelas genuinamente desprotegidas mantem-se.
+EDIT  tools/smoke-inline-frontend.php
+      - Estendido as vistas financeiras (usos de utilitarios e class duplicada). A
+        verificacao de residuo foi retirada por ser redundante com a catraca e
+        produzir falsos positivos nos casos legitimamente saltados (com class).
+
+Nota: o tools/diag-responsivo.php ja reconhecia a classe sige-u-oxa desde a vaga 2
+(v12.12.47), pelo que nao precisou de alteracao nesta vaga.
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- Nao toca em regras de calculo financeiro nem em ficheiros canonicos.
+- Superficie de accao: 199 itens (enforce 33). Vistas: 60. Opcoes: 132.
+- Dependencias externas: 9 (inalteradas). Sem alteracao de esquema.
+- Calculo financeiro byte-identico. Aspecto visual identico.
+- Versao sincronizada nas cinco fontes. Zero travessoes. Ficheiros de codigo em LF.
+
+================================================================
+VALIDACAO
+================================================================
+- php tools/check-inline-frontend.php  -> OK (style 2110 de 2110, sem folga)
+- php tools/smoke-inline-frontend.php     -> OK
+- php tools/smoke-regression-pack.php       -> OK (306 invariantes)
+- php tools/diag-responsivo.php              -> OK (0 antipadroes)
+- php tools/check-governance-docs.php         -> OK (21 documentos v12.12.48)
+- php tools/smoke-release-gate.php              -> verde a partir de pasta limpa
+- gates de pagamentos, cofre, Fase 1 e Fase 4 incr 1 -> sem regressao
+- extractor de superficie / opcoes / hosts     -> 199 / 132 / 9
+- php -l nas 7 vistas + gate/smokes; node -c sige-ui.js -> limpo
+
+================================================================
+INSTALACAO E REVERSAO
+================================================================
+- Instalacao: backup, desactivar, substituir a pasta sige-softgenial, reactivar.
+- Reversao: reinstalar a versao anterior. Sem alteracao de esquema; reversao directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Vagas seguintes do incremento 2: admin-shell e restantes areas de estilo (jardim,
+  recursos humanos, sistema, includes), depois os onclick remanescentes, depois os
+  blocos script inline, e por fim o CSP em enforcement (nonce por pedido e flip do
+  cabecalho).

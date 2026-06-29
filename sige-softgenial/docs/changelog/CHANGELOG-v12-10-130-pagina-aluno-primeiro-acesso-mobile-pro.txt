@@ -1,0 +1,52 @@
+SIGE SoftGenial v12.10.130 - Página do Aluno: Primeiro Acesso Mobile PRO
+
+Base
+- Construído por cima da v12.10.129 - Página do Aluno: Primeiro Acesso e Associação Segura.
+
+Problemas corrigidos
+1. Primeiro acesso pouco visível em mobile
+- Antes, quando havia senha provisória, o sistema conduzia para a secção Alterar senha, mas a mensagem podia ficar baixa na página e mal formatada em telas pequenas.
+- Em mobile, a área ficava estreita, com o aviso quase invisível e com leitura desconfortável.
+
+2. Ícones dos cards/KPIs desalinhados
+- Alguns ícones dos cartões apareciam encostados ao canto do quadrado em vez de centralizados.
+
+Melhorias aplicadas
+
+1. Ecrã obrigatório de primeiro acesso
+- Quando o aluno/encarregado tem senha provisória, a Página do Aluno deixa de mostrar o ambiente normal.
+- O utilizador vê apenas um ecrã central para criar a sua senha pessoal.
+- Só depois de alterar a senha é que entra no ambiente normal da Página do Aluno.
+- Isto evita que o utilizador ignore a troca de senha ou não encontre o formulário.
+
+2. Experiência mobile PRO
+- O formulário de primeiro acesso foi optimizado para telemóvel.
+- Campos aparecem em coluna, com bom espaçamento e leitura clara.
+- O aviso fica no topo do ecrã, dentro de um card grande e visível.
+- O botão principal fica em largura total.
+
+3. Segurança mantida
+- O formulário continua a usar admin-post.php?action=sige_aluno_portal_change_password.
+- Mantém nonce.
+- Mantém senha actual obrigatória.
+- Mantém política de senha.
+- Mantém limite de tentativas.
+- Após sucesso, limpa os marcadores de senha provisória e abre o portal normal.
+
+4. Ícones centralizados
+- Ícones dos KPIs/cards foram reforçados com display flex, alinhamento ao centro, margin auto e remoção de posicionamentos herdados.
+- Também foram reforçados ícones de lock/primeiro acesso.
+
+Mantido
+- Associação segura do aluno/escola.
+- Permissões de portal.
+- Reposição de senha pela secretaria.
+- Modo leitura.
+- Bloqueio de notas/boletins por dívida.
+- Mensagens claras de senha.
+- Menu lateral do aluno.
+- Recibos filtráveis.
+- Validação de propriedade dos recibos.
+- Sem alteração de base de dados académica/financeira.
+- Sem alteração de pagamentos.
+- Sem alteração de notas, Pauta, DEC, ACTA ou boletins.

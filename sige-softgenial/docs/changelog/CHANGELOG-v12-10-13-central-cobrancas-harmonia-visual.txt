@@ -1,0 +1,30 @@
+SIGE SoftGenial v12.10.13 - Central de Cobranças: harmonia visual com Painel Principal
+
+Objectivo
+- Alinhar a Central de Cobranças ao padrão visual validado no Painel Principal e no Financeiro Produto PRO.
+- Manter progressão sem regressão, sem alterar fórmulas, regras financeiras ou base de dados.
+
+Alterações visuais
+- Novo hero claro e amplo para a Central de Cobranças, seguindo a linguagem do Painel Principal.
+- Cabeçalho genérico ocultado nesta página para evitar duplicação visual.
+- KPIs reorganizados com cartões arredondados, sombra suave, melhor hierarquia e linguagem mais limpa.
+- Filtros, selecção rápida, resumo operacional, tabela e rodapé de envio harmonizados com o padrão aprovado.
+- Melhor responsividade em tablet e telemóvel, mantendo rolagem controlada nas tabelas largas.
+
+Confirmação de envio
+- O envio de cobrança deixa de depender de confirmação nativa do navegador.
+- Foi criado pop-up real, centrado no ecrã, com overlay e bloqueio de scroll do fundo.
+- O pop-up mostra alunos seleccionados, total em aberto, canais e casos sem contacto antes da submissão.
+
+Garantias de não regressão
+- Sem alteração de fórmulas financeiras.
+- Sem alteração de mensalidades, multas, descontos, pagamentos, cobranças, recibos ou estornos.
+- Sem alteração de notas, pautas, DEC, boletins, actas ou regras académicas.
+- Sem migrações ou alterações de schema da base de dados.
+
+Ficheiros alterados
+- sige-softgenial.php
+- BUILD.json
+- assets/style.css
+- includes/admin-shell.php
+- admin/finance/financeiro-devedores-view.php

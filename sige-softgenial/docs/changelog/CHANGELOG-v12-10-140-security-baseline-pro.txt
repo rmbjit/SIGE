@@ -1,0 +1,56 @@
+SIGE SoftGenial v12.10.140 - Security Baseline PRO
+Data: 2026-05-22
+
+Base: v12.10.139 - UI PRO: Modais e HTML Oculto Blindados
+Escopo: hardening transversal de segurança, sem alteração das regras financeiras/académicas.
+
+Medidas aplicadas:
+1. Security Baseline PRO
+   - Novo ficheiro: includes/security-baseline-pro.php
+   - Segredos únicos por instalação para cron, Hub instant refresh e webhook WhatsApp.
+   - Helpers HMAC com timestamp, replay protection e rate limit.
+   - Headers de segurança globais em frontend/admin.
+   - Validação de upload de backup JSON.
+   - Validação/bloqueio de updates por origem e checksum SHA-256.
+
+2. Cron WhatsApp
+   - Removida a chave cron hardcoded antiga.
+   - Chave agora é gerada por instalação e guardada em wp_options.
+   - Aceita X-SIGE-Cron-Key / Authorization: Bearer para reduzir uso de query string.
+   - Chave antiga hardcoded já não é aceite como segredo válido.
+
+3. Endpoints públicos REST
+   - /sige/v1/hub/instant-refresh protegido por HMAC/segredo.
+   - /sige/v1/whatsapp-webhook protegido por HMAC/segredo.
+   - Rate limit e bloqueio de pedidos sem assinatura/segredo.
+
+4. Reset de senha
+   - Removido envio/devolução de senhas em texto claro.
+   - Reset passa a enviar link único de redefinição.
+   - UI RH deixa de copiar senha para clipboard.
+
+5. Portal/contas de alunos
+   - Credenciais deixam de incluir senha em texto claro.
+   - Envio ao encarregado passa a usar link seguro de definição de senha.
+   - JSON de reset de aluno deixa de devolver a senha.
+
+6. Segredos e criptografia
+   - sige_encrypt_token/sige_decrypt_token migrados para encriptação autenticada.
+   - Formato novo: sige2: com sodium secretbox; fallback AES-256-GCM.
+   - Retrocompatibilidade com tokens CBC antigos, sem devolver valor original em falha.
+
+7. Recibos públicos
+   - Tokens passam a gravar timestamp de emissão.
+   - Expiração configurável por padrão de 30 dias.
+   - Função de revogação por recibo adicionada.
+   - Rate limit no acesso público ao recibo.
+
+8. Hub/licenciamento/updates
+   - Chamadas ao Hub passam a incluir Authorization + assinatura HMAC.
+   - Update checker deixa de enviar api_key em query string.
+   - Bloqueio de updates automáticos sem host autorizado/checksum SHA-256 quando o filtro de segurança está activo.
+
+Validação técnica:
+- Todos os ficheiros PHP passaram em php -l.
+- ZIP final testado com unzip -t.
+- BUILD.json e header do plugin actualizados para 12.10.140.

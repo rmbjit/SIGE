@@ -1,0 +1,34 @@
+DEPLOY - SIGE SoftGenial v12.12.12 (MFA de Operacao: reposicao automatica)
+Base: v12.12.11. Sem migracao de base de dados. Sem alteracao de regras de calculo.
+
+O QUE MUDA
+- Depois de confirmar a identidade no step-up (TOTP ou email), a operacao critica que foi bloqueada e re-executada automaticamente uma unica vez, com tenant e permissoes re-validados. Acaba a repeticao manual.
+- Abrange as 6 operacoes de servico: cancelar, isentar, reactivar lancamento; bloquear, desbloquear mes; estornar pagamento (e anular recibo).
+- Configuracao de pagamentos (e-Mola, M-Pesa) e caixa (reabrir, fechar) continuam a exigir repeticao manual, por desenho.
+- Desligado por defeito. Nada muda para quem nao ligar.
+
+PASSOS
+1. Backup do plugin e da base de dados (rotina habitual).
+2. Substituir a pasta do plugin pela desta versao (ou actualizar via ZIP). Os 7 ficheiros canonicos da raiz mantem-se.
+3. Confirmar a versao: cabecalho do plugin, SIGE_VERSION e BUILD.json em 12.12.12.
+4. Sem passos de base de dados.
+
+ACTIVACAO
+1. O step-up continua a ligar-se como antes (option sige_mfa_stepup = on; perfis sige_director, sige_admin_ti). O TOTP por utilizador (v12.12.11) e opcional.
+2. Para ligar a reposicao automatica: update_option('sige_mfa_autoreplay','on'). Por defeito esta off.
+3. A partir dai, ao confirmar a identidade numa operacao critica das 6, a operacao conclui-se sozinha; surge um aviso de operacao concluida.
+
+REVERSAO
+- Desligar a reposicao: update_option('sige_mfa_autoreplay','off') (volta a repeticao manual).
+- De emergencia: definir a constante SIGE_MFA_AUTOREPLAY_OFF (forca off, independentemente da opcao).
+- A repeticao manual funciona sempre, esteja a reposicao ligada ou nao.
+
+VERIFICACAO RAPIDA
+- Com o step-up e a reposicao ligados, iniciar uma operacao das 6 (por exemplo, estorno) pede a confirmacao. Apos confirmar, a operacao conclui-se automaticamente (aviso de operacao concluida), sem ter de repetir.
+- Repetir a operacao a mao apos a conclusao nao deve executar de novo (as operacoes tem guardas de estado: por exemplo, um pagamento ja estornado e recusado).
+- Uma operacao de config (e-Mola, M-Pesa) ou de caixa continua a exigir repeticao manual apos a confirmacao.
+- Com a reposicao off, o comportamento e o da v12.12.11 (confirmar e repetir a mao).
+
+NOTAS
+- A reposicao re-executa pelo mesmo metodo de servico, que re-valida tenant (escola) e permissoes; nao contorna verificacoes.
+- O descritor de reposicao e de uso unico e expira em 10 minutos.

@@ -1,0 +1,28 @@
+SIGE SoftGenial v12.11.9.33 - Portaria Digital com Harmonia Visual PRO
+Data: 04/06/2026
+Escopo: Operação Escolar / Portaria Digital / Visual Produto PRO
+
+Resumo
+- Módulo de Portaria Digital harmonizado visualmente com o Painel Principal / Dashboard V2 MJS-grade.
+- Intervenção limitada à camada visual e de experiência de utilização.
+- Regras de negócio, permissões, nonce, AJAX, validação do aluno, áudio e registo de acesso preservados.
+
+Ficheiros intervencionados
+- admin/system/portaria-view.php
+  • Novo hero no padrão Produto PRO.
+  • Cartão de leitura do cartão com scanner visualmente modernizado.
+  • Formulário manual integrado em cartão premium.
+  • Painel de resultado com fotografia, estado, turma, observação e estados visuais: aguardando, a verificar, autorizado e atenção.
+  • Responsividade melhorada para tablets e telemóveis.
+  • Fallback visual quando o leitor QR não carrega.
+
+- includes/admin-shell.php
+  • Portaria adicionada à lista de views com cabeçalho próprio, evitando duplicação com o cabeçalho genérico do App Shell.
+
+Não alterado
+- Handler AJAX sige_validar_acesso.
+- Tabelas e schema da base de dados.
+- Regras de status do aluno.
+- Registo de histórico em sige_acessos.
+- Permissões/matriz de acesso.
+- Áudios success.ogg e error.ogg.

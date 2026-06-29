@@ -1,0 +1,18 @@
+DEPLOY v12.12.5 - Security Kernel Corrective Runtime Audit
+
+Tipo: correctivo de seguranca/governacao.
+Schema: sem alteracao de schema.
+Risco: medio, porque reforca runtime do Security Kernel e muda storage de configuracoes M-Pesa/e-Mola para scoped por escola em contexto multi-escola.
+
+Validar em staging:
+1. Guardar configuracao M-Pesa.
+2. Guardar configuracao e-Mola.
+3. Confirmar que webhook URL inclui escola_id quando ha escola activa.
+4. Validar chamadas REST M-Pesa/e-Mola com token correcto.
+5. Validar Centro de Configuracao via wp_ajax:sige_settings_save.
+6. Validar comprovativo de despesa ?sige_desp_print.
+7. Confirmar que Shortcode Portal continua a renderizar.
+
+Rollback:
+- Repor v12.12.4 apenas se houver regressao operacional.
+- Em multi-escola, manter atencao aos novos options scoped por escola.

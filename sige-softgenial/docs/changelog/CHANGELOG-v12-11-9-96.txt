@@ -1,0 +1,51 @@
+SIGE SoftGenial v12.11.9.96
+============================
+
+Sprint UX-3 - financeiro-config e mpesa-view conformes; sigeUi.prompt no kit; auditor conta prompt nativos
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+DETALHE COMPLETO DO SPRINT UX-3
+===============================
+
+UX - MÓDULO 3: FINANCEIRO-CONFIG (26,2 -> 17,2; produção, cirurgia conservadora)
+- Os 3 rótulos BR reais ("no cadastro do aluno") canonizados para
+  "na ficha do aluno"; nada mais foi tocado num ecrã usado diariamente.
+- Descoberta documentada: 6 das 9 ocorrências AO90 eram contrato de
+  dados ('ativo' => valor para a coluna; name="ativo" do formulário):
+  intocáveis e agora EXCLUÍDAS pelo auditor v2.2 (chaves de array e
+  names de formulário não contam). O residual 17,2 = 142 inline de
+  layout congelado + 3 pontos de ruído da heurística de estado vazio
+  (a tabela de preços da creche é uma grelha de inputs, nunca vazia).
+
+UX - MÓDULO 4: MPESA-VIEW (34,4 -> 9,8; nunca deployado, conversão completa)
+- Por nunca ter ido a produção (deploys na lista pendente), este ecrã
+  recebeu o tratamento integral: 2 banners, 6 cartões (4 variantes,
+  acentos laranja/margens preservados), badge de canal e badges de
+  estado convertidos às classes do kit; rótulos intactos.
+- REJEITAR deixou de usar prompt() nativo: novo sigeUi.prompt do kit,
+  com título, a REFERÊNCIA da transacção no texto (data-ref no botão),
+  motivo obrigatório, botão vermelho "Rejeitar", Esc cancela.
+- 5 alerts viram toasts humanos; conciliação manual e rejeição ganham
+  toast de sucesso ("Pagamento registado; o recibo segue na fila
+  WhatsApp.") antes do reload suave.
+
+UX - KIT: sigeUi.prompt (NOVO COMPONENTE)
+- Pedido de texto canónico: input com placeholder, obrigatório opcional
+  (campo vazio fica vermelho e não fecha), Enter confirma, Esc/overlay
+  cancelam com null, foco gerido. Substitui o prompt() nativo em todo o
+  sistema daqui em diante.
+
+UX - INSTRUMENTO
+- Auditor v2.2: exclui chaves de array/names de formulário do AO90 e
+  passa a CONTAR prompt( nativos com peso de alert. O instrumento
+  denunciou de imediato os 2 prompts restantes do sistema (ambos em
+  turmas-view, já na fila). Recalibrações reportadas em separado do
+  progresso no PAINEL-UX.
+
+QUALIDADE - GATES
+- tools/smoke-regression-pack.php: 75 -> 81 invariantes.

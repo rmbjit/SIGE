@@ -1,0 +1,22 @@
+SIGE SoftGenial v12.10.83 - Auditoria Académica: Compliance Visual Integral
+
+Objectivo
+- Redesenhar visualmente o módulo &view=auditoria_notas com o mesmo rigor do Painel Principal / Dashboard V2 MJS-grade.
+- Manter a intervenção exclusivamente visual, sem alterar logs, filtros, exportação, queries, permissões, notas, aprovação, pautas, DEC, ACTA ou regras académicas.
+
+Ajustes aplicados
+- Removido o cabeçalho genérico do App Shell para esta view, garantindo header único.
+- Hero claro no padrão Produto PRO, com área Auditoria, título, subtítulo, botão Exportar CSV e painel lateral de estado.
+- KPIs de acções hoje, logins, tentativas falhadas e módulos dos últimos 30 dias redesenhados no padrão dos cartões do Painel Principal.
+- Filtros redesenhados como cartão claro, com campos arredondados, botão Filtrar e botão Limpar no padrão do sistema.
+- Tabs Tabela/Timeline alinhadas ao padrão visual dos botões/tabs validados.
+- Tabela de auditoria redesenhada com scroll controlado, cabeçalhos limpos, badges com ícones canónicos e detalhes em chips técnicos.
+- Timeline redesenhada com cartões leves, ícones canónicos e melhor leitura por dia.
+- Paginação harmonizada com o padrão Produto PRO.
+- Removidos emojis visuais principais, substituídos por ícones canónicos.
+
+Garantias
+- Sem alteração na criação, leitura ou exportação dos logs.
+- Sem alteração nos filtros, paginação, queries ou permissões.
+- Sem alteração em notas, aprovação, ACTA, pautas, DEC, pauta final, boletins ou regras académicas.
+- Sem alteração em pagamentos, multas, mensalidades ou base de dados financeira.

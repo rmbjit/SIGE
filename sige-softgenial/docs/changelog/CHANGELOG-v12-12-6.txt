@@ -1,0 +1,9 @@
+v12.12.6 - Security Kernel Query Runtime & Tenant Guard Closure
+
+- Fecha a segunda reverificacao adversarial da v12.12.5.
+- Adiciona prioridade antecipada formal `SIGE_SECURITY_KERNEL_EARLY_PRIORITY`.
+- Query handlers passam pelo kernel em `admin_init`, `parse_request` e `template_redirect`.
+- `sige_print` e `sige_portaria_camera` deixam de depender apenas de `template_redirect`.
+- `wp_ajax:sige_settings_save` passa a exigir tenant no Security Kernel.
+- `SIGE_Settings_Repository` bloqueia escrita `sige_config` sem escola resolvida.
+- Adicionados smokes/gates adversariais v12.12.6.

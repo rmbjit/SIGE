@@ -1,0 +1,39 @@
+SIGE SoftGenial v12.9.99 - Modo Escola Limpo + Modo Técnico SoftGenial
+
+Base:
+- Construído sobre a v12.9.98 - Pacote Piloto Final validada em ambiente de teste.
+
+Objectivo:
+- Preparar o Centro de Configuração para instalação em escolas reais com uma experiência limpa para a escola, sem expor linguagem técnica interna como saneamento, rollback, release candidate, go-live ou produção piloto.
+
+Alterações principais:
+1. Modo escola limpo por padrão
+   - O Centro de Configuração passa a abrir, por padrão, com linguagem orientada à escola.
+   - A escola vê apenas Configuração da Escola e Áreas protegidas.
+   - O cabeçalho deixa de mostrar anotações técnicas internas.
+   - A descrição passa a explicar dados institucionais, contactos, marca, documentos e protecção de configurações críticas.
+
+2. Modo técnico SoftGenial sob demanda
+   - Painéis técnicos continuam preservados para equipa autorizada.
+   - Para abrir a visão técnica, um utilizador autorizado pode acrescentar sgcp_mode=tech à URL do Centro de Configuração.
+   - No modo técnico, todos os separadores anteriores continuam disponíveis: responsabilidade, implantação, pré-produção, saneamento e diagnóstico.
+
+3. Separação de apresentação sem alteração operacional
+   - Nova camada: includes/settings/class-sige-settings-presentation.php.
+   - Apenas controla textos, badges, separadores visíveis e modo de apresentação.
+   - Não altera regras financeiras, académicas, WhatsApp, SMTP, Hub, permissões, documentos, recibos, pautas, boletins ou schema.
+
+4. Segurança e anti-regressão
+   - Modo técnico continua limitado a perfil técnico/core.
+   - Segredos continuam mascarados.
+   - Não há remoção, migração, sincronização automática nem alteração de cálculos.
+   - O modo escola reduz ruído e evita confusão comercial em escolas reais.
+
+Como abrir modo técnico:
+- Aceder ao Centro de Configuração e acrescentar &sgcp_mode=tech à URL.
+- Para voltar ao modo escola, usar o link apresentado no modo técnico ou remover o parâmetro sgcp_mode.
+
+Versionamento:
+- Header do plugin actualizado para 12.9.99.
+- SIGE_VERSION actualizado para 12.9.99.
+- BUILD.json actualizado para 12.9.99.

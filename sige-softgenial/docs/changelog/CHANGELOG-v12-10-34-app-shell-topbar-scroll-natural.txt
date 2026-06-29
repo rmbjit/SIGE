@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.10.34 - App Shell: Topbar com Scroll Natural
+
+Objectivo
+- Ajustar o comportamento do App Shell para que a barra superior da escola role juntamente com o conteúdo principal.
+
+Alterações
+- A sidebar continua fixa no ecrã.
+- O menu lateral mantém scroll independente.
+- O botão “Terminar sessão” continua sempre visível no fundo da sidebar.
+- A área principal mantém scroll próprio.
+- A barra superior com escola, ano lectivo e utilizador deixa de ficar fixa/sticky.
+- Mantida a experiência mobile/off-canvas.
+
+Garantias
+- Sem alteração de fórmulas.
+- Sem alteração de mensalidades, multas, descontos, pagamentos, cobranças, recibos, estornos ou base de dados.
+- Sem alteração de notas, pautas, DEC, boletins ou actas.
+- Intervenção restrita ao comportamento visual do App Shell.

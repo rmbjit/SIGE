@@ -1,0 +1,32 @@
+SIGE SoftGenial v12.10.114 - Jardim: Sono sem Minutos Incoerentes
+
+Base
+- Construído por cima da v12.10.113 - Jardim: Aplicar a Todos com Efeito Real.
+
+Problema corrigido
+- No Diário do Jardim, ao seleccionar Sono = Não dormiu, o campo Minutos de sono continuava visível.
+- Isso criava uma incoerência de experiência e podia induzir o educador a preencher minutos quando a criança não dormiu.
+
+Correções aplicadas
+- No painel Aplicar padrão a todos:
+  - se Sono = Não dormiu, o campo Minutos de sono desaparece;
+  - o valor dos minutos é limpo;
+  - se Sono = Dormiu, o campo volta a aparecer.
+- Nos cartões individuais dos alunos:
+  - se o educador marcar Não dormiu, o campo Minutos de sono desaparece;
+  - o valor dos minutos é limpo;
+  - se marcar Dormiu, o campo volta a aparecer.
+- Ao usar Aplicar a todos:
+  - se aplicar Sono = Não dormiu, todos os campos de minutos são limpos e escondidos;
+  - se aplicar Sono = Dormiu, os campos de minutos ficam disponíveis e podem receber o valor padrão.
+- A regra é aplicada também no carregamento inicial da página, respeitando registos já existentes.
+
+Garantias
+- Sem alterar handlers de gravação.
+- Sem alterar nomes dos campos POST.
+- Sem alterar regras de negócio.
+- Sem alterar cálculos MB/B/S/NS.
+- Sem alterar pagamentos, mensalidades, multas ou recibos.
+- Sem alterar notas, Pauta, DEC, ACTA, boletins ou regras académicas.
+- Sem alterar Permission Engine, perfis ou permissões.
+- Sem alterar base de dados.

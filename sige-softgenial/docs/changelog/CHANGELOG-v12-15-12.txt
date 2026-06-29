@@ -1,0 +1,9 @@
+v12.15.12 - Design System PRO: Financeiro Core
+
+- Adiciona camada visual/UX conservadora para Financeiro Core.
+- Carrega `assets/views/financeiro-core-design-pro.css` e `.js` apenas em views financeiras.
+- Adiciona feature flag `sige_design_financeiro_core_v121512_enabled`.
+- Não altera `admin/finance/*.php`, `includes/finance-core.php` nem motores financeiros protegidos.
+- Adiciona baseline de hashes de PHP financeiro crítico.
+- Adiciona gates de escopo, integridade de fórmulas e smoke da vaga.
+- Preserva CSP zero-inline, Alunos, Portaria, PDFs, Segurança e Shell.

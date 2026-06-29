@@ -1,0 +1,30 @@
+DEPLOY - SIGE SoftGenial v12.12.17 (Ledger incr 2: pagamentos e ancora externa)
+===============================================================================
+
+O QUE MUDA
+- Os pagamentos passam a ser registados no livro-razao imutavel (todos os fluxos:
+  M-Pesa, e-Mola, numerario, admin, planos e anual).
+- Passa a existir uma ancora externa por escola, guardada FORA da base de dados, que
+  permite detectar a truncagem das entradas mais recentes do ledger.
+
+PASSOS
+1. Backup da base de dados e da pasta do plugin (rotina normal).
+2. Substituir a pasta do plugin pelo conteudo deste ZIP.
+3. Abrir o wp-admin uma vez como administrador (a migracao ja correu na v12.12.16; nao
+   ha nova tabela nesta versao).
+4. Fazer um pagamento de teste. Abrir Definicoes > Integridade do Ledger: a escola
+   aparece com "Cadeia integra" e a coluna "Ancora externa" como "Confirmada".
+
+ATENCAO AOS BACKUPS
+- A ancora vive em wp-content/uploads/sige-private/ledger/ (ficheiros anchor-*.json).
+  Inclua a pasta uploads nos backups. A ancora persiste com o ledger; nao e removida
+  na desinstalacao suave do plugin.
+- A pasta esta protegida de acesso web por index.php e .htaccess. O conteudo
+  (seq mais hash) nao e segredo.
+
+NOTAS
+- Nenhuma regra de calculo muda; o pagamento funciona exactamente como antes. O
+  registo no ledger e a ancora sao best-effort e nunca quebram o pagamento.
+
+REVERSAO
+- Repor o ZIP anterior. Os ficheiros de ancora podem permanecer sem efeito.

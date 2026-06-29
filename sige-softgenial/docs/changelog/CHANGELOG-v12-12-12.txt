@@ -1,0 +1,12 @@
+## v12.12.12 - MFA de Operacao: reposicao automatica apos confirmacao (2026-06-19)
+
+- Fase 4 (MFA critico), incremento 3. Depois de o utilizador confirmar a identidade no step-up (TOTP ou email), a operacao de servico que tinha sido bloqueada e re-executada automaticamente uma unica vez, com tenant e permissoes re-validados. Acaba a repeticao manual.
+- Novo modulo `includes/security-mfa-replay.php`: captura de descritor de uso unico (contexto + argumentos da chamada, via func_get_args) quando uma das 6 operacoes de servico e bloqueada; consumo atomico (apaga antes de despachar) e re-execucao uma unica vez no handler de confirmacao partilhado (`admin_post_sige_mfa_confirm`). Re-execucao por call_user_func_array sobre o mesmo metodo estatico.
+- Abrange exactamente as 6 operacoes de SIGE_FinanceActionService: cancelLancamento, isentarLancamento, reactivarLancamento, bloquearMes, desbloquearMes, estornarPagamento (cobre anular_recibo). Config (e-Mola, M-Pesa) e caixa (reabrir, fechar) mantem repeticao manual, por desenho.
+- Re-validacao garantida por passar pelo mesmo metodo: cada operacao corre sige_tenant_write_guard (tenant) e self::userCan (permissao) e os guards de estado (FSM). A reposicao nao contorna verificacoes.
+- Nao-execucao-dupla por consumo atomico (apaga o descritor antes de despachar) e pelas guardas de estado das operacoes. Argumentos capturados do lado do servidor; a confirmacao nao transporta argumentos da operacao.
+- Aviso ao utilizador com o resultado da reposicao (concluida automaticamente, ou aviso se nao pode concluir). Funciona igual com TOTP ou email. A mensagem de bloqueio das 6 operacoes passou a ser neutra (sem mencao a email, valida para TOTP e para a reposicao).
+- Desligado por defeito: opcao opt-in `sige_mfa_autoreplay` (defeito off) e kill-switch `SIGE_MFA_AUTOREPLAY_OFF`. A repeticao manual funciona sempre. Sem step-up ligado, nada muda.
+- Governacao: gate `check-mfa-autoreplay.php` e smoke `smoke-mfa-autoreplay-v12-12-12.php` (26 verificacoes, incluindo a prova de execucao unica) ligados ao corredor. Sem novo endpoint (manifesto mantem-se em 195); regras de Kernel inalteradas (enforce 30). Rediagnostico adversarial Zero P0/P1; dois achados P2 aceites e documentados.
+- Sem migracao de base de dados. Sem alteracao de regras de calculo (md5 de sige_fin_saldo_lancamento, sige_fin_saldo_sql e sige_fin_total_bruto_sql inalterados). Zero travessoes em codigo e documentos.
+

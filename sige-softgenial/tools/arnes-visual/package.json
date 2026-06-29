@@ -1,0 +1,15 @@
+{
+  "name": "sige-arnes-visual",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Arnes de verificacao visual do SIGE SoftGenial: screenshot diff por modulo para remover !important com seguranca.",
+  "bin": { "arnes": "arnes.js" },
+  "scripts": {
+    "postinstall-browser": "playwright install chromium"
+  },
+  "dependencies": {
+    "playwright": "1.49.1",
+    "pngjs": "7.0.0",
+    "pixelmatch": "5.3.0"
+  }
+}

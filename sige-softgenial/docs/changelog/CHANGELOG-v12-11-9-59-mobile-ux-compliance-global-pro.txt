@@ -1,0 +1,29 @@
+SIGE SoftGenial v12.11.9.59 - Mobile UX Compliance Global PRO
+
+Área: App Shell / UX Mobile Global / Produto PRO
+
+Objectivo:
+- Consolidar a experiência mobile global, corrigindo inconsistências visuais detectadas após a globalização do padrão app-grade validado no módulo Alunos.
+
+Intervenções realizadas:
+- Camada transversal de compliance mobile aplicada ao App Shell.
+- Padronização de toolbars, filtros, campos, botões e formulários em mobile.
+- Padronização defensiva de modais: altura útil, scroll interno, header preservado e rodapé com botões sempre acessíveis.
+- Tabelas tornam-se scrolláveis horizontalmente em mobile quando necessário, evitando quebra visual e overflow da página.
+- Harmonização de cards, painéis, estados vazios, alertas, notices e blocos de conteúdo.
+- Reforço de foco visível e alvos tácteis mínimos em botões, links e campos.
+- Ajuste do logo oficial no cabeçalho mobile global para evitar recorte.
+- Preservação da bottom navigation global e exclusão do módulo Alunos/Portal do Aluno para evitar duplicação.
+
+Blindagem:
+- Sem alterações de base de dados.
+- Sem alterações em notas, pautas, boletins, DEC, fórmulas, pagamentos, mensalidades, multas ou recibos.
+- Sem alterações na importação de alunos, Ficha 360º, Gestão Avançada de Encarregados ou auditoria.
+- Sem alterações de permissões, AJAX ou regras de negócio.
+
+Validação esperada:
+- Abrir módulos principais em telemóvel real.
+- Confirmar ausência de overflow horizontal da página.
+- Confirmar que tabelas grandes têm deslocamento próprio.
+- Confirmar que modais têm scroll interno e botões visíveis.
+- Confirmar consistência visual de cards, filtros e botões.

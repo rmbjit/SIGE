@@ -1,0 +1,81 @@
+SIGE SoftGenial v12.11.9.12 - Académico AF 3ª Classe e MAP por Turma PRO (TEST)
+Data: 2026-05-25
+
+Base validada:
+- v12.11.9.11 - Transportes Harmonia Visual PRO (TEST)
+
+Objectivo:
+- Corrigir sistematicamente a exposição da AF no ecossistema académico.
+- Garantir que AF é designação visível exclusiva da 3.ª classe.
+- Acrescentar impressão em massa/por turma do MAP oficial no Aproveitamento do Aluno.
+
+Alterações principais:
+1. includes/academic-logic.php
+   - Criados helpers canónicos:
+     • sige_classe_usa_af($classe_num)
+     • sige_label_avaliacao_final($classe_num)
+     • sige_label_nota_final($classe_num)
+     • sige_turma_classe_num($turma_id)
+     • sige_turma_label_avaliacao_final($turma_id)
+   - A regra de designação passa a ser única:
+     • 3.ª classe: AF / MF
+     • restantes classes de fim de ciclo: Exame / NF
+   - Ajustada a leitura da avaliação final em situação final para usar o campo técnico nota_at quando aplicável.
+
+2. admin/academic/notas-view.php
+   - A coluna de avaliação final só aparece quando:
+     • turma é fim de ciclo;
+     • regra académica exige avaliação final;
+     • disciplina é nuclear.
+   - A label visível é dinâmica:
+     • 3.ª classe: AF
+     • restantes classes: Exame
+   - A nota final ponderada usa label dinâmica:
+     • 3.ª classe: MF
+     • restantes classes: NF
+   - Eliminada exposição genérica “Exame/AF”.
+
+3. admin/academic/boletim-view.php
+   - Aproveitamento/Boletim passa a usar label dinâmica AF/Exame e MF/NF.
+   - A coluna trimestral mantém AT como avaliação trimestral.
+   - Adicionado botão “Mapa oficial da turma” na vista anual.
+   - Criada ligação segura para admin-post.php?action=sige_map_turma_pdf.
+
+4. admin/academic/pauta-final-view.php
+   - Rótulos finais passam a vir dos helpers canónicos.
+   - “AF/MF” deixa de ser usado genericamente fora da 3.ª classe.
+   - Classes superiores passam a aparecer como Exame/NF quando aplicável.
+
+5. includes/map-pdf-handler.php
+   - Criado motor único sige_map_build_data() usado pelo MAP individual e por turma.
+   - Mantido o handler individual sige_map_pdf_handler().
+   - Criado handler sige_map_turma_pdf_handler().
+   - A impressão em massa carrega todos os alunos activos da turma/ano e gera uma página MAP por aluno.
+
+6. admin/map-oficial-template.php
+   - Template passou a suportar múltiplas páginas/alunos.
+   - Botão muda para “Imprimir todos” em modo massa.
+   - Label da coluna final passa a ser dinâmica:
+     • 3.ª classe: AF
+     • demais casos: MFD ou NF, conforme regra.
+
+7. sige-softgenial.php / BUILD.json
+   - Versionamento alinhado para 12.11.9.12.
+   - Registado novo admin_post_sige_map_turma_pdf.
+
+Não alterado:
+- Regras financeiras.
+- Pagamentos.
+- Mensalidades.
+- Multas.
+- Recibos.
+- RH.
+- Transportes.
+- WhatsApp.
+- Base de dados.
+- DEC e documentos de passagem fora dos rótulos académicos necessários.
+
+Testes executados:
+- php -l nos ficheiros modificados.
+- php -l em RH e Transportes para preservação.
+- Smoke estático tools/smoke-academico-af-map-turma-v12-11-9-12.php concluído sem falhas.

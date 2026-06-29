@@ -1,0 +1,21 @@
+SIGE SoftGenial v12.9.104 - Saneamento Real do Centro de Configuração
+
+Objectivo
+- Transformar o Centro de Configuração em produto real, evitando que a escola altere campos sem efeito operacional comprovado.
+
+Alterações
+- Criado mapa de efeito real das configurações.
+- Modo escola mantém apenas configurações com efeito real confirmado ou valor institucional claro.
+- Removidos do modo escola campos sem consumo operacional comprovado: assinatura do director, dados bancários, formato de recibo, prefixo de matrícula, regras académicas globais, escalas, tipos de avaliação, turnos, feriados e datas de trimestre.
+- Regras financeiras permanecem encaminhadas para o módulo financeiro real.
+- Regras académicas permanecem encaminhadas para matriz curricular, pautas/notas e regras académicas reais.
+- Modo técnico mostra mapa de campos retirados e regras pertencentes a módulos.
+- Não foram apagados dados antigos nem removidas colunas.
+- Escrita do Centro foi restringida no servidor para impedir POST manual de campos retirados do modo escola.
+
+Garantias
+- Sem alteração de cálculos financeiros.
+- Sem alteração de WhatsApp/Z-API engine/fila.
+- Sem alteração de pautas, boletins, recibos ou documentos existentes.
+- Sem alteração de permissões, Hub/licença ou schema.
+- Segurança mantida com nonce, permissão, sanitização, auditoria e mascaramento de campos sensíveis.

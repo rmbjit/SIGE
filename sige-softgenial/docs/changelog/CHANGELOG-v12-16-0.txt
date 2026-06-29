@@ -1,0 +1,52 @@
+SIGE SoftGenial v12.16.0
+============================
+
+Institutional Product Architecture & Operational UX Hardening aprovado em staging
+
+Resumo executivo
+----------------
+A v12.16.0 transforma a evolucao aprovada em staging numa release final. A fase melhora a arquitectura operacional do produto sem mexer nas formulas financeiras, nas formulas academicas, no schema da base de dados ou nas permissoes reais.
+
+Entregas principais
+-------------------
+- RC1: mapa operacional por perfil, read-only, filtrado pelas permissoes existentes.
+- RC2: checklists operacionais no dashboard, sem queries de escrita.
+- RC3: faixa Comece aqui no shell para orientar o utilizador sem refazer o menu inteiro.
+- RC4: Fluxos Guiados para pagamento, mensalidades, novo aluno, notas, pauta, portaria e comunicacao.
+- RC5: hardening final, readiness, riscos residuais e checklist de staging.
+- RC6: hotfix Professor/Minhas Turmas, corrigindo redirect que podia gerar #038;view e loop de processamento.
+- RC7: hotfix do header mobile, com grelha compacta de menu, marca e avatar.
+
+Contratos protegidos
+--------------------
+- Financeiro: formulas, recibos, saldos, dividas, descontos, multas, transporte, pagamentos e ledger nao foram alterados.
+- Academico: notas, pautas, boletins e formulas academicas nao foram alterados.
+- Permissoes: nao houve alargamento real de acesso nem enfraquecimento de tenant isolation.
+- Schema: nao houve migracao nem alteracao de tabelas.
+
+Ficheiros de runtime alterados
+------------------------------
+- includes/institutional-product-map.php
+- admin/system/dashboard-view.php
+- includes/admin-shell.php
+- sige-softgenial.php
+- BUILD.json
+- CHANGELOG.md
+- tools/run-gates.php
+
+QA final local
+--------------
+- PHP lint: 490/490 ficheiros sem erro de sintaxe.
+- Corredor oficial: 136/136 gates verdes.
+- Release gate: 54/54 verificacoes verdes.
+- Staging humano: aprovado pelo utilizador apos RC7.
+
+Riscos residuais
+----------------
+- Continuar a observar mobile em dispositivos reais depois de instalacao final.
+- Fazer backup antes de substituir o plugin em producao.
+- Validar perfis reais no primeiro acesso pos-instalacao.
+
+Rollback
+--------
+Rollback simples por substituicao da pasta do plugin pela versao anterior validada, sem migracao de base de dados.

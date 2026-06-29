@@ -1,0 +1,30 @@
+SIGE SoftGenial v12.11.9.14 - Página do Aluno Pendências Financeiras Reais PRO (TEST)
+
+Objectivo
+- Corrigir casos em que alunos financeiramente regulares apareciam com pendências na Página do Aluno.
+
+Causa identificada
+- A Página do Aluno calculava a dívida somando saldo técnico de todos os lançamentos do aluno, sem restringir a dívida aos estados financeiros realmente abertos.
+- Com isso, lançamentos pagos, isentos, cancelados, anulados ou em plano negociado podiam contaminar o resumo financeiro e activar bloqueio indevido de notas/boletim.
+
+Correção aplicada
+- A Página do Aluno passou a usar a semântica canónica do financeiro:
+  - Só status pendente/parcial com saldo real > 0 geram pendência.
+  - Pago, isento, cancelado, anulado e em_plano não geram pendência nem bloqueio no portal.
+  - A fórmula de saldo passa a respeitar valor_transporte, extras, multa efectiva, descontos, desconto especial e valor pago.
+
+Ficheiros alterados
+- admin/academic/aluno-portal-view.php
+- includes/portal-logic.php
+- sige-softgenial.php
+- BUILD.json
+
+Preservado sem alteração
+- Regras financeiras de pagamento.
+- Mensalidades, multas, recibos e lançamentos.
+- Base de dados.
+- RH.
+- Transportes.
+- WhatsApp.
+- Regra da AF exclusiva da 3.ª classe.
+- MAP oficial individual e por turma.

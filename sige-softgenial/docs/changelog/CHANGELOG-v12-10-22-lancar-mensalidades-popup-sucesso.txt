@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.10.22 - Lançar Mensalidades: pop-up de sucesso
+
+Objectivo
+- Ajustar a experiência após clicar em Gerar lançamentos, para que a mensagem de sucesso também apareça em pop-up real, seguindo a regra validada para confirmações e mensagens importantes.
+
+Alterações
+- A mensagem de sucesso do lote deixou de aparecer apenas como alerta inline na página.
+- Após concluir a geração, o sistema abre automaticamente um pop-up real, centrado no ecrã.
+- O pop-up apresenta resumo por período, incluindo alunos processados, lançamentos criados, actualizados e ignorados.
+- O resumo também apresenta mensalidade, transporte, extras e mensagens de forma limpa para a escola.
+- Mantida a experiência mobile-friendly, com conteúdo rolável em ecrãs pequenos.
+- Mantido o padrão visual aprovado do Painel Principal: cartões arredondados, espaçamento, linguagem limpa e visual de aplicação.
+
+Garantias
+- Não altera fórmulas financeiras.
+- Não altera regras de mensalidades, multas, descontos, pagamentos, cobranças, recibos ou estornos.
+- Não altera notas, pautas, DEC, boletins, actas ou base de dados.
+- Não adiciona termos técnicos internos na interface do utilizador.

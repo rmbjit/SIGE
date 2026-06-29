@@ -1,0 +1,57 @@
+CHANGELOG - SIGE SoftGenial v12.12.57
+Fase 4 (CSP e front-end seguro) - incremento 2
+Nonce CSP nas paginas autonomas
+Data: 2026-06-23
+
+RESUMO
+Aplicacao do nonce CSP as tags script ao nivel do template das paginas autonomas
+(modelos PDF de pauta e boletim, boletim do jardim, motor de documentos, pagina
+segura da camara da portaria). Conclui a aplicacao do nonce a todas as tags script
+inline alcancaveis: apos esta vaga, todos os scripts inline convertiveis (vistas no
+shell na v12.12.55, redireccionamentos por echo na v12.12.56, paginas autonomas
+agora) levam o nonce por pedido. Usa a mesma infraestrutura do core-helpers
+(sige_csp_nonce e sige_csp_script_attr).
+
+CONVERSAO (7 tags, 5 ficheiros)
+- pauta-pdf-template: 1
+- boletim-pdf-template: 1
+- jardim_boletim-view: 1
+- documents-engine: 3
+- portaria-camera-safe-page: 1
+
+INOCUIDADE
+- Nestas paginas ainda nao ha um CSP que referencie o nonce.
+- No motor de documentos, que ja envia um CSP, esse CSP usa unsafe-inline sem nonce
+  na directiva, pelo que o unsafe-inline continua activo e os scripts (e os botoes
+  de impressao em onclick) continuam a funcionar. Acrescentar o atributo nonce nao
+  altera o comportamento.
+
+CABECALHOS DE SEGURANCA EXISTENTES (intactos)
+- Motor de documentos: tres cabecalhos Content-Security-Policy mantidos.
+- Camara da portaria: Permissions-Policy mantido.
+
+VERIFICADORES DE JAVASCRIPT EMBEBIDO
+- Os modelos PDF de pauta e boletim e a vista do jardim estao em admin e sao
+  varridos; a tag com nonce e normalizada para extraccao desde a v12.12.55, pelo
+  que se mantem verdes. O motor de documentos e a camara estao em includes, fora
+  do alcance desses verificadores.
+
+PASSO SEGUINTE (enforce do CSP)
+- Estas paginas tambem usam onclick inline (botoes de impressao), que um CSP
+  estrito baseado em nonce bloqueia. Impor o CSP exige primeiro converter esses
+  onclick. O enforcement do CSP fica para incremento dedicado.
+
+CATRACA
+- check-inline-frontend: maximo de blocos script de 14 para 7 (sem folga).
+- onclick mantem-se em 162; style mantem-se em 2051.
+
+INVARIANTES
+- Superficie de accao 199 (enforce 33), vistas 60, opcoes 132, dependencias
+  externas 9. Sem alteracao de esquema. Calculo financeiro byte-identico.
+- Corredor 99. Release gate verde a partir de pasta limpa.
+- Rediagnostico adversarial: Zero P0 e Zero P1.
+
+VERSAO
+- Cinco fontes sincronizadas em 12.12.57 (cabecalho do plugin, SIGE_VERSION,
+  BUILD.json, SIGE_GOV_VERSION, base da superficie de inventario).
+- Zero travessoes em todo o codigo, documentacao e changelog.

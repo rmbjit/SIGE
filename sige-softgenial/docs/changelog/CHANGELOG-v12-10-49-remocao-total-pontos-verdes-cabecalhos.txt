@@ -1,0 +1,19 @@
+SIGE SoftGenial v12.10.49 - Remoção Total de Pontos Verdes nos Cabeçalhos
+
+Base: v12.10.48 - Compliance Visual Fino.
+
+Objectivo:
+- Remover de forma total os pontos verdes decorativos que apareciam antes do texto da secção/kicker, por exemplo antes de “Tesouraria” em “Registar Pagamento”.
+- Manter o padrão visual correcto igual ao módulo “Extractos e Caixa”: ícone canónico + texto da secção, sem bolinha verde decorativa.
+
+Alterações feitas:
+- Removido/neutralizado o pseudo-elemento verde de .sg-paypro-kicker.
+- Removido/neutralizado o pseudo-elemento verde de .sgcc-pro-kicker.
+- Criada camada global de segurança visual para impedir :before/::before decorativo em kickers PRO.
+- Reforçado display inline-flex nos cabeçalhos com ícone, preservando o alinhamento ícone + texto.
+- Versionamento actualizado para 12.10.49 no header, SIGE_VERSION e BUILD.json.
+
+Garantias:
+- Sem alteração de fórmulas.
+- Sem alteração de pagamentos, multas, mensalidades, notas, pautas, DEC, boletins ou base de dados.
+- Intervenção exclusivamente visual/de compliance.

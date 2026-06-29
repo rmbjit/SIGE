@@ -1,0 +1,20 @@
+SIGE SoftGenial v12.9.40 - SMTP Nativo Zoho/Email Profissional
+
+Base: v12.9.39 - WhatsApp Guardrails Invisíveis validado.
+
+Principais alterações:
+- Adicionado SMTP nativo no core do SIGE, sem dependência de plugin externo.
+- Nova área em Configurações Gerais → Comunicação → SMTP Nativo do SIGE.
+- Campos: activar SMTP, servidor, porta, SSL/TLS, autenticação, utilizador, palavra-passe, remetente, Reply-To e email de teste.
+- Palavra-passe SMTP guardada encriptada em wp_options; não é exibida após gravação.
+- Integração com PHPMailer nativo do WordPress via phpmailer_init.
+- wp_mail passa a sair via SMTP quando a configuração estiver activa.
+- Botões AJAX para gravar SMTP e gravar+testar envio.
+- Log interno do último erro wp_mail_failed em sige_smtp_last_error.
+
+Não alterado:
+- Fórmulas financeiras.
+- Guardrails WhatsApp.
+- Permissões existentes.
+- Templates de WhatsApp e Email já existentes.
+- Fluxos de recibos/documentos.

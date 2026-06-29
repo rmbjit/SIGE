@@ -1,0 +1,29 @@
+SIGE SoftGenial v12.11.9.66 - Painel Principal Deep Smoke + Permission-Aligned UX
+Data: 2026-06-08
+
+Objectivo
+- Rever novamente o Painel Principal após a criação do perfil Guarda / Portaria.
+- Executar smoke test profundo focado em mobile/tablet, permissões, navegação e regressões.
+- Corrigir pontos de UX onde atalhos ou blocos do dashboard podiam aparecer para perfis sem permissão efectiva para o destino.
+
+Alterações aplicadas
+- O Painel Principal passou a calcular permissões efectivas antes de renderizar atalhos, focos rápidos, alertas, KPIs e blocos de informação.
+- Atalhos de Pagamento, Novo aluno, Devedores, Turmas, Equipa e Configurações agora só aparecem quando o perfil pode abrir a área correspondente.
+- Alertas de conformidade continuam informativos, mas só são accionáveis quando a permissão do destino existe.
+- Blocos financeiros sensíveis do dashboard deixam de ser renderizados para perfis sem permissão financeira.
+- Linhas de Visão Operacional e Resumo do Dia agora são filtradas por escopo do perfil.
+- A camada Guarda / Portaria passa a ser contabilizada na equipa de apoio do dashboard, sem dar acesso ao dashboard ao Guarda.
+- O texto do hero adapta-se quando o perfil não tem escopo financeiro.
+
+Blindagem preservada
+- Sem alterações de schema da base de dados.
+- Sem alterações em cálculos financeiros, pagamentos, mensalidades, multas, dívidas ou recibos.
+- Sem alterações em notas, pautas, boletins, DEC, ACTA ou regras académicas.
+- Sem alterações na Portaria Digital, validação de crachás ou isolamento do perfil Guarda.
+- Sem alterações no módulo Alunos além da validação de navegação do dashboard.
+
+Validação
+- PHP lint completo sem erros.
+- JS mobile/tablet validado com node --check.
+- Smoke profundo do Painel Principal v12.11.9.66 criado e executado.
+- Smoke de regressão da camada Guarda / Portaria v12.11.9.66 criado e executado sem regressão.

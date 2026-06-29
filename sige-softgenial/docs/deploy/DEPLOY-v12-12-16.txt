@@ -1,0 +1,30 @@
+DEPLOY - SIGE SoftGenial v12.12.16 (Correccao: tabela do ledger e ecra resiliente)
+==================================================================================
+
+O QUE MUDA
+- A migracao passa a criar a tabela sige_fin_ledger nas instalacoes que foram
+  actualizadas apenas por substituicao de ficheiros (antes so era criada se o
+  plugin fosse reactivado). Conseguido subindo a versao interna de schema.
+- O ecra Definicoes > Integridade do Ledger deixa de mostrar o erro cru da base de
+  dados quando a tabela ainda nao existe: mostra uma mensagem clara.
+
+PASSOS
+1. Backup da base de dados e da pasta do plugin (rotina normal).
+2. Substituir a pasta do plugin pelo conteudo deste ZIP.
+3. Abrir o wp-admin uma vez COMO ADMINISTRADOR. A migracao corre sozinha e cria a
+   tabela sige_fin_ledger (dbDelta, idempotente, sem perda de dados).
+4. Abrir Definicoes > Integridade do Ledger. Deve abrir sem erro. Antes de qualquer
+   operacao mostra "Ainda nao ha eventos registados".
+
+SE JA ESTAVA NA v12.12.15 COM O ERRO
+- Basta actualizar para esta versao e abrir o wp-admin como administrador; a tabela
+  e criada automaticamente.
+- Em alternativa imediata, na v12.12.15: reactivar o plugin (desactivar e activar)
+  tambem cria a tabela, ou criar a tabela por SQL (ver QA).
+
+NOTAS
+- Nenhuma regra de calculo financeiro muda; nenhuma logica do ledger muda. So a
+  criacao da tabela e a resiliencia de leitura.
+
+REVERSAO
+- Repor o ZIP anterior. A tabela sige_fin_ledger pode permanecer sem efeito.

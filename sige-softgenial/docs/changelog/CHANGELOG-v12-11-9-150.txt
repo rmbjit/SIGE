@@ -1,0 +1,53 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.150
+Data: 2026-06-14
+Ambito: Consistencia visual / Design / Qualidade
+
+OBJECTIVO
+---------
+Continuar a migracao de consistencia visual pela faixa de RISCO ZERO comprovado:
+trocar valores literais por tokens APENAS quando o token resolve para o mesmissimo
+valor. Nenhuma decisao estetica, nenhuma mudanca de render.
+
+MIGRADOR GENERALIZADO (tools, nao versionado no plugin)
+-------------------------------------------------------
+  - Varre .css de sistema e blocos <style> das views.
+  - DETECCAO E EXCLUSAO automatica de blocos de impressao standalone: qualquer
+    <style> seguido de </head>/<body> ou precedido de <!DOCTYPE/<html/<head>
+    (popups de window.print montados em template literal JS). Esses NAO carregam
+    sige-tokens.css; um var(--token) ali ficaria por resolver. Excluidos por inteiro.
+  - Trocas exactas: border-radius, font-size, padding/margin/gap (shorthand, com 0 e
+    auto preservados), box-shadow (4 sombras canonicas) e transition (120/200/320ms).
+  - !important e tudo o resto preservado byte-a-byte.
+
+RESULTADO
+---------
+  3708 trocas em 46 ficheiros:
+    radios:       1183
+    espacamentos: 1128
+    font-size:     770
+    sombras:       598
+    transicoes:     29
+
+  Maiores ficheiros migrados: style.css (543), equipe-view (203), matriz-view (178),
+  financeiro-pagamentos (177), disciplinas-view (168), financeiro-extratos (163).
+
+GARANTIAS DE NAO-REGRESSAO
+--------------------------
+  - 0 vazamentos de var(--token) para blocos de impressao (verificado).
+  - 0 chavetas CSS desequilibradas (verificado).
+  - php -l limpo em todos os ficheiros tocados.
+  - !important inalterado (cascata nao tocada).
+  - Corredor run-gates.php 14/14 verde, 306 invariantes.
+  - 1 invariante de disciplinas actualizado: a forma canonica do padding do estado
+    vazio passou de "40px 20px" para "var(--space-10) var(--space-5)" (identico).
+
+PLACAR (controlador-consistencia-visual.php, referencia fixa)
+-------------------------------------------------------------
+  Global: 1.8 -> 14.5 / 100
+  Raios 65.5%  Sombras 63.2%  Tipografia 34.0%  Espacamento 26.4%  Movimento 25.4%
+  Divida total: 28625 -> 24917 primitivos.
+
+BASELINES DESCIDAS (--set nesta entrega; so descem)
+---------------------------------------------------
+  design-tokens:      4011 -> 2646
+  consistencia-visual: 10887 -> 8030

@@ -1,0 +1,17 @@
+SIGE SoftGenial v12.11.9.51 - Smoke Hardening Encarregados PRO
+
+Base: v12.11.9.50 - Auditoria Avançada de Encarregados PRO
+
+Intervenções:
+- Ajustado o salvamento do aluno para resolver contacto/e-mail principal dos encarregados no servidor, sem depender exclusivamente do JavaScript.
+- Corrigido risco de email_encarregado ficar vazio quando o campo de outro encarregado existe no formulário mas está vazio.
+- contacto_encarregado e whatsapp_notificacoes passam a usar fallback seguro conforme encarregado principal, pai/mãe e outro encarregado.
+- consentimento_comunicacao_em deixa de ser actualizado em todo salvamento; mantém o valor anterior quando os consentimentos não mudam.
+- Notificações financeiras deixam de incluir contacto_alternativo por defeito; contacto alternativo e pessoa autorizada a buscar continuam disponíveis na Ficha 360º, mas não recebem mensagens financeiras sem autorização/scope próprio.
+- Reforçado fallback de detecção da tabela de auditoria de encarregados com SHOW TABLES antes de information_schema.
+
+Preservado:
+- Notas, pautas, boletins, DEC e fórmulas académicas.
+- Pagamentos, mensalidades, recibos e regras financeiras.
+- Importação de alunos, histórico de lotes e anulação segura.
+- Ficha 360º e blindagem de privacidade.

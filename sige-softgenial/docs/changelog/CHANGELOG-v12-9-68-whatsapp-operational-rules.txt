@@ -1,0 +1,54 @@
+SIGE SoftGenial v12.9.68 - WhatsApp Operational Rules
+Data: 2026-05-05
+
+Objectivo
+- Tornar o envio WhatsApp mais seguro, previsível e operacional para escolas com muitos alunos, sem alterar nenhuma regra financeira nem académica.
+
+Regras implementadas
+1) Lançamento de mensalidades/faturas
+- Continua sem envio WhatsApp e sem envio de e-mail no acto do lançamento.
+- Mantida a policy central: fatura/mensalidade/lancamento = bloqueado.
+
+2) Confirmação de pagamento
+- Recibos/pagamentos ficam como mensagens prioritárias.
+- Mensagem de confirmação sai sem link directo.
+- O link do recibo fica pendente para envio manual pela escola quando o encarregado pedir.
+- Recibos sucessivos respeitam 30 segundos mínimos entre mensagens.
+
+3) Cobrança de pendências/dívidas
+- Se a escola seleccionar apenas 1 aluno: tenta enviar imediatamente, respeitando janela, limite diário e guardrails.
+- Se a escola seleccionar vários alunos: agenda 1 aluno a cada 3 minutos.
+- Se houver pai+mãe para o mesmo aluno, o segundo contacto fica 30 segundos depois.
+
+4) Janela e limite diário
+- Janela oficial de envio: 07:30 às 19:30, fuso Africa/Maputo.
+- Limite diário fixo: 250 mensagens por escola/instância.
+- Ao atingir o limite, a fila para e retoma automaticamente no dia seguinte às 07:30.
+
+5) Central WhatsApp
+- Adicionada barra de quota diária: usadas, restantes, limite e percentagem.
+- Mostra aviso quando fora da janela segura.
+- Mostra aviso quando o limite diário foi atingido.
+- Mostra aviso quando há recibos/pagamentos pendentes atrasados.
+- Botão “Processar fila agora” também aciona o resgate de recibos presos e devolve detalhes.
+
+6) Resgate de recibos presos
+- Recibos/pagamentos pendentes há mais de 10 minutos são reprogramados automaticamente.
+- Reprogramação respeita cadência de 30 segundos e janela segura.
+
+Ficheiros alterados
+- sige-softgenial.php
+- includes/notification-policy.php
+- includes/whatsapp-recovery-mode.php
+- includes/whatsapp-human-advanced.php
+- includes/cron-tasks.php
+- includes/whatsapp-central.php
+- admin/whatsapp_central-view.php
+- BUILD.json
+
+Validação
+- php -l executado nos ficheiros alterados.
+- php -l global executado no plugin antes do empacotamento.
+
+Nota operacional
+- O cron passa a estar agendado para 1 minuto. Em produção, para maior previsibilidade, recomenda-se garantir que o WP-Cron ou cron real do servidor chama o WordPress regularmente.

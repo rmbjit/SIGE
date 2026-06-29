@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.10.38 - Equipa e Professores: KPIs sem Sobreposição
+
+Objectivo
+- Corrigir a sobreposição dos círculos decorativos nos cartões de indicadores do módulo Equipa e Professores.
+- Reforçar o compliance visual com o Painel Principal, sem criar estilo paralelo.
+
+Ajustes realizados
+- Os elementos decorativos dos KPIs passam a ficar sempre atrás dos textos e ícones.
+- Textos, valores e notas dos KPIs receberam protecção de camada visual para manter legibilidade.
+- O espaçamento interno dos cartões foi ajustado para reduzir conflito entre decoração e conteúdo.
+- Em larguras intermédias, os KPIs passam para duas colunas para evitar compressão visual.
+- Mantido o padrão de cores personalizáveis da escola.
+- Mantido o padrão de App, mobile-friendly e pop-ups reais já implementados.
+
+Garantias
+- Não altera fórmulas.
+- Não altera mensalidades, multas, pagamentos, cobranças, recibos, estornos ou base de dados.
+- Não altera notas, pautas, DEC, boletins ou actas.

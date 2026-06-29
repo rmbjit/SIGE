@@ -1,0 +1,31 @@
+SIGE SoftGenial v12.11.9.115 - AUDITORIA DE DESIGN (aluno-portal)
+================================================================
+
+Portal do aluno (1366 linhas) - a CARA EXTERNA do produto, vista pelos
+encarregados de educação. Legibilidade limpa é aqui ainda mais crítica.
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 10 pesos, 950 dominante (21x). Muitos valores raros
+  (680/720/750/760/780) inexistentes nas fontes.
+- RAIOS: 12 valores. SOMBRAS: 13. CORES: 81 hex.
+
+CORRECÇÃO (bloco CSS 518-932 + estilos inline em HTML; JS preservado)
+1. Hierarquia de 3 níveis: 10 pesos -> 600/700.
+2. Raios da escala: 12 -> 4. Sombras da escala: 13 -> 4.
+3. 139 cores migradas (CSS + estilos inline echo'd em PHP). O tema
+   dinâmico da escola (var(--sg-theme-primary,#5a3fd6)) PRESERVADO com o
+   seu fallback - é a cor personalizável por escola, não se fixa.
+
+PROVA VISUAL
+- aluno-portal-antes-depois.png: header do aluno + KPIs. O nome
+  destaca-se, os dados de turma recuam, valores dos KPIs dominam.
+
+GATES
+- smoke-regression-pack: 176 -> 180 invariantes.
+- aluno-portal adicionado aos ecrãs auditados.
+- Baseline de mágicos: 8577 -> 8436 (-141).
+- Baseline de tipografia: 524 -> 492 (-32).
+- 12 gates verdes.
+
+PRÓXIMO
+- disciplinas (27 pesos), boletim (25), equipe (23)...

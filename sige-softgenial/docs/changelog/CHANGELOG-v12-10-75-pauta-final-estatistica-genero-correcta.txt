@@ -1,0 +1,24 @@
+SIGE SoftGenial v12.10.75 - Pauta Final Oficial: Estatística por Género Correcta
+
+Objectivo
+- Corrigir a estatística por género na Pauta Final Oficial, replicando a lógica já corrigida no DEC.
+- Evitar que alunos do sexo masculino guardados como “M” sejam contabilizados indevidamente em Mulheres.
+- Melhorar a leitura visual da tabela estatística com cores diferentes para Homens, Mulheres e Total (HM).
+
+Correcções aplicadas
+- Criada normalização própria de género para a Pauta Final:
+  - M / Masculino / Homem / H passam a entrar em Homens.
+  - F / Feminino / Mulher passam a entrar em Mulheres.
+  - Género desconhecido não é forçado para Homens nem Mulheres, mas continua incluído no Total (HM).
+- A coluna “G” da pauta passa a apresentar a sigla normalizada: H, M ou  - .
+- A exportação Excel passa a usar a mesma normalização de género.
+- As estatísticas por coluna passam a contar avaliados, percentagens e médias no grupo correcto.
+- A secção Homens recebeu cor própria.
+- A secção Mulheres recebeu cor própria.
+- O Total (HM) mantém destaque separado.
+
+Garantias
+- Sem alteração em MT, MFD, AF, MF, MG, negativas ou resultado final.
+- Sem alteração em progressão, transição, reprovação ou regras académicas.
+- Sem alteração em notas, pautas trimestrais, DEC, boletins, pagamentos, multas, mensalidades ou base de dados.
+- Sem alteração na estrutura de impressão ou exportação, apenas normalização do valor de género exibido/exportado.

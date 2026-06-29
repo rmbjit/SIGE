@@ -1,0 +1,32 @@
+SIGE SoftGenial v12.10.97 - Responsividade PRO Matriz e Alunos
+
+Base
+- Construído por cima da v12.10.96 - Correção Warnings e Responsividade 17 Pol.
+
+Objectivo
+- Corrigir os dois problemas visuais remanescentes reportados em telas intermédias/laptops de 17 polegadas:
+  1. Matriz Curricular: ícones dos KPIs sobrepunham os textos.
+  2. Gestão de Alunos: botões de acção sobrepunham o nome do aluno.
+
+Ajustes aplicados
+- Matriz Curricular:
+  - KPIs passam a usar layout grid interno com áreas definidas para ícone, label, valor e nota.
+  - Ícones deixam de usar posição absoluta nos cards.
+  - Cards em telas intermédias passam para composição 2x2 mais espaçada.
+  - Labels, valores e notas respeitam min-width:0 e deixam de atravessar o ícone.
+  - Mantido o padrão visual Produto PRO do Dashboard V2 MJS-grade.
+
+- Gestão de Alunos:
+  - Botões de acção deixam de ficar expostos sobre o nome do aluno.
+  - Cada cartão passa a ter um botão compacto de acções.
+  - Ao clicar, as opções aparecem num menu flutuante organizado.
+  - O menu fecha ao clicar fora, abrir outro menu ou pressionar ESC.
+  - O nome do aluno passa a ter área útil protegida contra o botão de acções.
+  - Grid dos cartões em telas intermédias fica mais estável.
+
+Garantias
+- Sem alterar regras de negócio.
+- Sem alterar notas, aprovação, Pauta, DEC, ACTA ou boletins.
+- Sem alterar pagamentos, multas, mensalidades, recibos ou histórico financeiro.
+- Sem alterar Permission Engine, perfis ou permissões.
+- Sem alterar base de dados.

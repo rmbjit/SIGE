@@ -1,0 +1,43 @@
+SIGE SoftGenial v12.11.9.144 - AUDITORIA DE DESIGN (jardim_boletim)
+=================================================================
+
+Boletim do jardim de infância (869 linhas). Documento de avaliação que
+vai para os pais.
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 8 pesos, 850 (7x), 800 (6x). Pesos inline no corpo (600/
+  700) já canónicos.
+- RAIOS: 11 valores. SOMBRAS: 16. CORES: 72 hex.
+
+CORRECÇÃO (bloco <style> 161-625, inclui @media print; JS preservado)
+1. Hierarquia de 3 níveis: 8 pesos -> 500/600/700.
+2. Raios da escala: 11 -> 4. Sombras da escala: 16 -> 6.
+3. 94 cores migradas (CSS + corpo HTML). Inclui o MAPA de avaliação
+   MB/B/S/NS (Muito Bom verde, Bom azul, Suficiente laranja, Não
+   Satisfatório vermelho), a cor por defeito (cinza para nível
+   desconhecido) e a lógica de cor por estado de meta (atingido verde),
+   migrados para tokens semânticos preservando o significado. @media print
+   preservada. ZERO hex restantes.
+
+NOTA DE MÉTODO
+- A impressão é DINÂMICA: o JS copia os <style> da página e reconstrói o
+  documento via document.write. Ao migrar o CSS para tokens, a impressão
+  HERDA automaticamente as cores migradas - consistência garantida.
+
+PROVA VISUAL
+- jardim-boletim-antes-depois.png: boletim. Mapa de avaliação preservado
+  (MB verde, B azul, S laranja); área de desenvolvimento domina, nível
+  ênfase.
+
+GATES
+- smoke-regression-pack: 290 -> 294 invariantes.
+- jardim_boletim adicionado aos ecrãs auditados.
+- Baseline de mágicos: 4267 -> 4173 (-94).
+- Baseline de tipografia: 15 -> 5 (-10). Quase a zerar!
+- 12 gates verdes.
+
+MARCO: 34 ecrãs auditados. Desde o início: mágicos 9925 -> 4173; pesos
+não-canónicos 665 -> 5.
+
+PRÓXIMO
+- financeiro-lancamentos (4 pesos), financeiro-config (1) - os ÚLTIMOS.

@@ -1,0 +1,36 @@
+SIGE SoftGenial v12.10.93 - Permissões: Correção Tela Branca
+
+Objectivo
+- Corrigir a tela branca no módulo &view=sige_permissoes após a introdução do catálogo de perfis operacionais.
+- Manter Secretário como perfil operacional real.
+- Tornar a consulta dos perfis operacionais mais robusta.
+
+Causa provável
+- A função auxiliar sige_perm_ui_operational_role_slugs() estava a ser chamada antes de estar garantidamente disponível no ficheiro da UI.
+- A consulta anterior também usava ORDER BY FIELD com placeholders duplicados, o que podia ser mais frágil em alguns ambientes.
+
+Correções aplicadas
+- A função sige_perm_ui_operational_role_slugs() passa a ser declarada localmente, antes do primeiro uso.
+- A consulta dos perfis operacionais foi simplificada:
+  - primeiro busca os perfis permitidos por slug;
+  - depois ordena em PHP pela ordem oficial do catálogo.
+- Mantido o catálogo operacional:
+  - Admin da Escola
+  - Admin TI
+  - Direcção Geral
+  - Dir. Pedagógico
+  - Gestor de RH
+  - Professor
+  - Educador
+  - Secretaria Geral
+  - Secretário
+  - Tesouraria
+  - Assistente
+  - Recepção
+
+Garantias
+- Sem apagar perfis da base de dados.
+- Sem alterar Permission Engine.
+- Sem alterar permissões, guards, nonces, acções POST, auditoria ou segurança.
+- Sem alterar notas, ACTA, DEC, pautas, pauta final, boletins ou regras académicas.
+- Sem alterar pagamentos, multas, mensalidades ou base de dados financeira.

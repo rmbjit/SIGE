@@ -1,0 +1,24 @@
+SIGE SoftGenial v12.11.9.70 - Alunos Bottom Nav Mais Deep Smoke Hotfix
+
+Contexto:
+- Revisão adicional do módulo Alunos / Estudantes após reporte visual do botão “Mais” da navegação inferior mobile/tablet.
+- O módulo Alunos usa uma bottom navigation própria, por isso não herdava integralmente o handler global que abre o menu lateral.
+
+Correções:
+- O botão “Mais” do módulo Alunos deixa de ser navegação directa/configuração e passa a ser botão funcional do menu lateral.
+- Adicionado handler específico para .sige-mobile-bottom-nav button[aria-controls="sige-sidebar"].
+- O handler abre/fecha #sige-sidebar, #sige-overlay e body.sg-app-menu-open.
+- aria-expanded é sincronizado no botão Mais, hamburger e navegação global quando presente.
+- Escape fecha o menu lateral.
+- Clique no overlay/menu actualiza o estado ARIA.
+- Ao abrir, o foco é enviado para o primeiro item accionável do menu lateral.
+- A exibição do “Mais” passa a usar $sige_alunos_can_more_nav, não apenas configuração.
+- Guarda/Portaria continua sem “Mais” e isolado em Portaria + consulta de alunos.
+- CSS da bottom nav passa a tratar botões e links da mesma forma: dimensão, ícone, foco, reset visual e tap target.
+
+Blindagem preservada:
+- Sem alterações de schema/base de dados.
+- Sem alterações em cálculos financeiros, pagamentos, mensalidades, dívidas, multas ou recibos.
+- Sem alterações em notas, pautas, boletins, DEC, ACTA ou fórmulas.
+- Sem alterações em importação de alunos.
+- Sem alteração do scanner/Portaria e isolamento Guarda/Portaria.

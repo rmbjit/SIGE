@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.11.9.23 - Fase 1 Blindagem Imediata P0
+
+Intervenções:
+- Director deixa de receber manage_options no WordPress.
+- Todas as roles SIGE não-nativas perdem manage_options se herdaram essa capability em instalações anteriores.
+- Migração defensiva remove manage_options directo de utilizadores SIGE, preservando administradores WordPress reais.
+- Verificações de super-admin/admin técnico passam a distinguir role administrator/super_admin de capability herdada.
+- Multi-escola: fallback para escola 1 fica bloqueado quando há várias escolas activas ou SIGE_MULTITENANT_STRICT=true.
+- Query helper de escola passa a fechar com 1=0 quando não há escola válida.
+- Documentos do portal do aluno passam por endpoint autenticado admin-post com nonce, validação aluno/escola/permissão e auditoria.
+- Ownership de pagamentos/recibos passa a validar escola_id.
+- Endpoint de fila WhatsApp/cron reforçado para admin real/permissão segura e logging de negações.
+- Logs explícitos para download de documentos e acções críticas de acta/notas.
+
+Sem alterações:
+- Fórmulas financeiras.
+- Fórmulas académicas.
+- Regras de cálculo de notas, mensalidades, multas ou descontos.

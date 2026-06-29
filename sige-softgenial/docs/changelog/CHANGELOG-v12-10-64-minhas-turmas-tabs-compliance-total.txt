@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.10.64 - Minhas Turmas: Tabs em Compliance Total
+
+Objectivo
+- Corrigir especificamente os tabs de trimestre do módulo &view=minhas_turmas para ficarem no mesmo padrão visual do Painel Principal / Dashboard V2 MJS-grade.
+- Manter a intervenção apenas visual, sem alterar lógica de turmas, notas, pautas ou trimestres.
+
+Ajustes aplicados
+- Tabs “1º Trimestre”, “2º Trimestre” e “3º Trimestre” alinhados ao padrão dos botões/tabs do Painel Principal.
+- Active tab passa a usar azul profundo/gradiente institucional, altura, raio, peso e sombra compatíveis com o Dashboard.
+- Tabs inactivos passam a usar fundo branco, borda clara, sombra suave e peso tipográfico consistente.
+- Adicionados ícones canónicos: check no trimestre activo e calendário nos restantes.
+- Melhorada a responsividade dos tabs em ecrãs pequenos, passando para 1 coluna sem quebrar a leitura.
+
+Garantias
+- Sem alteração no trimestre seleccionado.
+- Sem alteração em consultas de turmas, alunos ou notas.
+- Sem alteração em lançamento de notas, pautas ou regras académicas.
+- Sem alteração em pagamentos, mensalidades, multas, base de dados ou regras financeiras.

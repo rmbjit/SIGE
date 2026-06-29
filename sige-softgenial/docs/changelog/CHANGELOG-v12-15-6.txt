@@ -1,0 +1,25 @@
+SIGE SoftGenial v12.15.6 - Shell, Scroll, Topbar e Sidebar
+Data: 2026-06-25
+
+Resumo:
+Primeira vaga visual controlada da Fase 11 depois da baseline v12.15.5. O escopo ficou limitado ao shell principal, scroll, topbar e sidebar.
+
+Alteracoes:
+- Criado assets/sige-shell-stability.css com contrato de scroll por breakpoint.
+- Criado assets/sige-shell-stability.js para sincronizar sidebar, overlay e aria-expanded.
+- includes/ui-kit.php passa a enfileirar os assets de shell por wp_enqueue_style e wp_enqueue_script.
+- includes/admin-shell.php passa a restaurar scroll independente apenas em desktop real, 1101px ou mais.
+- Criados gates check-shell-scope-v12-15-6.php e smoke-shell-scroll-v12-15-6.php.
+- Run-gates actualizado para incluir a vaga v12.15.6.
+- Documentacao formal criada em governance, traceability, qa, rediagnostico e deploy.
+
+Exclusoes:
+- Sem alteracao nos cards de alunos.
+- Sem alteracao em menus de tres pontinhos internos.
+- Sem normalizacao de botoes, tabelas, modais ou filtros dos modulos.
+- Sem reintroducao de Design System PRO global agressivo.
+- Sem relaxar CSP.
+
+Riscos residuais:
+- QA visual em browser autenticado continua obrigatorio.
+- A divida historica de CSS com !important permanece e deve ser tratada por modulo.

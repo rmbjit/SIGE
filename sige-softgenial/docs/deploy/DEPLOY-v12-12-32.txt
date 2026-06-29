@@ -1,0 +1,34 @@
+DEPLOY - SIGE SoftGenial v12.12.32
+Fase 9 incremento 5: Sobreposicao puramente aditiva por capacidades
+Data: 2026-06-22
+
+O QUE MUDA NESTA VERSAO
+- O modulo de permissoes deixa de substituir o papel WordPress dos colaboradores. Antes, atribuir um perfil SIGE a um colaborador trocava-lhe o papel WordPress por um papel sige_*. Agora o papel WordPress original do colaborador fica intacto, e as capacidades do perfil sao concedidas em tempo de execucao por um filtro.
+- O efeito visivel para o utilizador e o mesmo de antes: os menus e as areas continuam a aparecer conforme o perfil. A diferenca e que o papel WordPress do colaborador ja nao e alterado pelo modulo.
+- Colaboradores que ainda estejam num papel sige_* (de versoes anteriores) sao repostos automaticamente ao seu papel WordPress original na sessao seguinte, sem perder acesso. E uma limpeza unica por utilizador.
+- As contas de aluno e encarregado tem um fluxo proprio e nao sao afectadas.
+- O administrador WordPress real nao e afectado.
+
+PASSOS DE INSTALACAO (CloudPanel / File Manager)
+1. Faca uma copia de seguranca do plugin actual e da base de dados (rotina normal).
+2. Em Plugins, desactive o SIGE SoftGenial (nao apague: os dados ficam).
+3. Substitua a pasta do plugin pelo conteudo deste ZIP (a pasta sige-softgenial na raiz do ZIP). Em alternativa, instale o ZIP por cima pela administracao do WordPress.
+4. Reactive o plugin. Nao ha migracao de base de dados.
+
+VERIFICACAO RAPIDA (10 minutos)
+1. Atribua um perfil de staff a um colaborador de teste (por exemplo, Professor) pelo ecra de Perfis e Permissoes. Confirme que o colaborador passa a ver as areas do perfil.
+2. Confirme que o papel WordPress do colaborador NAO mudou para sige_*: na gestao de utilizadores do WordPress, o papel dele continua a ser o original (por exemplo, Assinante). As areas SIGE aparecem na mesma (vem do filtro).
+3. Para um colaborador que ja estivesse num papel sige_* antes desta versao: depois de ele iniciar sessao uma vez, confirme que o papel WordPress dele volta ao original (ou ao papel por omissao), sem perder o acesso as areas do perfil.
+4. Proteccao do Admin TI: confirme que so um administrador WordPress real consegue editar ou remover um colaborador com perfil de Admin TI.
+5. Remova o perfil de um colaborador e confirme que ele deixa de ver as areas do perfil.
+6. Contas de aluno e encarregado: confirme que continuam a funcionar como antes.
+
+NOTAS
+- Sem migracao de esquema: a versao do esquema nao muda.
+- Sem alteracoes a regras de calculo financeiro ou academico.
+- Sem nova superficie de accao: o inventario de seguranca mantem-se em 199 accoes (33 em modo enforce).
+- A isolacao de dados por escola (cada escola so ve os seus dados) nao muda; e separada das capacidades.
+- As capacidades concedidas pelo filtro sao exactamente as do perfil (capacidades sige_* mais leitura/carregamento de ficheiros); o filtro nunca concede privilegios de administrador.
+
+REVERSAO
+- Reinstale o pacote da versao anterior (v12.12.31). Esta versao nao altera esquema. Atencao: ao reverter, a versao anterior volta a substituir o papel WordPress nas novas atribuicoes; os colaboradores ja repostos ao papel original voltarao a ser substituidos na proxima atribuicao ou sincronizacao. Nao ha perda de dados.

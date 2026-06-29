@@ -1,0 +1,44 @@
+SIGE SoftGenial v12.10.112 - Jardim: Aplicar a Todos e Pop-up PRO
+
+Base
+- Construído por cima da v12.10.111 - Feedback Visível no Jardim.
+
+Objectivo
+- Reduzir trabalho repetitivo dos educadores no Jardim de Infância.
+- Transformar mensagens de sucesso/erro em pop-up visível e product-like.
+- Manter intervenção de experiência/UX, sem alterar regras de negócio, handlers, cálculos ou base de dados.
+
+Melhorias aplicadas
+1. Diário de Actividades
+- Adicionado painel “Aplicar padrão a todos”.
+- O educador pode definir actividades, humor, comportamento, sono, minutos de sono, observação de comportamento e recado aos pais.
+- O sistema aplica o padrão em todos os alunos da turma.
+- Depois, o educador pode alterar apenas a criança que teve situação diferente.
+
+2. Avaliação por Critérios
+- Adicionado painel “Aplicar avaliação a todos”.
+- O educador pode marcar todos os critérios como:
+  - Atingido;
+  - Em progresso;
+  - Não atingido.
+- Depois pode ajustar critérios/alunos específicos.
+
+3. Saúde e Nutrição
+- Adicionado painel “Aplicar padrão a todos”.
+- O educador pode aplicar refeições, febre, temperatura, queda/acidente, observações e ocorrência a todos.
+- Depois ajusta apenas a criança com inconsistência.
+
+4. Pop-up Produto PRO
+- Mensagens de Guardar Diário, Guardar Avaliação, Guardar Saúde e Guardar Presenças passam a aparecer como pop-up central.
+- O feedback transversal do App Shell também passa a ser apresentado em pop-up central.
+- A mensagem deixa de ser pequena/invisível e passa a ter aspecto de aplicação profissional.
+
+Garantias
+- Sem alterar handlers de gravação.
+- Sem alterar nomes dos campos POST.
+- Sem alterar regras de negócio.
+- Sem alterar cálculo MB/B/S/NS.
+- Sem alterar pagamentos, mensalidades, multas ou recibos.
+- Sem alterar notas, Pauta, DEC, ACTA, boletins ou regras académicas.
+- Sem alterar Permission Engine, perfis ou permissões.
+- Sem alterar base de dados.

@@ -1,0 +1,45 @@
+SIGE SoftGenial v12.11.9.106
+============================
+
+Consolidacao CSS - equipe/RH: 13 estilos reais para classes (larguras de tabela col-*, margens, alinhamentos), paleta e larguras pixel-perfect; 2 casos dinamicos (JS/innerHTML) preservados
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+CONSOLIDAÇÃO CSS - EQUIPE/RH (v12.11.9.106)
+===========================================
+
+Segundo ecrã da fase CSS. Princípio mantido: pixel-perfect, com a
+impressão digital visual (larguras, margens, alinhamentos) provada
+idêntica antes e depois.
+
+COMPOSIÇÃO REAL (régua v2.7): 19 style= inline, dos quais 15 estilo
+real e 4 custom properties (intocadas).
+
+CONSOLIDADOS (13 dos 15 estilos reais)
+- 5 larguras da tabela de staff (35/18/15/12/20%) -> classes
+  semânticas .sg-staff-th-nome/-cargo/-validade/-status/-accoes;
+- separador vertical -> .sg-sep-vert;
+- 4 margens de formulário (mb 20x2, mb 24, mt 24) -> .sg-mb-20/-24,
+  .sg-mt-24;
+- padding do estado vazio -> .sg-pad-empty;
+- 2 divs centrados -> .sg-text-center (1 classe reutilizada por 2
+  elementos: menos repetição, mesmo efeito).
+PROVA: larguras 35/18/15/12/20% intactas; margin-bottom:20px continua
+presente 4x; os 2 divs continuam centrados.
+
+PRESERVADOS DE PROPÓSITO (2 casos dinâmicos legítimos)
+- display:none do #sige-rh-confirm-detail: estado inicial gerido por
+  JS (detail.style.display='block'/'none'). Tocar aqui só acrescenta
+  subtileza sem ganho - o JS escreve style inline que venceria a
+  classe. Mantido inline + invariante a proteger a alternância JS.
+- animation:spin dentro de um innerHTML gerado em runtime (botão "A
+  gerar..."): não é markup estático; só seria classe reescrevendo a
+  geração. Mantido.
+
+QUALIDADE - GATES
+- tools/smoke-regression-pack.php: 133 -> 137 invariantes.
+- Equipe: 1,9 (entrada) -> 0,2. Segundo ecrã praticamente limpo.

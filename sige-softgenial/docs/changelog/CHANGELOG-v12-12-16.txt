@@ -1,0 +1,8 @@
+## v12.12.16 - Correccao: criacao da tabela do ledger e ecra resiliente (2026-06-20)
+
+- Correccao de um defeito da v12.12.15 apanhado em uso real: ao abrir Definicoes > Integridade do Ledger numa instalacao actualizada por substituicao de ficheiros, aparecia "Table '..._sige_fin_ledger' doesn't exist" e o ecra mostrava o erro cru da base de dados.
+- Causa-raiz: a migracao so re-corre quando a constante interna SCHEMA_VERSION muda (maybe_upgrade no admin_init). Na v12.12.15 a tabela foi acrescentada mas a SCHEMA_VERSION nao foi subida, pelo que a tabela so era criada por reactivacao do plugin, nao por actualizacao de ficheiros. Agora a SCHEMA_VERSION foi subida (20260611.1 para 20260620.1): a migracao volta a correr em qualquer instalacao desactualizada e cria a tabela via dbDelta (idempotente, sem perda de dados).
+- Resiliencia: novo guard sige_ledger_table_exists() (SHOW TABLES com supressao de erros), aplicado ao escritor, ao verificador, a lista de escolas e ao ecra. Sem a tabela, o escritor nao regista (devolve false), o verificador devolve vazio e o ecra mostra uma mensagem clara a indicar a actualizacao, em vez do erro cru.
+- Sem alteracao a logica do ledger, ao encadeamento HMAC, as 6 operacoes instrumentadas, ao calculo financeiro (md5 intactos) ou a superficie de accoes (manifesto 196 inalterado).
+- Gate reforcado (exige a subida da SCHEMA_VERSION quando a tabela e adicionada, e o guard de existencia aplicado nos quatro pontos) e smoke reforcado (14 verificacoes, incluindo a degradacao sem tabela). Rediagnostico adversarial Zero P0/P1; nenhum item adiado.
+

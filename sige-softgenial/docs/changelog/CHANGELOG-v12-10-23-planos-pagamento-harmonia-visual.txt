@@ -1,0 +1,21 @@
+SIGE SoftGenial v12.10.23 - Planos de Pagamento: Harmonia Visual
+
+Escopo:
+- Harmonização visual do módulo Planos de Pagamento com o padrão aprovado do Painel Principal.
+- Remoção da duplicação do cabeçalho genérico nesta página.
+- Hero claro e amplo para gestão de acordos de pagamento faseado.
+- KPIs redesenhados para planos activos, em atraso, cumpridos e valor cumprido.
+- Formulário de novo plano reorganizado visualmente.
+- Filtros e cartões de planos com melhor leitura e espaçamento.
+- Pop-up real para confirmar criação de plano.
+- Pop-up real para confirmar cancelamento de plano.
+- Mensagens de sucesso/erro convertidas em pop-up real quando aplicável.
+- Modal de pagamento de prestação ajustado ao padrão visual aprovado.
+- Responsividade melhorada para tablet e telemóvel.
+
+Garantias:
+- Não altera fórmulas financeiras.
+- Não altera regras de mensalidades, multas, descontos, pagamentos, prestações, recibos ou estornos.
+- Não altera base de dados nem executa migrações.
+- Não altera notas, pautas, DEC, boletins ou regras académicas.
+- Mantém linguagem limpa, sem termos técnicos internos visíveis ao utilizador final.

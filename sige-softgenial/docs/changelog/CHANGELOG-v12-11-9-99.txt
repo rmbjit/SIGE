@@ -1,0 +1,56 @@
+SIGE SoftGenial v12.11.9.99
+============================
+
+Sprint UX-5 - acta, planos e devedores conformes; canonica dos planos e cobranca em massa cadeadas; auditor v2.4 sem botoes-fantasma nem termos de comentarios
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+DETALHE COMPLETO DO SPRINT UX-5
+===============================
+
+CONTEXTO: v12.11.9.98 VALIDADA LIVE em teste.softgenial.edu.mz pelo
+Rogério (12 Jun): fila UX reaberta com a bateria de 7 gates.
+
+UX - MÓDULO 8: ACTA (21,6 -> 15,6)
+- A aprovação de nota à pauta oficial (acção académica de alto risco)
+  trocou o confirm() do browser por confirmação declarativa do kit:
+  modal com título "Aprovar e aplicar à pauta", explicação do efeito e
+  registo na acta; Esc/Cancelar não aplica nada.
+- Botão "Carregar" da toolbar entra no kit como primário do ecrã.
+- HONESTIDADE DO RESIDUAL: as 3 tabelas sem estado vazio NÃO foram
+  automatizadas de propósito; o auto-inserter detectou loops aninhados
+  (2 a 5 foreach por tbody) e recusou-se a tocar (salvaguarda
+  funcionou). Ficam documentadas para passagem manual futura: 12 dos
+  15,6 pontos residuais são isto.
+
+UX - MÓDULO 9: FINANCEIRO-PLANOS (13,6 -> 9,5)
+- Os 2 botões realmente sem classe (Seleccionar Tudo violeta + Limpar)
+  entram no kit; o violeta de contexto preservado como nos pagamentos.
+- CADEADOS NOVOS: invariantes garantem que as prestações pagam SEMPRE
+  por sige_fin_registar_pagamento e que a view nunca insere directo em
+  tabelas financeiras.
+
+UX - MÓDULO 10: FINANCEIRO-DEVEDORES (17,8 -> 5,8)
+- 3 alerts viram toasts (gerar cobrança sem alunos; popup de impressão
+  bloqueado com instrução; selecção vazia antes do envio).
+- A cobrança em massa JÁ TINHA modal próprio de confirmação
+  (openConfirmModal): agora está cadeada por invariante para nunca
+  desaparecer. Residual 5,8 = inline + o botão dentro da janela de
+  impressão gerada (ruído documentado: essa janela não tem o CSS do
+  SIGE).
+
+UX - INSTRUMENTO: AUDITOR v2.3 + v2.4 (recalibração -29, fora da conta)
+- v2.3/v2.4: o fecho de tag PHP dentro de atributos onclick enganava o
+  parser de botões (7 "botões-fantasma" no sistema); termos como
+  "Buscar" em COMENTÁRIOS de código contavam como interface. Botões
+  medem-se agora sobre HTML puro e termos sobre código sem comentários.
+  Sistema recalibrado 514,3 -> 485,3 antes do trabalho do sprint.
+
+QUALIDADE - GATES
+- tools/smoke-regression-pack.php: 95 -> 102 invariantes.
+- Sistema após o sprint: 463,2. Diálogos nativos restantes: 17 alert +
+  9 confirm + 0 prompt.

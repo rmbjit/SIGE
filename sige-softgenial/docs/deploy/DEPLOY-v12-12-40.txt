@@ -1,0 +1,55 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.40
+Data: 2026-06-22
+Titulo: Fase 3 - Reconciliacao de pagamentos digitais - deteccao de duplicados
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+O ecra de reconciliacao de pagamentos passa a assinalar possiveis pagamentos
+duplicados, para revisao. Apanha tres situacoes:
+1. A mesma referencia de transaccao a aparecer mais do que uma vez.
+2. O mesmo pagamento a ser conciliado mais do que uma vez (possivel duplo credito).
+3. O mesmo numero de telefone a pagar o mesmo valor com poucos minutos de
+   intervalo (provavel pagamento repetido por engano).
+Pagamentos do mesmo pagador e valor mas afastados no tempo (por exemplo,
+mensalidades) NAO sao assinalados.
+
+IMPORTANTE: e so uma ajuda a revisao. O sistema nao apaga nem altera nenhum
+pagamento; apenas mostra os grupos para a secretaria confirmar. Nao ha alteracao a
+base de dados.
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+5. Limpe a cache do navegador (Ctrl+F5) para ver o ecra de reconciliacao
+   actualizado.
+
+================================================================
+VERIFICACAO
+================================================================
+1. Abra o ecra de reconciliacao de pagamentos (Financeiro).
+2. Confirme a nova seccao "Possiveis duplicados". Se nao houver duplicados,
+   aparece "Nao foram encontrados possiveis duplicados".
+3. Confirme que as restantes seccoes (recebido mas nao conciliado, divergencia de
+   montante, pagamento movel sem transaccao) continuam a funcionar.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera dados
+nem esquema, pelo que a reversao e directa.
+
+================================================================
+A SEGUIR (FASE 3)
+================================================================
+- Reconciliacao viva: o sistema consultar directamente o M-Pesa e o e-Mola para
+  confirmar transaccoes e descobrir as que faltam (depende do acesso de teste das
+  operadoras).
+- Resolucao de divergencias a partir do ecra (juntar ou anular), com confirmacao
+  por duas pessoas.

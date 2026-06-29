@@ -1,0 +1,45 @@
+SIGE SoftGenial v12.11.9.64 - Painel Principal Mobile + Tablet UX PRO
+
+Escopo
+- Primeira melhoria tela-a-tela da jornada Mobile e Tablet.
+- Tela intervencionada: Painel Principal / Dashboard.
+- Ficheiro principal alterado: admin/system/dashboard-view.php.
+
+Melhorias de UX/UI aplicadas
+- Painel Principal passa a comportar-se como uma home operacional em mobile e tablet.
+- Hero recebe pílulas de estado com data, estado dos alertas e ritmo da cobrança.
+- Acrescentada área de acções prioritárias para ecrãs até 1100px:
+  - Pagamento
+  - Novo aluno
+  - Devedores
+  - Turmas
+- Acrescentada faixa de prioridades rápidas com leitura executiva:
+  - Cobrança do mês
+  - Pendências financeiras
+  - Qualidade dos dados
+- Alertas de conformidade agora são accionáveis e encaminham o utilizador para a área natural de resolução.
+- Tablet passa a ter grelha dedicada de 2 colunas no corpo do dashboard, mantendo o resumo financeiro em largura total.
+- Mobile passa a ter ordem operacional mais intuitiva:
+  - Acessos rápidos
+  - Alertas
+  - Visão operacional
+  - Resumo financeiro
+  - Resumo do dia
+  - Distribuição por classe
+- KPIs em mobile foram compactados para leitura 2x2, com fallback 1 coluna em ecrãs muito estreitos.
+- Faixa de prioridades no mobile usa deslocamento horizontal táctil com snap.
+- Reforço de foco visível e alvos tácteis em links/cartões do dashboard.
+
+Blindagem
+- Sem alterações em regras académicas.
+- Sem alterações em regras financeiras.
+- Sem alterações em permissões.
+- Sem alterações em queries SQL existentes do dashboard.
+- Sem alterações em cálculos de cobrança, dívida, alunos, turmas, docentes ou conformidade.
+- Sem alterações em base de dados, migrations ou estrutura de tabelas.
+- Alteração limitada à camada de apresentação, navegação e responsividade do Painel Principal.
+
+Validação esperada
+- PHP lint completo sem erros.
+- Smoke test estático v12.11.9.64.
+- ZIP final íntegro.

@@ -1,0 +1,29 @@
+SIGE SoftGenial v12.11.9.2 - Equipa e Professores Post-Hardening Review PRO (TEST)
+
+Objectivo
+- Revisão técnica imediata após a intervenção v12.11.9.1 no módulo Equipa e Professores.
+- Reforçar o compromisso de pacote instalável sem fatal errors e sem regressões críticas/altas no módulo auditado.
+
+Ajustes
+1. Evitado conflito JavaScript com o objecto global `sigeAjax` injectado pelo App Shell.
+   - A view deixa de declarar `const sigeAjax`.
+   - Usa `window.sigeAjax = window.sigeAjax || {}` e apenas acrescenta os dados específicos da página.
+
+2. Protecção adicional de dados salariais.
+   - Perfis com apenas `rh.equipe_ver` deixam de ver o KPI "Folha Salarial".
+   - Para esses perfis, o cartão mostra apenas Activos/Inactivos, sem valores financeiros.
+
+3. Reforço anti-XSS nos crachás.
+   - URLs em crachás passam a aceitar apenas http/https.
+   - O protocolo `data:` foi removido da whitelist client-side.
+
+4. Reforço na reexposição autorizada de documentos.
+   - Documentos antigos guardados no histórico são novamente normalizados no endpoint seguro antes de serem devolvidos ao front-end.
+
+Validação
+- php -l em todos os ficheiros PHP.
+- Smoke test estático do módulo Equipa.
+- Verificação do método `add_unique_index_if_no_duplicates()` dentro de `SIGE_Migration`.
+- Verificação de integridade do ZIP.
+
+Sem alteração de regras financeiras ou académicas.

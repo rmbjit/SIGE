@@ -1,0 +1,24 @@
+SIGE SoftGenial v12.9.94 - Relatório Executivo de Go-live e Pacote de Instalação Segura
+
+Base: v12.9.93 validada em ambiente de teste.
+
+Objectivo:
+- Consolidar a decisão final de go-live antes de instalar em escolas reais.
+- Transformar pré-produção, plano de correcção e checklist de evidências num relatório executivo seguro.
+
+Alterações:
+- Adicionado includes/settings/class-sige-settings-golive-report.php.
+- Novo bloco no separador Pré-produção: Relatório executivo de go-live.
+- Nova recomendação final: não instalar, instalar com cautela técnica ou elegível para instalação controlada.
+- Adicionado pacote de instalação segura com passos anti-regressão.
+- Adicionados critérios de aceitação para produção.
+- Adicionado resumo executivo seguro para impressão/cópia, sem tokens, senhas, API keys ou segredos.
+
+Garantias:
+- Não grava configurações.
+- Não remove campos.
+- Não migra valores.
+- Não sincroniza automaticamente.
+- Não altera financeiro, académico, WhatsApp, SMTP, Hub/licença, permissões, pautas, boletins, recibos ou schema.
+- Não promove produção automaticamente.
+- Mantém a decisão humana, backup e smoke test real como requisitos antes de escola real.

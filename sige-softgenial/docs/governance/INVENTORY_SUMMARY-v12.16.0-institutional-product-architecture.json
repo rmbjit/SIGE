@@ -1,0 +1,774 @@
+{
+  "php_files": 474,
+  "admin_views_php": 71,
+  "includes_php": 155,
+  "tools_php": 232,
+  "assets_css": 16,
+  "assets_js": 15,
+  "total_files": 2855,
+  "largest_php": [
+    [
+      9264,
+      "admin/academic/alunos_lista.php"
+    ],
+    [
+      8906,
+      "includes/security-kernel-rules.php"
+    ],
+    [
+      4243,
+      "includes/finance-core.php"
+    ],
+    [
+      3875,
+      "admin/finance/financeiro-pagamentos.php"
+    ],
+    [
+      3761,
+      "admin/finance/financeiro-extratos.php"
+    ],
+    [
+      3740,
+      "admin/hr/equipe-view.php"
+    ],
+    [
+      3242,
+      "includes/aluno-fetch-ajax.php"
+    ],
+    [
+      3038,
+      "includes/db-handler.php"
+    ],
+    [
+      2819,
+      "includes/class-sige-migration.php"
+    ],
+    [
+      2739,
+      "includes/admin-shell.php"
+    ],
+    [
+      2546,
+      "admin/academic/notas-view.php"
+    ],
+    [
+      2377,
+      "admin/academic/turmas-view.php"
+    ],
+    [
+      2375,
+      "admin/academic/pautas-view.php"
+    ],
+    [
+      2309,
+      "includes/academic-logic.php"
+    ],
+    [
+      2300,
+      "includes/portal-logic.php"
+    ],
+    [
+      2159,
+      "admin/academic/disciplinas-view.php"
+    ],
+    [
+      1944,
+      "includes/permissions-layer.php"
+    ],
+    [
+      1874,
+      "admin/finance/financeiro-devedores-view.php"
+    ],
+    [
+      1839,
+      "admin/finance/financeiro-config.php"
+    ],
+    [
+      1629,
+      "includes/acta-pdf-handler.php"
+    ],
+    [
+      1622,
+      "includes/alertas-core.php"
+    ],
+    [
+      1537,
+      "admin/system/permissions-ui.php"
+    ],
+    [
+      1523,
+      "admin/whatsapp_central-view.php"
+    ],
+    [
+      1521,
+      "admin/finance/financeiro-lancamentos-view.php"
+    ],
+    [
+      1496,
+      "includes/documents-engine.php"
+    ],
+    [
+      1473,
+      "admin/finance/financeiro-gerador.php"
+    ],
+    [
+      1449,
+      "admin/academic/acta-view.php"
+    ],
+    [
+      1367,
+      "admin/academic/aluno-portal-view.php"
+    ],
+    [
+      1348,
+      "includes/notification-policy.php"
+    ],
+    [
+      1344,
+      "admin/academic/encerramento-view.php"
+    ]
+  ],
+  "counts": {
+    "current_user_can": {
+      "total": 491,
+      "files": 87,
+      "top": [
+        [
+          "includes/admin-shell.php",
+          49
+        ],
+        [
+          "includes/ajax-handlers.php",
+          23
+        ],
+        [
+          "includes/db-handler.php",
+          21
+        ],
+        [
+          "includes/aluno-accounts.php",
+          21
+        ],
+        [
+          "includes/whatsapp-engine.php",
+          20
+        ],
+        [
+          "admin/finance/financeiro-pagamentos.php",
+          20
+        ],
+        [
+          "includes/acta-pdf-handler.php",
+          18
+        ],
+        [
+          "includes/aluno-fetch-ajax.php",
+          18
+        ],
+        [
+          "admin/academic/alunos_lista.php",
+          15
+        ],
+        [
+          "admin/academic/aluno-portal-view.php",
+          13
+        ],
+        [
+          "includes/whatsapp-diagnostics.php",
+          12
+        ],
+        [
+          "admin/finance/financeiro-planos-view.php",
+          12
+        ],
+        [
+          "includes/finance-core.php",
+          11
+        ],
+        [
+          "includes/centros-helpers.php",
+          10
+        ],
+        [
+          "includes/security-hardening.php",
+          9
+        ]
+      ]
+    },
+    "sige_can": {
+      "total": 70,
+      "files": 43,
+      "top": [
+        [
+          "admin/academic/aluno-portal-view.php",
+          7
+        ],
+        [
+          "admin/academic/alunos_lista.php",
+          4
+        ],
+        [
+          "includes/finance-core.php",
+          3
+        ],
+        [
+          "includes/admin-shell.php",
+          3
+        ],
+        [
+          "includes/secure-document-download.php",
+          3
+        ],
+        [
+          "includes/aluno-fetch-ajax.php",
+          3
+        ],
+        [
+          "includes/finance-devedores-pdf.php",
+          2
+        ],
+        [
+          "includes/presencas-engine.php",
+          2
+        ],
+        [
+          "includes/curriculum-engine.php",
+          2
+        ],
+        [
+          "includes/ajax-handlers.php",
+          2
+        ],
+        [
+          "includes/permissions-layer.php",
+          2
+        ],
+        [
+          "tools/smoke-devedores-pdf-v12-12-7-1.php",
+          2
+        ],
+        [
+          "admin/academic/encerramento-view.php",
+          2
+        ],
+        [
+          "admin/academic/notas-view.php",
+          2
+        ],
+        [
+          "admin/logistics/transporte-view.php",
+          2
+        ]
+      ]
+    },
+    "nonce": {
+      "total": 1469,
+      "files": 160,
+      "top": [
+        [
+          "includes/security-kernel-rules.php",
+          221
+        ],
+        [
+          "includes/db-handler.php",
+          54
+        ],
+        [
+          "admin/finance/financeiro-pagamentos.php",
+          36
+        ],
+        [
+          "includes/ajax-handlers.php",
+          30
+        ],
+        [
+          "admin/finance/financeiro-config.php",
+          30
+        ],
+        [
+          "includes/core-helpers.php",
+          28
+        ],
+        [
+          "includes/admin-shell.php",
+          26
+        ],
+        [
+          "includes/whatsapp-engine.php",
+          26
+        ],
+        [
+          "admin/academic/alunos_lista.php",
+          25
+        ],
+        [
+          "tools/governance-lib.php",
+          24
+        ],
+        [
+          "includes/whatsapp-central.php",
+          23
+        ],
+        [
+          "includes/csp-zero-inline.php",
+          23
+        ],
+        [
+          "admin/finance/financeiro-planos-view.php",
+          23
+        ],
+        [
+          "admin/finance/financeiro-despesas-view.php",
+          22
+        ],
+        [
+          "includes/email-central.php",
+          21
+        ]
+      ]
+    },
+    "wpdb_prepare": {
+      "total": 1118,
+      "files": 134,
+      "top": [
+        [
+          "includes/aluno-fetch-ajax.php",
+          47
+        ],
+        [
+          "includes/finance-core.php",
+          45
+        ],
+        [
+          "includes/permissions-layer.php",
+          45
+        ],
+        [
+          "includes/db-handler.php",
+          44
+        ],
+        [
+          "admin/finance/financeiro-pagamentos.php",
+          42
+        ],
+        [
+          "includes/academic-logic.php",
+          33
+        ],
+        [
+          "includes/acta-pdf-handler.php",
+          30
+        ],
+        [
+          "includes/jardim-handlers.php",
+          28
+        ],
+        [
+          "includes/centros-helpers.php",
+          24
+        ],
+        [
+          "includes/portal-logic.php",
+          21
+        ],
+        [
+          "includes/documents-engine.php",
+          20
+        ],
+        [
+          "includes/alertas-core.php",
+          20
+        ],
+        [
+          "admin/finance/financeiro-gerador.php",
+          20
+        ],
+        [
+          "admin/system/dashboard-view.php",
+          20
+        ],
+        [
+          "admin/finance/financeiro-planos-view.php",
+          17
+        ]
+      ]
+    },
+    "wpdb_query": {
+      "total": 121,
+      "files": 31,
+      "top": [
+        [
+          "includes/permissions-layer.php",
+          17
+        ],
+        [
+          "admin/finance/financeiro-planos-view.php",
+          10
+        ],
+        [
+          "includes/finance-core.php",
+          8
+        ],
+        [
+          "includes/acta-pdf-handler.php",
+          8
+        ],
+        [
+          "includes/jardim-handlers.php",
+          8
+        ],
+        [
+          "includes/centros-helpers.php",
+          7
+        ],
+        [
+          "includes/fin-action-service.php",
+          7
+        ],
+        [
+          "includes/ajax-handlers.php",
+          7
+        ],
+        [
+          "includes/aluno-fetch-ajax.php",
+          6
+        ],
+        [
+          "includes/db-handler.php",
+          5
+        ],
+        [
+          "includes/db-migration-engine.php",
+          4
+        ],
+        [
+          "admin/academic/abertura-view.php",
+          4
+        ],
+        [
+          "includes/whatsapp-central.php",
+          3
+        ],
+        [
+          "includes/alertas-core.php",
+          3
+        ],
+        [
+          "admin/finance/financeiro-auditoria-view.php",
+          3
+        ]
+      ]
+    },
+    "ajax_actions": {
+      "total": 153,
+      "files": 41,
+      "top": [
+        [
+          "includes/db-handler.php",
+          35
+        ],
+        [
+          "includes/audit-hooks.php",
+          14
+        ],
+        [
+          "includes/ajax-handlers.php",
+          12
+        ],
+        [
+          "includes/whatsapp-central.php",
+          11
+        ],
+        [
+          "includes/email-central.php",
+          9
+        ],
+        [
+          "includes/aluno-fetch-ajax.php",
+          6
+        ],
+        [
+          "includes/aluno-accounts.php",
+          5
+        ],
+        [
+          "includes/academic-logic.php",
+          4
+        ],
+        [
+          "includes/comunicacoes-core.php",
+          4
+        ],
+        [
+          "includes/whatsapp-engine.php",
+          4
+        ],
+        [
+          "includes/email-queue-templates.php",
+          3
+        ],
+        [
+          "includes/centros-helpers.php",
+          3
+        ],
+        [
+          "includes/presencas-engine.php",
+          3
+        ],
+        [
+          "includes/whatsapp-diagnostics.php",
+          3
+        ],
+        [
+          "includes/payments/mpesa-conciliacao.php",
+          3
+        ]
+      ]
+    },
+    "inserts": {
+      "total": 193,
+      "files": 71,
+      "top": [
+        [
+          "includes/permissions-layer.php",
+          19
+        ],
+        [
+          "includes/db-handler.php",
+          18
+        ],
+        [
+          "includes/finance-core.php",
+          16
+        ],
+        [
+          "tools/smoke-regression-pack.php",
+          14
+        ],
+        [
+          "includes/acta-pdf-handler.php",
+          6
+        ],
+        [
+          "admin/academic/abertura-view.php",
+          6
+        ],
+        [
+          "includes/curriculum-engine.php",
+          5
+        ],
+        [
+          "includes/alertas-core.php",
+          4
+        ],
+        [
+          "includes/centros-helpers.php",
+          4
+        ],
+        [
+          "includes/aluno-fetch-ajax.php",
+          4
+        ],
+        [
+          "tools/smoke-settings-tenant-guard-v12-12-6.php",
+          4
+        ],
+        [
+          "includes/finance-ledger.php",
+          3
+        ],
+        [
+          "includes/whatsapp-recovery-mode.php",
+          3
+        ],
+        [
+          "includes/multitenancy.php",
+          3
+        ],
+        [
+          "tools/smoke-aluno-360-v12-11-9-46.php",
+          3
+        ]
+      ]
+    },
+    "updates": {
+      "total": 346,
+      "files": 86,
+      "top": [
+        [
+          "includes/cron-tasks.php",
+          28
+        ],
+        [
+          "includes/finance-core.php",
+          22
+        ],
+        [
+          "includes/class-sige-migration.php",
+          22
+        ],
+        [
+          "includes/db-handler.php",
+          19
+        ],
+        [
+          "includes/permissions-layer.php",
+          19
+        ],
+        [
+          "tools/smoke-apagamento.php",
+          14
+        ],
+        [
+          "admin/finance/financeiro-planos-view.php",
+          10
+        ],
+        [
+          "includes/alertas-core.php",
+          9
+        ],
+        [
+          "includes/centros-helpers.php",
+          8
+        ],
+        [
+          "includes/fin-action-service.php",
+          7
+        ],
+        [
+          "includes/ajax-handlers.php",
+          7
+        ],
+        [
+          "tools/check-apagamento.php",
+          7
+        ],
+        [
+          "sige-softgenial.php",
+          6
+        ],
+        [
+          "includes/despesa-state-machine.php",
+          6
+        ],
+        [
+          "includes/acta-pdf-handler.php",
+          6
+        ]
+      ]
+    },
+    "deletes": {
+      "total": 136,
+      "files": 52,
+      "top": [
+        [
+          "admin/whatsapp_central-view.php",
+          15
+        ],
+        [
+          "includes/db-handler.php",
+          9
+        ],
+        [
+          "includes/comunicacoes-core.php",
+          7
+        ],
+        [
+          "admin/academic/disciplinas-view.php",
+          7
+        ],
+        [
+          "includes/whatsapp-central.php",
+          6
+        ],
+        [
+          "tools/check-ledger.php",
+          5
+        ],
+        [
+          "admin/comunicacoes_central-view.php",
+          4
+        ],
+        [
+          "includes/class-sige-migration.php",
+          4
+        ],
+        [
+          "includes/jardim-handlers.php",
+          4
+        ],
+        [
+          "admin/hr/equipe-view.php",
+          4
+        ],
+        [
+          "admin/finance/financeiro-config.php",
+          4
+        ],
+        [
+          "includes/acta-pdf-handler.php",
+          3
+        ],
+        [
+          "includes/aluno-fetch-ajax.php",
+          3
+        ],
+        [
+          "includes/permissions-layer.php",
+          3
+        ],
+        [
+          "tools/check-apagamento.php",
+          3
+        ]
+      ]
+    }
+  },
+  "views_ok_count": 60,
+  "route_map_count": 60,
+  "perm_map_count": 60,
+  "critical": [
+    {
+      "file": "includes/finance-core.php",
+      "lines": 4243,
+      "sha256": "bcb51dcfaf93f8c45f378b825d734df2a3dea8dfe23e26b5364fc12fb5ad7266",
+      "bytes": 132890
+    },
+    {
+      "file": "admin/finance/financeiro-pagamentos.php",
+      "lines": 3875,
+      "sha256": "3afab797c29cd261d25c53410ac482f267d043232b98f31c02c323caebd9a823",
+      "bytes": 238192
+    },
+    {
+      "file": "admin/finance/financeiro-extratos.php",
+      "lines": 3761,
+      "sha256": "e251917d82564372c5a779152ef6a9640754a394e95298396ac48bf53eb293d1",
+      "bytes": 204861
+    },
+    {
+      "file": "includes/admin-shell.php",
+      "lines": 2739,
+      "sha256": "8b818279c9a11cbb9010ee6cbbe0498222420a3b7c85fe8d6ab919f74319270f",
+      "bytes": 182515
+    },
+    {
+      "file": "admin/academic/alunos_lista.php",
+      "lines": 9264,
+      "sha256": "4f491428dab48d4a12157ad645c84ecd8c0e1db93cdb5f81eab6793746137f47",
+      "bytes": 496345
+    },
+    {
+      "file": "includes/permissions-layer.php",
+      "lines": 1944,
+      "sha256": "3661ef0d427790f413b2148092bd2f340c4c064a9913d8eb1264301cd5728c47",
+      "bytes": 117439
+    },
+    {
+      "file": "includes/security-kernel-rules.php",
+      "lines": 8906,
+      "sha256": "774436262ffab70665dcb61cca1f3c14494e7adde846d6b269665cae028d6869",
+      "bytes": 228113
+    }
+  ]
+}

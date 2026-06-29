@@ -1,0 +1,44 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.163
+Data: 2026-06-14
+Ambito: Central de Comunicacoes - NIVEL 3 (historico por encarregado, cross-canal)
+
+O QUE E
+-------
+Separador "Por encarregado": para um aluno, a linha do tempo UNICA de todas as
+comunicacoes, e-mail e WhatsApp juntos, por ordem cronologica. E a visao de CRM
+escolar ("o pai da Ana recebeu a fatura por WhatsApp a 3 e o recibo por e-mail
+a 10").
+
+CORRELACAO AGNOSTICA AO CANAL
+-----------------------------
+  - WhatsApp: pela coluna aluno_id da fila (ligacao directa).
+  - E-mail: por recipient IN (emails dos encarregados na ficha do aluno:
+    email_encarregado, email_pai, email_mae, encarregado_principal_email).
+Os dois conjuntos sao normalizados para o modelo canonico (nivel 2) e ordenados
+por data desc.
+
+FUNCIONALIDADE
+--------------
+  - Busca de alunos por nome ou numero de processo (debounce 250ms + AJAX).
+  - Ficha de contacto: e-mails, telefones, canal preferido
+    (canal_preferencial_comunicacao) e consentimentos (consent_whatsapp/email).
+  - Linha do tempo com ponto por canal, estado canonico, contexto, resumo e data.
+  - Deep-link: ?ctab=encarregado&aluno_id=N pre-carrega o historico.
+
+SEGURANCA E QUALIDADE
+---------------------
+  sige_comm_historico_aluno / sige_comm_aluno_ficha / sige_comm_buscar_alunos +
+  AJAX sige_comm_historico / sige_comm_buscar. nonce + capability + escola_id +
+  prepared statements (alinhamento placeholder/parametro validado por harness).
+  Render no cliente com escape de HTML em todos os campos. UX no kit (sigeUi).
+  Tokens do design system.
+
+NAO TOCADO
+----------
+  Nenhuma regra financeira ou academica. So leitura e correlacao.
+
+A SEGUIR (opcional)
+-------------------
+  "Notificar pelo canal preferido": uma accao que escolhe o canal com base em
+  canal_preferencial_comunicacao + consentimentos. Toca nos caminhos de envio,
+  por isso seria um incremento proprio e cuidadoso.

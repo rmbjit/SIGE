@@ -1,0 +1,97 @@
+================================================================================
+SIGE SoftGenial - CHANGELOG
+v12.11.9.21 - Unificacao Visual com o Painel Principal (Dashboard Design Language)
+Data: 2026-05-29
+Canal: teste
+================================================================================
+
+OBJECTIVO
+---------
+Aplicar a TODOS os modulos a mesma linguagem visual do Painel Principal
+(?page=sige-app&view=dashboard), de forma profunda - nao por "interruptor"
+central, mas tratando a origem do problema ecra a ecra.
+
+
+PORQUE A TENTATIVA ANTERIOR (v12.11.9.20) PARECEU NAO MUDAR NADA
+---------------------------------------------------------------
+Os ecras legados (area antiga de Academico, Jardim, RH, Portaria, Devedores,
+WhatsApp, Portal) tinham o azul/indigo escrito DIRECTAMENTE em cada elemento,
+dentro do proprio style="..." da pagina (cor inline). Em CSS, a cor inline
+ganha sempre a qualquer folha de estilos central. Por isso, reescrever a paleta
+no :root foi uma correccao real mas que nao tinha como chegar a esses ecras  - 
+so re-tingiu os ecras que bebem a cor do centro (Financeiro/PRO), que ja estavam
+visualmente corrigidos. Os ecras errados continuaram errados.
+
+
+O QUE MUDA NESTA VERSAO - TRES FRENTES
+--------------------------------------
+
+1) MIGRACAO DE COR NA ORIGEM (248 trocas em 27 ficheiros)
+   A familia azul/indigo foi substituida por variaveis do tema, com fallback:
+     - tons fortes  -> var(--sg-theme-primary,#5a3fd6)
+     - tons escuros -> var(--sg-theme-primary-800,#3b2f8d)
+     - tons claros  -> var(--sg-theme-soft,#f1edff)
+   Hexes migrados: #0b4a8f, #1a237e, #083a72, #3f51b5, #1565c0, #1976d2,
+   #2196f3, #1e40af, #1e3a8a, #0d47a1, #eff6ff, #dbeafe, #bfdbfe, #e3f2fd,
+   #e8eaf6.
+   Efeito: cada ecra passa a usar a cor da PROPRIA escola (tema), e o Portal
+   front-end - onde as variaveis de tema nao existem - cai no violeta do produto.
+
+   SEGURANCA: a troca foi feita SO em contexto CSS (blocos <style> e style="...").
+   Tudo dentro de <script> ficou INTACTO de proposito:
+     - graficos Chart.js (ex.: jardim_relatorio) - uma variavel CSS partiria o canvas;
+     - templates de impressao gerados em JS (ex.: pautas/listas do Turmas)  - 
+       mantem o azul-marinho de impressao.
+
+2) LINGUAGEM DE SUPERFICIE DO PAINEL (nova camada no style.css)
+   Os ecras legados "nus" passam a ter os mesmos componentes do dashboard:
+     - cartoes brancos arredondados (raio 20px) com sombra suave em camadas
+       (anula o "border-radius:0" achatado da camada "design honestidade");
+     - skin de tabela do painel: cabecalho maiusculo discreto (#fafbff/#6f7486),
+       linhas suaves (#f0f2f7) e hover (#fbfaff);
+     - botoes primarios com gradiente violeta do tema e raio 12px;
+     - campos de formulario com raio e anel de foco violeta;
+     - selos/etiquetas como chips suaves violeta.
+   Valores copiados 1:1 do .sg-dashboard-v2 para coerencia exacta.
+
+   ESCOPO: aplica-se apenas aos ecras SEM skin PRO proprio. Ficam DE FORA
+   (porque ja tem linguagem propria, so beneficiaram da migracao de cor):
+   Painel Principal, Financeiro PRO, Alunos, Turmas, Equipa e Estado do Sistema.
+   Os DOCUMENTOS oficiais (acta, pauta, DEC, boletim) NAO mudam - mantem o
+   azul-marinho institucional por fidelidade de impressao.
+
+3) ADAPTABILIDADE REAL (telemovel)
+   Como body.sige-admin-app usa overflow-x:hidden, as tabelas dos ecras legados
+   cortavam colunas no telemovel. Agora, em @media (max-width:760px), essas
+   tabelas passam a permitir scroll horizontal (display:block + overflow-x:auto  - 
+   a mesma tecnica ja usada nos modulos Financeiros), com a dica
+   "Deslize para ver mais".
+
+
+O QUE NAO FOI TOCADO (inviolavel)
+--------------------------------
+- Formulas e regras: MT/MFD, media, progressao, fim-de-ciclo, SNE.
+- Modulos Financeiro, RH, Genero/GALS, WhatsApp.
+- Permissoes, papeis e isolamento multi-tenant (escola_id).
+- Base de dados e qualquer logica de calculo.
+- Paleta de impressao dos documentos oficiais.
+
+
+FICHEIROS ALTERADOS
+-------------------
+- assets/style.css  (nova camada de unificacao + rede responsiva; chavetas 2040/2040)
+- 27 ficheiros de vista/includes (migracao de cor - so valores de cor):
+  admin/academic: alocacao, aluno-portal, alunos_lista, aprovar_notas,
+    auditoria_notas, disciplinas, minhas_turmas, notas, turmas, vincular
+  admin/finance: config, devedores, extratos, pagamentos
+  admin/hr: equipe
+  admin/jardim: diario, presencas, relatorio, saude
+  admin/system: core-status, permissions-ui, portaria
+  admin: whatsapp_central
+  includes: admin-shell, aluno-accounts, dica-do-dia, portal-logic
+- sige-softgenial.php (versao), BUILD.json (versao + notas)
+
+Versao: 12.11.9.20 -> 12.11.9.21 (header, SIGE_VERSION, BUILD.json).
+A subida de versao tambem renova o cache-buster do style.css, garantindo que o
+navegador carrega o CSS novo (e nao a versao antiga em cache).
+================================================================================

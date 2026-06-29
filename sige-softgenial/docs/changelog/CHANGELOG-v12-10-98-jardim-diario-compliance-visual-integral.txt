@@ -1,0 +1,28 @@
+SIGE SoftGenial v12.10.98 - Jardim Diário: Compliance Visual Integral
+
+Base
+- Construído por cima da v12.10.97 - Responsividade PRO Matriz e Alunos.
+
+Objectivo
+- Aplicar o novo padrão visual Produto PRO ao módulo &view=jardim_diario.
+- Manter a intervenção exclusivamente visual, sem alterar regras pedagógicas, cálculos, handlers, notas, pagamentos, permissões ou base de dados.
+
+Ajustes aplicados
+- Removido o cabeçalho genérico do App Shell para esta view, garantindo header único.
+- Hero antigo escuro substituído por hero claro no padrão Painel Principal / Dashboard V2 MJS-grade.
+- Sequência visual aplicada: ícone canónico, área Pré-Escolar, título Diário do Jardim, subtítulo, chips de contexto e painel lateral de estado.
+- Adicionados KPIs de alunos, diários registados, áreas/disciplinas e critérios configurados.
+- Filtros de turma/data/trimestre redesenhados como cartão claro e responsivo.
+- Tabs Diário de Actividades e Avaliação por Critérios harmonizadas com o padrão de botões/tabs validado.
+- Cartões de alunos no Diário redesenhados com hierarquia visual mais limpa.
+- Campos, selects, textareas e botões harmonizados no padrão Produto PRO.
+- Avaliação por Critérios recebe cartões, legendas e grids mais profissionais e responsivos.
+- Responsividade revista para desktop, laptop 17", tablet e mobile.
+- Ícones canónicos adicionados sem depender de emojis como estrutura visual principal.
+
+Garantias
+- Sem alteração nos handlers de gravação.
+- Sem alteração no cálculo automático MB/B/S/NS.
+- Sem alteração nas respostas de critérios, comentários ou diários gravados.
+- Sem alteração em notas, Pauta, DEC, ACTA, boletins académicos principais ou pagamentos.
+- Sem alteração em Permission Engine, perfis, permissões ou base de dados.

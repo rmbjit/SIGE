@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.11.9.75 - Portaria Camera Safe Bootstrap PRO
+
+Contexto
+- Em desktop/Edge a câmara podia aparecer como “ocupada” mesmo sem Teams/Zoom/WhatsApp abertos, porque o fluxo anterior tentava o leitor QR antes do teste nativo e podia provocar dupla captura/hand-off instável.
+- Em mobile, alguns browsers devolviam document.permissionsPolicy/document.featurePolicy como “bloqueada” mesmo quando a política efectiva do site não devia bloquear; a UI interrompia antes de testar getUserMedia.
+
+Correcções
+- Remove bloqueio preventivo baseado apenas em document.permissionsPolicy.allowsFeature('camera').
+- Mantém Permissions-Policy: camera=(self) na Portaria e camera=() no restante SIGE.
+- Adiciona filtro wp_headers para reforçar a política antes do envio dos cabeçalhos.
+- Inicia a câmara com getUserMedia({ video:true })/constraints seguras no gesto do utilizador antes de entregar ao leitor QR.
+- Pára tracks de teste e aguarda libertação do controlador antes de iniciar Html5Qrcode, reduzindo falsos NotReadableError no Edge/Windows.
+- Se o teste nativo abre a câmara mas Html5Qrcode falha, activa fallback nativo com BarcodeDetector quando disponível.
+- Mensagens de erro deixam de culpar apenas aplicações abertas e passam a separar controlador/Windows/browser, política, permissão, componente QR e ausência de câmara.
+- Diagnóstico visual passa a indicar “sinal policy API” como aviso, não como bloqueio conclusivo.
+
+Blindagem
+- Sem alterações à base de dados, finanças, notas, fórmulas académicas, alunos, pagamentos ou permissões Guarda/Portaria.

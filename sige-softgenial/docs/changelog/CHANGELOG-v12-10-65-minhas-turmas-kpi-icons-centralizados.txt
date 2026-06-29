@@ -1,0 +1,14 @@
+SIGE SoftGenial v12.10.65 - Minhas Turmas: Centralização dos Ícones KPI
+
+Objectivo
+- Corrigir a posição dos ícones nos cartões KPI do módulo &view=minhas_turmas.
+- Garantir centralização visual rigorosa dentro das caixas dos indicadores, em linha com o Painel Principal.
+
+Ajustes aplicados
+- Centralização horizontal e vertical dos ícones nos cartões KPI.
+- Uniformização da caixa do ícone e do tamanho do SVG.
+- Mantida a aparência Produto PRO já validada, apenas com correcção de alinhamento.
+
+Garantias
+- Sem alteração em turmas, alunos, notas, pautas ou trimestres.
+- Sem alteração em regras académicas, pagamentos, multas, base de dados ou consultas.

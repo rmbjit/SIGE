@@ -1,0 +1,220 @@
+/* SIGE SoftGenial v12.19.1 - Dashboard Copy & Português Final Hotfix */
+body.sige-admin-app .sg-profile-dashboard-v121900{
+    --sg-pd-accent:var(--color-brand-500);
+    --sg-pd-soft:var(--color-brand-50);
+    --sg-pd-ink:var(--color-ink-900);
+    --sg-pd-muted:var(--color-slate-500);
+    display:grid;
+    grid-template-columns:minmax(280px,.95fr) minmax(0,1.55fr);
+    gap:var(--space-4);
+    align-items:stretch;
+    margin:0;
+    color:var(--sg-pd-ink);
+}
+body.sige-admin-app .sg-profile-dashboard-v121900[data-tone="financeiro"]{--sg-pd-accent:var(--color-success-500);--sg-pd-soft:var(--color-success-50);}
+body.sige-admin-app .sg-profile-dashboard-v121900[data-tone="academico"]{--sg-pd-accent:var(--color-info-500);--sg-pd-soft:var(--color-info-50);}
+body.sige-admin-app .sg-profile-dashboard-v121900[data-tone="portaria"]{--sg-pd-accent:var(--color-danger-500);--sg-pd-soft:var(--color-danger-50);}
+body.sige-admin-app .sg-profile-dashboard-v121900[data-tone="secretaria"]{--sg-pd-accent:var(--color-brand-500);--sg-pd-soft:var(--color-brand-50);}
+body.sige-admin-app .sg-profile-dashboard-v121900[data-tone="comunicacao"]{--sg-pd-accent:var(--color-info-500);--sg-pd-soft:var(--color-info-50);}
+body.sige-admin-app .sg-pd-panel,
+body.sige-admin-app .sg-pd-main{
+    min-width:0;
+    border:1px solid rgba(30,34,60,.08);
+    border-radius:var(--radius-xl);
+    background:var(--color-white);
+    box-shadow:var(--shadow-md);
+    overflow:hidden;
+}
+body.sige-admin-app .sg-pd-panel{
+    padding:var(--space-5);
+    background:linear-gradient(145deg,var(--color-white) 0%,var(--color-white) 56%,var(--sg-pd-soft) 100%);
+    display:grid;
+    gap:var(--space-4);
+}
+body.sige-admin-app .sg-pd-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:var(--space-2);
+    width:max-content;
+    max-width:100%;
+    padding:var(--space-1) var(--space-2);
+    border-radius:var(--radius-pill);
+    background:var(--color-white);
+    border:1px solid rgba(30,34,60,.08);
+    color:var(--sg-pd-accent);
+    font-size:var(--fs-xs);
+    font-weight:950;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+body.sige-admin-app .sg-pd-kicker:before{
+    content:"";
+    width:8px;
+    height:8px;
+    border-radius:var(--radius-pill);
+    background:var(--sg-pd-accent);
+}
+body.sige-admin-app .sg-pd-title{
+    margin:0;
+    font-size:clamp(var(--fs-lg),2.2vw,var(--fs-2xl));
+    line-height:1.08;
+    letter-spacing:-.045em;
+    font-weight:950;
+    color:var(--sg-pd-ink);
+}
+body.sige-admin-app .sg-pd-summary{
+    margin:0;
+    font-size:var(--fs-sm);
+    line-height:1.55;
+    font-weight:700;
+    color:var(--sg-pd-muted);
+}
+body.sige-admin-app .sg-pd-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:var(--space-2);
+}
+body.sige-admin-app .sg-pd-pill{
+    display:inline-flex;
+    align-items:center;
+    min-height:30px;
+    padding:0 var(--space-3);
+    border-radius:var(--radius-pill);
+    background:var(--color-white);
+    border:1px solid rgba(30,34,60,.08);
+    color:var(--color-slate-700);
+    font-size:var(--fs-xs);
+    font-weight:850;
+}
+body.sige-admin-app .sg-pd-main{
+    display:grid;
+    grid-template-rows:auto auto;
+}
+body.sige-admin-app .sg-pd-cards{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:var(--space-3);
+    padding:var(--space-4);
+}
+body.sige-admin-app .sg-pd-card{
+    min-width:0;
+    border:1px solid rgba(30,34,60,.08);
+    border-radius:var(--radius-lg);
+    background:var(--color-slate-50);
+    padding:var(--space-4);
+    display:grid;
+    gap:var(--space-2);
+}
+body.sige-admin-app .sg-pd-card span{
+    color:var(--sg-pd-accent);
+    font-size:var(--fs-xs);
+    line-height:1.25;
+    font-weight:950;
+    text-transform:uppercase;
+    letter-spacing:.07em;
+}
+body.sige-admin-app .sg-pd-card strong{
+    display:block;
+    color:var(--sg-pd-ink);
+    font-size:var(--fs-sm);
+    line-height:1.3;
+    font-weight:900;
+    overflow-wrap:anywhere;
+}
+body.sige-admin-app .sg-pd-card small{
+    color:var(--sg-pd-muted);
+    font-size:var(--fs-xs);
+    line-height:1.4;
+    font-weight:750;
+}
+body.sige-admin-app .sg-pd-footer{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:var(--space-3);
+    align-items:center;
+    padding:0 var(--space-4) var(--space-4);
+}
+body.sige-admin-app .sg-pd-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:var(--space-2);
+    min-width:0;
+}
+body.sige-admin-app .sg-pd-action{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:38px;
+    padding:0 var(--space-3);
+    border-radius:var(--radius-lg);
+    background:var(--sg-pd-soft);
+    color:var(--sg-pd-accent)!important;
+    text-decoration:none!important;
+    border:1px solid rgba(30,34,60,.08);
+    font-size:var(--fs-xs);
+    font-weight:950;
+    white-space:nowrap;
+}
+body.sige-admin-app .sg-pd-action:first-child{
+    background:var(--sg-pd-accent);
+    color:var(--text-on-brand)!important;
+    box-shadow:var(--shadow-sm);
+}
+body.sige-admin-app .sg-pd-groups{
+    display:flex;
+    gap:var(--space-2);
+    flex-wrap:wrap;
+    justify-content:flex-end;
+}
+body.sige-admin-app .sg-pd-group{
+    display:inline-flex;
+    align-items:center;
+    max-width:190px;
+    min-height:32px;
+    padding:0 var(--space-2);
+    border-radius:var(--radius-pill);
+    background:var(--color-white);
+    border:1px solid rgba(30,34,60,.08);
+    color:var(--sg-pd-muted);
+    font-size:var(--fs-xs);
+    line-height:1.2;
+    font-weight:800;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+body.sige-admin-app .sg-pd-group.is-primary{
+    color:var(--sg-pd-accent);
+    background:var(--sg-pd-soft);
+}
+body.sige-admin-app .sg-pd-close{
+    appearance:none;
+    width:38px;
+    height:38px;
+    border-radius:var(--radius-lg);
+    border:1px solid rgba(30,34,60,.08);
+    background:var(--color-white);
+    color:var(--sg-pd-muted);
+    font-size:var(--fs-lg);
+    font-weight:950;
+    cursor:pointer;
+}
+body.sige-admin-app .sg-pd-action:focus,
+body.sige-admin-app .sg-pd-close:focus{
+    outline:3px solid var(--sg-pd-soft);
+    outline-offset:2px;
+}
+@media(max-width:1180px){
+    body.sige-admin-app .sg-profile-dashboard-v121900{grid-template-columns:1fr;}
+    body.sige-admin-app .sg-pd-footer{grid-template-columns:1fr;}
+    body.sige-admin-app .sg-pd-groups{justify-content:flex-start;}
+}
+@media(max-width:760px){
+    body.sige-admin-app .sg-profile-dashboard-v121900{gap:var(--space-3);}
+    body.sige-admin-app .sg-pd-panel{padding:var(--space-4);}
+    body.sige-admin-app .sg-pd-cards{grid-template-columns:1fr;padding:var(--space-3);}
+    body.sige-admin-app .sg-pd-footer{padding:0 var(--space-3) var(--space-3);}
+    body.sige-admin-app .sg-pd-actions{display:grid;grid-template-columns:1fr;width:100%;}
+    body.sige-admin-app .sg-pd-action{width:100%;white-space:normal;text-align:center;}
+    body.sige-admin-app .sg-pd-group{max-width:100%;}
+}

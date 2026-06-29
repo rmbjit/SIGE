@@ -1,0 +1,23 @@
+SIGE SoftGenial v12.11.9.44 - Hotfix Loop Download Modelo Excel PRO
+
+Problema corrigido:
+- Ao clicar em “Baixar modelo Excel (.xlsx)”, o navegador descarregava o ficheiro, mas o App Shell activava o overlay global “A abrir área...” como se fosse uma navegação interna.
+- Como downloads via admin-post podem não substituir a página actual, o overlay ficava preso em loop visual.
+
+Intervenção:
+- O link do modelo Excel foi marcado como download sem transição (`data-sige-no-transition="1"` / `sige-download-link`).
+- O motor global de transição do App Shell passou a ignorar links de download, exportação, modelos e admin-post associados a ficheiros.
+- Foi adicionada uma salvaguarda que remove automaticamente o overlay quando o clique for de download e a página permanecer aberta.
+
+Preservado sem alteração:
+- Importação em duas etapas.
+- Modelo Excel .xlsx com listas controladas.
+- Importação CSV.
+- Histórico de lotes.
+- Anulação segura de lote.
+- Validações, permissões, AJAX e base de dados.
+- Notas, pautas, boletins, DEC, pagamentos, multas e recibos.
+
+Teste técnico:
+- Sintaxe PHP validada nos ficheiros alterados.
+- Smoke test estático confirmou a presença das blindagens de download e a versão 12.11.9.44.

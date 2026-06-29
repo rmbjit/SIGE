@@ -1,0 +1,42 @@
+SIGE SoftGenial v12.11.9.140 - AUDITORIA DE DESIGN (turmas)
+==========================================================
+
+Gestão de turmas (2376 linhas). O mais complexo estruturalmente da cauda.
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 7 pesos, 700 (26x), 800 (12x), 900 (9x), 850 (8x). Zero
+  pesos inline fora dos blocos CSS/templates (verificado).
+- RAIOS: 13 valores. SOMBRAS: 22. CORES: 162 hex.
+- ESTRUTURA COMPLEXA: 4 blocos <style> (topo 30-36, principal 143-1357,
+  + 1 dentro de template Excel) e 3 templates de impressão via
+  document.write (Mapa de Turmas, Horário, Lista de Alunos) + 1 de
+  exportação Excel.
+
+CORRECÇÃO (blocos CSS reais 30-36 e 143-1357; templates preservados)
+1. Hierarquia de 3 níveis: 7 pesos -> 500/600/700.
+2. Raios da escala: 13 -> 4. Sombras da escala: 22 -> 6.
+3. 181 cores migradas (blocos CSS + 2 hex de corpo HTML, --kpi-color e
+   --kpi-soft de marca). PRESERVADOS: 3 templates de impressão (Mapa de
+   Turmas, Horário, Lista de Alunos, cada com <!DOCTYPE> e @media print +
+   @page landscape/portrait) e 1 template de exportação Excel (com
+   xmlns:office). 59 hex preservados nesses templates. ZERO hex de estilo
+   restantes.
+
+PROVA VISUAL
+- turmas-antes-depois.png: cartões de turma com ocupação. Barra de
+  ocupação preservada; nome da turma e contagem destacam-se, detalhe
+  recua.
+
+GATES
+- smoke-regression-pack: 273 -> 278 invariantes.
+- turmas adicionado aos ecrãs auditados.
+- Baseline de mágicos: 4708 -> 4527 (-181).
+- Baseline de tipografia: 61 -> 49 (-12).
+- 12 gates verdes. Invariantes antigos (horário sigeUi.prompt) continuam
+  verdes.
+
+MARCO: 30 ecrãs auditados. Desde o início: mágicos 9925 -> 4527; pesos
+não-canónicos 665 -> 49.
+
+PRÓXIMO
+- auditoria_notas (12 pesos), dec (11), aprovar_notas (11)...

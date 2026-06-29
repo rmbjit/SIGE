@@ -1,0 +1,63 @@
+SIGE SoftGenial v12.11.9.27 - Fase 2/P2.1 Arquitectura Multi-Escola
+Build: sige-12.11.9.27-phase2-p2-1-tenant-schema
+Data: 2026-06-01
+Canal: test
+
+Objectivo
+---------
+Iniciar a Fase 2 com uma intervenção estrutural controlada no schema multi-escola:
+- remover índices únicos globais em tabelas tenant-scoped;
+- substituir por índices únicos que incluem escola_id;
+- executar backfill seguro de escola_id a partir de relações canónicas;
+- adicionar índices compostos para consultas/relatórios por escola;
+- gravar auditoria técnica do schema multi-escola.
+
+Alterações principais
+---------------------
+1. SCHEMA_VERSION actualizado para 20260601.1.
+2. Tabela sige_anos_lectivos:
+   - UNIQUE antigo: ano_lectivo
+   - UNIQUE novo: escola_id + ano_lectivo
+3. Tabela sige_fin_pacotes:
+   - UNIQUE antigo: codigo + ano_letivo
+   - UNIQUE novo: escola_id + codigo + ano_letivo
+4. Tabela sige_fin_pagamentos_anuais:
+   - UNIQUE antigo: aluno_id + ano_letivo
+   - UNIQUE novo: escola_id + aluno_id + ano_letivo
+5. Tabela sige_acta_cumprimento_programas:
+   - UNIQUE antigo: acta_id + disciplina_id + disciplina_nome
+   - UNIQUE novo: escola_id + acta_id + disciplina_id + disciplina_nome
+6. Curriculum Engine:
+   - levels, grades, subjects e periods passam a ter UNIQUE KEYs explícitas com escola_id.
+7. Criada migration run_phase2_tenant_schema_migration().
+8. Criados helpers seguros para:
+   - verificar tabela/coluna/índice;
+   - contar duplicados antes de criar UNIQUE KEY;
+   - substituir UNIQUE KEY global apenas quando o novo índice foi criado;
+   - fazer backfill de escola_id a partir de tabela pai;
+   - gravar auditoria de schema.
+9. Criados índices compostos tenant-aware para anos lectivos, turmas, matrículas, notas, matriz, turma_disciplinas, pacotes, pagamentos anuais, WhatsApp queue, actas e curriculum profiles.
+10. Criado smoke test: tools/smoke-phase2-tenant-schema-v12-11-9-27.php.
+11. Smoke tests da Fase 1 mantidos compatíveis para garantir regressão zero da blindagem anterior.
+
+Sem alterações funcionais
+-------------------------
+Não foram alterados:
+- cálculos financeiros;
+- mensalidades;
+- multas;
+- descontos;
+- pagamentos;
+- recibos;
+- notas;
+- pautas;
+- boletins;
+- regras académicas;
+- regras de aprovação.
+
+Validação estática
+------------------
+- PHP lint: 173 ficheiros PHP, 0 erros.
+- Smoke Fase 2: 36 OK / 0 FAIL.
+- Smoke Fase 1 Hotfix: 10 OK / 0 FAIL.
+- Smoke Fase 1 Final: 22 OK / 0 FAIL.

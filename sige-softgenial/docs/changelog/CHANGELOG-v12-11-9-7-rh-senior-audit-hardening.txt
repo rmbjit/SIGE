@@ -1,0 +1,17 @@
+SIGE SoftGenial v12.11.9.7 - RH Senior Audit Hardening PRO (TEST)
+
+Âmbito:
+- Módulo Recursos Humanos / Equipa e Professores (&view=equipe).
+
+Alterações de hardening:
+- Bypass de administrador real alinhado por role WordPress nativa (administrator/super_admin), evitando que capabilities herdadas como manage_options contornem a desactivação RH.
+- Validação server-side de NUIT, tipo de vínculo, data de término e valores monetários do formulário RH.
+- Normalização de valores monetários em formatos comuns pt/Moçambique.
+- Toasts do módulo passam a escapar título/mensagem antes de injectar no DOM.
+- Remoção de colaborador passa a validar falha de actualização RH antes de eliminar utilizador WordPress.
+- Bloqueio explícito de remoção/desactivação de contas técnicas WordPress reais pelo módulo RH.
+
+Garantias:
+- Sem alterações em fórmulas financeiras.
+- Sem alterações em regras académicas.
+- Sem alterações ao desenho visual aprovado do módulo.

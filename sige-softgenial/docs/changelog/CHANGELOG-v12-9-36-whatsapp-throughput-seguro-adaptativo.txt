@@ -1,0 +1,12 @@
+SIGE SoftGenial v12.9.36 - WhatsApp Throughput Seguro Adaptativo
+
+Base: v12.9.35 validada.
+
+Alterações:
+- Ritmo de envio passa a ser adaptativo por janela humana, limite diário, envios do dia e falhas recentes.
+- Batch deixa de ser fixo: pode variar entre 1 e 4 mensagens conforme risco e horário.
+- Se houver falhas recentes, o motor reduz ou pausa temporariamente o envio.
+- Desbloqueio inteligente passa a respeitar a margem segura real do dia.
+- Mantém limites anti-restrição, token de cron central e janelas humanas.
+
+Não altera fórmulas financeiras nem académicas.

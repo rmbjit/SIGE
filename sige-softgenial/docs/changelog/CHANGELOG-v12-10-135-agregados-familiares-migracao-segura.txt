@@ -1,0 +1,44 @@
+SIGE SoftGenial v12.10.135 - Agregados Familiares: Migração Segura
+
+Base
+- Construído por cima da v12.10.134 - Hub Control Alignment.
+
+Problema corrigido
+- Em algumas escolas, ao abrir fluxos financeiros ligados a pagamento por família/irmãos, o WordPress mostrava:
+  Table '...sige_agregados_familiares' doesn't exist
+  SHOW FULL COLUMNS FROM `...sige_agregados_familiares`
+- A causa era a existência de lógica de agregados familiares no serviço financeiro sem garantia de que a tabela já existia em bases antigas.
+
+Correções aplicadas
+
+1. Migração centralizada
+- Adicionada a tabela:
+  sige_agregados_familiares
+- A tabela inclui:
+  - escola_id
+  - telefone_chave
+  - nome_agregado
+  - observacoes
+  - criado_em
+  - actualizado_em
+  - índices por escola e telefone
+
+2. Alunos
+- Garante a coluna:
+  familia_id
+- Garante o índice:
+  idx_familia
+
+3. Serviço financeiro de família
+- Antes de criar ou listar agregados familiares, o serviço verifica se a tabela existe.
+- Se a tabela ainda não existir, o fluxo cai em modo seguro e não bloqueia pagamentos.
+- Evita o warning SHOW FULL COLUMNS FROM sige_agregados_familiares.
+
+Garantias
+- Sem alteração de regras de pagamento.
+- Sem alteração de cobranças, recibos ou lançamentos.
+- Sem alteração de notas, Pauta, DEC, ACTA ou boletins.
+- Sem alteração do Jardim.
+- Sem alteração da Página do Aluno.
+- Sem alteração do Hub Control Alignment.
+- Sem alteração destrutiva de base de dados.

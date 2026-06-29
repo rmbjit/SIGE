@@ -1,0 +1,20 @@
+SIGE SoftGenial v12.10.63 - Minhas Turmas: Compliance Visual Integral
+
+Objectivo
+- Rever o desenho do módulo &view=minhas_turmas e garantir alinhamento rigoroso com o Painel Principal / Dashboard V2 MJS-grade.
+- Manter a intervenção exclusivamente visual, sem alterar permissões, consultas, notas, pautas ou regras académicas.
+
+Ajustes aplicados
+- Criado hero próprio no padrão Produto PRO, com header único e sem duplicação pelo App Shell.
+- Sequência visual mandatória aplicada: ícone canónico, área Área Docente, título, subtítulo e acções.
+- Removidos emojis visuais dos títulos, botões e indicadores principais.
+- Resumo das turmas convertido para KPIs claros no mesmo modelo do Painel Principal.
+- Cards de turmas redesenhados com cantos arredondados, sombra suave, badges limpos, progresso e acções alinhadas.
+- Detalhe da turma redesenhado com KPIs, barra de progresso, pesquisa e cards de alunos no padrão Produto PRO.
+- Estados vazios e alertas harmonizados com ícones canónicos.
+
+Garantias
+- Sem alteração no controlo de acesso do professor.
+- Sem alteração nas consultas de turmas, alunos ou notas.
+- Sem alteração no lançamento de notas, pautas, trimestres ou regras académicas.
+- Sem alteração em pagamentos, mensalidades, multas, base de dados ou regras financeiras.

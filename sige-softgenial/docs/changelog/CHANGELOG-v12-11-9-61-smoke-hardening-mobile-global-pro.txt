@@ -1,0 +1,23 @@
+SIGE SoftGenial v12.11.9.61 - Smoke Hardening Mobile Global PRO
+
+Área: Mobile App Visual System / App Shell / Alunos
+
+Objectivo:
+- Realizar hardening após smoke test profundo da v12.11.9.60, corrigindo micro-riscos de regressão visual e melhorando acessibilidade da navegação mobile.
+
+Intervenções realizadas:
+- Reaplicação final do fine-tune 10/10 do hero de Alunos após as camadas globais/v60, evitando que a ordem do CSS aproxime novamente a ilustração do botão principal.
+- Bottom navigation global com `aria-current` nos itens activos.
+- Botão “Mais” com `aria-controls` e `aria-expanded` sincronizado ao abrir/fechar o menu lateral.
+- Reforço de foco visível nos itens da bottom navigation.
+- Protecção visual adicional da topbar mobile contra micro-regressões de recorte/curvas.
+- Pequeno reforço de scroll táctil em tabelas responsivas e contenção de overscroll em modais.
+
+Blindagem:
+- Sem alterações de base de dados.
+- Sem alterações em regras académicas ou financeiras.
+- Sem alterações em notas, pautas, boletins, DEC, pagamentos, importação, Ficha 360º ou Gestão Avançada de Encarregados.
+
+Validação:
+- PHP lint completo.
+- Smoke test estático de versão, CSS, bottom navigation, acessibilidade e regressões mobile.

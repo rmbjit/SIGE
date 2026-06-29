@@ -1,0 +1,23 @@
+DEPLOY - SIGE SoftGenial v12.12.22
+Correccao de roteamento da Fase 7: Reconciliacao e Aprovacoes Pendentes voltam a abrir
+Base: v12.12.21
+
+O QUE MUDA
+- As duas paginas entregues na Fase 7 voltam a abrir a partir do menu financeiro (Tesouraria): "Reconciliacao e Divergencias" e "Aprovacoes Pendentes". Antes, ao clicar em qualquer das duas, a aplicacao devolvia a pagina inicial.
+- O acesso fica como pretendido: a Reconciliacao para quem gere pagamentos moveis (Direccao, Secretaria Geral, financeiro); as Aprovacoes para quem pode estornar ou reabrir caixa. Quem nao tiver a permissao ve a mensagem de area reservada, em vez de cair no painel inicial.
+- Nada mais muda no comportamento das paginas: e so a reposicao do acesso.
+
+PASSOS (Hostinger File Manager, sem SSH)
+1. Salvaguardar a pasta actual do plugin (wp-content/plugins/sige-softgenial) por precaucao.
+2. Substituir a pasta sige-softgenial/ pela do ZIP v12.12.22 (instalacao completa).
+3. Confirmar versao em Plugins: deve ler 12.12.22.
+4. Abrir o menu financeiro e clicar em "Reconciliacao" e depois em "Aprovacoes": ambas devem abrir (com a permissao respectiva).
+
+NOTAS
+- NAO corre migracao de base de dados: a versao do esquema mantem-se 20260621.1. Nao e preciso reactivar o plugin para criar tabelas.
+- Sem alteracao da superficie de accao: o manifesto e as regras do Security Kernel mantem-se em 197 (enforce 31). Nao ha endpoint novo.
+- Sem alteracao das regras de calculo financeiro (as tres funcoes bloqueadas ficam byte-identicas a v12.12.21). Sem alteracao de design (estilo so com tokens).
+- Esta correccao precede o arranque da Fase 8. A partir daqui, a Fase 7 esta nao so entregue como acessivel na interface.
+
+REVERSAO
+- Repor a pasta salvaguardada do plugin. Como nao ha migracao nem nova superficie, a reversao e limpa: as duas paginas voltam ao estado anterior (inalcancaveis). Nenhum dado e afectado.

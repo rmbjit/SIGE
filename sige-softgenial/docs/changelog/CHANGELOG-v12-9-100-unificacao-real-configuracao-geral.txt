@@ -1,0 +1,53 @@
+SIGE SoftGenial v12.9.100 - Unificação Real da Configuração Geral
+
+Base:
+- v12.9.99 - Modo Escola Limpo + Modo Técnico SoftGenial, validada em ambiente de teste.
+
+Objectivo:
+- Corrigir a duplicação entre “Configuração Geral” e “Centro de Configuração” sem simplesmente esconder a página antiga.
+- Consolidar a antiga Configuração Geral dentro da estratégia de produto do Centro de Configuração.
+- Manter compatibilidade técnica controlada até a absorção completa dos campos.
+
+Alterações:
+1. Novo mapa de unificação da Configuração Geral:
+   - includes/settings/class-sige-settings-legacy-general.php
+   - inventaria as abas antigas;
+   - classifica cada área como absorvida, parcial, protegida, legado controlado ou pendente;
+   - define destino canónico, risco, decisão e próximo passo.
+
+2. Novo separador técnico no Centro de Configuração:
+   - “Configuração Geral integrada”;
+   - mostra mapa de absorção;
+   - mostra política de compatibilidade;
+   - permite abrir a página antiga apenas como compatibilidade legada controlada.
+
+3. Compatibilidade com a página antiga:
+   - admin/system/config-view.php passa a abrir a página antiga apenas com sgcp_legacy=1 em modo técnico autorizado;
+   - acessos normais a view=config recebem orientação para usar o Centro de Configuração;
+   - nada é apagado.
+
+4. Menu lateral:
+   - remove a duplicação visual do menu;
+   - mantém “Centro de Configuração” como entrada principal;
+   - a funcionalidade antiga permanece acessível pelo modo técnico do Centro, não como menu paralelo para a escola.
+
+Garantias:
+- Não altera regras financeiras.
+- Não altera regras académicas.
+- Não altera WhatsApp/Z-API.
+- Não altera SMTP/email.
+- Não altera Hub/licença.
+- Não altera permissões.
+- Não altera documentos, recibos, pautas, boletins ou schema.
+- Não remove campos legados.
+- Não executa migração automática.
+- Não expõe tokens, senhas, API keys ou segredos.
+
+Teste recomendado:
+1. Abrir Centro de Configuração em modo escola.
+2. Confirmar que só aparece a experiência limpa da escola.
+3. Abrir Centro com &sgcp_mode=tech&sgcp_tab=legacy_general.
+4. Confirmar o mapa de unificação.
+5. Clicar em “Abrir compatibilidade legada controlada”.
+6. Confirmar que a página antiga só abre para técnico autorizado com sgcp_legacy=1.
+7. Testar login, dashboard, alunos, turmas, financeiro, pagamentos, recibos, documentos, WhatsApp/fila e auditoria.

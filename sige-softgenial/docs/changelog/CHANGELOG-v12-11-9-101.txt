@@ -1,0 +1,44 @@
+SIGE SoftGenial v12.11.9.101
+============================
+
+Sprint UX-7 - jardim diario, alocacao e circulares conformes; confirmacao com nome do aluno; confirmacao consciente das circulares cadeada
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+DETALHE COMPLETO DO SPRINT UX-7
+===============================
+
+UX - MÓDULO 14: JARDIM DIÁRIO (17,8 -> 5,8)
+- Os 3 botões entram no kit: "Carregar" da toolbar (sgk-btn-sec) e os
+  dois "Guardar" violeta de marca (sgk-btn-primario com a cor e o
+  tamanho preservados por override).
+- Os 2 "AO90" eram fragmentos de schema (column_exists + "ativo IS
+  NULL"): o filtro v2.5d passou a excluí-los (recalibração).
+
+UX - MÓDULO 15: ALOCAÇÃO/ENTURMAÇÃO (17,1 -> 2,1)
+- "Remover aluno desta turma?" anónimo virou modal com NOME PRÓPRIO:
+  "Benedito Júnior sai desta turma. A matrícula mantém-se e o aluno
+  pode ser enturmado novamente." com botão vermelho Remover.
+- Enturmar/remover ganham toasts de sucesso e erro (adeus alert(res.data)).
+- Os botões +/x das linhas entram no kit com as cores preservadas.
+- PÉROLA Nº 3 DO PROGRAMA: a tabela da turma JÁ TINHA estado vazio
+  ("A turma ainda está vazia."): mais uma formulação legítima que a
+  régua não conhecia. View preservada; regex de vazios afinado; o
+  vazio existente foi CADEADO por invariante.
+
+UX - MÓDULO 16: CIRCULARES WHATSAPP (14,5 -> 2,5)
+- 3 alerts viram toasts (turma por escolher; prévia falhada; falha de
+  ligação).
+- O envio em massa JÁ TINHA confirmação SUPERIOR à do kit: checkbox
+  "Confirmo o envio desta circular para N famílias" que destrava o
+  botão (com a contagem vinda da prévia). Mantida intacta e CADEADA:
+  invariante garante checkbox + botão bloqueado por omissão + sync.
+
+QUALIDADE - GATES
+- tools/smoke-regression-pack.php: 109 -> 116 invariantes.
+- Diálogos nativos restantes: 11 alert + 5 confirm + 0 prompt, todos
+  na cauda longa de ecrãs pequenos (candidatos a sprint-vassoura).

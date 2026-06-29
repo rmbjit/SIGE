@@ -1,0 +1,23 @@
+DEPLOY - SIGE SoftGenial v12.12.19 (Ledger incr 4: despesas, creditos, fechos)
+==============================================================================
+
+O QUE MUDA
+- O livro-razao imutavel passa a cobrir despesas (criacao e mudanca de estado),
+  creditos (criacao) e fechos de caixa (fechar e reabrir turno). Cobertura
+  financeira do ledger completa.
+
+PASSOS
+1. Backup da base de dados e da pasta do plugin (rotina normal).
+2. Substituir a pasta do plugin pelo conteudo deste ZIP.
+3. Abrir o wp-admin uma vez como administrador (sem nova tabela nesta versao).
+4. Registar uma despesa, criar um credito, fechar e reabrir um turno. Abrir
+   Definicoes > Integridade do Ledger: a escola mostra os novos eventos,
+   "Cadeia integra" e a ancora "Confirmada".
+
+NOTAS
+- Nenhuma regra de calculo muda; as despesas, creditos e fechos funcionam como antes.
+  O registo no ledger e imediato e best-effort: nunca quebra a operacao.
+- Pagamentos, cobrancas e ajustes ja eram cobertos nas versoes anteriores.
+
+REVERSAO
+- Repor o ZIP anterior. Sem alteracao de esquema nesta versao.

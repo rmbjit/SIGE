@@ -1,0 +1,46 @@
+SIGE SoftGenial v12.12.7.1 - Mapa de Cobranca em PDF
+============================================================
+
+Tarefa extraordinaria sobre a baseline congelada v12.12.7. Acrescenta um
+botao definitivo na Central de Cobrancas que gera a lista completa de
+devedores da escola num documento pronto a imprimir e a guardar como PDF.
+Depois desta versao, a sequencia retoma na v12.12.8 (Tenant Isolation
+Hardening).
+
+O QUE MUDA
+- Botao Imprimir lista (PDF) em view=financeiro-devedores, ao lado de
+  Ver Lista de Cobranca. Abre em nova aba, com URL protegida por nonce.
+- Novo query handler sige_dev_print (?sige_dev_print=lista) em
+  includes/finance-devedores-pdf.php, despachado em template_redirect.
+- Regra query_handler:sige_dev_print no Security Kernel em enforce, com
+  nonce, permissao, tenant, rate limit, auditoria e runtime antecipado
+  multi-hook (admin_init, parse_request, template_redirect, prioridade -1000).
+- Documento de cobranca com cabecalho de escola, tres cartoes de resumo
+  (alunos com divida, divida total, maior divida), tabela detalhada e total.
+  CSS de impressao A4 com cabecalho de tabela repetido em cada pagina e
+  linhas sem quebra.
+
+PORQUE E DEFINITIVO, SEGURO E ESCALAVEL
+- Definitivo: segue o padrao canonico ja usado em despesas (sige_desp_print),
+  sem introduzir um padrao paralelo nem biblioteca de PDF no servidor.
+- Seguro: defesa em profundidade. O Kernel impoe a regra enforce antes do
+  handler; o handler tambem valida login, nonce, permissao e tenant
+  fail-closed. Leitura pura: nunca escreve em tabelas financeiras.
+- Escalavel: uma unica query agregada (GROUP BY aluno_id), sem N+1. A
+  paginacao do documento e feita pelo motor de impressao do browser.
+- Coerente: o total e a contagem do PDF coincidem com a Central de
+  Cobrancas. Usa a mesma populacao do ecra (alunos activos com matricula
+  activa) e a mesma funcao de saldo dos pagamentos (sige_fin_saldo_lancamento)
+  sobre os lancamentos em aberto, numa query sem JOIN (sem multiplicacao
+  por matriculas).
+
+FORMULAS FINANCEIRAS
+- Nenhuma formula financeira ou academica foi alterada. O dataset apenas
+  consome sige_fin_saldo_lancamento. As regras aprovadas permanecem intactas.
+
+CHECKLIST OBRIGATORIO
+- Header Version, SIGE_VERSION e BUILD.json sincronizados em 12.12.7.1.
+- SIGE_GOV_VERSION em 12.12.7.1.
+- Manifesto e regras do Kernel regenerados e alinhados (193 = 193).
+- PHP lint verde. php tools/run-gates.php verde (39 gates).
+- Smoke dedicado smoke-devedores-pdf-v12-12-7-1.php verde (28 verificacoes).

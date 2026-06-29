@@ -1,0 +1,44 @@
+DEPLOY - SIGE SoftGenial v12.12.63
+Fase 4 (CSP e front-end seguro) - incremento 2
+CSP Report-Only no shell admin e lote de onclick admin
+Data: 2026-06-23
+
+NATUREZA DA ENTREGA
+- Pacote instalavel completo (pasta sige-softgenial na raiz do ZIP).
+- Activa um CSP Report-Only no shell admin (NAO bloqueia, so reporta a consola) e
+  converte 21 onclick das vistas admin para o despachante data-sige-act.
+  Comportamento identico.
+- Nao toca em regras de calculo financeiro nem no ficheiro canonico finance-core.
+
+PRE-REQUISITOS
+- Sem alteracao de base de dados. Sem migracao. Sem alteracao de configuracao.
+- Sem novas dependencias externas (mantem-se 9 hosts).
+
+PASSOS
+1. Fazer copia de seguranca do plugin actual (pasta wp-content/plugins/sige-softgenial).
+2. Em alternativa recomendada, desactivar o plugin antes de substituir os ficheiros.
+3. Substituir a pasta sige-softgenial pela desta entrega (pacote completo).
+4. Reactivar o plugin, se tiver sido desactivado.
+5. Confirmar a versao 12.12.63 no cabecalho do plugin.
+
+VERIFICACAO POS-DEPLOY (recomendada no seu ambiente)
+- O CSP do shell admin e Report-Only: a interface NAO deve mudar de comportamento.
+  Confirme que o software (page=sige-app) abre e funciona normalmente.
+- Com a consola do browser aberta (F12, separador Console) nas paginas do software,
+  vera mensagens de Content-Security-Policy-Report-Only a assinalar violacoes de
+  script-src (handlers inline e scripts sem nonce ainda por tratar). Isto e
+  esperado e NAO afecta o funcionamento; e a telemetria para os proximos passos.
+- Confirme que os botoes convertidos funcionam: imprimir, alternar abas, filtrar
+  tabelas, repor senha, gerir horario, anular lote, carregar historico, fechar
+  popups e os dois toggles de visibilidade.
+
+NOTAS
+- O CSP do shell admin e Report-Only nesta entrega; o enforce so vem depois de
+  tratados, com a ajuda da consola, os onclick restantes (window.open(this.href),
+  this.form, e os gerados por JavaScript) e os estilos inline (para o style-src).
+- Os 2 onclick do finance-core estao numa pagina standalone de impressao, fora do
+  shell, e nao foram tocados.
+- A catraca de onclick desceu de 66 para 45.
+
+REVERSAO
+- Repor a pasta a partir da copia de seguranca. Sem passos de base de dados.

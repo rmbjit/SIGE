@@ -1,0 +1,48 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.165
+Data: 2026-06-14
+Ambito: Central de Comunicacoes - acentuacao, visual do sistema, SMTP so super admin
+
+(1) ACENTUACAO (portugues europeu)
+----------------------------------
+Todo o texto visivel ao utilizador ficou correctamente acentuado:
+Comunicacoes->Comunicacoes (com cedilha e til), Saude->Saude (com acento),
+Operacao, configuracao, historico, numero, cronologica, Pre-visualizacao,
+Destinatario, Accoes, Ultimos, recepcao, ligacao, alteracoes, endereco, nao, sao.
+Aplicado na vista (separadores, tabela, modelos, por encarregado, saude do
+e-mail, dialogos e avisos), nas mensagens do nucleo, no e-mail de teste e na
+nota do WhatsApp. Feito por frase inteira, sem tocar em identificadores de
+codigo (variaveis/funcoes como accao, historico).
+
+(2) VISUAL IGUAL AO SISTEMA
+---------------------------
+A Central deixa de desenhar um cabecalho proprio. Passa a usar o cabecalho
+padrao do sistema (sg-product-page-head), alimentado pelos metadados
+(area "Comunicacao", titulo "Central de Comunicacoes", subtitulo). Fica igual
+aos restantes modulos. Os paineis mantem os tokens do design system.
+
+(3) SMTP CABE SO AO SUPER ADMIN
+-------------------------------
+A alteracao de SMTP e exclusiva do administrador principal:
+  - O endpoint de teste (sige_emc_smtp_test) passou a exigir
+    sige_is_real_wp_admin_user(), a mesma regra que o config_center ja usa
+    para gravar e testar SMTP.
+  - No separador "Saude do e-mail", o link "Abrir configuracao SMTP" e o botao
+    "Enviar e-mail de teste" so aparecem ao super admin. Os outros papeis com
+    acesso a Central veem o estado do SMTP em leitura, com uma nota a dizer que
+    a configuracao cabe ao administrador principal.
+  - O gravar do SMTP no config_center ja estava protegido no servidor; isto
+    reforca a regra na nova superficie e na interface.
+
+CORRECAO ADICIONAL
+------------------
+Reposta a abertura da seccao do separador "Modelos" (<section> e paragrafo de
+ajuda), que tinha ficado em falta numa edicao anterior.
+
+VALIDACAO
+---------
+php -l limpo; JS embebido balanceado; sem travessoes; 15/15 gates;
+306 invariantes de regressao; consistencia visual no baseline.
+
+NAO TOCADO
+----------
+Nenhuma regra financeira ou academica. Ferramentas WhatsApp intactas.

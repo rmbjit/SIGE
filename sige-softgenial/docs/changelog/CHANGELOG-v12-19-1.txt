@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.19.1 - Dashboard Copy & Português Final Hotfix
+
+Tipo: hotfix localizado de UX textual.
+Baseline: v12.19.0.
+
+Alterações:
+- Copy do dashboard por perfil corrigido para português final e acentuado.
+- Kicker alterado para "Orientação do painel".
+- Headline, resumo, cards, hints e chips ajustados para linguagem de utilizador final.
+- Labels de grupos e áreas humanizados quando vêm de fontes sem acentos.
+- Dismiss key actualizado para v121901 para garantir que o utilizador veja o copy corrigido nesta sessão.
+
+Contratos preservados:
+- Sem escrita na base de dados.
+- Sem alteração de schema.
+- Sem alteração de permissões.
+- Sem alteração de fórmulas financeiras ou académicas.
+- Sem alteração do dashboard core, admin-shell, Portaria, Alunos, financeiro ou académico core.

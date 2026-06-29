@@ -1,0 +1,32 @@
+SIGE SoftGenial v12.10.81 - ACTA: Censo 3 de Março e Snapshot Estatístico Oficial
+
+Objectivo
+- Corrigir a lógica da linha “3 de Março” na ACTA para respeitar o Censo Escolar oficial de Moçambique.
+- Garantir que o valor não seja inferido pela data de registo/matrícula no sistema.
+- Introduzir snapshot oficial confirmado pela escola, com auditoria e uso estável na impressão/PDF.
+
+Correções aplicadas
+- Criada tabela segura `sige_acta_censo_3_marco` para guardar o snapshot oficial por escola, turma, ano lectivo e data de referência.
+- A linha “3 de Março” deixa de usar `data_matricula <= 03/03`.
+- O módulo ACTA passa a apresentar um card “Censo Escolar - 3 de Março” com:
+  - M - Mulheres no Censo;
+  - HM - Total da turma no Censo;
+  - observação/fonte;
+  - checkbox explícito de confirmação/actualização oficial.
+- A confirmação guarda:
+  - valores M/HM;
+  - data oficial de referência;
+  - utilizador que confirmou;
+  - data/hora da confirmação;
+  - observação;
+  - snapshot JSON com valores e sugestão do sistema no momento.
+- A ACTA impressa/PDF usa o snapshot oficial quando confirmado.
+- Quando não há snapshot confirmado, a linha “3 de Março” mostra “ - ” em vez de zero falso.
+- O PDF passa a explicar que a linha 3 de Março representa o snapshot oficial confirmado pela escola.
+- O módulo digital actualiza a explicação dos dados automáticos da ACTA.
+
+Garantias
+- Sem alteração na nota votada.
+- Sem alteração na aprovação do Director Pedagógico.
+- Sem alteração em fórmulas, médias, pautas, DEC, pauta final, boletins ou regras académicas.
+- Sem alteração em pagamentos, multas, mensalidades ou base de dados financeira.

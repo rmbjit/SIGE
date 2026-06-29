@@ -1,0 +1,58 @@
+SIGE SoftGenial v12.11.9.88.1 - Financeiro Status Sync Hotfix
+Data: 10 de junho de 2026
+
+Contexto
+- Hotfix funcional sobre v12.11.9.88 - Financeiro Cash Reconciliation PRO.
+- Corrige dois problemas reportados em produção/teste:
+  1) lançamento de mensalidades a ignorar alunos importados/registados via Excel em turma;
+  2) aluno anteriormente desistente continuar a ser tratado como não-activo nos pagamentos após reactivação.
+
+Causa técnica
+- O gerador de mensalidades ainda usava filtro rígido `a.status = 'activo'` em vez da condição canónica que aceita variações controladas como activo/ativo/activa/ativa.
+- O cadastro do aluno actualizava a tabela de alunos, mas não reescrevia `sige_matriculas.status_matricula` ao reactivar um aluno. Assim, um aluno com `sige_alunos.status = activo` podia continuar com matrícula do ano em `desistente`.
+- O módulo Pagamentos por Turma também dependia de gates exactos sobre `status_matricula = 'activa'` e `a.status = 'activo'`.
+
+Correcções aplicadas
+1. `includes/core-helpers.php`
+   - Adicionados helpers de normalização operacional de status:
+     - `sige_status_operacional_normalizar()`
+     - `sige_status_operacional_activo()`
+     - `sige_status_operacional_inactivo()`
+   - `sige_aluno_financeiramente_inactivo()` agora trata o status principal do aluno como fonte operacional canónica.
+   - Se o aluno está activo, mas a matrícula do ano ainda está marcada como desistente/transferida/inactiva por legado, a função tenta sincronizar a matrícula para activa e deixa de bloquear pagamentos recorrentes.
+
+2. `includes/db-handler.php`
+   - Ao criar/actualizar aluno, a matrícula do ano lectivo passa a sincronizar `status_matricula` com o status do aluno.
+   - Reactivar um aluno actualiza também a matrícula do ano para `activa`.
+
+3. `includes/aluno-fetch-ajax.php`
+   - Importação Excel/CSV passa a gravar `status_matricula` de acordo com o status do aluno importado.
+   - Evita inconsistência entre ficha do aluno e matrícula criada pelo importador.
+
+4. `admin/finance/financeiro-gerador.php`
+   - Gerador de mensalidades passa a usar condição canónica do aluno activo.
+   - JOIN de matrícula/turma foi reforçado com `escola_id` para evitar ambiguidade multi-tenant.
+   - Alunos reactivados ou importados com variações válidas de activo deixam de ser ignorados indevidamente.
+
+5. `admin/finance/financeiro-pagamentos.php`
+   - Ao abrir pagamentos de um aluno activo, o módulo executa uma auto-cura leve da matrícula do ano, quando necessário.
+   - Pesquisa de alunos reforçada com JOIN multi-tenant seguro entre aluno, matrícula e turma.
+
+6. `admin/finance/pagamentos-turma-view.php`
+   - Pagamentos por Turma passa a usar a condição canónica do aluno activo.
+   - Remove dependência rígida de `m.status_matricula = 'activa'` para não esconder alunos reactivados com matrícula legada desalinhada.
+
+Validações
+- `php -l` completo em 243 ficheiros PHP: OK.
+- Smoke test de reconciliação v12.11.9.88.x: OK.
+- Smoke test novo de status sync v12.11.9.88.1: OK.
+- ZIP final testado com integridade: OK.
+
+Garantias
+- Não altera cálculos financeiros.
+- Não altera recibos.
+- Não altera estornos.
+- Não altera fecho/reabertura de caixa.
+- Não altera reconciliação da Fase 2.
+- Não cria nem altera estrutura de base de dados.
+- Não altera regras de permissões.

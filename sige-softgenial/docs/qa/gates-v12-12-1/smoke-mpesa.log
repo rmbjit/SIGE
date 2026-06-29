@@ -1,0 +1,39 @@
+OK   Bearer gerado em base64 válido
+OK   Decifrar o bearer com a chave privada devolve a API key exacta
+OK   Public key em base64 nu é normalizada para PEM e cifra igual
+OK   Chave pública inválida devolve bearer vazio (sem fatal)
+OK   9 dígitos começados em 8 ganham 258
+OK   +258 com espaços normaliza
+OK   Já normalizado mantém-se
+OK   Prefixo 00 internacional removido
+OK   Formato input_* mapeado
+OK   Formato output_* mapeado
+OK   Chaves em maiúsculas resolvidas case-insensitive
+OK   Moeda por defeito MZN
+OK   Só os dígitos da referência contam
+OK   Dígitos no meio de texto extraídos
+OK   Sem dígitos devolve vazio
+OK   Valor exacto vai ao mais antigo com saldo (31)
+OK   Pagamento parcial vai ao mais antigo (31)
+OK   Tolerância de 0,50 MT aceita arredondamento
+OK   Valor que excede o mais antigo vai a pendente_manual (sem inventar divisões)
+OK   Aluno sem dívida em aberto vai a pendente_manual
+OK   Ordenação por vencimento é feita internamente (51 vence)
+OK   Parser: '1500.00' = 1500
+OK   Parser: '2.350,50' europeu = 2350.5
+OK   Parser: '2,350.50' anglo = 2350.5
+OK   Parser: '1.500' = milhares = 1500
+OK   Parser: '1,50' = decimal = 1.5
+OK   Parser: sufixo de moeda ignorado
+OK   Provider mpesa regista com método 'mpesa'
+OK   Provider emola regista com método 'emola'
+OK   Provider case-insensitive
+OK   Provider desconhecido cai no método mpesa (defeito seguro)
+OK   Rótulo humano do e-Mola correcto
+OK   Rótulo humano do M-Pesa correcto
+OK   e-Mola formato transid/amount mapeado
+OK   e-Mola formato alternativo + vírgula decimal
+OK   e-Mola moeda por defeito MZN
+OK   e-Mola payload irreconhecível devolve vazio (webhook recusa com 400)
+------------------------------------------------------------
+SMOKE M-PESA OK - 37 verificações passaram.

@@ -1,0 +1,21 @@
+# Definition of Done v12.12.4
+
+- DoD-001: `includes/security-kernel.php` existe e tem runtime central.
+- DoD-002: `includes/security-kernel-rules.php` existe e carrega sem erro.
+- DoD-003: kernel carregado no bootstrap depois de permissao/tenant e antes dos handlers funcionais.
+- DoD-004: 174 superficies do manifesto cobertas pelo kernel.
+- DoD-005: cada superficie tem mode observe ou enforce.
+- DoD-006: enforcement piloto activo nas 4 superficies aprovadas.
+- DoD-007: regras enforce declaram intent/nonce.
+- DoD-008: regras enforce privadas declaram permissoes ou delegacao formal.
+- DoD-009: regras enforce de alto/critico declaram rate limit.
+- DoD-010: regras enforce de alto/critico declaram auditoria.
+- DoD-011: regras tenant-aware exigem tenant valido.
+- DoD-012: gates novos verdes.
+- DoD-013: gates antigos continuam verdes.
+- DoD-014: PHP lint verde.
+- DoD-015: testes negativos provam que gates falham quando regras obrigatorias sao enfraquecidas.
+- Zero P0/P1: a versao so pode ser concluida com P0=0 e P1=0.
+- DoD-016: sem aumento nao declarado de divida de autorizacao, tenant, segredos ou dependencias.
+- DoD-017: rediagnostico adversarial documentado.
+- DoD-018: Zero P0/P1 aberto para declarar a versao concluida.

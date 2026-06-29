@@ -1,0 +1,55 @@
+SIGE SoftGenial v12.9.88 - Normalização de Estado e Expansão Segura
+
+Base validada:
+- v12.9.87 - Sincronização Assistida e Auditoria de Configurações.
+
+Objectivo:
+Melhorar a leitura dos estados de saneamento e expandir a sincronização assistida para grupos institucionais/documentais de baixo e médio risco, sem alterar lógica operacional, cálculos, WhatsApp, académico, documentos finais, permissões ou Hub.
+
+Principais melhorias:
+
+1. Normalização de estados
+   - Estados agora aparecem de forma mais clara:
+     • sem valor nas fontes;
+     • já alinhado;
+     • conflito: escolha técnica;
+     • pronto para sincronização;
+     • sem fonte legada gravável;
+     • bloqueado por alto risco;
+     • congelado.
+
+2. Expansão segura dos grupos de baixo/médio risco
+   - Novos grupos mapeados para observação e eventual sincronização assistida:
+     • telefone oficial da escola;
+     • email institucional;
+     • cidade/localidade;
+     • província;
+     • rodapé dos documentos;
+     • prefixo de matrícula.
+   - As fontes antigas são apenas aliases compatíveis; nenhuma coluna é criada, removida ou migrada automaticamente.
+
+3. Segurança anti-regressão
+   - A sincronização só aparece se existir fonte canónica, alias legado gravável e valor útil.
+   - Não há escrita automática.
+   - Cada acção continua a exigir perfil técnico, nonce, confirmação textual, sanitização, validação e auditoria.
+   - Campos financeiros, académicos, WhatsApp, SMTP, Hub/licença, templates críticos e dados sensíveis continuam bloqueados.
+
+4. Robustez técnica
+   - A camada de compatibilidade agora identifica se a fonte existe no schema antes de sugerir acção.
+   - Evita mostrar botões para destinos inexistentes ou não graváveis.
+   - Mantém fallback legado activo, sem remoção física.
+
+Testes recomendados:
+1. Instalar a versão num ambiente de teste.
+2. Abrir: Sistema Técnico → Centro de Configuração → Saneamento controlado.
+3. Confirmar novos estados e grupos institucionais.
+4. Verificar que grupos financeiros continuam bloqueados.
+5. Se houver alias legado preenchido, sincronizar apenas um campo institucional e confirmar auditoria.
+
+Sem regressão esperada:
+- Nenhuma regra financeira alterada.
+- Nenhum cálculo alterado.
+- Nenhum envio WhatsApp alterado.
+- Nenhum documento/pauta/boletim alterado.
+- Nenhuma permissão operacional alterada.
+- Nenhuma remoção automática.

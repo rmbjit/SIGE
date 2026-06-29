@@ -1,0 +1,23 @@
+SIGE SoftGenial v12.9.81 - Dívidas Mensais no Cartão e Multa no Transporte
+
+Base: v12.9.78 validada recebida em anexo.
+
+Alterações:
+1. Módulo Financeiro > Pagamentos
+   - O cartão mensal passa a mostrar a dívida mensal em aberto quando já existe lançamento pendente/parcial para aquele mês.
+   - O resumo mostra total em falta, valor pago, mensalidade, transporte e multa quando aplicável.
+   - A tabela de Dívidas Actuais continua a ser o local correcto para pagar lançamentos já materializados, evitando duplicação.
+
+2. Transporte Escolar
+   - O serviço financeiro Transporte Escolar passa a ser criado com multa aplicável por defeito.
+   - A multa sobre transporte usa o mesmo motor canónico de multas: configuração global ou multa específica do serviço.
+   - A escola pode ligar/desligar multa e descontos do transporte em Configuração de Preços > Regras do Transporte Escolar.
+   - O valor do transporte continua a vir da rota de transporte do aluno; o campo valor do serviço permanece 0.
+
+Não alterado:
+- Estrutura da base de dados.
+- Pagamentos/estornos canónicos.
+- WhatsApp.
+- Dashboard.
+- Extractos.
+- Lançamentos Excel da v12.9.78.

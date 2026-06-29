@@ -1,0 +1,22 @@
+SIGE SoftGenial v12.10.15 - Extractos e Caixa: Harmonia Visual
+
+Objectivo
+- Alinhar o módulo Extractos e Caixa ao padrão visual aprovado no Painel Principal e nos módulos financeiros já validados.
+
+Alterações visuais
+- Removida duplicação de cabeçalho nesta página.
+- Novo hero claro e amplo para Extractos e Caixa.
+- Leitura de status do caixa e receita líquida integrada no hero.
+- Alternância entre Caixa do período e Histórico de aluno reorganizada em cartões claros.
+- Filtros, KPIs, tabela de movimentos, histórico do aluno e modal de estorno harmonizados visualmente.
+- Botões, campos, badges e tabelas ajustados para o padrão de App já aprovado.
+- Melhorias responsivas para tablet e telemóvel.
+
+Confirmações
+- Fecho de caixa e reabertura de caixa passam a abrir pop-up real de confirmação, em vez de confirmação nativa do navegador.
+
+Garantias
+- Sem alterações em fórmulas.
+- Sem alterações em mensalidades, multas, descontos, pagamentos, cobranças, recibos, estornos ou base de dados.
+- Sem alterações em notas, pautas, DEC, boletins ou actas.
+- Sem termos técnicos internos visíveis ao utilizador final.

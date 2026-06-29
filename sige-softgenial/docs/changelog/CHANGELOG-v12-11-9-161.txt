@@ -1,0 +1,66 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.161
+Data: 2026-06-14
+Ambito: NOVO - Central de Comunicacoes (E-mail + WhatsApp)
+
+O QUE E
+-------
+Uma vista unica (?page=sige-app&view=comunicacoes_central) que reune o controlo
+das comunicacoes da escola, a semelhanca do Central de WhatsApp ja existente.
+
+BACKEND - includes/email-central.php (mesma seguranca do Central WhatsApp)
+-------------------------------------------------------------------------
+  - Nonce dedicado sige_emc_nonce em TODOS os endpoints.
+  - Capability multi-papel: director, admin, admin_ti, financeiro, secretario,
+    secretaria_geral (ou WP admin real).
+  - escola_id em TODAS as queries (multi-tenant); sige_emc_load_row valida a
+    escola antes de qualquer accao.
+  - Prepared statements em todas as queries.
+  - Auditoria via sige_fin_log em cada accao.
+  Endpoints AJAX:
+    sige_emc_cancel         pendente            -> cancelled
+    sige_emc_retry          failed|cancelled    -> pending (attempts=0, agora)
+    sige_emc_delete         sent|failed|cancelled -> elimina
+    sige_emc_get_full       pre-visualizacao (assunto + corpo)
+    sige_emc_process_now    processa a fila ja (limite seguro)
+    sige_emc_save_templates grava os modelos da escola
+    sige_emc_reset_template repoe um modelo ao default (remove o override)
+    sige_emc_test_template  envia um e-mail de teste do modelo
+
+VISTA - admin/comunicacoes_central-view.php (3 separadores)
+----------------------------------------------------------
+  1. E-mails: cartoes de estatistica por estado + fila PAGINADA (por escola) com
+     filtros (todos/pendentes/enviados/falhados/cancelados), pre-visualizacao em
+     modal, e accoes ver/cancelar/reenviar/eliminar conforme o estado. Botao
+     "Processar fila agora".
+  2. Modelos: editor do assunto e corpo de cada modelo de e-mail, com a lista de
+     variaveis, "Repor original" e "Enviar teste". Resolve de raiz a edicao de
+     texto que ate agora so tinha backend e nenhuma UI.
+  3. WhatsApp: ligacao para o Central de WhatsApp existente.
+
+USABILIDADE / DISCIPLINA
+------------------------
+  - Zero alert()/confirm()/prompt() nativos: usa os diálogos canonicos do kit
+    (sigeUi.confirm/toast/prompt), como as outras vistas. Passa o invariante de
+    extincao global (306 invariantes verdes).
+  - Toda a UI usa os tokens do design system (--space/--fs/--radius/--color/--z).
+    Debito de tokens inalterado.
+
+REGISTO
+-------
+  Router (com whitelist de seguranca de views), menu lateral, cabecalho proprio,
+  metadados (ui-components) e modulo no arnes visual (cobertura de regressao
+  visual a partir de agora).
+
+NAO TOCADO
+----------
+  Nenhuma regra financeira ou academica. So estado de fila e texto de modelos.
+
+VALIDACAO
+---------
+  php -l limpo em todos os ficheiros; 15/15 gates; 306 invariantes de regressao
+  verdes; release gate OK.
+
+A SEGUIR (possivel)
+-------------------
+  - Accoes em massa na fila de e-mail (cancelar/eliminar seleccionadas).
+  - Unificar tambem a fila WhatsApp dentro do separador, em vez de ligacao.

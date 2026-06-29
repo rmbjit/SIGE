@@ -1,0 +1,39 @@
+SIGE SoftGenial v12.11.9.134 - AUDITORIA DE DESIGN (pauta-final)
+===============================================================
+
+Pauta final de avaliação (578 linhas). Documento oficial, irmão do
+pautas e do acta.
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 8 pesos, 850 (12x), 800 (5x). Pesos inline (L480) já
+  canónicos (700).
+- RAIOS: 4 valores. SOMBRAS: 10. CORES: 73 hex.
+
+CORRECÇÃO (bloco <style> 213-329, inclui @media print; template impressão e JS preservados)
+1. Hierarquia de 3 níveis: 8 pesos -> 500/600/700. .pf-meta-pill mantido
+   a 700 (é pill de destaque, não legenda).
+2. Raios da escala: 4 -> 3. Sombras da escala: 10 -> 5.
+3. 104 cores migradas (CSS + corpo HTML). Inclui classes de SITUAÇÃO
+   (.sit-progride verde, .sit-transita laranja, .sit-reprova vermelho,
+   .td-neg nota negativa) e cabeçalhos de tabela coloridos, migrados para
+   tokens preservando o significado. PRESERVADOS: template de impressão
+   (<!DOCTYPE> com <style> próprio, 13 hex) e @media print. ZERO hex de
+   estilo restantes (só template).
+
+PROVA VISUAL
+- pauta-final-antes-depois.png: pauta final. Situação preservada
+  (PROGRIDE verde, REPROVA vermelho, TRANSITA laranja); nome e média
+  destacam-se, situação ênfase.
+
+GATES
+- smoke-regression-pack: 247 -> 252 invariantes.
+- pauta-final adicionado aos ecrãs auditados.
+- Baseline de mágicos: 5707 -> 5603 (-104).
+- Baseline de tipografia: 141 -> 126 (-15).
+- 12 gates verdes.
+
+MARCO: 24 ecrãs auditados. Desde o início: mágicos 9925 -> 5603; pesos
+não-canónicos 665 -> 126.
+
+PRÓXIMO
+- whatsapp_central (14 pesos), notas (14), jardim_relatorio (13)...

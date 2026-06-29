@@ -1,0 +1,16 @@
+SIGE SoftGenial 12.9.9.6 - V7.2.4 Controlo de Notificações
+
+Base usada:
+- sige-softgenial-12-9-9-5-v7-2-3-scroll-context-safe.zip
+
+Implementado:
+- Lançamento de mensalidades: escolher WhatsApp/E-mail antes de lançar.
+- Registo de pagamento: escolher WhatsApp/E-mail antes de confirmar pagamento.
+- Central de Cobranças: escolher canais antes de cobrança manual/em massa.
+- Compatibilidade: se formulário antigo não trouxer campos, mantém envio como antes.
+
+Não alterado:
+- Regras financeiras e cálculos.
+- Lançamentos em massa.
+- Permissões.
+- Scroll validado.

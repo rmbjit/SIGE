@@ -1,0 +1,20 @@
+DEPLOY - SIGE SoftGenial v12.12.2
+
+1. Instalar primeiro em ambiente de staging.
+2. Validar a Central de Devedores.
+3. Abrir `Extracto dívida` para alunos com:
+   - divida pendente;
+   - divida parcial;
+   - divida em plano;
+   - transporte;
+   - extras;
+   - multa;
+   - desconto normal;
+   - desconto especial;
+   - pagamento parcial.
+4. Confirmar que o documento mostra decomposicao e saldo esperado.
+5. Confirmar que `Histórico` continua a abrir o historico financeiro anterior.
+6. Confirmar perfis Financeiro, Direccao, Secretaria e utilizador sem permissao.
+7. Fazer rollback para v12.12.1 se houver divergencia financeira ou bloqueio funcional.
+
+Sem migracao de schema.

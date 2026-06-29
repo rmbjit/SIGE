@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.10.71 - Pautas: Mesma Regra do Aproveitamento
+
+Objectivo
+- Alinhar o resultado da Pauta Anual com a lógica já usada no módulo Aproveitamento do Aluno.
+
+Correcções
+- As notas ausentes deixam de gerar PROGRIDE indevido.
+- Para efeito de resultado final, valores ausentes contam como 0, tal como no Aproveitamento.
+- Quando o aluno reprova numa classe intermédia, a Pauta mostra NÃO PROGRIDE.
+- Quando o aluno reprova numa classe de fim de ciclo, a Pauta mostra NÃO TRANSITA.
+- PDF e Excel passam a usar o mesmo rótulo pedagógico e a mesma regra.
+- O motor central sige_calcular_situacao_final fica alinhado com Pautas, Aproveitamento, exportações e documentos.
+
+Sem alterações
+- Não altera a base de dados.
+- Não altera permissões.
+- Não altera pagamentos, mensalidades, multas, recibos, WhatsApp ou financeiro.
+- Não altera o design Produto PRO já validado.

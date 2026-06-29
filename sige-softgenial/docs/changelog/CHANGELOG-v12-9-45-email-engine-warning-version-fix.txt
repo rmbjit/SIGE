@@ -1,0 +1,14 @@
+SIGE SoftGenial v12.9.45 - Correção de warnings no Email Engine + Versionamento
+
+Base: v12.9.44 validada.
+
+Correções:
+- Corrige warning preg_replace(): missing closing parenthesis no includes/email-engine.php.
+- Corrige Deprecated explode(): Passing null ao garantir string segura.
+- Alinha Header do plugin, SIGE_VERSION e BUILD.json para 12.9.45.
+
+Sem regressão prevista:
+- SMTP nativo mantido.
+- Reply-To mantido.
+- Fila de email mantida.
+- Templates de pagamento, mensalidade e cobrança mantidos.

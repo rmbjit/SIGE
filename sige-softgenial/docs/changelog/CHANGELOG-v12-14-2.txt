@@ -1,0 +1,45 @@
+# SIGE SoftGenial v12.14.2 - User Security & Privileged Role Integrity
+
+Data: 2026-06-25
+Base: v12.14.1 - CSP Zero-Inline Absolute Guard
+
+## Objectivo
+
+Corrigir a superfície de risco observada no módulo de utilizadores/acesso: ataques repetidos contra usernames conhecidos, tentativa de adivinhação de palavra-passe/MFA e suspeita de alteração silenciosa de papel de utilizador privilegiado.
+
+## Alterações implementadas
+
+1. Login Shield reforçado:
+   - mantido limite por utilizador+IP;
+   - novo limite por username global, mesmo quando o atacante muda de IP;
+   - limite por IP endurecido;
+   - tentativas erradas de MFA contam como evento de risco e alimentam o rate-limit;
+   - sucesso limpa o balde do username para evitar bloqueio persistente de utilizador legítimo.
+
+2. Anti-enumeração:
+   - erros de login passam a ser genéricos quando não são mensagens de MFA/bloqueio;
+   - bloqueio de enumeração via ?author=;
+   - remoção de endpoints REST /wp/v2/users para não administradores WordPress reais;
+   - XML-RPC desligado por defeito, com escape hatch SIGE_XMLRPC_ALLOW.
+
+3. Integridade de perfis e roles:
+   - novo includes/security-user-integrity.php;
+   - auditoria de set_user_role, added_user_role e removed_user_role;
+   - downgrade de WP roles críticos revertido quando o actor não é administrador WordPress real;
+   - guarda central para atribuição/despromoção de perfis SIGE privilegiados;
+   - módulos Perfis e Permissões, RH/Equipe e handlers antigos de staff passam a respeitar falha da guarda.
+
+## Nota sobre o caso Edilson/Edmilson
+
+A evidência anexada comprova muitas tentativas falhadas, mas não comprova login bem-sucedido. O papel WordPress aparecer como subscriber pode ser efeito da arquitectura aditiva anterior, onde o perfil SIGE activo é a fonte de verdade e o papel WordPress nativo deixa de ser a autoridade principal. A confirmação exige comparar:
+
+- login_sucesso no período;
+- eventos user_integrity_wp_role_set / wp_role_downgrade_*;
+- perfil activo em wp_sige_user_roles;
+- metadados _sige_last_authorized_role_change.
+
+## Riscos residuais
+
+- Alterações directas na base de dados, feitas fora dos hooks WordPress/SIGE, não podem ser bloqueadas por PHP em tempo real.
+- Bloqueio por username global pode causar lock temporário se um atacante insistir contra uma conta conhecida; isto é aceitável face ao risco de brute-force/MFA abuse.
+- XML-RPC desligado pode afectar integrações externas antigas; reactivar explicitamente apenas se houver integração conhecida e protegida.

@@ -1,0 +1,19 @@
+SIGE SoftGenial v12.11.9.74 - Portaria Edge/Permissions-Policy Camera Hotfix
+
+Problema corrigido
+- O cadeado do navegador podia mostrar Câmara=Permitido, mas a Portaria continuava a apresentar “Câmara bloqueada”.
+- Causa encontrada: a baseline de segurança global enviava Permissions-Policy: camera=(), bloqueando getUserMedia no documento antes da permissão normal do navegador.
+- O fluxo anterior também podia confundir o diagnóstico no Edge/Windows quando a biblioteca QR falhava depois de uma permissão já concedida.
+
+Correcção
+- A política global continua restritiva em todo o SIGE.
+- Apenas a tela admin.php?page=sige-app&view=portaria passa a receber camera=(self).
+- Microfone, geolocalização e pagamentos continuam bloqueados.
+- O leitor QR tenta iniciar directamente no gesto do utilizador.
+- O getUserMedia nativo passa a ser usado como diagnóstico/fallback quando a primeira tentativa QR falha.
+- Diagnóstico da Portaria mostra Permissão API, Política do documento, câmaras detectadas, fase, teste nativo e erro técnico.
+- Erros por Permissions-Policy deixaram de ser tratados como simples permissão negada do utilizador.
+- Estados com cadeado permitido, mas falha por Windows/SO/controlador/leitor QR, recebem mensagem própria.
+
+Blindagem
+- Sem alterações de BD, pagamentos, notas, alunos, Portaria AJAX, validação de crachás ou isolamento do perfil Guarda.

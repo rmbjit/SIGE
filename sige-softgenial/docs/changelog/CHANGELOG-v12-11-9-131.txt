@@ -1,0 +1,49 @@
+SIGE SoftGenial v12.11.9.131 - AUDITORIA DE DESIGN (financeiro-pagamentos)
+=========================================================================
+
+Registo de pagamentos (3744 linhas). O MAIOR e mais denso ecrã da
+auditoria. Dinheiro - semântica financeira sagrada.
+
+DIAGNÓSTICO (recordes da auditoria)
+- TIPOGRAFIA: 8 pesos, distribuição muito pesada: 700 (33x!), 800 (17x),
+  900 (10x), 950 (9x). Mais ocorrências de peso de todos os ecrãs.
+- RAIOS: 15 valores (4 a 30px). O maior leque.
+- SOMBRAS: 36 distintas. O maior número.
+- CORES: 217 hex. O maior número.
+
+CORRECÇÃO (bloco <style> 1805-2146; JS 3217-3744 preservado)
+1. Hierarquia de 3 níveis: 8 pesos -> 500/600/700. .sg-paypro-hints
+   .sige-badge mantido a 700 (é pill de destaque, não legenda).
+2. Raios da escala: 15 -> 6. Sombras da escala: 36 -> 6.
+3. 361 cores migradas em TRÊS zonas HTML (lógica de recibo 752-1804;
+   corpo HTML 2147-3216; PHP-topo). Inclui estilos inline de notices
+   (info azul, aviso laranja, erro vermelho), preservando o significado.
+   PRESERVADO: classes de estado de pagamento (.sige-month-paid verde,
+   .sige-month-overdue vermelho, .sige-month-item-pending laranja, já em
+   variáveis); tema (--sg-theme-primary com fallback); 7 cores em JS.
+   ZERO hex de estilo restantes (só JS).
+
+NOTA DE MÉTODO
+- Verificado que NÃO há template de recibo embebido (sem DOCTYPE/<style>
+  próprio); a lógica de recibo gera HTML com estilos inline semânticos.
+- Aplicada a lição da abertura: pesos verificados no FICHEIRO INTEIRO
+  (não só no <style>). Zero pesos inline soltos desta vez.
+
+PROVA VISUAL
+- financeiro-pagamentos-antes-depois.png: propinas mensais. Estado de
+  pagamento preservado (pago verde, vencido vermelho, pendente laranja);
+  mês e valor destacam-se, descrição recua.
+
+GATES
+- smoke-regression-pack: 236 -> 240 invariantes.
+- financeiro-pagamentos adicionado aos ecrãs auditados.
+- Baseline de mágicos: 6288 -> 5927 (-361). MAIOR salto da auditoria;
+  abaixo de 6000!
+- Baseline de tipografia: 187 -> 171 (-16).
+- 12 gates verdes.
+
+MARCO: 21 ecrãs auditados. Desde o início: mágicos 9925 -> 5927; pesos
+não-canónicos 665 -> 171.
+
+PRÓXIMO
+- permissions-ui (15 pesos), jardim_presencas (15), pauta-final (15)...

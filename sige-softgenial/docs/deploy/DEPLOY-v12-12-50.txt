@@ -1,0 +1,49 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.50
+Data: 2026-06-23
+Titulo: Fase 4 incr 2 - Onclick para data-sige-act (vistas limpas)
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+Mudanca interna, sem alterar a forma de trabalhar. Estamos a preparar o reforco de
+seguranca do navegador (CSP), que exige tirar os cliques escritos directamente nas
+etiquetas (onclick) e liga-los de outra forma, sem mudar o que cada botao faz.
+
+Nesta versao, dez ecrans (entre eles pagamentos, planos, centros de custo, despesas,
+matriz, disciplinas e actas) passaram a usar esse novo metodo para 49 botoes. O
+funcionamento e exactamente o mesmo. Nao ha qualquer alteracao visivel.
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+
+================================================================
+VERIFICACAO
+================================================================
+Confirme que os botoes destes ecrans continuam a responder como antes:
+1. Pagamentos: abrir e fechar as janelas de confirmacao e os modais.
+2. Planos: abrir e fechar o formulario de novo plano e as confirmacoes.
+3. Centros de custo e Despesas: guardar, limpar e fechar os formularios.
+4. Matriz e Disciplinas: adicionar a matriz, nova disciplina e as mensagens.
+5. Actas: adicionar e remover linhas de presenca e de notas votadas.
+
+Tudo deve comportar-se exactamente como antes.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera o
+esquema da base de dados, pelo que a reversao e directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Continuar a tirar os cliques embutidos que faltam (os que levam numeros ou varios
+  valores), depois os blocos de script, e por fim impor a politica de seguranca de
+  conteudo (CSP).

@@ -1,0 +1,32 @@
+SIGE SoftGenial v12.9.95 - Release Candidate e Controlo Anti-Regressão
+
+Base validada: v12.9.94 - Relatório Executivo de Go-live e Instalação Segura.
+
+Objectivo
+- Preparar a versão como candidata controlada para instalação em escolas reais.
+- Adicionar uma camada de governação anti-regressão antes do rollout.
+- Manter zero alteração de lógica operacional.
+
+Incluído
+- Nova classe: includes/settings/class-sige-settings-release-candidate.php
+- Estado de versão candidata/RC1 no separador Pré-produção.
+- Leitura segura de BUILD.json, SIGE_VERSION, canal e ambiente provável.
+- Checklist anti-regressão para login, dashboard, alunos/turmas, financeiro, recibos, documentos, WhatsApp, SMTP, permissões, auditoria, Hub/licença, cache e sessão.
+- Política de rollout por escola: piloto, observação 24-48h, ondas pequenas e histórico de instalação.
+- Pacote de rollback seguro: ZIP anterior, backup completo, cópia da pasta do plugin e proibição de rollback parcial.
+- Resumo seguro de instalação sem tokens, senhas, SMTP, Z-API, API keys ou segredos.
+
+Garantias
+- Não grava configurações operacionais.
+- Não remove campos.
+- Não migra valores.
+- Não sincroniza automaticamente.
+- Não altera financeiro, académico, WhatsApp, SMTP, Hub/licença, permissões, pautas, boletins, recibos ou schema.
+- Apenas acrescenta leitura, decisão técnica, anti-regressão, rollout e rollback.
+
+Teste recomendado
+1. Instalar no ambiente de teste.
+2. Abrir Sistema Técnico → Centro de Configuração → Pré-produção.
+3. Confirmar a nova área Release Candidate e Controlo Anti-Regressão.
+4. Confirmar que versionamento, build e estado RC aparecem correctamente.
+5. Confirmar que nenhum comportamento operacional mudou.

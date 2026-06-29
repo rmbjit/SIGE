@@ -1,0 +1,38 @@
+DEPLOY - SIGE SoftGenial v12.12.15 (Ledger financeiro, incremento 1)
+====================================================================
+
+O QUE MUDA
+- Novo livro-razao financeiro append-only e a prova de adulteracao das 6 operacoes
+  criticas (cancelar, isentar, reactivar lancamento; bloquear e desbloquear mes;
+  estornar pagamento). Cada evento e encadeado por HMAC com chave dos salts.
+- Tabela nova: sige_fin_ledger (criada automaticamente na actualizacao).
+- Novo ecra so de leitura em Definicoes > Integridade do Ledger (so super admin).
+
+PASSOS
+1. Backup da base de dados e da pasta do plugin (rotina normal).
+2. Substituir a pasta do plugin pelo conteudo deste ZIP (sige-softgenial/).
+3. Abrir o wp-admin uma vez. A migracao corre sozinha e cria a tabela
+   sige_fin_ledger de forma idempotente (dbDelta). Nao apaga nem altera dados.
+4. Nao e preciso reconfigurar nada. Nenhuma regra de calculo financeiro muda.
+
+VERIFICACAO RAPIDA
+- Como administrador WordPress (super admin), abrir Definicoes > Integridade do
+  Ledger. Antes de qualquer operacao mostra "Ainda nao ha eventos registados".
+- Fazer uma operacao critica (por exemplo, cancelar um lancamento sem pagamento, ou
+  estornar um pagamento). Voltar ao ecra: a escola aparece com 1 evento e
+  "Cadeia integra".
+- As operacoes financeiras funcionam exactamente como antes; o ledger e adicional.
+
+NOTAS
+- O registo no ledger e fail-closed por escola e nunca quebra a operacao: se por
+  algum motivo nao puder registar, a operacao financeira mantem-se consistente.
+- A verificacao da cadeia precisa dos salts (wp-config.php). Se os salts forem
+  rodados, a verificacao das entradas antigas passa a assinalar a transicao; os
+  dados financeiros em si nao sao afectados.
+- Limite conhecido desta fase: a cadeia deteta modificacao e remocao no meio; a
+  deteccao de truncagem da cauda (apagar as entradas mais recentes) chega com a
+  ancoragem externa num incremento posterior.
+
+REVERSAO
+- Repor o ZIP anterior (v12.12.14). A tabela sige_fin_ledger pode permanecer sem
+  efeito; nenhuma outra alteracao de esquema foi feita.

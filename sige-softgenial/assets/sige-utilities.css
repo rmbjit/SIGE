@@ -1,0 +1,24 @@
+/*
+ * SIGE SoftGenial - Utilitarios de apresentacao (Fase 4)
+ * Ficheiro: assets/sige-utilities.css
+ *
+ * Classes utilitarias para a migracao dos estilos inline para CSS, a caminho do CSP
+ * em enforcement. Usam !important de proposito: um atributo style inline tem
+ * especificidade 1000 e vencia a cascata; estas classes replicam esse comportamento,
+ * para a migracao ser equivalente do ponto de vista visual (sem regressoes de
+ * cascata). So cobrem propriedades presentacionais estaticas, nunca alternadas por
+ * JavaScript (por isso nao ha utilitario de display aqui).
+ */
+
+.sige-u-shrink-0 { flex-shrink: 0 !important; }
+.sige-u-flex-1   { flex: 1 !important; }
+.sige-u-tac      { text-align: center !important; }
+.sige-u-tal      { text-align: left !important; }
+.sige-u-tar      { text-align: right !important; }
+.sige-u-fw7      { font-weight: 700 !important; }
+.sige-u-fw6      { font-weight: 600 !important; }
+.sige-u-fw5      { font-weight: 500 !important; }
+.sige-u-m0       { margin: 0 !important; }
+.sige-u-nowrap   { white-space: nowrap !important; }
+.sige-u-oxa      { overflow-x: auto !important; }
+.sige-u-wfull    { width: 100% !important; }

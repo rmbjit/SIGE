@@ -1,0 +1,52 @@
+DEPLOY - SIGE SoftGenial v12.12.26
+Fase 8 incremento 3.2: Completar o catalogo de PII (fechar as lacunas)
+Data: 2026-06-22. Base: v12.12.25.
+
+================================================================
+RESUMO
+================================================================
+Incremento de classificacao. Fecha as 12 lacunas do catalogo de dados pessoais
+detectadas pelo inventario da Incr 1. As nove colunas identificaveis de
+sige_alunos (documento de identidade digitalizado, fotografia, contactos de
+emergencia, dados da pessoa autorizada a buscar o aluno, notas do encarregado)
+passam a aparecer no dossie do titular e a ser redigidas no apagamento. As duas
+datas operacionais de cobranca sao classificadas mas preservadas. A coluna de
+notas de funcionario e classificada mas fica para o futuro incremento do titular
+funcionario. Catalogo 76 -> 88 campos, lacunas 12 -> 0. Sem nova superficie e
+sem migracao de esquema.
+
+================================================================
+PASSOS DE INSTALACAO (Hostinger / File Manager)
+================================================================
+1. Fazer backup do plugin actual (pasta wp-content/plugins/sige-softgenial/).
+2. Desactivar NAO e necessario; a actualizacao e aditiva.
+3. Carregar o ZIP sige-softgenial-v12_12_26-catalogo-pii.zip e extrair,
+   substituindo a pasta sige-softgenial/ (a pasta vem na raiz do ZIP).
+4. Abrir o painel de administracao do WordPress uma vez (nao ha migracao de
+   permissoes nova; o motor de permissoes mantem-se em 12.12.25).
+5. Confirmar a versao no cabecalho: 12.12.26.
+
+================================================================
+VERIFICACAO POS-INSTALACAO
+================================================================
+- Inventario de Dados: o cartao LACUNAS (PII SEM CLASSIFICAR) passa a 0 e CAMPOS
+  CATALOGADOS a 88.
+- Acesso e Portabilidade: o dossie de um aluno passa a incluir os campos
+  recem-catalogados (foto, documento, contactos de emergencia, etc.).
+- Apagamento de Dados: a pre-visualizacao de um aluno passa a listar tambem
+  esses campos como a redigir; as datas de cobranca nao aparecem como a redigir.
+
+================================================================
+NOTAS DE GOVERNANCA
+================================================================
+- Sem nova superficie: manifesto e Kernel mantem-se em 199 (enforce 33).
+- SCHEMA_VERSION inalterada (20260621.1). Calculo financeiro byte-identico.
+- As datas de cobranca sao preservadas por desenho (registo operacional).
+- As bases legais e finalidades sao classificacao por omissao a rever pela
+  instituicao enquanto responsavel pelo tratamento.
+
+================================================================
+ROLLBACK
+================================================================
+Repor a pasta sige-softgenial/ a partir do backup do passo 1. A alteracao e so
+de classificacao (catalogo); nao ha migracao de dados nem de esquema.

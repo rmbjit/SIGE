@@ -1,0 +1,46 @@
+SIGE SoftGenial v12.10.134 - Hub Control Alignment
+
+Base
+- Construído por cima da v12.10.133 - Dica do Dia: Gestão Restrita.
+
+Objectivo
+- Fazer uma microcorrecção de alinhamento com o SIGE Hub/License Server.
+- Garantir que as novidades recentes continuam sob controlo por plano/feature flag, sem mexer nas regras funcionais.
+
+Correções aplicadas
+
+1. Página do Aluno ligada à feature portal
+- A view:
+  aluno_portal
+  passa a estar explicitamente mapeada no sige_view_feature_map() para:
+  portal
+
+Efeito
+- Se a feature portal estiver activa para a escola, a Página do Aluno funciona normalmente.
+- Se a feature portal estiver desactivada pelo Hub/plano, a view aluno_portal fica bloqueada pela mesma camada de feature flag usada pelos restantes módulos.
+- Isto alinha a Página do Aluno ao controlo fino do Hub.
+
+2. Dica do Dia alinhada à feature dica_do_dia
+- A Dica do Dia passa a verificar:
+  sige_feature('dica_do_dia')
+  quando o sistema de features estiver disponível.
+- Em Hub/ambiente antigo, o default local mantém compatibilidade para não quebrar escolas existentes.
+
+3. Defaults de feature
+- Foram adicionados defaults conservadores para:
+  portal
+  dica_do_dia
+  quando aplicável no registry local de features.
+
+Mantido
+- Dica do Dia continua restrita à gestão administrativa/operacional.
+- A Dica do Dia continua bloqueada para aluno, encarregado, professor, educador e director pedagógico.
+- Página do Aluno continua em modo leitura.
+- Primeiro acesso e senha provisória continuam iguais.
+- Redireccionamento do portal antigo continua igual.
+- Alteração de senha continua igual.
+- Jardim de Infância continua igual.
+- Sem alteração de pagamentos.
+- Sem alteração de notas.
+- Sem alteração de Pauta, DEC, ACTA ou boletins.
+- Sem alteração de base de dados.

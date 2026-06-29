@@ -1,0 +1,41 @@
+SIGE SoftGenial v12.10.120 - Página do Aluno: Menu na Lateral Azul
+
+Base
+- Construído por cima da v12.10.119 - Página do Aluno: Compliance Visual PRO.
+
+Problema tratado
+- O menu interno da Página do Aluno ficava dentro da área de conteúdo.
+- Em telas pequenas ou com scroll, o aluno/encarregado precisava descer a página para navegar entre Resumo, Académico, Financeiro, Documentos e Contactos.
+- Isso não dava uma experiência suficientemente fluida de web-app.
+
+Melhorias aplicadas
+1. Menu na lateral azul
+- No contexto aluno/encarregado, o menu da Página do Aluno passa para a lateral azul.
+- A lateral azul torna-se a navegação principal do portal:
+  - Resumo
+  - Académico/Jardim
+  - Financeiro
+  - Documentos
+  - Contactos
+- O item activo fica destacado em branco, seguindo a lógica visual do sistema.
+
+2. Conteúdo mais limpo
+- Para aluno/encarregado, o menu interno deixa de aparecer dentro do conteúdo.
+- A área principal fica dedicada aos dados do aluno, cartões, estado geral, financeiro e contactos.
+
+3. Staff preservado
+- Quando staff abre a Página do Aluno pela Gestão de Alunos, mantém o menu interno no conteúdo.
+- Isto evita interferir com a experiência administrativa e com a navegação normal da equipa.
+
+4. Compatibilidade
+- A navegação é injectada de forma segura na lateral azul existente do App Shell.
+- Se a lateral variar de classe no futuro, há fallback para encontrar o sidebar mais provável.
+- Sem alterar rotas, handlers ou base de dados.
+
+Mantido
+- Permissão real de portal.
+- Modo leitura.
+- Bloqueio de notas/boletins por dívida.
+- Redireccionamento correcto do portal antigo.
+- Sem alteração de pagamentos.
+- Sem alteração de notas, Pauta, DEC, ACTA ou boletins.

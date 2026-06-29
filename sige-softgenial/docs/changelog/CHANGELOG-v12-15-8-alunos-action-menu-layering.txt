@@ -1,0 +1,10 @@
+v12.15.8 - Alunos Action Menu Layering Closure
+
+Correcao pontual pós-v12.15.7 para fechar regressao visual no menu dos tres pontinhos dos cards de Alunos.
+
+Alteracoes:
+- Card com menu aberto recebe classe de estado `sige-card-actions-open` via JS escopado.
+- Body recebe `sige-alunos-actions-open` enquanto qualquer menu esta aberto.
+- CSS eleva z-index do card/menu aberto e impede que hover de card vizinho fique por cima das accoes.
+- Preserva verticalidade do menu, Escape, click fora, `aria-expanded`, CSP forte e escopo por view.
+- Nao altera modulos fora de Alunos.

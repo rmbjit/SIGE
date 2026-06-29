@@ -1,0 +1,15 @@
+SIGE SoftGenial v12.9.26 - Central de Cobranças: Acção Inteligente
+
+Base: v12.9.25 validada pelo utilizador.
+
+Alterações aplicadas:
+- Adicionada selecção rápida por prioridade: Críticos, Alta e Sem contacto.
+- Adicionado resumo dinâmico da selecção: número de alunos, dívida total seleccionada e casos sem contacto.
+- Adicionada pré-validação antes de enviar cobrança em massa.
+- Destacados visualmente alunos sem contacto e linhas seleccionadas.
+- Mantidas intactas as fórmulas financeiras, académicas, lançamentos, pagamentos, estornos e motor WhatsApp/e-mail.
+
+Observação técnica:
+- Incremento apenas em UI/JS e atributos de leitura na Central de Cobranças.
+- Sem novas tabelas.
+- Sem alterações em queries de saldo ou funções canónicas.

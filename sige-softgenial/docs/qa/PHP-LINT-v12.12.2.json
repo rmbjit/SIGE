@@ -1,0 +1,7 @@
+{
+  "version": "12.12.2",
+  "checked": 332,
+  "failed": 0,
+  "command": "find . -name \"*.php\" -print0 | xargs -0 -n1 -P8 php -l",
+  "failures": []
+}

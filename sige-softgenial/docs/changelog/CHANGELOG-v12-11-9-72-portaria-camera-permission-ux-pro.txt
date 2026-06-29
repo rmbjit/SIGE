@@ -1,0 +1,26 @@
+SIGE SoftGenial v12.11.9.72 - Portaria Camera Permission UX PRO
+
+Data: 2026-06-09
+
+Resumo:
+- Corrige o botão “Permitir uso da câmara” da Portaria Digital, que podia parecer clicável mas não abrir a permissão do navegador.
+- Substitui o Html5QrcodeScanner automático por um fluxo próprio baseado em Html5Qrcode + navigator.mediaDevices.getUserMedia(), garantindo que o pedido de câmara acontece directamente no toque do utilizador.
+- Melhora UX/UI em mobile/tablet para Guarda/Portaria: estado da câmara, tentar novamente, pausar, seleccionar câmara, fallback manual, resultado mais claro e histórico local das últimas leituras.
+
+Blindagem:
+- Não altera schema de base de dados.
+- Não altera cálculos financeiros, pagamentos, mensalidades, multas, recibos, notas, pautas, boletins, DEC, ACTA ou fórmulas académicas.
+- Mantém permissões portaria.ver e portaria.validar_acesso.
+- Mantém o perfil Guarda isolado na Portaria e consulta read-only de alunos.
+
+Arquivos principais:
+- admin/system/portaria-view.php
+- includes/db-handler.php
+- tools/smoke-portaria-camera-permission-ux-v12-11-9-72.php
+- tools/smoke-portaria-camera-dom-v12-11-9-72.js
+
+Ajustes adicionais de QA:
+- Input manual passa a usar type="text" com inputmode numérico, maxlength e filtragem client-side.
+- Resultado recebe aria-busy durante validação.
+- Stop da câmara reinicializa o leitor para permitir retomar com segurança.
+- Endpoint AJAX limita o número de processo normalizado a 20 caracteres e devolve processo no payload mínimo.

@@ -1,0 +1,32 @@
+SIGE SoftGenial v12.11.6 - WhatsApp Health Recovery Hotfix PRO (TEST)
+
+Base: v12.11.5 - Teacher Dashboard Permission PRO (TEST)
+
+Objectivo:
+Corrigir o comportamento em que a Central WhatsApp voltava para "Pausado" depois de o administrador seleccionar Aquecimento ou Recuperação.
+
+Diagnóstico confirmado no código:
+1. includes/whatsapp-recovery-mode.php:
+   - sige_wpp_guardian_mark_failed() usava daily_failed acumulado na tabela de estado.
+   - Ao atingir daily_failed >= 5, chamava sige_wpp_pause_instance($eid, 48, 'Falhas elevadas no envio WhatsApp').
+   - Como a alteração manual de modo não limpava daily_failed, uma falha posterior podia reactivar a pausa de 48h com histórico antigo.
+
+2. includes/notification-policy.php:
+   - sige_wpp_health_set_mode() mudava mode/paused_until, mas não limpava daily_failed, daily_links nem transientes do Guardian.
+   - sige_wpp_health_effective_state() também podia forçar pausa com base em falhas antigas dentro da janela.
+
+Correcções:
+- Mudança manual para normal/warmup/recovery limpa paused_until.
+- Mudança manual limpa daily_failed e daily_links.
+- Mudança manual apaga transientes antigos de pausa.
+- Adicionado marcador temporal de alteração manual por escola.
+- Falhas/críticos anteriores à última intervenção manual deixam de contar para nova pausa.
+- Pausa expirada ou sem paused_until passa automaticamente para recovery.
+- HTTP 5xx isolado passa para recovery, não paused.
+- HTTP 401/403/423 continua a ir para review.
+- HTTP 429 continua a poder pausar por protecção.
+- Erro crítico real fica em review e não é rebaixado para paused por contador acumulado.
+- UI da Central WhatsApp explica melhor a recuperação e deixa de sugerir que não há recuperação manual.
+
+Não alterado:
+- Pagamentos, mensalidades, multas, recibos, notas, pautas, DEC, ACTA, currículos, permissões e base de dados de negócio.

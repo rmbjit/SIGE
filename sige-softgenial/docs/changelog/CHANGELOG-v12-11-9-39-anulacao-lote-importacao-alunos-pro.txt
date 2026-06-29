@@ -1,0 +1,63 @@
+SIGE SoftGenial v12.11.9.39 - Anulação Automática de Lote de Importação PRO
+
+Base:
+- v12.11.9.38 - Importação de Alunos em Duas Etapas PRO.
+
+Objectivo:
+- Permitir anular uma importação feita por engano sem apagar manualmente aluno por aluno.
+- Garantir que a anulação só ocorre quando o lote ainda está limpo, preservando integridade académica, financeira, documental e operacional.
+
+O que foi implementado:
+1. Novo endpoint AJAX seguro: sige_anular_lote_importacao_alunos.
+2. Novo painel no modal de importação: Anulação segura de lote.
+3. Botão contextual "Anular este lote" no relatório final da importação confirmada.
+4. Metadados estruturados de lote em alunos e matrículas:
+   - importacao_lote_id;
+   - importado_em;
+   - importado_por.
+5. Compatibilidade com lotes da versão anterior, onde o lote estava apenas nas observações do aluno.
+6. Anulação transaccional:
+   - remove matrículas do lote;
+   - remove alunos do lote;
+   - faz rollback se houver erro ou divergência.
+7. Bloqueios automáticos quando houver uso posterior:
+   - notas académicas;
+   - lançamentos financeiros;
+   - pagamentos;
+   - créditos;
+   - planos de pagamento;
+   - histórico de cobrança;
+   - mensagens WhatsApp;
+   - registos de portaria;
+   - transporte escolar;
+   - avaliações/diário/saúde do Jardim;
+   - documentos, foto, família ou serviços já actualizados na ficha;
+   - múltiplas matrículas por aluno.
+8. Auditoria:
+   - alunos_importacao_lote_anulado;
+   - alunos_importacao_lote_anulacao_bloqueada.
+
+Quando ocorre a anulação:
+- A anulação não corre sozinha por tempo ou cron.
+- Ocorre quando a secretaria/director clica em "Anular este lote" depois de uma importação confirmada, ou informa manualmente o ID do lote no painel de anulação.
+- Depois do clique, o sistema verifica automaticamente se o lote está limpo.
+- Se estiver limpo, remove automaticamente os alunos e matrículas daquele lote.
+- Se já houver qualquer ligação operacional posterior, bloqueia a operação e informa o motivo.
+
+Preservado sem alteração:
+- Fórmulas de notas;
+- Pautas;
+- Boletins;
+- DEC;
+- Mensalidades;
+- Multas;
+- Pagamentos;
+- Recibos;
+- Regras financeiras/académicas.
+
+Testes efectuados:
+- php -l nos ficheiros alterados;
+- verificação estática do endpoint AJAX;
+- verificação estática da presença do painel de anulação;
+- verificação das protecções de dependência;
+- integridade do pacote ZIP.

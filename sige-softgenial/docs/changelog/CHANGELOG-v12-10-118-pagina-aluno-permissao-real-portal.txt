@@ -1,0 +1,44 @@
+SIGE SoftGenial v12.10.118 - Página do Aluno: Permissão Real de Portal
+
+Base
+- Construído por cima da v12.10.117 - Página do Aluno: Redireccionamento Correcto.
+
+Diagnóstico
+- O bloqueio "Acesso não disponível" não era causado por o aluno ser da creche.
+- Também não era, pela lógica do ecrã, consequência directa de ter sido transferido e reactivado.
+- A view aluno_portal estava a ser bloqueada pelo App Shell antes de carregar a Página do Aluno.
+- O App Shell tratava a página como rota administrativa comum, exigindo permissões administrativas como alunos.ver.
+- Aluno/encarregado precisa de permissão de portal/leitura, não de permissão administrativa.
+
+Correções aplicadas
+1. App Shell
+- Reconhece contexto real de portal para:
+  - role WP sige_encarregado;
+  - role WP sige_aluno;
+  - active_role SIGE encarregado;
+  - active_role SIGE aluno;
+  - permissão portal.ver sem alunos.ver.
+- Para estes utilizadores, &view=aluno_portal deixa de ser bloqueado por falta de alunos.ver.
+- Outras áreas administrativas continuam bloqueadas.
+
+2. Página do Aluno
+- Guarda própria de leitura:
+  - staff autorizado entra por alunos.ver/caps de equipa;
+  - aluno/encarregado entra por portal.ver, sige_encarregado, sige_aluno ou active_role SIGE de portal.
+- O contexto de portal continua a forçar o aluno associado ao utilizador logado, ignorando tentativa de trocar aluno_id no URL.
+
+3. Roles existentes
+- As roles sige_encarregado e sige_aluno passam a receber automaticamente:
+  - read;
+  - portal.ver;
+  - portal.ver_pagamentos;
+  - portal.ver_documentos.
+- Isto aplica-se também a instalações onde as roles já existiam antes desta versão.
+
+Mantido
+- Redireccionamento correcto de /portal-do-aluno/ para aluno_portal.
+- Modo leitura.
+- Bloqueio de notas/boletins por dívida.
+- Sem formulários de edição.
+- Sem alterar base de dados.
+- Sem alterar pagamentos, notas, Pauta, DEC, ACTA ou boletins.

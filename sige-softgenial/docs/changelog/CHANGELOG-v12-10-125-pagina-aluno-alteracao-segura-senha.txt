@@ -1,0 +1,50 @@
+SIGE SoftGenial v12.10.125 - Página do Aluno: Alteração Segura de Senha
+
+Base
+- Construído por cima da v12.10.124 - Página do Aluno: Texto Mais Humano.
+
+Objectivo
+- Permitir que aluno/encarregado altere a sua própria senha dentro da Página do Aluno.
+- Manter a Página do Aluno em modo leitura para todos os dados académicos, financeiros, documentais e familiares.
+- Evitar que a alteração de senha abra qualquer possibilidade de edição de dados do aluno.
+
+Nova área
+- Nova secção no menu: Alterar senha.
+- Aparece no menu lateral azul do aluno/encarregado.
+- Também é reconhecida pela view aluno_portal via secao=senha.
+
+Condições de alteração de senha
+- Disponível apenas em contexto aluno/encarregado.
+- Exige senha actual.
+- Exige nova senha e confirmação.
+- A nova senha deve ter pelo menos 8 caracteres.
+- A nova senha deve combinar letras e números.
+- A nova senha não deve conter o nome de utilizador.
+- A nova senha não deve conter parte do e-mail.
+- A nova senha deve ser diferente da senha actual.
+- Há limite de tentativas: 5 tentativas em 15 minutos.
+
+Segurança aplicada
+- Usa wp_verify_nonce para proteger o formulário.
+- Usa wp_check_password para validar a senha actual.
+- Usa wp_set_password para actualizar a senha de forma nativa WordPress.
+- Recria a sessão do utilizador após a alteração, evitando expulsão imediata do portal.
+- Altera apenas a senha do utilizador autenticado.
+- Não altera dados académicos, financeiros, familiares ou de matrícula.
+- A defesa read-only foi ajustada para bloquear POSTs indevidos, permitindo apenas o formulário autorizado de alteração de senha.
+- Filtros GET de consulta continuam permitidos.
+
+Roles/capabilities
+- Roles sige_encarregado e sige_aluno passam a receber portal.alterar_senha.
+- Instalações existentes também recebem a capability automaticamente no init.
+
+Mantido
+- Modo leitura da Página do Aluno.
+- Bloqueio de notas/boletins por dívida.
+- Validação de propriedade dos recibos.
+- Menu lateral do aluno.
+- Recibos filtráveis.
+- Redireccionamento correcto do portal antigo.
+- Sem alteração de base de dados académica/financeira.
+- Sem alteração de pagamentos.
+- Sem alteração de notas, Pauta, DEC, ACTA ou boletins.

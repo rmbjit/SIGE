@@ -1,0 +1,47 @@
+DEPLOY - SIGE SoftGenial v12.12.58
+Fase 4 (CSP e front-end seguro) - incremento 2
+onclick de impressao das autonomas em addEventListener
+Data: 2026-06-23
+
+NATUREZA DA ENTREGA
+- Pacote instalavel completo (pasta sige-softgenial na raiz do ZIP).
+- Preparacao para o CSP enforce das paginas autonomas: remove os handlers inline
+  (onclick) dos botoes de impressao, fecho e impressao de boletins, passando-os a
+  addEventListener local. Comportamento identico.
+- Nao toca em regras de calculo financeiro nem no ficheiro canonico finance-core.
+- Nao altera nenhum cabecalho de seguranca existente.
+
+PRE-REQUISITOS
+- Sem alteracao de base de dados. Sem migracao. Sem alteracao de configuracao.
+- Sem novas dependencias externas (mantem-se 9 hosts).
+
+PASSOS
+1. Fazer copia de seguranca do plugin actual (pasta wp-content/plugins/sige-softgenial).
+2. Em alternativa recomendada, desactivar o plugin antes de substituir os ficheiros.
+3. Substituir a pasta sige-softgenial pela desta entrega (pacote completo).
+4. Reactivar o plugin, se tiver sido desactivado.
+5. Confirmar a versao 12.12.58 no cabecalho do plugin.
+
+VERIFICACAO POS-DEPLOY
+- Gerar uma pauta em PDF e confirmar que os botoes Imprimir / Guardar como PDF e
+  Fechar funcionam.
+- Gerar um boletim em PDF (modelo de boletim) e confirmar que os botoes Imprimir /
+  Guardar PDF e Fechar funcionam.
+- Abrir o boletim do jardim e confirmar que Imprimir Todos e o botao de imprimir um
+  boletim individual funcionam (este ultimo deve imprimir so o boletim escolhido).
+- Abrir documentos do motor de documentos (historico financeiro, recibos) e
+  confirmar que os botoes Baixar / Guardar PDF, Imprimir e Fechar funcionam e que o
+  codigo QR continua a aparecer.
+
+NOTAS
+- Esta entrega nao activa nem altera nenhum cabecalho CSP. O motor de documentos
+  mantem os seus tres cabecalhos Content-Security-Policy com unsafe-inline e a
+  camara mantem o seu Permissions-Policy.
+- O passo seguinte e o CSP enforce nestas paginas: agora que ja nao tem handlers
+  inline, podera substituir-se unsafe-inline por nonce no motor de documentos e
+  acrescentar cabecalho CSP as restantes paginas autonomas. Sera um incremento
+  dedicado.
+- A catraca de onclick desceu de 162 para 149.
+
+REVERSAO
+- Repor a pasta a partir da copia de seguranca. Sem passos de base de dados.

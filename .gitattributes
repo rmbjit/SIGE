@@ -1,0 +1,18 @@
+# Normalizacao de fins de linha.
+# Baseline do plugin SIGE importada integralmente em LF (v12.19.1).
+# Preservar bytes tal como entregues e garantir LF estavel cross-platform.
+# Deteccao automatica de binarios; eol aplica-se so a ficheiros de texto.
+* text=auto eol=lf
+
+# Binarios explicitos (evitar qualquer conversao acidental).
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.ogg  binary
+*.zip  binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.eot   binary

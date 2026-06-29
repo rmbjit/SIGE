@@ -1,0 +1,79 @@
+/*
+ * Aprovacoes Pendentes - Fase 7 incremento 2.
+ * Estilo so com tokens da fonte da verdade (assets/sige-tokens.css).
+ */
+
+.sige-aprov-titulo {
+    color: var(--brand);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.sige-aprov-hint {
+    color: var(--color-ink-500);
+    max-width: 820px;
+    margin-top: 0;
+}
+
+.sige-aprov-sec {
+    margin-top: var(--space-6);
+    color: var(--color-ink-800);
+}
+
+.sige-aprov-conta {
+    font-size: var(--fs-sm);
+    color: var(--color-ink-500);
+    font-weight: 400;
+}
+
+.sige-aprov-ok {
+    color: var(--color-success-700);
+}
+
+.sige-aprov-nota {
+    color: var(--color-ink-400);
+    font-size: var(--fs-xs);
+    margin-top: var(--space-3);
+}
+
+.sige-aprov-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+}
+
+.sige-aprov-motivo {
+    min-width: 200px;
+}
+
+.sige-aprov-badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    background: var(--bg-subtle);
+    color: var(--color-ink-700);
+}
+
+.sige-aprov-badge--ok {
+    background: var(--bg-success-soft);
+    color: var(--color-success-700);
+}
+
+.sige-aprov-badge--aviso {
+    background: var(--bg-warning-soft);
+    color: var(--color-warning-700);
+}
+
+.sige-aprov-badge--erro {
+    background: var(--bg-danger-soft);
+    color: var(--color-danger-700);
+}
+
+.sige-aprov-badge--neutro {
+    background: var(--bg-subtle);
+    color: var(--color-ink-600);
+}

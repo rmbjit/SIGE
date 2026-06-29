@@ -1,0 +1,36 @@
+SIGE SoftGenial v12.11.9.116 - AUDITORIA DE DESIGN (disciplinas)
+================================================================
+
+Gestão de disciplinas (2157 linhas).
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 10 pesos, 950 lidera (12x), muito 700/800.
+- RAIOS: 14 valores (6 a 38px).
+- SOMBRAS: 33 distintas (2ª maior dispersão vista).
+- CORES: 171 hex.
+
+CORRECÇÃO (dois blocos CSS: 30-38 e 200-1495; scripts preservados)
+1. Hierarquia de 3 níveis: 10 pesos -> 600/700 (distribuição perfeita,
+   28/28). Verificado: sem legendas pesadas a forçar.
+2. Raios da escala: 14 -> 6. Sombras da escala: 33 -> 6.
+3. 233 cores migradas para tokens, ZERO hex restantes. Incluindo os
+   ícones SVG de CICLO DE ENSINO (Pré-Escolar, etc.): cada ciclo tinha
+   a sua cor identificadora (rosa/verde/laranja/azul) - migradas para
+   tokens semânticos (brand/success/warning/info) PRESERVANDO a
+   distinção visual entre ciclos.
+
+PROVA VISUAL
+- disciplinas-antes-depois.png: lista de disciplinas. O nome domina, a
+  área/carga recua, as siglas coloridas mantêm a codificação por cor.
+
+GATES
+- smoke-regression-pack: 180 -> 183 invariantes. (Os invariantes da
+  consolidação CSS da v107 continuam verdes - auditoria não quebrou o
+  trabalho anterior.)
+- disciplinas adicionado aos ecrãs auditados.
+- Baseline de mágicos: 8436 -> 8203 (-233).
+- Baseline de tipografia: 492 -> 465 (-27).
+- 12 gates verdes.
+
+PRÓXIMO
+- boletim (25 pesos), equipe (23), portaria (22)...

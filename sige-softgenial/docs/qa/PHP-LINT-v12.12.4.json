@@ -1,0 +1,10 @@
+{
+  "version": "12.12.4",
+  "gate": "php-lint",
+  "scope": "all PHP files",
+  "command": "cat /tmp/sige_v12124_php_files.txt | xargs -I{} -P32 sh -c 'php -d opcache.enable_cli=0 -d memory_limit=128M -l \"$1\" >/dev/null' sh {}",
+  "files_checked": 341,
+  "failures": 0,
+  "status": "ok",
+  "evidence": "LINT_OK; elapsed=0:33.45"
+}

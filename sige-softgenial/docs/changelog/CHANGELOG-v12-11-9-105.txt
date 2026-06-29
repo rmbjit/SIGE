@@ -1,0 +1,57 @@
+SIGE SoftGenial v12.11.9.105
+============================
+
+Consolidacao CSS - dashboard (estreia): 5 estilos reais para classes utilitarias semanticas, paleta pixel-perfect; auditor v2.7 distingue custom properties e estilo dinamico de inline-divida
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+CONSOLIDAÇÃO CSS - DASHBOARD (ESTREIA DA FASE, v12.11.9.105)
+===========================================================
+
+PRINCÍPIO DA FASE: risco visual puro. O ecrã fica PIXEL-PERFECT
+idêntico; só a origem do estilo muda (style= inline -> classe). A rede
+de segurança, sem browser, é a "impressão digital visual": o conjunto
+e a contagem de cores tem de ser IGUAL antes e depois.
+
+DESCOBERTA: O DASHBOARD JÁ ESTAVA BEM ARQUITECTADO
+Dos 28 style= inline reportados, 23 eram INJECÇÃO DE CUSTOM PROPERTIES
+(--kpi-color, --alert-bg, --h/--r do gráfico) que alimentam um bloco
+<style> de 250 linhas - o padrão CORRECTO para passar valores
+dinâmicos do PHP ao stylesheet. Mexer neles seria REGRESSÃO. Só 5 eram
+estilo real consolidável.
+
+O QUE MUDOU (os 5 estilos reais)
+- 3 cores de valores financeiros (receitas verde, lançado vermelho,
+  taxa violeta) -> classes .sg-val-pos / .sg-val-neg / .sg-val-hi;
+- 1 grid-column da barra de distribuição -> a classe .sg-class-bar que
+  o elemento JÁ tinha (removido o inline redundante).
+PROVA PIXEL-PERFECT: a impressão digital de cores (#16a34a x3,
+#ef4444 x1, #5a3fd6 x1, grid-column 2/4) é IDÊNTICA antes e depois -
+as cores só migraram de style= para classe.
+
+O QUE NÃO MUDOU (e porquê)
+- 23 custom properties: arquitectura correcta, intocadas;
+- o conic-gradient do donut (background gerado em runtime com N
+  segmentos de cor): estilo DINÂMICO legítimo, impossível de tornar
+  estático - intocado.
+
+INSTRUMENTO: AUDITOR v2.7/v2.7b
+A régua aprendeu a distinguir inline-DÍVIDA de padrões legítimos:
+- style="--x:valor" (custom properties) NÃO conta: é o modo recomendado
+  de passar dados dinâmicos ao CSS;
+- style 100% expressão PHP (ex.: conic-gradient runtime) NÃO conta: é
+  estilo dinâmico legítimo;
+- style com propriedades CSS escritas à mão CONTA (a dívida real).
+Recalibração reportada em separado: dashboard 14,8 (início) -> 0,0.
+Impacto sistémico: ~83 falsos "inline" reconhecidos como legítimos
+(sistema 263 -> 213). NENHUM byte de view alterado nessa recalibração.
+
+QUALIDADE - GATES
+- tools/smoke-regression-pack.php: 129 -> 133 invariantes (4 da
+  consolidação: classes existem, zero inline de cor, paleta preservada,
+  régua v2.7).
+- Dashboard: score 0,0. Primeiro ecrã 100% limpo do programa.

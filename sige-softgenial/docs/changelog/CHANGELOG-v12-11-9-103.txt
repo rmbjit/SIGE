@@ -1,0 +1,58 @@
+SIGE SoftGenial v12.11.9.103
+============================
+
+Sprint UX-8 vassoura - 11 alert e 5 confirm nativos convertidos; alert/confirm/prompt EXTINTOS do sistema com 3 invariantes globais; confirmacao declarativa cobre links
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+DETALHE COMPLETO DO SPRINT UX-8 (OPERAÇÃO VASSOURA)
+===================================================
+
+OBJECTIVO: não converter 16 diálogos um a um, mas EXTINGUIR a categoria
+"diálogo nativo" do SIGE e torná-la impossível de ressuscitar.
+
+ALERTS -> TOASTS (11 em 6 ficheiros)
+- financeiro-extratos (3): divergência de fecho de caixa, checklist de
+  reconciliação, exportação sem dados;
+- pauta-final (2) e dec-view (2): popup de impressão bloqueado +
+  ExcelJS por carregar, com mensagens humanas e accionáveis;
+- boletim-view (2): tabela não encontrada + popup bloqueado;
+- jardim_boletim (1): nenhum boletim para imprimir;
+- vincular (1): o alert(res.data) virou toast condicional ok/erro
+  conforme a resposta do servidor.
+
+CONFIRMS -> CONFIRMAÇÃO DO KIT (5 em 5 ficheiros)
+- permissions-ui: o onsubmit=confirm do form passou para
+  data-sige-confirm no botão "Remover";
+- transporte: o link <a> de remover rota usa data-sige-confirm
+  (vermelho) - o enhancer cobre <a> preservando href e NONCE;
+- aprovar_notas: rejeitar notas com confirmação declarativa;
+- abertura: "Abertura Oficial do Ano" passou a submit declarativo com
+  as consequências por extenso (par simétrico do Encerramento do UX-6);
+- disciplinas: a função apagarDisciplina() passou a async com
+  sigeUi.confirm, mantendo o NOME da disciplina e a lista de impactos.
+
+EXTINÇÃO SELADA (a parte que fica para sempre)
+- 3 invariantes globais novos na regressão varrem TODAS as views e
+  falham a release se reaparecer um alert(), confirm() OU prompt()
+  nativo. A categoria deixou de existir por construção, não por
+  vigilância manual.
+- UI-GUIA ganhou a regra permanente com o mapa de substituição
+  (toast / prompt / confirm / data-sige-* declarativo em botões,
+  submits E links).
+
+HONESTIDADE DE PROCESSO
+- O lote dos confirms ABORTOU no 1º ficheiro porque assumi
+  <button type="submit"> quando o markup era <button class=...
+  type="submit"> (ordem inversa). O assert travou ANTES de gravar
+  qualquer byte; reli o markso real e refiz o lote com a âncora exacta.
+  Asserts-antes-de-escrever salvaram a integridade pela enésima vez.
+
+QUALIDADE - GATES
+- tools/smoke-regression-pack.php: 124 -> 127 invariantes.
+- Sistema: diálogos nativos = 0 alert + 0 confirm + 0 prompt.
+  Score global cruzou para 263,2.

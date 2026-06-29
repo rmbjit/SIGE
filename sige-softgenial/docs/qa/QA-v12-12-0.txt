@@ -1,0 +1,26 @@
+QA SIGE SoftGenial v12.12.0
+
+Escopo: Fase 0 - Engineering Governance Baseline.
+Base: v12.11.9.166.
+
+Validação executada:
+- PHP lint executado por blocos sobre 328 ficheiros PHP: OK.
+- php tools/run-gates.php: OK.
+- Resultado do corredor oficial: 24/24 gates verdes.
+
+Gates novos incluídos no corredor:
+- tools/check-governance-docs.php: OK.
+- tools/check-view-permission-map.php: OK.
+- tools/check-action-surface-manifest.php: OK.
+- tools/check-public-endpoints-policy.php: OK.
+- tools/check-authorization-baseline.php: OK.
+- tools/check-tenant-fallbacks.php: OK.
+- tools/check-secrets-options-register.php: OK.
+- tools/check-external-dependencies-register.php: OK.
+
+Resultado de segurança da Fase 0:
+- P0 aberto: 0.
+- P1 aberto: 0.
+- P2 registados para fases futuras: autorização legada, fallbacks tenant, Secret Vault, dependências externas, CSP.
+
+Critério de aprovação: cumprido para Fase 0.

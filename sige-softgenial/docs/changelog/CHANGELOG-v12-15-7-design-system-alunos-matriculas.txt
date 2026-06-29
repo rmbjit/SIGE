@@ -1,0 +1,23 @@
+v12.15.7 - Design System PRO: Alunos e Matrículas
+
+Base: v12.15.6 aprovada em staging.
+
+Alterações:
+- Criado assets/views/alunos-design-pro.css com escopo exclusivo para body.sige-admin-app.sige-view-alunos_lista.
+- Criado assets/views/alunos-design-pro.js com sincronização de menus de acção, aria-expanded, Escape/click externo e filtros mobile.
+- includes/ui-kit.php passa a carregar estes assets apenas em view=alunos_lista.
+- Adicionado opt-out sige_design_alunos_v12157_enabled=0.
+- Cards de aluno recebem contrato de grid seguro para evitar compressão e texto letra por letra.
+- Botões rápidos mobile ficam ocultos no desktop e visíveis apenas em breakpoints estreitos.
+- Menu dos três pontinhos fica vertical e com labels quando aberto.
+- Mobile/tablet estreito: acções entram no fluxo do card para não sobrepor o card seguinte.
+- Foco visível reforçado dentro do módulo.
+- Modais de Alunos preservam scroll interno.
+
+Sem alterações em:
+- Financeiro
+- Portaria
+- PDFs/documentos
+- CSP
+- Permissões
+- Tenant isolation

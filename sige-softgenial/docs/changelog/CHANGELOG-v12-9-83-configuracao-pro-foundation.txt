@@ -1,0 +1,55 @@
+SIGE SoftGenial v12.9.83 - Configuração PRO Foundation
+========================================================
+
+Base: v12.9.82 - Link Principal Força Login validado.
+
+Objectivo
+---------
+Criar a fundação técnica para centralizar e sanear progressivamente as configurações do SIGE SoftGenial, mantendo o comportamento operacional intacto.
+
+O que foi adicionado
+--------------------
+1. includes/settings/settings-loader.php
+   - Loader da nova camada de configurações PRO.
+
+2. includes/settings/class-sige-settings-registry.php
+   - Registry declarativo de configurações conhecidas.
+   - Classificação por domínio: escola, documentos, académico, financeiro, comunicação, módulos, técnico e legado.
+   - Metadados de segurança: sensível, mascarado, controlado pelo Hub, editável pela escola, editável apenas por técnico.
+
+3. includes/settings/class-sige-settings-repository.php
+   - Repository de leitura centralizada.
+   - Funções novas: sige_setting_get(), sige_setting_effective() e sige_setting_masked().
+   - Leitura de sige_config, sige_fin_configuracoes, wp_options e constantes.
+   - Fallback seguro sem alterar a lógica existente.
+
+4. includes/settings/class-sige-settings-diagnostics.php
+   - Inventário técnico para diagnóstico.
+   - Detecção de storage ausente, valores vazios, itens sensíveis, legados e candidatos a duplicação.
+
+5. admin/system/config-center-view.php
+   - Nova página técnica “Centro de Configuração”.
+   - Apenas leitura e diagnóstico.
+   - Visível apenas para perfil técnico/core.
+   - Segredos mascarados.
+   - Pesquisa e filtros por estado.
+
+6. Menu técnico
+   - Adicionado link “Centro de Configuração” no bloco SISTEMA TÉCNICO.
+
+Importante
+----------
+- Nenhuma configuração foi removida nesta versão.
+- Nenhum cálculo financeiro foi alterado.
+- Nenhuma regra académica foi alterada.
+- Nenhuma regra de WhatsApp foi alterada.
+- Nenhuma permissão existente foi alterada.
+- Nenhuma tabela nova foi criada.
+- Esta versão é uma fundação para saneamento progressivo, não uma substituição imediata das telas actuais.
+
+Próxima fase sugerida
+---------------------
+v12.9.84 - Centro de Configuração da Escola
+- UI consolidada para configurações efectivamente editáveis pela escola.
+- Escrita segura com nonce, permissões, sanitização e auditoria.
+- Continuação do saneamento de configurações duplicadas/legadas.

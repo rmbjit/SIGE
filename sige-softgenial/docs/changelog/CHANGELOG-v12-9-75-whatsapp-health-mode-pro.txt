@@ -1,0 +1,19 @@
+SIGE SoftGenial v12.9.75 - WhatsApp Health Mode PRO
+
+Base: v12.9.69 WhatsApp Destinatários Padrão validado.
+
+Intervenção exclusiva na camada WhatsApp:
+- 250/dia passa a ser tecto saudável, não limite cego para todos os estados.
+- Modos do número: Saudável/Automático, Aquecimento, Recuperação, Em revisão e Pausado.
+- Em revisão/pausado: limite efectivo 0.
+- Recuperação: 10 → 20 → 30 → 50 → 80 → 120 → 180 → 250 conforme os dias.
+- Aquecimento: 20 → 30 → 50 → 80 → 120 → 180 → 250 conforme os dias.
+- Pausa automática por sinais críticos: revisão, restrição, bloqueio, banimento, desconexão crítica.
+- Intervalo global entre qualquer mensagem da escola: recibos 30s; cobranças/links 180s; outros 60s.
+- Botão Processar fila agora continua sem bypass: respeita janela, limite, saúde do número e intervalo global.
+- Painel Central WhatsApp mostra estado de saúde, falhas, sinais críticos, limite actual e quota usada.
+
+Zero regressão:
+- Não altera regras financeiras.
+- Não altera regras académicas.
+- Não altera cálculos, mensalidades, notas, pautas, descontos ou documentos.

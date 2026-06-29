@@ -1,0 +1,33 @@
+DEPLOY - SIGE SoftGenial v12.12.8.1 (Tenant Write Isolation)
+Base: v12.12.8. Tipo: remediacao do P1 (escrita por tenant fail-closed na camada de sumidouro).
+
+PRE-REQUISITOS
+- Estar na v12.12.8 validada (ou superior na linha 12.12.x).
+- Backup do plugin actual antes de substituir (procedimento padrao).
+
+PASSOS
+1. Desactivar o plugin SIGE no WordPress (Plugins).
+2. Substituir a pasta do plugin pela desta versao (sige-softgenial/).
+3. Reactivar o plugin. Nao ha migracao de base de dados nesta versao.
+4. Confirmar a versao em Plugins (12.12.8.1) e, se aplicavel, no rodape do painel SIGE.
+
+VERIFICACAO POS-DEPLOY (mono-escola: comportamento inalterado)
+- Registar um pagamento e confirmar recibo: deve funcionar como antes.
+- Aplicar uma nota votada (acta) e confirmar que grava normalmente.
+- Criar/editar um aluno e uma turma: deve funcionar como antes.
+- Abertura/encerramento de ano academico: deve funcionar como antes.
+Em mono-escola o resolvedor devolve a escola unica, pelo que os guards de tenant nunca disparam.
+
+VERIFICACAO TECNICA (opcional, por linha de comandos)
+- php tools/run-gates.php  (todos os gates verdes, incluindo check-tenant-write-sinks e o smoke v12.12.8.1)
+- php tools/check-tenant-write-sinks.php  (0 sumidouros sem guard)
+- php tools/smoke-tenant-write-isolation-v12-12-8-1.php  (23 verificacoes OK)
+
+ROLLBACK
+- Reverter para o ZIP da v12.12.8 (desactivar, substituir a pasta, reactivar).
+- Sem alteracoes de schema: o rollback nao exige migracao inversa.
+- Nota: apos rollback, escritas sem escola resolvida em modo estrito voltam ao comportamento anterior (call-sites ": 1" de escrita ja endurecidos na v12.12.8; sumidouros sem o guard adicional desta versao).
+
+NOTAS
+- Modo multi-escola estrito: escritas sem escola valida passam a ser bloqueadas no proprio sumidouro (financeiro, academico, comunicacao), com auditoria tenant_write_blocked, em vez de gravarem com escola 0 ou na escola 1.
+- Excecoes deliberadas de logging (sige_audit_log, sige_registar_log): registam o evento mesmo sem escola, para auditar a anomalia.

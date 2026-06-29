@@ -1,0 +1,37 @@
+DEPLOY - SIGE SoftGenial v12.12.10.1 (MFA de Operacao, correccao)
+=================================================================
+
+RESUMO
+Correccao da v12.12.10 apos rediagnostico adversarial. Mantem o MFA de operacao
+(step-up) DESLIGADO por defeito. Sem migracao de base de dados. Sem alteracao de
+regras de calculo. Em instalacoes que nao liguem o step-up, o comportamento e o
+de v12.12.9.
+
+O QUE MUDA FACE A v12.12.10
+- Formulario de confirmacao agora aparece nas 10 operacoes criticas (antes so na
+  caixa o mostrava de imediato).
+- Novo modo estrito opcional (ver abaixo).
+- Auditoria mais completa (satisfied_window).
+- Documentacao do pacote sem em-dashes.
+
+PASSOS DE DEPLOY
+1. Backup da pasta do plugin (wp-content/plugins/sige-softgenial).
+2. Substituir a pasta pelo conteudo deste ZIP.
+3. Sem migracao de base de dados nem alteracao de esquema.
+4. Limpar cache de objecto/opcoes se aplicavel.
+5. Verificar versao activa: 12.12.10.1.
+
+ACTIVACAO (opcional, staging primeiro)
+- Ligar o step-up:   update_option('sige_mfa_stepup', 'on');
+- Modo estrito:      update_option('sige_mfa_stepup_strict', 'on');
+                     (ou define('SIGE_MFA_STEPUP_STRICT', true) no wp-config)
+                     Em modo estrito, falha de email BLOQUEIA a operacao critica.
+- Perfis:            update_option('sige_mfa_stepup_roles', ['sige_director','sige_admin_ti']);
+- Janela (segundos): define('SIGE_MFA_STEPUP_WINDOW', 300);
+
+EMERGENCIA
+- Desligar tudo: define('SIGE_MFA_STEPUP_OFF', true); no wp-config.php.
+- Sem modo estrito, falha de SMTP permite a operacao nessa tentativa (com registo).
+
+ROLLBACK
+- Restaurar o backup (v12.12.10 ou v12.12.9). Sem efeitos colaterais em dados.

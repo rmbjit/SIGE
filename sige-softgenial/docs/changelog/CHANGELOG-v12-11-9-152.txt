@@ -1,0 +1,53 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.152
+Data: 2026-06-14
+Modulo: Equipa / RH (admin/hr/equipe-view.php)
+Ambito: Consistencia visual / Design
+
+ESCALA DE DISPLAY ESTENDIDA
+---------------------------
+Adicionado --fs-4xl: 40px (aditivo). O modulo usava 42px (titulo-heroi) e 34px
+(numeros KPI), acima do topo anterior (--fs-3xl 32px).
+
+REMAP TIPOGRAFICO (nearest na escala; empates para cima)
+-------------------------------------------------------
+    heroi h1        42px -> --fs-4xl (40)  -2
+    stat-value      34px -> --fs-3xl (32)  -2
+    titulo          31px -> --fs-3xl (32)  +1
+    titulo          30px -> --fs-3xl (32)  +2
+    valor           27px -> --fs-2xl (28)  +1
+    valor           26px -> --fs-2xl (28)  +2
+    28px (exacto)        -> --fs-2xl (28)   0
+    24px (exacto)        -> --fs-xl  (24)   0
+    sub-titulo      22px -> --fs-xl  (24)  +2
+    18px            18px -> --fs-lg  (20)  +2
+    sub             15px -> --fs-md  (16)  +1
+    18 rotulos      12px -> --fs-sm  (13)  +1
+
+REMAP DE ESPACAMENTO (nearest grelha 4px; empates para cima)
+------------------------------------------------------------
+    6->8  9->8  10->12  14->16  18->20  26->24  28->32
+Espacamento do modulo: 100 por cento na grelha (zero literais).
+
+REMOCAO DE !important (12, so SVG)
+---------------------------------
+As regras .X svg{...!important} sao redundantes (seletor descendente 0,1,1 vence
+a base .sg-svg-icon 0,1,0; tamanho via atributo HTML). Render identico.
+!important do modulo: 625 -> 613.
+
+IMPORTANTE: porque ficam 613 !important
+---------------------------------------
+O modulo foi escrito com um "cobertor" de !important em quase todas as
+propriedades do escopo .sige-rh, para vencer o tema do wp-admin. Remove-los com
+seguranca exige comparar contra os estilos do wp-admin (que nao existem fora de
+um WordPress a correr). Por isso ficam para uma fase com verificacao em render
+(screenshot antes/depois), nao para remocao estatica as cegas.
+
+BLOCOS DE IMPRESSAO
+-------------------
+Dois blocos window.print detectados e preservados byte-a-byte. Zero vazamento de
+var(--token) (esses popups nao carregam sige-tokens.css).
+
+GARANTIAS
+---------
+  php -l limpo; run-gates.php 14/14; 306 invariantes.
+  Baselines descidas (--set).

@@ -1,0 +1,63 @@
+CHANGELOG - SIGE SoftGenial v12.12.59
+Fase 4 (CSP e front-end seguro) - incremento 2
+CSP enforce com nonce nas paginas autonomas
+Data: 2026-06-23
+
+RESUMO
+Primeiro CSP enforce com nonce, nas paginas autonomas. Conclui a sequencia de
+preparacao (nonce em todos os scripts inline na v12.12.55 a v12.12.57, onclick de
+impressao das autonomas em addEventListener na v12.12.58) impondo agora um
+script-src baseado em nonce nessas paginas. Esta vaga altera comportamento: e a
+primeira que o faz nesta frente.
+
+PRE-REQUISITO VERIFICADO (recurso a recurso)
+- Zero handlers inline e zero URLs javascript nas paginas autonomas.
+- Todos os scripts inline com nonce (desde a v12.12.55 a v12.12.57).
+- Scripts externos (QRious, html5-qrcode) servidos da propria origem
+  (assets/vendor do plugin), cobertos por self.
+- O nonce do cabecalho casa exactamente com o das tags: ambos de sige_csp_nonce;
+  esc_attr nao altera o base64 (mesmo com mais barra igual).
+Logo script-src self mais nonce nao bloqueia nada.
+
+ALTERACOES POR PAGINA
+- Motor de documentos (includes/documents-engine.php): os tres cabecalhos
+  Content-Security-Policy passam o script-src de unsafe-inline para self mais nonce
+  por pedido. style-src unsafe-inline e img-src self data https mantidos.
+- Modelos PDF de pauta e boletim: cabecalho CSP com nonce no respectivo handler
+  (pauta-pdf-handler, boletim-pdf-handler), antes do output. Politica: default-src
+  self; script-src self mais nonce; style-src self unsafe-inline; img-src self
+  data; font-src self data.
+- Boletim do jardim (admin/jardim/jardim_boletim-view.php): cabecalho CSP no topo
+  da vista, protegido por headers_sent, antes do DOCTYPE. Mesma politica dos PDF.
+- Pagina da camara (includes/portaria-camera-safe-page.php): CSP acrescentado a
+  funcao de cabecalhos da camara, que so corre no pedido da camara. connect-src
+  self (validacao via admin-ajax), media-src self (audios), img-src self data https
+  (fotos). O acesso a camara e governado pela Permissions-Policy, nao pelo CSP.
+
+ISOLAMENTO
+- Cada CSP so e emitido na sua pagina: a funcao da camara guarda o pedido da
+  camara; os handlers PDF so correm na impressao; o jardim e o motor de documentos
+  so emitem nas suas paginas. Sem fuga para outras paginas.
+
+CATRACA
+- check-inline-frontend: nova asserccao exige script-src com nonce nas cinco
+  paginas autonomas e proibe a presenca de unsafe-inline no script-src (trava a
+  regressao). onclick mantem-se em 149, style em 2051, blocos script em 7.
+
+FORA DE AMBITO
+- O CSP enforce das vistas admin (que ainda tem onclick e estilos inline) e um
+  esforco grande a parte.
+- Portal publico, finance-core, pagina de login (pre-auth) e popup document.write
+  ficam para abordagem propria.
+
+INVARIANTES
+- Superficie de accao 199 (enforce 33), vistas 60, opcoes 132, dependencias
+  externas 9 (tudo self). Sem alteracao de esquema. Calculo financeiro
+  byte-identico.
+- Corredor 99. Release gate verde a partir de pasta limpa.
+- Rediagnostico adversarial: Zero P0 e Zero P1.
+
+VERSAO
+- Cinco fontes sincronizadas em 12.12.59 (cabecalho do plugin, SIGE_VERSION,
+  BUILD.json, SIGE_GOV_VERSION, base da superficie de inventario).
+- Zero travessoes em todo o codigo, documentacao e changelog.

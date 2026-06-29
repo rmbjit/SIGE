@@ -1,0 +1,53 @@
+SIGE SoftGenial v12.11.9.35 - SMTP Zoho Teste de Envio PRO
+Data: 2026-06-05
+
+Ficheiros intervencionados:
+- admin/system/config-center-view.php
+- includes/email-engine.php
+- includes/settings/class-sige-settings-view-renderer.php
+- includes/settings/class-sige-settings-repository.php
+- includes/settings/class-sige-settings-sanitizer.php
+- sige-softgenial.php
+- BUILD.json
+
+Melhorias implementadas:
+1. Centro de Configuração / Comunicação / SMTP
+   - Adicionado bloco visual "Teste de envio SMTP" dentro da configuração SMTP.
+   - Adicionado campo "E-mail para teste".
+   - Adicionado botão "Enviar teste agora".
+   - Adicionados presets rápidos para Zoho Mail:
+     • smtp.zoho.com:465 / SSL
+     • smtp.zoho.com:587 / TLS
+   - Adicionado painel de resultado com sucesso/falha, servidor, porta, segurança, remetente e tempo de resposta.
+   - Adicionado histórico visual do último teste SMTP.
+   - Adicionada nota de entregabilidade sobre SPAM, SPF, DKIM, DMARC e alinhamento do remetente.
+
+2. Motor SMTP
+   - O endpoint AJAX sige_testar_smtp_config passa a aceitar o formulário novo do Config Center e arrays smtp[...].
+   - O teste grava temporariamente/actualiza a configuração presente no ecrã antes do envio controlado.
+   - O teste usa wp_mail(), preservando o mesmo caminho usado por mensagens automáticas do WordPress/SoftGenial.
+   - O teste devolve diagnóstico estruturado para a interface.
+   - Adicionado registo de último teste em sige_smtp_last_test.
+
+3. Correcção crítica da palavra-passe SMTP
+   - Corrigida a gravação da palavra-passe SMTP via Centro de Configuração.
+   - A palavra-passe deixa de ficar guardada em claro pelo Settings Repository e passa a ser encriptada com sige_encrypt_token().
+   - Palavra-passe vazia continua a preservar a palavra-passe já existente.
+   - Se a palavra-passe gravada anteriormente não estiver legível/desencriptável, o sistema orienta a reintrodução da palavra-passe Zoho.
+
+4. Validação e compatibilidade
+   - Validação SMTP melhorada para host, remetente e utilizador SMTP.
+   - Se o e-mail remetente estiver vazio e o utilizador SMTP for um e-mail válido, o sistema usa esse utilizador como remetente.
+   - Compatibilidade mantida com handlers legacy e com o Centro de Configuração moderno.
+
+Preservado sem alteração:
+- Regras financeiras.
+- Regras académicas.
+- Base de dados estrutural.
+- Mensagens WhatsApp.
+- Templates existentes.
+- Sistema de recibos.
+- Permissões gerais do sistema.
+
+Nota operacional:
+Depois de instalar esta versão, reintroduza a palavra-passe SMTP do Zoho uma vez no campo "Nova palavra-passe" e clique em "Enviar teste agora". Isto garante que a credencial fica novamente gravada no formato encriptado correcto.

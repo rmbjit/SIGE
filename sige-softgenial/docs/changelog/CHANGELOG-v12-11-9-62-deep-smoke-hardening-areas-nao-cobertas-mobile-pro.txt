@@ -1,0 +1,29 @@
+SIGE SoftGenial v12.11.9.62 - Deep Smoke Hardening Áreas Não Cobertas Mobile PRO
+
+Área: Mobile UX Compliance Global / Smoke Test Profundo
+
+Objectivo:
+- Realizar novo smoke test profundo em áreas ainda não cobertas integralmente: modais customizados, tabelas injectadas por AJAX, toolbars dinâmicas, navegação lateral aberta pelo botão Mais e micro-estados mobile globais.
+
+O que foi encontrado:
+- A v12.11.9.61 estava estável, mas a camada global ainda cobria melhor os modais padrão .sige-modal do que alguns modais customizados de módulos financeiros/WhatsApp/extractos/lancamentos.
+- Tabelas adicionadas dinamicamente por AJAX podiam aparecer depois do carregamento inicial sem receber o wrapper mobile de scroll horizontal.
+- O botão Mais da bottom navigation podia ser fechado visualmente por outras interacções, mas faltava uma blindagem adicional por tecla Escape.
+
+Intervenções realizadas:
+- Hardening mobile para modais customizados: wppc-modal, sg-modal-backdrop, sige-lanc-modal, sg-paypro-modal, sg-plans-modal, sg-inspro-modal, sg-generator-modal, sg-expense-modal, sg-extracts-modal e variantes.
+- Cabeçalhos/rodapés de modais customizados preservados e corpos com scroll interno táctil.
+- MutationObserver para aplicar automaticamente scroll horizontal a tabelas injectadas por AJAX depois do carregamento inicial.
+- Reforço de toolbars dinâmicas adicionadas depois do carregamento.
+- Escape fecha o menu lateral aberto pelo botão Mais e sincroniza aria-expanded.
+- Pequenos reforços de foco e estados disabled em toolbars mobile.
+
+Blindagem:
+- Sem alterações de base de dados.
+- Sem alterações em regras académicas, financeiras, importação, Ficha 360º, Gestão Avançada de Encarregados, notas, pautas, boletins, DEC, pagamentos, recibos ou fórmulas.
+
+Validação:
+- PHP lint completo.
+- BUILD.json validado.
+- Smoke test estático específico da v12.11.9.62.
+- Integridade do ZIP validada.

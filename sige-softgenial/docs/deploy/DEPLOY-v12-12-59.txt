@@ -1,0 +1,52 @@
+DEPLOY - SIGE SoftGenial v12.12.59
+Fase 4 (CSP e front-end seguro) - incremento 2
+CSP enforce com nonce nas paginas autonomas
+Data: 2026-06-23
+
+NATUREZA DA ENTREGA
+- Pacote instalavel completo (pasta sige-softgenial na raiz do ZIP).
+- Primeiro CSP enforce com nonce, nas paginas autonomas. Esta entrega ALTERA
+  COMPORTAMENTO de seguranca: o script-src dessas paginas deixa de aceitar inline
+  arbitrario e passa a exigir o nonce por pedido.
+- Verificado recurso a recurso que nada e bloqueado (paginas sem handlers inline,
+  scripts inline com nonce, scripts externos da propria origem, nonce do cabecalho
+  igual ao das tags).
+- Nao toca em regras de calculo financeiro nem no ficheiro canonico finance-core.
+
+PRE-REQUISITOS
+- Sem alteracao de base de dados. Sem migracao. Sem alteracao de configuracao.
+- Sem novas dependencias externas (mantem-se 9 hosts, tudo self).
+
+PASSOS
+1. Fazer copia de seguranca do plugin actual (pasta wp-content/plugins/sige-softgenial).
+2. Em alternativa recomendada, desactivar o plugin antes de substituir os ficheiros.
+3. Substituir a pasta sige-softgenial pela desta entrega (pacote completo).
+4. Reactivar o plugin, se tiver sido desactivado.
+5. Confirmar a versao 12.12.59 no cabecalho do plugin.
+
+VERIFICACAO POS-DEPLOY (recomendada no seu ambiente)
+Como o CSP so se manifesta em runtime (consola do browser), confirme com a consola
+aberta (F12, separador Console) que nao surgem erros de Content-Security-Policy ao:
+- Gerar uma pauta em PDF: o botao Imprimir / Guardar como PDF e o Fechar funcionam
+  e a impressao automatica dispara.
+- Gerar um boletim em PDF: Imprimir / Guardar PDF e Fechar funcionam.
+- Abrir o boletim do jardim: Imprimir Todos e o imprimir um boletim individual
+  funcionam; o popup de impressao abre e imprime.
+- Abrir documentos do motor de documentos (historico financeiro, recibos): os
+  botoes funcionam e o codigo QR aparece (a QRious carrega de assets/vendor).
+- Abrir a pagina segura da camara da portaria: a camara abre, le o QR do cracha, a
+  validacao responde (som e resultado) e a foto do aluno aparece.
+
+NOTAS
+- Se, no seu ambiente, surgir algum aviso de CSP numa destas paginas (por exemplo
+  um recurso servido de outra origem que nao foi previsto), reporte qual a pagina e
+  qual a mensagem da consola para ajuste pontual do cabecalho dessa pagina. A
+  analise feita indica que tudo e servido da propria origem, mas a verificacao em
+  ambiente real e a prova final.
+- O CSP enforce das vistas admin NAO faz parte desta entrega: essas vistas ainda
+  tem handlers e estilos inline e exigem um esforco dedicado antes de impor o
+  script-src e o style-src.
+- Cada CSP desta entrega esta isolado a sua pagina e nao afecta outras paginas.
+
+REVERSAO
+- Repor a pasta a partir da copia de seguranca. Sem passos de base de dados.

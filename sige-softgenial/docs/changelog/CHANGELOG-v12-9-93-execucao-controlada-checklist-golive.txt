@@ -1,0 +1,44 @@
+SIGE SoftGenial v12.9.93 - Execução Controlada da Checklist de Go-live
+
+Base: v12.9.92 validada em ambiente de teste.
+
+Objectivo
+- Transformar a checklist final de go-live numa validação manual auditável antes de instalar em escolas reais.
+- Manter zero regressão: nenhuma lógica operacional é alterada.
+
+Incluído
+- Nova camada: includes/settings/class-sige-settings-golive-checklist.php
+- Nova área em Pré-produção: Execução controlada da checklist de go-live.
+- Registo manual de evidências por item.
+- Estados permitidos: pendente, validado, falhou/corrigir, dispensado com justificação.
+- Resumo de conclusão da checklist e obrigatórios validados.
+- Guardar evidências por wp_options, sem criar tabelas novas.
+- Auditoria para cada evidência guardada ou limpeza controlada.
+- Botão técnico para limpar evidências, exigindo confirmação textual LIMPAR.
+
+Segurança
+- Restrito ao perfil técnico/core.
+- Nonce em todas as acções AJAX.
+- Sanitização de status, item e observação.
+- Observação obrigatória para validação, falha ou dispensa.
+- Limite de tamanho nas observações.
+- Instrução explícita para não inserir tokens, senhas ou dados sensíveis nas evidências.
+
+Não altera
+- Financeiro.
+- Académico.
+- WhatsApp/Z-API.
+- SMTP.
+- Hub/licença.
+- Permissões.
+- Pautas, boletins, recibos ou documentos operacionais.
+- Schema da base de dados.
+- Cálculos, regras de cobrança ou regras académicas.
+
+Teste recomendado
+1. Abrir Sistema Técnico → Centro de Configuração → Pré-produção.
+2. Verificar a nova secção Execução controlada da checklist de go-live.
+3. Marcar um item não crítico como validado com observação curta.
+4. Confirmar reload com estado guardado.
+5. Confirmar registo na auditoria.
+6. Não promover para escolas reais enquanto houver bloqueios críticos ou obrigatórios sem validação.

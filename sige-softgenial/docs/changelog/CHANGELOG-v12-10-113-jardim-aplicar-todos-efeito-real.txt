@@ -1,0 +1,32 @@
+SIGE SoftGenial v12.10.113 - Jardim: Aplicar a Todos com Efeito Real
+
+Base
+- Construído por cima da v12.10.112 - Jardim: Aplicar a Todos e Pop-up PRO.
+
+Problema corrigido
+- O botão "Aplicar a todos" aparecia no Diário de Actividades, Avaliação por Critérios e Saúde/Nutrição, mas podia não produzir efeito visível.
+- A causa provável era o uso de selectores CSS frágeis para campos com nomes em formato array, por exemplo diario[123][humor] e saude[123][almoco].
+- Em alguns browsers/ambientes, o selector podia não encontrar os campos reais ou não disparar os eventos esperados.
+
+Correções aplicadas
+- O JavaScript passa a percorrer directamente form.elements.
+- A correspondência de campos passa a ser feita por startsWith/endsWith no name real do campo.
+- Campos de texto, selects, radios e checkboxes recebem valor real.
+- Após aplicar, o sistema dispara eventos input/change para garantir actualização visual e compatibilidade futura.
+- O botão mostra uma confirmação temporária com a contagem de campos afectados.
+- A Avaliação por Critérios actualiza também o estado visual dos botões Atingido/Em progresso/Não atingido.
+
+Módulos afectados
+- &view=jardim_diario - aba Diário de Actividades.
+- &view=jardim_diario - aba Avaliação por Critérios.
+- &view=jardim_saude - Saúde e Nutrição.
+
+Garantias
+- Sem alterar handlers de gravação.
+- Sem alterar nomes dos campos POST.
+- Sem alterar regras de negócio.
+- Sem alterar cálculos MB/B/S/NS.
+- Sem alterar pagamentos, mensalidades, multas ou recibos.
+- Sem alterar notas, Pauta, DEC, ACTA, boletins ou regras académicas.
+- Sem alterar Permission Engine, perfis ou permissões.
+- Sem alterar base de dados.

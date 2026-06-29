@@ -1,0 +1,62 @@
+SIGE SoftGenial v12.11.9.30 - WhatsApp Serviços Contextuais PT-MZ
+Build: sige-12.11.9.30-whatsapp-servicos-contextuais-pt-mz
+Data: 2026-06-01
+Canal: test
+
+Base:
+- v12.11.9.29 - WhatsApp PT-MZ/Género/Saudação única.
+
+Motivo:
+- A versão anterior evitava "ao(à) aluno(a)" usando a forma neutra "à matrícula de Nome" quando o género do aluno era incerto.
+- Essa forma é gramaticalmente segura, mas semanticamente problemática quando o pagamento é de mensalidade, transporte, exames, material escolar ou outros serviços.
+
+Alterações principais:
+- Criado detector de serviços financeiros a partir dos detalhes do lançamento/pagamento.
+- As mensagens passam a identificar o serviço real quando possível:
+  - mensalidade;
+  - transporte escolar;
+  - inscrição;
+  - matrícula/renovação, apenas quando o item realmente for matrícula;
+  - exames;
+  - material escolar;
+  - alimentação;
+  - actividades escolares;
+  - biblioteca;
+  - serviços escolares, como fallback.
+- Substituídas aberturas genéricas do tipo "pagamento referente ..." por frases contextuais:
+  - "pagamento do transporte escolar do aluno Aibo";
+  - "pagamento da mensalidade da aluna Amina";
+  - "pagamento dos serviços escolares de Nome", quando o sistema não consegue identificar um serviço único.
+- Mantida a variação humana das mensagens.
+- Mantido o tratamento correcto do encarregado/pai/mãe por número de WhatsApp.
+- Mantida a pergunta única para envio do link do recibo.
+- Actualizados fallbacks legacy para não chamarem todo pagamento de matrícula.
+- Actualizado humanizador para não converter mensagens antigas em "pagamento referente à matrícula de Nome".
+
+Ficheiros alterados:
+- BUILD.json
+- sige-softgenial.php
+- includes/whatsapp-templates-conversacional.php
+- includes/notification-humanization-pro.php
+- includes/whatsapp-engine.php
+- includes/whatsapp-recovery-mode.php
+- includes/cron-tasks.php
+- admin/finance/financeiro-gerador.php
+- admin/finance/financeiro-devedores-view.php
+- tools/smoke-whatsapp-pt-mz-v12-11-9-29.php
+- tools/smoke-whatsapp-servicos-contextuais-v12-11-9-30.php
+- tools/smoke-whatsapp-render-servicos-v12-11-9-30.php
+
+Validações:
+- PHP lint: 176 ficheiros verificados, 0 erros.
+- Smoke estático WhatsApp serviços contextuais: 22 OK / 0 FAIL.
+- Smoke de render real com Transporte Escolar: 5 OK / 0 FAIL.
+
+Não alterado:
+- Cálculos financeiros.
+- Cálculos académicos.
+- Pagamentos.
+- Recibos.
+- Links públicos de recibo.
+- Notas, pautas e boletins.
+- Arquitectura multi-escola da Fase 2.

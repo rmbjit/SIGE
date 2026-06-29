@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.9.25 - Central de Cobranças: Prioridade de Cobrança
+
+Base: v12.9.24-extractos-periodo-ciclo validado.
+
+Alterações realizadas:
+- Acrescentada classificação visual de prioridade na Central de Cobranças.
+- Novos níveis: Crítica, Alta, Média e Sem contacto.
+- Novo filtro por prioridade.
+- Ordenação da lista por prioridade e, em seguida, por maior dívida.
+- Novos contadores no topo para Prioridade Crítica e Sem Contacto.
+- Indicador de dias em atraso e número de pendências por aluno.
+
+Garantias de não regressão:
+- Não foram alteradas fórmulas financeiras.
+- Não foram alteradas fórmulas académicas.
+- Não foram criadas novas tabelas.
+- Continua a usar sige_fin_saldo_lancamento() como fonte canónica do saldo.
+- A alteração é apenas camada de leitura, classificação, filtro e apresentação.

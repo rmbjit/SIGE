@@ -1,0 +1,28 @@
+SIGE SoftGenial v12.11.9.67 - Painel Principal Mobile Fit Hotfix
+
+Objectivo
+- Corrigir o problema observado no anexo de captura mobile: o bloco inicial de boas-vindas do Painel Principal não cabia integralmente no ecrã, sobretudo na linha de estado rápido, onde o chip "Cobrança" ficava cortado.
+
+Intervenções aplicadas
+- O hero do Painel Principal ganhou contenção explícita de largura: shell, hero e conteúdo passam a usar min-width:0 e max-width:100%.
+- O título de boas-vindas passa a quebrar nomes longos de forma segura, com overflow-wrap:anywhere e ajuste fino de font-size/line-height no mobile.
+- O subtítulo do hero também passa a respeitar o limite do cartão, sem empurrar a largura da página.
+- A linha de status do hero deixa de ser carrossel horizontal em mobile.
+- Em tablet, os status ficam em grid de 3 colunas, sem corte lateral.
+- Em mobile, os status ficam em grid responsiva e caem para 1 coluna em ecrãs estreitos.
+- Os pills de status passam a aceitar quebra de linha, mantendo leitura completa de: Hoje, Alertas e Cobrança.
+- A faixa de prioridades rápidas também deixa de provocar overflow lateral logo abaixo do hero.
+
+Blindagem
+- Sem alterações em queries SQL do dashboard.
+- Sem alterações em cálculos financeiros, cobranças, pagamentos, dívidas, mensalidades, multas ou recibos.
+- Sem alterações em notas, pautas, boletins, DEC, ACTA ou fórmulas académicas.
+- Sem alterações na Portaria Digital ou no isolamento do perfil Guarda.
+- Sem alterações em criação, edição, remoção, importação ou exportação de alunos.
+
+Validação
+- PHP lint completo executado.
+- JS syntax check executado em assets/mobile-tablet-ux.js.
+- Smoke profundo do Painel Principal v12.11.9.67 criado e executado.
+- Smoke de regressão Guarda / Portaria v12.11.9.67 criado e executado.
+- Smoke visual headless com Chromium em larguras 360, 390, 430, 760 e 900 px executado para o hero do dashboard.

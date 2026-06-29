@@ -1,0 +1,50 @@
+SIGE SoftGenial v12.11.9.107
+============================
+
+Consolidacao CSS - disciplinas: 15 estilos reais para classes (larguras tabela, 2 estados vazios gemeos partilham classe), pixel-perfect; box-esg2 (slideDown jQuery) preservado
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+CONSOLIDAÇÃO CSS - DISCIPLINAS (v12.11.9.107)
+=============================================
+
+Terceiro ecrã da fase CSS. Pixel-perfect com impressão digital provada.
+
+COMPOSIÇÃO REAL (régua v2.7): 17 style= inline, TODOS estilo real.
+
+CONSOLIDADOS (15 dos 17)
+- 3 larguras da tabela de disciplinas (60/100/140px) -> classes
+  .sg-disc-th-num/-sigla/-accoes;
+- input da sigla em maiúsculas -> .sg-input-upper;
+- hint, modal 550px, mensagem de vazio, td centrado -> utilitárias;
+- DESTAQUE: 2 estados vazios GÉMEOS (HTML em template strings JS,
+  byte a byte idênticos: "Nenhum indicador definido") passaram a
+  PARTILHAR as mesmas 4 classes (.sg-empty-pad/-ico/-svg/-h3). Onde
+  havia 8 declarações inline duplicadas, há agora 4 classes
+  reutilizadas: menos duplicação, efeito idêntico.
+
+PRESERVADO DE PROPÓSITO (1 caso dinâmico)
+- #box-esg2 (style="display:none"): alternado por jQuery
+  slideDown(200)/slideUp(200). slideDown espera o display inicial
+  none e escreve display/altura inline na animação. Mantido inline +
+  invariante a proteger a animação.
+
+HONESTIDADE DE PROCESSO
+- Na 1ª troca do input da sigla, encadeei duas substituições que se
+  sobrepunham na mesma string e deixei um atributo órfão
+  (placeholder-fix=";"). Apanhado de imediato na verificação pós-troca
+  e limpo; invariante novo garante que não há atributos órfãos. Lição:
+  não encadear replaces que se sobrepõem no mesmo trecho.
+- O "display:none subiu de 2 para 7" foi falso alarme: a métrica
+  ANTES (string exacta) não apanhava os display:none com !important
+  dentro do <style>. O código nunca mudou nesses pontos; a régua de
+  verificação é que era incompleta. Confirmado por inspecção linha a
+  linha.
+
+QUALIDADE - GATES
+- tools/smoke-regression-pack.php: 137 -> 142 invariantes.
+- Disciplinas: 1,7 (entrada) -> 0,1.

@@ -1,0 +1,20 @@
+DEPLOY SIGE SoftGenial v12.12.0
+
+Instalar primeiro em staging.
+
+Notas de migração:
+- A versão adiciona permissões novas e uma migração idempotente: sige_permissions_migrate_12120_governance_view_permissions.
+- A migração é aditiva; não remove permissões personalizadas.
+- Após activar/actualizar, validar que Direcção, Secretaria, Tesouraria, Professor e Admin TI continuam com os acessos esperados.
+
+Rollback:
+- Repor ZIP anterior v12.11.9.166.
+- A migração adiciona permissões e grants; rollback de código não exige apagar dados, mas a matriz pode manter permissões extras sem impacto se as views antigas não as usarem.
+
+Validação pós-deploy:
+- Abrir Dashboard.
+- Abrir Central de Comunicações.
+- Abrir WhatsApp Central, WhatsApp Diagnóstico e Circulares com perfis autorizados.
+- Abrir Presenças com professor/secretaria/direcção.
+- Abrir M-Pesa/e-Mola com direcção/secretaria geral.
+- Confirmar que perfil sem permissão recebe bloqueio.

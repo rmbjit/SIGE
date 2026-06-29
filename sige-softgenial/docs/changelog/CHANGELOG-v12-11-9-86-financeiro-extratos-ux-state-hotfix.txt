@@ -1,0 +1,45 @@
+SIGE SoftGenial v12.11.9.86 - Financeiro Extractos/Caixa UX State Hotfix
+Data: 2026-06-10
+
+Resumo
+- Hotfix incremental sobre v12.11.9.85 para corrigir o aviso:
+  Warning: Undefined variable $sg_period_range em admin/finance/financeiro-extratos.php.
+
+Causa
+- Ao abrir Extractos/Caixa em modo=aluno sem aluno_id, a interface entrava correctamente no modo “Histórico de aluno”, mas alguns blocos partilhados da tabela continuavam a avaliar apenas $modo_aluno.
+- Como $modo_aluno depende de aluno_id > 0, o estado “Histórico de aluno ainda sem aluno seleccionado” ficava híbrido: a UI era de aluno, mas alguns metadados/consultas eram tratados como caixa diário.
+- $sg_period_range estava inicializada apenas dentro do ramo visual diário, mas era usada depois num bloco partilhado.
+
+Correcções aplicadas
+- $sg_period_range passou a ser inicializada globalmente logo após o cálculo de $data_inicio_relatorio/$data_fim_relatorio.
+- Foram definidos defaults seguros para:
+  - $extrato
+  - $aluno_dados
+  - $hist_total
+  - $hist_entradas
+  - $hist_estornos
+- O modo “Histórico de aluno” sem aluno seleccionado deixou de executar/carregar a query diária dos movimentos do caixa.
+- Os blocos de fecho/reabertura/estorno/KPI do caixa agora respeitam $sg_em_modo_aluno para distinguir o modo pretendido pelo utilizador.
+- O cabeçalho da tabela, estado vazio e botão Excel foram alinhados com $sg_em_modo_aluno.
+
+Impacto funcional
+- Remove o warning de $sg_period_range.
+- Ao clicar em “Histórico de aluno” sem escolher aluno, o ecrã mostra apenas a pesquisa/estado vazio de aluno.
+- O ecrã deixa de mostrar movimentos do caixa diário por engano nesse estado.
+- Não altera regras financeiras, cálculos, permissões reais, recibos, estornos, fecho/reabertura do caixa ou exportações existentes.
+
+Ficheiros alterados
+- admin/finance/financeiro-extratos.php
+- sige-softgenial.php
+- BUILD.json
+
+Ficheiros adicionados
+- tools/smoke-financeiro-extratos-ux-state-hotfix-v12-11-9-86.php
+- CHANGELOG-v12-11-9-86-financeiro-extratos-ux-state-hotfix.txt
+- DEPLOY-v12-11-9-86-financeiro-extratos-ux-state-hotfix.md
+
+Validações executadas
+- php -l admin/finance/financeiro-extratos.php
+- php -l em todos os ficheiros PHP do plugin
+- php tools/smoke-financeiro-extratos-ux-state-hotfix-v12-11-9-86.php
+- zip -T no pacote final

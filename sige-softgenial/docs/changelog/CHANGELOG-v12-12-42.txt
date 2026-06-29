@@ -1,0 +1,92 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.42
+Data: 2026-06-22
+Titulo: Fase 3 - Reconciliacao de pagamentos digitais - resolucao com escrita (quatro-olhos)
+Tipo: Funcionalidade (incremento 3 da Fase 3 - primeira escrita)
+Base: 12.12.41
+Canal: validated-feature
+
+================================================================
+CONTEXTO
+================================================================
+Terceiro incremento da Fase 3. Os dois primeiros (deteccao de duplicados e
+reconciliacao viva) eram so de leitura. Este e a primeira escrita: torna a
+reconciliacao accionavel, mas sob controlo duplo (quatro-olhos). Conciliar uma
+transacao confirmada, ou rejeitar uma rejeitada pelo gateway, atraves do framework
+de aprovacoes ja existente: um utilizador propoe e um segundo utilizador autorizado
+aprova; so entao a accao e executada.
+
+================================================================
+ALTERACOES
+================================================================
+NOVO  includes/payments/reconciliacao-accoes.php
+      - sige_recon_executar_conciliar(tx_id, lanc_id, escola_id): chamada pelo
+        despacho de aprovacoes apos a aprovacao. Re-valida o estado (recebida ou
+        pendente_manual), valida o lancamento (escola e aluno), e regista o
+        pagamento pelo caminho CANONICO sige_fin_registar_pagamento. Marca a
+        transacao conciliada com conciliado_por = aprovacao:user:UID. Se lanc_id = 0,
+        usa a correspondencia automatica (mesma logica do funil canonico).
+      - sige_recon_executar_rejeitar(tx_id, motivo, escola_id): marca rejeitada.
+        Idempotente (ja rejeitada -> ok). NUNCA rejeita uma transacao ja conciliada.
+      - sige_recon_propor_conciliacao / sige_recon_propor_rejeicao: criam o pedido
+        pendente (maker) via sige_fin_aprovacao_solicitar; nao executam nada.
+      Ambas as execucoes sao fail-closed (escola invalida) e tenant-guarded.
+
+EDIT  includes/finance-aprovacoes.php
+      - Regista dois tipos de aprovacao: recon_conciliar e recon_rejeitar, ambos
+        com a permissao existente financeiro.mobile_payments_gerir (sem nova
+        permissao).
+      - Acrescenta o despacho destes tipos em sige_fin_aprovacao_executar, que
+        encaminha para a execucao da reconciliacao. A separacao de funcoes (maker
+        diferente de checker) ja era imposta por sige_fin_aprovacao_decidir.
+
+EDIT  admin/finance/mpesa-view.php
+      - Handler server-side do maker (nonce sige_recon_propor) que propoe conciliar
+        ou rejeitar e remete para a fila de aprovacoes.
+      - Seccao "Resolucao com quatro-olhos" com as transacoes pendentes e os botoes
+        de proposta. Os botoes directos de conciliar e rejeitar continuam intactos.
+
+EDIT  sige-softgenial.php
+      - Carrega includes/payments/reconciliacao-accoes.php.
+
+================================================================
+QUALIDADE
+================================================================
+NOVO  tools/check-recon-resolucao.php (gate estatico)
+NOVO  tools/smoke-recon-resolucao.php (smoke de runtime, 14 verificacoes)
+EDIT  tools/run-gates.php (corredor passa de 93 para 95 verificacoes)
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- A escrita financeira passa SEMPRE pelo caminho canonico sige_fin_registar_pagamento.
+  Esta camada nunca calcula valores nem altera regras financeiras nem ficheiros
+  canonicos. A execucao re-valida o estado e e idempotente.
+- Controlo duplo: nada executa sem a aprovacao de um segundo utilizador autorizado
+  (maker diferente de checker, imposto pelo framework).
+- Superficie de accao: 199 itens (a UI do maker e server-side, nao e add_action; o
+  checker reutiliza accoes existentes). Regras do Kernel: 199; enforce 33.
+- Vistas: 60 (a vista de gestao foi estendida, nao criada). Opcoes: 132 (nenhuma
+  nova). Dependencias externas: 11 (nenhuma nova).
+- Sem alteracao de esquema. Calculo academico e financeiro byte-identico.
+- Versao sincronizada nas cinco fontes. Zero travessoes. Ficheiros em LF.
+
+================================================================
+VALIDACAO
+================================================================
+- php tools/check-recon-resolucao.php    -> OK
+- php tools/smoke-recon-resolucao.php      -> OK (14 verificacoes)
+- php tools/smoke-reconciliacao-viva.php    -> OK (sem regressao)
+- php tools/smoke-payments-dedup.php         -> OK (sem regressao)
+- php tools/check-governance-docs.php         -> OK (21 documentos v12.12.42)
+- php tools/smoke-release-gate.php              -> verde a partir de pasta limpa
+- extractor de superficie / opcoes / vistas    -> 199 / 132 / 60
+- php -l                                         -> limpo nos ficheiros tocados
+
+================================================================
+A SEGUIR (FASE 3)
+================================================================
+- Ajuste fino dos codigos de falha do gateway via o filtro sige_mpesa_codigos_falha,
+  com base no sandbox das operadoras.
+- Opcionalmente, escolha de um lancamento especifico na proposta de conciliacao com
+  quatro-olhos (a proposta usa hoje a correspondencia automatica).

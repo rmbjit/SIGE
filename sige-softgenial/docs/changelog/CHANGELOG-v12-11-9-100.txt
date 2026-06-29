@@ -1,0 +1,52 @@
+SIGE SoftGenial v12.11.9.100
+============================
+
+Sprint UX-6 - encerramento com confirmacoes dignas do risco, lancamentos limpo, portal verificado conforme e cadeado; auditor v2.5 reconhece vazios legitimos
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+DETALHE COMPLETO DO SPRINT UX-6
+===============================
+
+UX - MÓDULO 11: ALUNO-PORTAL (25,7 -> 1,7 SEM TOCAR NUM BYTE DA VIEW)
+A história mais honesta do programa até agora: fui acrescentar estados
+vazios e encontrei-os JÁ FEITOS, e melhores que o meu padrão ("Ainda
+não existem notas registadas...", "Sem lançamentos financeiros no
+período seleccionado.", com classe própria ap-empty). Os 6 "AO90" eram
+tolerância de dados (in_array com as duas grafias). Conclusão: a view
+estava conforme; a RÉGUA é que não a sabia ler. Correcções no
+instrumento (v2.5: in_array/value=/comparações de estado fora do AO90;
+v2.5c: vazios reconhecem qualquer classe *-empty e formulações
+legítimas) e CADEADO novo: os dois vazios do portal ficam protegidos
+por invariante. Crédito de trabalho deste módulo: 0 (honestidade).
+
+UX - MÓDULO 12: ENCERRAMENTO (17,4 -> 3,4)
+- As 3 acções de ano lectivo trocaram o confirm() do browser por
+  modais à altura do risco: "Activar Pauta Final em todas as turmas"
+  (explica o efeito), "Encerrar o Ano Lectivo" (VERMELHO, com as
+  consequências por extenso: checklist, pauta final, snapshot,
+  bloqueios, auditoria, e quem pode reabrir) e "Reabrir o Ano Lectivo".
+- Os botões passaram a type=submit com data-sige-*: o enhancer cobre
+  clique E Enter; as classes locais (btn-encerrar etc.) mantêm o visual.
+- Botão Filtrar do <noscript> entrou no kit.
+
+UX - MÓDULO 13: FINANCEIRO-LANÇAMENTOS (17,8 -> 0,8; melhor score do sistema)
+- 2 alerts viram toasts (exportação sem resultados; falha ao abrir
+  detalhes com mensagem humana em vez de "ver consola").
+- Cadeada a dupla financeira: nunca INSERT directo em tabelas fin.
+
+UX - INSTRUMENTO (recalibração v2.5/v2.5b/v2.5c, fora da conta)
+- AO90: in_array de tolerância, value= de formulários e comparações
+  === 'estado' deixam de contar (eram dados, não interface).
+- Vazios: qualquer classe *-empty (ap-, ed-, sgk-) e formulações como
+  "Ainda não existem" passam a contar. Efeito sistémico: estatísticas
+  18,9 -> 6,9 e outras views revelaram vazios que sempre existiram.
+- Sistema recalibrado + trabalho do sprint: 436,2 -> 375,2.
+
+QUALIDADE - GATES
+- tools/smoke-regression-pack.php: 102 -> 109 invariantes.
+- Diálogos nativos restantes: 15 alert + 6 confirm + 0 prompt.

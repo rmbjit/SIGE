@@ -1,0 +1,63 @@
+SIGE SoftGenial v12.11.9.93
+============================
+
+Sprint 4 parcial - Canal e-Mola sobre o funil de pagamentos moveis e Mapa Mensal de Assiduidade em formato oficial
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+DETALHE COMPLETO DO SPRINT 4 PARCIAL
+====================================
+
+FINANCEIRO - CANAL e-MOLA (NOVO, OFF POR DEFEITO, WEBHOOK-FIRST)
+- Conciliação tornou-se PROVIDER-AWARE: helpers puros sige_provider_metodo
+  e sige_provider_rotulo; o registo canónico passa a usar o método do
+  provider ('mpesa'/'emola', ambos já modelados na tesouraria) e o rótulo
+  certo na referência externa. Provider desconhecido cai em 'mpesa'
+  (defeito seguro). Zero alteração de comportamento para o M-Pesa.
+- includes/payments/emola-config.php: options por escola (ambiente, host,
+  merchant_code, api_key/secret com vazio=manter), webhook token próprio
+  auto-gerado, admin_post com nonce e auditoria.
+- includes/payments/emola-webhook.php: rota REST sige/v1/emola/callback
+  com hash_equals; mapeador puro tolerante aos nomes prováveis da Movitel
+  (transid/transactionid/amount/value/msisdn/clientreference, todos
+  case-insensitive); entra com provider='emola' na MESMA tabela, com a
+  MESMA idempotência por UNIQUE e a MESMA conciliação canónica.
+- includes/payments/emola-client.php: cliente esqueleto com a superfície
+  do M-Pesa, parametrizável por options (host/caminhos/headers) para a
+  doc oficial encaixar sem novo release; honesto enquanto não activado.
+- Ecrã renomeado para "Pagamentos Móveis (M-Pesa / e-Mola)": cartões
+  e-Mola de estado + credenciais + webhook com Copiar; coluna "Canal" na
+  tabela com badge por provider; menu actualizado.
+- BUG REAL APANHADO POR TESTE: valores com separador europeu de milhares
+  ('2.350,50') eram lidos como 2,35 em AMBOS os mapeadores. Novo parser
+  partilhado sige_pagamentos_parse_valor cobre os dois mundos
+  (anglo/europeu) com 6 testes dedicados.
+
+ACADÉMICO - MAPA MENSAL DE ASSIDUIDADE (FORMATO OFICIAL, NOVO)
+- Motor: sige_presencas_relatorio_dados (cabeçalho da escola via perfil,
+  identificação da turma, agregados M/F e média de presença) +
+  sige_presencas_totais_por_dia (função pura: P/AT/PM contam, F/J/D não)
+  + género incluído na grelha.
+- View: ramo ?relatorio=1 DEPOIS da guarda de visualização, renderiza a
+  folha oficial A4 paisagem: cabeçalho República/Ministério/Escola (com
+  logo se existir), grelha Nº/Nome/S/dias/P-AT-F-J-%, rodapé "Presentes
+  no dia", resumo M/F/média e três linhas de assinatura (Director de
+  Turma, Director da Escola, Data e carimbo). Botões Voltar e Imprimir.
+- Botão "Relatório oficial" na toolbar do mapa, activado ao escolher a
+  turma (link sincronizado com turma/mês correntes).
+- Estilos no assets/views/presencas.css (regra do escuteiro mantida);
+  presencas.js ganhou guarda de página: no relatório só liga o Imprimir.
+- NOTA: layout genérico fiel ao padrão dos mapas MINEDH; afina-se ao
+  milímetro quando o modelo oficial em papel chegar (acesso nº 2).
+
+QUALIDADE
+- tools/smoke-presencas.php: 21 -> 23 (totais por dia, turma vazia).
+- tools/smoke-mpesa.php: 21 -> 37 (parser monetário 6, providers 6,
+  mapeador e-Mola 4).
+- tools/smoke-regression-pack.php: 50 -> 59 invariantes (e-Mola no funil
+  canónico sem escrita financeira directa; relatório atrás da guarda;
+  parser partilhado presente).

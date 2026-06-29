@@ -1,0 +1,61 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.37
+Data: 2026-06-22
+Titulo: Fase 1 Incremento 3 - Ciclo de vida dos documentos
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+Fecha a Fase 1 (seguranca de documentos e ficheiros). Quatro melhorias:
+1. Links de documentos com validade: os links de acesso aos documentos passam a
+   expirar (por omissao ao fim de 1 hora) e nao podem ser forjados.
+2. Registo de download mais completo: cada descarregamento regista tambem o IP e
+   o utilizador.
+3. Limpeza de ficheiros orfaos: ficheiros privados que deixaram de estar ligados a
+   qualquer registo (por exemplo, documentos substituidos) sao removidos com
+   seguranca depois de um periodo de graca.
+4. QR local: o codigo QR dos cartoes de estudante passa a ser gerado no proprio
+   navegador, deixando de usar um servico externo (o numero de processo do aluno
+   ja nao sai do dispositivo).
+Nao ha alteracao a base de dados.
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+5. Como ha alteracoes em JavaScript (lista de alunos e cartoes), limpe a cache do
+   navegador (Ctrl+F5) e, se usar plugin de cache ou CDN (Cloudflare), limpe
+   tambem essa cache. As regras de bloqueio do servidor para a pasta privada (Nginx)
+   ja foram tratadas nos Incrementos 1 e 2.
+
+================================================================
+AJUSTES OPCIONAIS (constantes, no wp-config.php)
+================================================================
+- define('SIGE_SECURE_DOC_LINK_TTL', 3600);   // validade dos links, em segundos
+- define('SIGE_PRIVATE_ORPHAN_GRACE', 86400);  // periodo de graca dos orfaos, em segundos
+Se nao definir nada, ficam os valores por omissao (1h e 24h).
+
+================================================================
+VERIFICACAO
+================================================================
+1. Abra um documento de um aluno a partir da ficha: deve abrir normalmente.
+2. Guarde esse link e tente reabri-lo depois da validade (ou com SIGE_SECURE_DOC_LINK_TTL
+   curto, para testar): deve aparecer "Este link expirou". Reabrir a partir da ficha
+   gera um link novo e funciona.
+3. Substitua um documento de um aluno; passado o periodo de graca, confirme (no
+   armazenamento) que o ficheiro antigo desaparece e o novo permanece.
+4. Imprima um cartao de estudante: o QR deve aparecer. O numero de processo nao e
+   enviado para nenhum servico externo.
+5. No registo de auditoria de um descarregamento, confirme que constam o IP e o
+   utilizador.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera dados
+nem esquema, pelo que a reversao e directa. (A limpeza de orfaos apenas remove
+ficheiros sem referencia; nao afecta documentos em uso.)

@@ -1,0 +1,45 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.149
+Data: 2026-06-14
+Ambito: Consistencia visual / Design / Qualidade
+
+CONTEXTO
+--------
+Diagnostico 360 da consistencia visual de todo o plugin (204 ficheiros PHP/CSS).
+Conclusao: a infra-estrutura de design (fonte da verdade sige-tokens.css, ponte de
+compatibilidade, icones, tipografia) esta solida e gated. O problema e de ADOPCAO:
+fora da cor, o vocabulario de tokens quase nao era usado (--fs-* tinha 0 usos para
+2478 font-size literais; --space-* tinha 8 usos para 4773 literais).
+
+CORRECCAO (alunos_lista.php - o maior ofensor)
+----------------------------------------------
+Migracao SEGURA por equivalencia exacta no bloco de view (linhas 687-5668),
+preservando byte-a-byte tudo o que nao tem token exacto:
+  - 182 border-radius px  -> var(--radius-*)
+  - 133 padding/margin/gap em grelha 4px -> var(--space-*)
+  - 111 box-shadow         -> var(--shadow-*)
+  -  72 font-size px        -> var(--fs-*)
+  -  16 transition 0.2s     -> var(--duration-normal)  (0.2s == 200ms)
+  TOTAL: 514 trocas, zero mudanca visual (cada token resolve para o mesmo valor).
+
+GARANTIAS DE NAO-REGRESSAO
+--------------------------
+  - !important: 2173 antes -> 2173 depois (cascata NAO tocada).
+  - Templates de impressao (window.print, a partir da linha 8382): IDENTICOS.
+    Nao foram migrados porque o popup de impressao nao carrega sige-tokens.css;
+    um var(--token) ali ficaria por resolver. Decisao deliberada.
+  - php -l limpo; corredor run-gates.php 14/14 verde.
+
+UTILITARIOS NOVOS
+-----------------
+  - tools/check-consistencia-visual.php  (14o gate, ligado ao run-gates.php):
+    anti-regressao dos primitivos ainda sem token. A baseline so desce.
+  - tools/controlador-consistencia-visual.php:
+    placar 0-100 por dimensao e global (ponderado pela divida inicial). O modo
+    --gate so fica verde quando a consistencia for total (sino de fim de missao).
+    Mantido FORA do run-gates.php para nao bloquear entregas durante a migracao.
+
+BASELINES DESCIDAS
+------------------
+  - design-tokens: raios migrados saem da contagem de magicos.
+  - consistencia-visual: font-size/espaco/sombra/transicao migrados saem da contagem.
+  Ambas re-registadas com --set nesta mesma entrega (so descem, nunca sobem).

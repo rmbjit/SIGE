@@ -1,0 +1,41 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.36
+Data: 2026-06-22
+Titulo: Correccao do despacho do dialogo de confirmacao (aprovar_notas)
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+Correccao de um defeito na confirmacao de notas. Antes, premir Aprovar mostrava o
+dialogo de Rejeitar e, ao confirmar, rejeitava as notas em vez de as aprovar.
+Agora cada botao mostra o seu proprio dialogo (Aprovar notas ou Rejeitar notas) e
+submete a sua propria accao. Nao ha alteracao a base de dados.
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+5. IMPORTANTE: como a correccao inclui um ficheiro JavaScript (assets/sige-ui.js),
+   limpe a cache do navegador (ou faca Ctrl+F5 na pagina) e, se usar plugin de
+   cache ou CDN (Cloudflare), limpe tambem essa cache para garantir que a nova
+   versao do ficheiro e servida.
+
+================================================================
+VERIFICACAO
+================================================================
+1. Abra ?page=sige-app&view=aprovar_notas com notas pendentes.
+2. Premir Aprovar: deve aparecer o dialogo "Aprovar notas". Ao confirmar, as notas
+   seleccionadas ficam aprovadas (mensagem de sucesso).
+3. Premir Rejeitar: deve aparecer o dialogo "Rejeitar notas". Ao confirmar, as
+   notas sao rejeitadas e voltam ao professor (mensagem de aviso).
+4. Confirme que a accao realizada corresponde sempre ao botao que premiu.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera dados
+nem esquema, pelo que a reversao e directa.

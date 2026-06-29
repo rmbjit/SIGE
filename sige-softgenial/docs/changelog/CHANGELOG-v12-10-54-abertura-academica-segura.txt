@@ -1,0 +1,52 @@
+SIGE SoftGenial v12.10.54 - Abertura Académica Segura
+Data: 2026-05-17
+Tipo: Produto PRO / Fluxo Académico Seguro
+
+Objectivo
+- Transformar o módulo &view=abertura numa abertura oficial de ano lectivo com rigor académico, auditoria e integridade operacional, sem remendos e mantendo o padrão visual Produto PRO já validado.
+
+Principais melhorias
+1. Fonte da verdade no snapshot do encerramento
+   - A abertura oficial deixa de recalcular dinamicamente a situação dos alunos.
+   - Passa a usar os snapshots activos criados pelo Encerramento Académico Seguro v12.10.52.
+
+2. Checklist de segurança antes da abertura
+   - Bloqueia abertura se o ano de origem não estiver encerrado oficialmente.
+   - Bloqueia abertura sem snapshots activos.
+   - Bloqueia abertura se a contagem de snapshots não coincidir com matrículas activas do ano encerrado.
+   - Bloqueia abertura se o destino já tiver turmas ou matrículas.
+   - Bloqueia abertura se já existir uma abertura oficial concluída para o mesmo par de anos.
+   - Bloqueia abertura se houver aluno sem situação final válida.
+
+3. Progressão e retenção correctas
+   - PROGRIDE/TRANSITA são encaminhados para a classe seguinte quando aplicável.
+   - REPROVA permanece na classe de origem, evitando a lacuna de alunos reprovados irem para a classe seguinte.
+   - Concluintes em classe terminal são registados no relatório, sem matrícula automática indevida.
+
+4. Matriz curricular oficial
+   - Abertura deixa de copiar cegamente disciplinas da turma antiga.
+   - Cada turma destino recebe disciplinas da matriz curricular da classe destino.
+   - Se a matriz da classe destino não estiver configurada, a abertura fica bloqueada com mensagem clara.
+
+5. Transacção e integridade
+   - Criação de turmas, vínculos disciplinares e matrículas passa a ser executada em transacção.
+   - Se houver erro a meio, a operação é revertida para evitar anos parcialmente abertos.
+
+6. Auditoria e relatório estruturado
+   - Nova tabela aditiva sige_ano_lectivo_aberturas para registar operação oficial.
+   - Guarda estado, totais, relatório JSON, hash de integridade, utilizador e datas.
+   - Mantém também log legado por option para compatibilidade com o ecrã actual.
+
+7. Matrículas do novo ano mais coerentes
+   - Matrículas criadas no destino ficam activas.
+   - Situação de origem, turma de origem, classe de origem, classe destino, snapshot e operação de abertura são guardados em colunas aditivas na matrícula.
+
+8. Visual preservado
+   - Mantém o desenho Produto PRO da v12.10.53.
+   - Mantém header único, ícones canónicos e padrão visual do Dashboard V2 MJS-grade.
+
+Garantias
+- Sem alteração de notas, pautas, DEC, boletins, pagamentos, multas ou fórmulas financeiras.
+- Alterações de base de dados são aditivas e não destrutivas.
+- Sem regressão visual nos módulos já harmonizados.
+- Todos os ficheiros PHP validados com php -l.

@@ -1,0 +1,57 @@
+SIGE SoftGenial v12.11.9.102
+============================
+
+Feature de cliente - Calendario de Devedores por Mes no ecra de devedores: 12 tiles com contagem e valor em aberto pela formula canonica, clicaveis para filtrar a lista
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+DETALHE COMPLETO DA FEATURE (pedido de cliente, 12 Jun 2026)
+============================================================
+
+CALENDÁRIO DE DEVEDORES POR MÊS (ecrã Financeiro > Devedores)
+"Ver de forma rápida, num lance, o número de devedores por mês."
+
+O QUE O CLIENTE VAI VER
+- Faixa executiva no TOPO do ecrã: 12 tiles (Jan..Dez do ano lectivo),
+  cada um com a CONTAGEM de devedores distintos do mês em grande, o
+  valor em aberto por baixo, e calor visual proporcional ao pior mês
+  (cinza = zero; âmbar -> vermelho escuro = pior).
+- Mês corrente com anel discreto; total em aberto do ano na legenda.
+- CLICÁVEL: clicar num mês aplica o filtro 'mes' já existente e a
+  lista abaixo passa a mostrar exactamente esses devedores; aparece o
+  tile "Ano inteiro" para limpar o filtro. Tooltip com o detalhe.
+
+PORQUE OS NÚMEROS BATEM SEMPRE COM A LISTA (decisões de engenharia)
+- O valor em aberto usa SEMPRE sige_fin_saldo_sql() (fórmula canónica
+  da tesouraria): zero matemática nova.
+- Cirurgia mínima na view: a condição de mês foi isolada em $where_mes;
+  o agregado do calendário reutiliza AS MESMAS condições da lista
+  (turma, centro, situação do aluno) SEM o mês: se o gestor filtra a
+  turma X, o calendário mostra a turma X.
+- Devedor do mês = aluno com lançamento pendente/parcial daquele mês
+  COM saldo positivo (COUNT DISTINCT aluno_id).
+- Motor de LEITURA PURA (invariante proíbe INSERT/UPDATE no ficheiro).
+
+ARQUITECTURA (as nossas regras de ouro)
+- includes/fin-devedores-calendario.php: consulta fina + montador
+  100% PURO (zero-fill 12 meses, níveis 0..4, corrente, filtrado).
+- assets/views/devedores.css (namespace sgdc-): em ficheiro próprio
+  DE PROPÓSITO, para o gate de colisões o cobrir automaticamente.
+- tools/smoke-devedores-calendario.php: 19 verificações do motor puro.
+
+QUALIDADE - DUAS CONFISSÕES DESTA ENTREGA
+1) O smoke apanhou um BUG REAL antes de sair do forno: a escala de
+   calor considerava linhas de OUTROS anos (um Dez/2025 com 99
+   devedores esmagava as cores de 2026). O teste-sentinela existia
+   exactamente para isso; motor corrigido; 19/19.
+2) O exit code desse smoke vermelho foi MASCARADO por um pipe
+   (`gate | tail`) na minha cadeia de fecho, e o bump passou com um
+   gate vermelho. Lição estrutural: nasceu tools/run-gates.php, o
+   corredor único que executa os 8 gates e sai vermelho se QUALQUER um
+   falhar: as baterias passam a ser um comando impossível de mascarar.
+- tools/smoke-regression-pack.php: 116 -> 124 invariantes (secção S +
+  invariante do corredor).

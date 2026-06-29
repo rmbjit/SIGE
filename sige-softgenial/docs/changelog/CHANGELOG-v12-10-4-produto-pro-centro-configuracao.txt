@@ -1,0 +1,45 @@
+SIGE SoftGenial v12.10.4 - Produto PRO: Centro de Configuração MJS-grade
+
+Base: v12.10.3 - Dashboard V2 MJS-grade aprovado.
+
+Objectivo
+- Aplicar ao Centro de Configuração o mesmo padrão visual aprovado no Dashboard V2.
+- Transformar a configuração numa área com cara de aplicação profissional, intuitiva, limpa e sem ruído técnico para a escola.
+- Manter fórmulas, regras de negócio, cálculos e fluxos operacionais intactos.
+
+Alterações principais
+1. Centro de Configuração Produto PRO
+   - Novo hero premium com título, descrição, atalhos e cartões de estado.
+   - Resumo visual de preenchimento da identidade, contactos e documentos.
+   - Navegação por áreas em cartões modernos, com ícones visíveis e descrições curtas.
+   - Formulários com campos mais legíveis, espaçamento generoso, cantos arredondados e botões alinhados ao padrão MJS-grade.
+
+2. Experiência protegida por padrão
+   - A escola continua a ver apenas as opções seguras do uso diário.
+   - As opções avançadas continuam fechadas por padrão e dependem do mecanismo já existente.
+   - Comunicação, módulos e estado técnico continuam reservados ao modo avançado.
+
+3. Renderer de configurações modernizado
+   - Separadores convertidos em cards de navegação.
+   - Cabeçalho de cada grupo de configuração com ícone, título e descrição.
+   - Estados de consulta, campos controlados pela central e campos de perfil visualmente mais limpos.
+
+4. Registry de grupos refinado
+   - Rótulos orientados a produto: Dados da escola, Contactos e localização, Marca e documentos, Ano lectivo, Preferências.
+   - Descrições adicionadas aos grupos para melhorar compreensão da escola.
+
+Perímetro de segurança
+- Sem alteração em fórmulas financeiras.
+- Sem alteração em notas, pautas, DEC, boletins ou actas.
+- Sem alteração em mensalidades, multas, pagamentos ou cobranças.
+- Sem alteração de schema da base de dados.
+- Sem migrações novas.
+- Sem alterações nos handlers de negócio.
+
+Validação recomendada
+1. Abrir: SIGE → Centro de Configuração.
+2. Confirmar que o visual segue o padrão aprovado do Dashboard V2.
+3. Testar gravação de Dados da escola, Contactos, Marca e Ano lectivo.
+4. Confirmar que opções avançadas ficam fechadas por padrão.
+5. Abrir opções avançadas apenas com perfil autorizado e fechar novamente.
+6. Confirmar que Dashboard, Financeiro, Académico e Pautas continuam a abrir normalmente.

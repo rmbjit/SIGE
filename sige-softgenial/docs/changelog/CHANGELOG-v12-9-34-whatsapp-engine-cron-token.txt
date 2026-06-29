@@ -1,0 +1,17 @@
+SIGE SoftGenial v12.9.34 - WhatsApp Engine Cron Token
+
+Base: v12.9.33 validada.
+
+Alterações:
+- Adicionado token seguro para processamento automático da fila WhatsApp por cron central.
+- Endpoint REST /wp-json/sige/v1/process-queue passa a aceitar ?key=... além de permissões administrativas.
+- Fallback admin-post passa a aceitar ?key=... para execução sem sessão de login.
+- Mantido limite conservador de até 5 mensagens por execução manual/cron.
+- Mantido motor de fila, scheduled_at, retries e horário Africa/Maputo.
+- Sem alterações em fórmulas financeiras/académicas.
+
+Chave padrão desta build:
+SGQ-2026-MZ-7f42c9e6d1b54a8f
+
+URL cron por instância:
+https://DOMINIO/wp-admin/admin-post.php?action=sige_process_queue_now&key=SGQ-2026-MZ-7f42c9e6d1b54a8f

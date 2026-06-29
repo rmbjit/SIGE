@@ -1,0 +1,23 @@
+# CHANGELOG v12.15.5 - Design System PRO Diagnostic Baseline
+
+## Tipo
+Diagnostico e QA harness. Sem mudanca visual de producao.
+
+## Adicionado
+- Baseline JSON em `docs/design-system/DESIGN_SYSTEM_BASELINE-v12.15.5.json`.
+- Estrategia incremental em `docs/design-system/IMPLEMENTATION_STRATEGY-v12.15.5.md`.
+- Phase Charter, Inventario Tecnico, Matriz de Rastreabilidade, QA, Migracao/Rollback e Rediagnostico.
+- `tools/inventory-design-system-pro-v12-15-5.php`.
+- `tools/check-design-system-safety-contract-v12-15-5.php`.
+- `tools/smoke-design-system-diagnostic-v12-15-5.php`.
+- Novo gate no `tools/run-gates.php`.
+
+## Preservado
+- CSP zero-inline.
+- Recuperacao de paginas autonomas da v12.15.4.
+- Estabilidade visual da v12.14.4/v12.15.4.
+
+## Nao incluido
+- Nenhum CSS global novo.
+- Nenhum JS global normalizador.
+- Nenhuma modernizacao visual de pagina.

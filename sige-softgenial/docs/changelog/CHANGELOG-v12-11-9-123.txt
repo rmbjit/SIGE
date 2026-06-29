@@ -1,0 +1,34 @@
+SIGE SoftGenial v12.11.9.123 - AUDITORIA DE DESIGN (transporte)
+==============================================================
+
+Gestão de transporte escolar (546 linhas).
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 7 pesos, 850 dominante (12 de 25).
+- RAIOS: 12 valores. SOMBRAS: 16. CORES: 58 hex (o menor até agora).
+
+CORRECÇÃO (bloco <style> 247-346 + estilos inline; redirect JS preservado)
+1. Hierarquia de 3 níveis: 7 pesos -> 500/600/700.
+2. Raios da escala: 12 -> 5. Sombras da escala: 16 -> 6.
+3. 107 cores migradas (CSS + KPIs/badges inline + lógica). Inclui a
+   LÓGICA PHP de cor por LOTAÇÃO ('Disponível' verde, 'No limite'
+   vermelho, 'Em uso' azul) migrada para tokens semânticos preservando
+   o significado de capacidade. ZERO hex restantes.
+
+PROVA VISUAL
+- transporte-antes-depois.png: rotas com lotação. Cores de estado
+  preservadas (disponível verde, no limite vermelho, em uso azul); nome
+  e lotação destacam-se, tipo recua.
+
+GATES
+- smoke-regression-pack: 205 -> 209 invariantes.
+- transporte adicionado aos ecrãs auditados.
+- Baseline de mágicos: 7290 -> 7175 (-115).
+- Baseline de tipografia: 331 -> 312 (-19).
+- 12 gates verdes.
+
+MARCO: 13 ecrãs auditados. Desde o início: mágicos 9925 -> 7175; pesos
+não-canónicos 665 -> 312.
+
+PRÓXIMO
+- a cauda mais leve (ecrãs com < 19 pesos não-canónicos)...

@@ -1,0 +1,22 @@
+SIGE SoftGenial v12.9.18 - WhatsApp Guardian
+
+Objectivo:
+Reduzir drasticamente o risco de restrições temporárias/banimento em números WhatsApp usados via Z-API para cobranças, confirmação de pagamentos, recibos e notificações financeiras.
+
+Principais mudanças:
+1. Todos os envios financeiros via sige_fin_queue_whatsapp passam agora pelo Guardian.
+2. Criação automática da tabela sige_whatsapp_consentimentos.
+3. Acrescento seguro de colunas opcionais à sige_whatsapp_queue: not_before, prioridade, risco_score, hash_msg, guardian_meta.
+4. Humanização automática das mensagens: saudação variada, linguagem menos agressiva e pedido claro de consentimento.
+5. Opt-out automático: respostas como NÃO, NAO, PARAR, STOP, SAIR, CANCELAR marcam o contacto como recusado.
+6. Opt-in automático: respostas como SIM, ACEITO, AUTORIZO, OK marcam o contacto como aceito.
+7. Webhook REST: /wp-json/sige/v1/whatsapp-webhook para receber respostas da Z-API.
+8. Recibos/links passam a ser separados: a mensagem principal sai primeiro; o link sai depois com atraso aleatório seguro.
+9. Aquecimento automático por escola: limite diário começa conservador e sobe progressivamente.
+10. Limites por hora, por dia, por contacto e intervalo global entre mensagens.
+11. Anti-duplicação de mensagens idênticas nas últimas 24h.
+12. Pausa automática quando o sistema detecta muitas falhas recentes.
+13. Janela segura de envio: 06:30-20:30, horário local do WordPress/Moçambique.
+
+Observação importante:
+Nenhum mecanismo garante 100% contra restrição, porque o WhatsApp também considera denúncias, bloqueios, reputação do número, idade do número, qualidade dos contactos e reacções dos destinatários. Esta versão reduz o risco de forma forte, mas recomenda-se configurar o webhook da Z-API e orientar as escolas a manterem consentimento real dos encarregados.

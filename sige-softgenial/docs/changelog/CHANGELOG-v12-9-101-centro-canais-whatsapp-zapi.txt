@@ -1,0 +1,25 @@
+SIGE SoftGenial v12.9.101 - Centro de Canais WhatsApp/Z-API
+
+Base: v12.9.100 - Unificação Real da Configuração Geral.
+
+Objectivo:
+- Continuar a produtificação real do Centro de Configuração.
+- Evitar que alterações operacionais como URL/API e token da Z-API dependam da Configuração Geral legada.
+- Criar uma área própria, segura e auditada para canais de comunicação.
+
+Alterações:
+- Novo separador técnico: Comunicação e canais.
+- WhatsApp/Z-API pode ser actualizado no Centro de Configuração em modo técnico.
+- URL/API actual e token actual aparecem apenas mascarados.
+- Campo vazio preserva valor existente para segredos/campos sensíveis.
+- Destinatários padrão do WhatsApp podem ser ajustados no Centro de Canais.
+- Nova acção AJAX segura: sige_settings_save_communication_channels.
+- A escrita exige nonce, permissão técnica, sanitização, validação e auditoria.
+- Mapa de Configuração Geral integrado actualizado para indicar que WhatsApp/Z-API já tem destino no Centro.
+
+Garantias:
+- Não altera motor WhatsApp.
+- Não dispara mensagens.
+- Não altera fila, guardrails, templates conversacionais ou cron.
+- Não altera financeiro, académico, SMTP, Hub/licença, permissões, documentos, recibos, pautas, boletins ou schema.
+- Não remove a Configuração Geral legada; mantém apenas como compatibilidade técnica controlada.

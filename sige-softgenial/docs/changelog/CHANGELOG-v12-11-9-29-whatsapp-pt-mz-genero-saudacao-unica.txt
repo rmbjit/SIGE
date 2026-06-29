@@ -1,0 +1,35 @@
+SIGE SoftGenial v12.11.9.29 - WhatsApp PT-MZ e Género do Encarregado
+Data: 2026-06-01
+Build: sige-12.11.9.29-whatsapp-pt-mz-genero-saudacao-unica
+Base validada: v12.11.9.28
+
+Objectivo
+- Corrigir mensagens WhatsApp financeiras que podiam sair com dupla saudação, aberturas contraditórias, tratamento incorrecto do género do destinatário e construções pouco naturais em português de Moçambique.
+
+Alterações
+- Corrigida dupla saudação em mensagens de recibo/pagamento.
+- O Recovery Mode passa a reconhecer "Boa noite" como saudação existente.
+- Removidas aberturas fixas como "Bom dia! Confirmamos que o pagamento foi recebido pela escola.".
+- Removidos emojis das aberturas operacionais de WhatsApp financeiro.
+- Templates de pagamento passam a usar referência gramatical ao aluno:
+  - "ao aluno Nome" quando género masculino é conhecido;
+  - "à aluna Nome" quando género feminino é conhecido;
+  - "à matrícula de Nome" quando género não está confiável.
+- Fechos de recibo passam a terminar em pergunta única, evitando duplicação do tipo:
+  "Se precisar do comprovativo..." + "Podemos enviar o link...?".
+- Identificação do destinatário por número: se whatsapp_notificacoes/contacto_encarregado for o número da mãe, a mensagem usa nome/tratamento da mãe; se for do pai, usa o pai.
+- O renderer recebe encarregado_tipo para tratar "pai" como Sr. e "mae" como Sra.
+- Sanitizador final corrige mensagens pendentes com dupla abertura e a frase antiga "pagamento referente a Nome".
+
+Não alterado
+- Fórmulas financeiras.
+- Fórmulas académicas.
+- Pagamentos.
+- Recibos.
+- Links públicos de recibo.
+- Pautas, notas, boletins e regras de aprovação.
+
+Validações
+- php -l em 173 ficheiros PHP: 0 erros.
+- smoke-whatsapp-pt-mz-v12-11-9-29.php: 18 OK / 0 FAIL.
+- BUILD.json validado.

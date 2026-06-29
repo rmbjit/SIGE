@@ -1,0 +1,35 @@
+SIGE SoftGenial v12.11.4 - Permission Matrix Enforcement PRO (TEST)
+
+Objectivo
+- Corrigir permissões que ficavam cosméticas, sobretudo para professores com acesso concedido a DEC e ACTA.
+- Garantir que a matriz SIGE comanda menus, rotas e handlers sempre que o utilizador tem perfil SIGE activo.
+
+Principais correcções
+1. Admin Shell
+- Removido bloqueio fixo que forçava professores para apenas dashboard/minhas_turmas/notas/pautas.
+- DEC, ACTA, Pauta Final, Aprovar Notas, Auditoria e Estatísticas passam a aparecer se a matriz conceder a permissão correspondente.
+- O redireccionamento automático por role deixou de anular permissões explícitas concedidas na matriz.
+
+2. Handlers e acções reais
+- Central helper sige_user_can_any_secure() passa a respeitar a matriz SIGE como fonte soberana quando há perfil SIGE activo.
+- Fallback por current_user_can('sige_xxx') fica reservado para utilizadores ainda sem perfil SIGE activo.
+- Handler da ACTA deixa de exigir permissões inexistentes como academico.actas_editar / academico.actas_finalizar.
+- Guardar/gerar ACTA passa a usar permissões reais existentes: academico.actas_emitir, academico.aprovar_notas e academico.pautas_emitir.
+
+3. Registry / defaults
+- Direcção passa a receber por defeito DEC, ACTA, boletins e pautas na matriz SIGE.
+- Etiquetas ajustadas para deixar claro que academico.actas_emitir também cobre editar/guardar/imprimir actas e academico.dec_emitir cobre gerar/imprimir/exportar DEC.
+
+4. Limpeza de permissões inconsistentes
+- Removidas referências operacionais a permissões não registadas em handlers de pauta/MAP.
+
+Sem alteração
+- Não altera fórmulas de notas.
+- Não altera regras financeiras, pagamentos, multas ou recibos.
+- Não altera currículos.
+- Não altera base de dados de negócio, excepto seed idempotente das permissões padrão.
+
+Teste recomendado
+- Com utilizador Professor, atribuir academico.dec_ver + academico.dec_emitir e confirmar menu DEC + acesso directo.
+- Atribuir academico.actas_ver + academico.actas_emitir e confirmar menu ACTA + guardar/gerar.
+- Remover as permissões e confirmar que o menu e a rota deixam de aparecer/abrir.

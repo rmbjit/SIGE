@@ -1,0 +1,44 @@
+SIGE SoftGenial v12.10.47 - Compliance Visual Global
+
+Objectivo
+- Reverificar e harmonizar as páginas já melhoradas para manter o Painel Principal como referência visual inegociável.
+
+Ajustes realizados
+- Aplicada uma camada global de compliance visual no App Shell para os módulos já redesenhados.
+- Normalizada a sequência dos heros: área/secção com ícone, título principal e texto explicativo.
+- Reforçada a consistência de tipografia global escolhida em Aparência da escola.
+- Reforçada a aplicação das cores personalizadas nos cabeçalhos, botões, destaques e cartões.
+- Harmonizados estilos de hero, KPIs, cartões, subtítulos e painéis auxiliares.
+- Corrigida a ausência de ícone em secções de alguns módulos já trabalhados.
+- Reforçada a proteção visual para círculos decorativos nunca sobreporem textos.
+
+Módulos abrangidos
+- Painel Principal
+- Centro de Configuração
+- Painel Financeiro
+- Registar Pagamento
+- Central de Cobranças
+- Pagamentos por Turma
+- Extractos e Caixa
+- Relatório Mensal
+- Lançamentos Financeiros
+- Despesas da Escola
+- Auditoria Financeira
+- Centros de Custo
+- Lançar Mensalidades
+- Planos de Pagamento
+- Preços e Serviços
+- Inscrições e Renovações
+- Alunos e Matrículas
+- Turmas
+- Equipa e Professores
+- Disciplinas
+- Matriz Curricular
+- Aproveitamento/Boletim
+
+Garantias
+- Sem alteração de fórmulas.
+- Sem alteração de regras financeiras.
+- Sem alteração de mensalidades, multas, pagamentos, recibos, estornos ou base de dados.
+- Sem alteração de notas, pautas, DEC, boletins ou actas.
+- Sem termos técnicos internos adicionados à interface do utilizador final.

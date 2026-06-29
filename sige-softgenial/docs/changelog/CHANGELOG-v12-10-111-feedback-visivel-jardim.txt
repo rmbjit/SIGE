@@ -1,0 +1,36 @@
+SIGE SoftGenial v12.10.111 - Feedback Visível no Jardim
+
+Base
+- Construído por cima da v12.10.110 - Feedback Visível de Salvamento.
+
+Problema corrigido
+- No Jardim de Infância, algumas acções guardavam correctamente mas não exibiam mensagem visível.
+- A causa principal era que os handlers do Jardim redireccionavam com msg=ok/msg=erro, enquanto as views Diário e Saúde estavam à espera apenas de saved=1/saved=0.
+- Na v12.10.110 o App Shell evitava feedback genérico no Jardim para não duplicar mensagens locais, mas as mensagens locais ainda não estavam a interpretar todos os marcadores.
+
+Correções aplicadas
+- Diário de Actividades:
+  - passa a aceitar msg=ok/msg=erro;
+  - mostra "Diário de actividades guardado com sucesso" após Guardar Diário;
+  - mostra erro claro quando não for possível guardar.
+- Avaliação por Critérios:
+  - usa a mesma view do Diário;
+  - passa a mostrar "Avaliação por critérios guardada com sucesso" quando tab=avaliacao.
+- Saúde e Nutrição:
+  - passa a aceitar msg=ok/msg=erro;
+  - mostra "Registos de saúde e nutrição guardados com sucesso".
+- Presenças:
+  - mantém feedback local;
+  - aviso passa a usar sanitize_key;
+  - mensagem de erro ficou mais clara.
+- A camada transversal de feedback da v12.10.110 continua activa para outros módulos.
+
+Garantias
+- Sem alterar handlers de gravação.
+- Sem alterar nomes dos campos POST.
+- Sem alterar regras de negócio.
+- Sem alterar cálculos MB/B/S/NS.
+- Sem alterar pagamentos, mensalidades, multas ou recibos.
+- Sem alterar notas, Pauta, DEC, ACTA, boletins ou regras académicas.
+- Sem alterar Permission Engine, perfis ou permissões.
+- Sem alterar base de dados.

@@ -1,0 +1,56 @@
+SIGE SoftGenial v12.10.126 - Página do Aluno: Senha sem Tela Branca
+
+Base
+- Construído por cima da v12.10.125 - Página do Aluno: Alteração Segura de Senha.
+
+Problema corrigido
+- Ao clicar em "Guardar nova senha", a página podia processar para uma tela branca.
+- A causa provável era o processamento da alteração de senha dentro da própria view:
+  admin.php?page=sige-app&view=aluno_portal&secao=senha
+- Como o App Shell já podia ter iniciado a renderização, qualquer redirect após wp_set_password podia falhar ou deixar o utilizador sem feedback claro.
+
+Correção aplicada
+1. Handler próprio em admin-post.php
+- A alteração de senha passa a ser processada por:
+  wp-admin/admin-post.php?action=sige_aluno_portal_change_password
+- Esse handler corre antes da página renderizar, evitando tela branca.
+
+2. Feedback claro ao utilizador
+- Após sucesso, volta para:
+  admin.php?page=sige-app&view=aluno_portal&secao=senha&pass_msg=ok
+- Após erro, volta para a mesma secção com mensagem clara:
+  - senha actual errada;
+  - confirmação diferente;
+  - senha fraca;
+  - muitas tentativas;
+  - sessão expirada;
+  - acesso negado.
+
+3. Protecção mantida
+- Nonce obrigatório.
+- Senha actual obrigatória.
+- Nova senha diferente da actual.
+- Pelo menos 8 caracteres.
+- Letras e números.
+- Não conter login nem parte do e-mail.
+- Limite de 5 tentativas em 15 minutos.
+- Altera apenas a senha do utilizador autenticado.
+
+4. View protegida
+- O antigo processamento POST dentro da view foi desactivado.
+- Caso algum formulário antigo/cache envie POST para admin.php, a página já não tenta processar nem redireccionar tardiamente.
+- Mostra mensagem orientando a nova submissão segura.
+
+5. UX
+- Ao submeter, o botão muda para "A guardar senha..." para o utilizador perceber que a acção foi iniciada.
+
+Mantido
+- Modo leitura da Página do Aluno.
+- Bloqueio de notas/boletins por dívida.
+- Validação de propriedade dos recibos.
+- Menu lateral do aluno.
+- Recibos filtráveis.
+- Redireccionamento correcto do portal antigo.
+- Sem alteração de base de dados académica/financeira.
+- Sem alteração de pagamentos.
+- Sem alteração de notas, Pauta, DEC, ACTA ou boletins.

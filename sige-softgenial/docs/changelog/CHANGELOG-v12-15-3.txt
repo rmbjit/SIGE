@@ -1,0 +1,6 @@
+v12.15.3 - Design System Stability Recovery
+
+- Quarentena da camada global Design System PRO.
+- Retorno controlado à base visual aprovada v12.14.4.
+- Preservação da validação segura do fluxo de pagamentos.
+- Gate novo para impedir reintrodução acidental de enqueue global de `sige-design-system-pro.*`.

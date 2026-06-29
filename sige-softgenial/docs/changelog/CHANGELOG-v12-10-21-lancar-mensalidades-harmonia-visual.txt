@@ -1,0 +1,19 @@
+SIGE SoftGenial v12.10.21 - Lançar Mensalidades: Harmonia Visual
+
+Objectivo
+- Alinhar o módulo Lançar Mensalidades ao padrão visual aprovado do Painel Principal.
+
+Alterações
+- Removida duplicação de cabeçalho nesta página.
+- Novo hero claro, amplo e consistente com o Dashboard V2 aprovado.
+- KPIs para serviços activos, alunos activos, turmas e serviços por classificar.
+- Formulário reorganizado em cartão moderno, com melhor largura e leitura.
+- Texto visível revisto para remover anotações internas e linguagem técnica.
+- Confirmação de lançamento trocada por pop-up real, centrado no ecrã.
+- O pop-up confirma serviço, período, turma/aluno e opções antes de gerar.
+- Mantida camada mobile-friendly.
+
+Garantias
+- Sem alteração de fórmulas.
+- Sem alteração de mensalidades, multas, descontos, pagamentos, cobranças, recibos, estornos ou base de dados.
+- Sem alteração de notas, pautas, DEC, boletins ou actas.

@@ -1,0 +1,20 @@
+SIGE SoftGenial v12.10.53 - Abertura: Harmonia Visual
+
+Base: v12.10.52 - Encerramento Académico Seguro.
+
+Objectivo
+- Harmonizar visualmente o módulo &view=abertura / Abertura de Ano Lectivo com o padrão Produto PRO validado no Painel Principal / Dashboard V2 MJS-grade.
+
+Alterações efectuadas
+- Removido o header genérico superior do App Shell para a view abertura, respeitando a regra de header único quando o módulo já possui hero próprio.
+- Recriado o hero do módulo no padrão Produto PRO: kicker com ícone canónico, título principal e texto explicativo na sequência correcta.
+- Substituídos emojis visuais por ícones canónicos do sistema SIGE, no padrão usado em Extractos e Caixa.
+- Removidos pontos/pontinhos decorativos em cabeçalhos e alertas do módulo.
+- Harmonizados stepper, cartões KPI, painéis, tabela de pré-visualização, confirmação crítica e log final.
+- Melhorada a responsividade do módulo sem alterar o fluxo operacional.
+
+Garantias
+- Sem alteração de cálculos académicos.
+- Sem alteração de regras de abertura, rematrícula, progressão, retenção ou pendências.
+- Sem alteração de notas, pautas, DEC, boletins, pagamentos, multas ou base de dados.
+- Intervenção visual conservadora, sem regressão sobre a v12.10.52.

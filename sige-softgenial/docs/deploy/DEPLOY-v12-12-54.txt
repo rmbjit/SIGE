@@ -1,0 +1,44 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.54
+Data: 2026-06-23
+Titulo: Fase 4 incr 2 - Cadeias jQuery e IIFE em onclick reescritas em vanilla
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+Mudanca interna, sem alterar a forma de trabalhar. Continuamos a preparar o reforco
+de seguranca do navegador (CSP). Nesta versao reescrevemos os dois ultimos cliques que
+ainda usavam bibliotecas em codigo simples, sem mudar o que fazem. Com isto, todos os
+cliques embutidos das paginas normais ficam tratados. Nao ha qualquer alteracao
+visivel.
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+
+================================================================
+VERIFICACAO
+================================================================
+1. Central de WhatsApp: se aparecer um erro a carregar, o botao "Tentar novamente"
+   reabre o painel de pendentes como antes.
+2. Matriz curricular: ao clonar uma matriz, o botao "Cancelar" do quadro de clonagem
+   fecha o quadro normalmente.
+
+Tudo deve comportar-se exactamente como antes.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera o
+esquema da base de dados, pelo que a reversao e directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Tratar os blocos de script das paginas, e por fim impor a politica de seguranca de
+  conteudo (CSP).

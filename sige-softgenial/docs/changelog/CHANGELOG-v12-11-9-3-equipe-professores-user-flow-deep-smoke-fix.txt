@@ -1,0 +1,31 @@
+SIGE SoftGenial v12.11.9.3 - Equipa e Professores User-Flow Deep Smoke Fix PRO (TEST)
+
+Escopo:
+- Módulo Equipa e Professores (&view=equipe).
+- Correção pós-teste real após reporte de falha ao editar/carregar ficha segura.
+
+Alterações:
+1. Configuração AJAX isolada em window.sigeEquipeAjax.
+   - A view deixa de depender de sigeAjax como fonte de verdade.
+   - Evita sobrescrita pelo App Shell/localização de scripts no footer.
+
+2. Endpoints RH com resposta JSON limpa.
+   - Buffer próprio nos endpoints de equipa.
+   - Limpeza antes de wp_send_json_success/error via wrappers internos.
+   - Reduz risco de erro de comunicação causado por notices, warnings ou output acidental antes do JSON.
+
+3. Diagnóstico de erro no front-end melhorado.
+   - Falhas AJAX passam a mostrar HTTP status e resumo seguro da resposta.
+   - O utilizador deixa de receber apenas mensagem genérica quando houver bloqueio real do servidor.
+
+4. Mantidos os hardenings críticos/altos da v12.11.9.x.
+   - Bloqueio de escalada Admin TI.
+   - Validação de pertença à escola.
+   - Dados salariais/bancários fora do DOM.
+   - Exportação da folha salarial via endpoint protegido.
+
+Validação estática:
+- php -l em todos os ficheiros PHP.
+- Deep smoke test estático na óptica do utilizador para botões, funções JS, endpoints AJAX e ausência de conflito sigeAjax.
+
+Não altera regras financeiras, académicas, notas, pautas, DEC, mensalidades, multas ou pagamentos.

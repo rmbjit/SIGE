@@ -1,0 +1,33 @@
+SIGE SoftGenial v12.11.9.118 - AUDITORIA DE DESIGN (equipe/RH)
+=============================================================
+
+Gestão de equipa/RH (3737 linhas).
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 9 pesos.
+- RAIOS: 17 valores (4 a 38px) - A MAIOR dispersão de raios vista.
+- SOMBRAS: 55 distintas (2ª maior depois do alunos_lista).
+- CORES: 182 hex.
+
+CORRECÇÃO (bloco CSS 209-1901; templates de crachá impressão e JS preservados)
+1. Hierarquia de 3 níveis: 9 pesos -> 500/600/700 (30/33 equilibrado).
+2. Raios da escala: 17 -> 5. Sombras da escala: 55 -> 7.
+3. 230 cores migradas. KPIs (custom properties --kpi-color/--kpi-soft)
+   migrados para tokens; tema dinâmico (--sg-theme-primary/soft)
+   PRESERVADO com fallbacks. Os 21 hex restantes em zonas preservadas
+   (20 templates de crachá, 1 fallback de tema).
+
+PROVA VISUAL
+- equipe-antes-depois.png: lista de pessoal. Nome domina, cargo ênfase,
+  departamento/estado recua. Iniciais coloridas mantidas.
+
+GATES
+- smoke-regression-pack: 188 -> 191 invariantes. (Invariantes da
+  consolidação CSS da v106 continuam verdes.)
+- equipe adicionado aos ecrãs auditados.
+- Baseline de mágicos: 8056 -> 7824 (-232).
+- Baseline de tipografia: 440 -> 417 (-23).
+- 12 gates verdes.
+
+PRÓXIMO
+- portaria (22 pesos), minhas_turmas (22), encerramento (22)...

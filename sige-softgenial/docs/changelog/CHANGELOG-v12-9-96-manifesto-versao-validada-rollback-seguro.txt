@@ -1,0 +1,45 @@
+SIGE SoftGenial v12.9.96 - Manifesto de Versão Validada e Rollback Seguro
+
+Objectivo
+- Preparar a v12.9.95 validada em teste como base controlada para instalação piloto em escolas reais.
+- Acrescentar manifesto de versão, prontidão de instalação, rollback e rollout sem alterar lógica operacional.
+
+O que foi acrescentado
+1. Nova camada apenas de leitura:
+   - includes/settings/class-sige-settings-validated-release.php
+
+2. Nova área dentro de Centro de Configuração → Pré-produção:
+   - Manifesto de versão validada e rollback seguro.
+
+3. O manifesto apresenta:
+   - versão actual;
+   - build ID;
+   - canal da release;
+   - ambiente detectado;
+   - base segura anterior;
+   - decisão de instalação;
+   - checklist obrigatória;
+   - protocolo de instalação segura;
+   - prontidão de rollback;
+   - matriz de rollout por escola;
+   - registo seguro para suporte;
+   - lista de condições em que não se deve instalar.
+
+Garantias anti-regressão
+- Não grava configurações operacionais.
+- Não remove campos.
+- Não migra valores.
+- Não sincroniza automaticamente.
+- Não altera financeiro, académico, WhatsApp, SMTP, Hub/licença, permissões, pautas, boletins, recibos ou schema.
+- Não executa instalação, promoção ou rollback automaticamente.
+- Não expõe tokens, senhas, API keys, SMTP, Z-API ou dados sensíveis.
+
+Como testar
+1. Instalar em ambiente de teste sobre a v12.9.95 validada.
+2. Abrir Sistema Técnico → Centro de Configuração → Pré-produção.
+3. Confirmar a nova área Manifesto de versão validada e rollback seguro.
+4. Confirmar que o versionamento está alinhado em 12.9.96.
+5. Confirmar que não houve alteração no fluxo operacional do sistema.
+
+Nota
+- Esta versão ainda não remove configurações mortas. A remoção continua proibida nesta fase até haver release estável em produção.

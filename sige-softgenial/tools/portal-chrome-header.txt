@@ -1,0 +1,17 @@
+/* =============================================================================
+   SIGE SoftGenial - style-portal-chrome.css (GERADO, NAO EDITAR A MAO)
+   -----------------------------------------------------------------------------
+   Folha enxuta do portal: apenas o chrome/core do design system.
+
+   Gerado por tools/gen-portal-chrome.php a partir de assets/style.css, removendo
+   os modulos de view que o portal do encarregado/aluno nunca renderiza (Financeiro
+   MJS, Central de Cobrancas, Relatorio Mensal, Despesas, Auditoria, Centros de
+   Custo, Lancar Mensalidades, Planos, Precos, Inscricoes, Pagamentos por Turma,
+   Extractos PRO). Nenhuma regra foi reescrita: onde se aplicam, aplicam-se de
+   forma identica ao style.css completo.
+
+   NAO editar este ficheiro a mao. Para actualizar apos mudanca no chrome do
+   style.css: correr 'php tools/gen-portal-chrome.php' e validar com run-gates.
+
+   Carregado apenas no portal enxuto e so com sige_portal_chrome_css_v121514_enabled = 1.
+   ============================================================================= */

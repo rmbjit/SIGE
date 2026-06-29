@@ -1,0 +1,54 @@
+SIGE SoftGenial v12.10.123 - Página do Aluno: Menu Legível e Recibos Filtráveis
+
+Base
+- Construído por cima da v12.10.122 - Página do Aluno: Menu Lateral Renderizado no Shell.
+
+Problemas tratados
+1. Menu lateral activo
+- O item seleccionado ficava com fundo branco, mas texto/ícone pouco legíveis ou aparentemente invisíveis.
+- A causa provável era especificidade CSS: a regra geral da lateral azul tinha prioridade sobre a regra do item activo.
+
+2. Lançamentos recentes
+- A área financeira precisava ter limite claro e não parecer uma lista sem fim.
+- O encarregado/aluno também precisava consultar datas antigas sem carregar tudo de uma vez.
+
+3. Recibos
+- O aluno/encarregado precisava conseguir abrir/baixar/imprimir os seus recibos directamente a partir da Página do Aluno.
+
+Correções aplicadas
+1. Menu lateral
+- Reforçado CSS do item activo com selectores mais fortes usando #sige-sidebar.
+- Texto, span e ícones do item activo passam a usar azul SoftGenial sobre fundo branco.
+- Mantém destaque visual correcto sem ofuscar o texto.
+
+2. Limites financeiros
+- Pagamentos recentes: máximo de 6 registos.
+- Lançamentos recentes: máximo de 8 registos.
+- O limite fica indicado visualmente na secção.
+
+3. Filtro retroactivo
+- Adicionado filtro por intervalo de datas:
+  - De
+  - Até
+- O filtro afecta:
+  - pagamentos recentes pela data de pagamento;
+  - lançamentos recentes pela data de vencimento.
+- O botão Limpar volta à visão recente.
+
+4. Recibos disponíveis ao aluno/encarregado
+- Em Pagamentos recentes, cada pagamento com ID gera link:
+  - Baixar / imprimir recibo.
+- Em Lançamentos recentes, quando houver pagamento associado ao lançamento, aparece link para o recibo.
+- O link abre o motor oficial de recibos do SIGE:
+  - admin.php?page=sige-app&sige_print=recibo&id=...
+- A segurança existente do Documents Engine continua a validar propriedade do pagamento: aluno/encarregado só consegue abrir recibos do seu próprio aluno.
+
+Mantido
+- Página do Aluno em modo leitura.
+- Sem formulários de edição.
+- Bloqueio de notas/boletins por dívida.
+- Permissão real de portal.
+- Redireccionamento correcto do portal antigo.
+- Sem alteração de base de dados.
+- Sem alteração de pagamentos, mensalidades, multas ou recibos.
+- Sem alteração de notas, Pauta, DEC, ACTA ou boletins.

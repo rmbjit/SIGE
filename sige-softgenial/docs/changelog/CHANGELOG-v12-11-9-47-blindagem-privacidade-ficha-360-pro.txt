@@ -1,0 +1,48 @@
+SIGE SoftGenial v12.11.9.47 - Blindagem de Privacidade da Ficha 360º PRO
+
+Objectivo
+- Reforçar a privacidade e a segurança da Ficha 360º do Aluno antes de avançar para novas funcionalidades.
+- Aplicar minimização de dados no payload AJAX e impedir exposição de informação técnica/desnecessária no navegador.
+
+Intervenções realizadas
+1. Payload AJAX da Ficha 360º
+- Adicionados helpers de normalização/sanitização para texto, e-mail, data, data/hora e URL.
+- Payload passa a devolver apenas campos necessários à visualização da Ficha 360º.
+- Histórico de matrículas deixa de usar SELECT m.* e passa a devolver apenas id, ano lectivo, turma, classe e estado.
+- Resumo académico por trimestre passa a ser convertido em array limpo com inteiros.
+- Últimos acessos de portaria passam por sanitização antes de chegar ao navegador.
+- Comunicação WhatsApp mantém apenas totais operacionais; telefone de destino e erro técnico deixam de ser expostos na Ficha 360º.
+- Pagamentos recentes deixam de ser enviados nesta ficha; detalhes continuam no módulo financeiro próprio.
+
+2. Documentos do aluno
+- Documentos digitais na Ficha 360º passam a expor link apenas se o endpoint seguro sige_secure_document_url() estiver disponível.
+- Se a camada segura não estiver disponível, a ficha mostra que o documento está carregado, mas não devolve URL directo guardado na base de dados.
+- A foto do aluno continua visível no cabeçalho da ficha, mas deixa de ser exposta como link documental adicional.
+
+3. Lista/cartão do aluno
+- data-search passa a ser escapado com esc_attr() e limpo com wp_strip_all_tags().
+- data-status passa por sanitize_key()/esc_attr().
+- data-turma-id passa a sair como inteiro.
+- O badge de saúde deixa de mostrar detalhes médicos no title/tooltip, evitando exposição acidental por hover.
+- O atalho de BI Digital na lista só aparece quando o endpoint seguro de documentos está disponível; não há fallback para URL directo.
+
+4. Frontend da Ficha 360º
+- Safe URL no JavaScript passa a rejeitar URLs protocol-relative, javascript: e data:.
+- Mantido o escape HTML de todos os valores renderizados dinamicamente.
+
+Preservado sem alterações
+- Ficha 360º permanece apenas leitura.
+- Índice de Qualidade dos Dados preservado.
+- Importação em duas etapas preservada.
+- Histórico de lotes e anulação segura preservados.
+- Modelo Excel controlado preservado.
+- Notas, pautas, boletins, DEC, fórmulas, pagamentos, mensalidades, multas e recibos preservados.
+- Estrutura principal da base de dados preservada.
+
+Testes executados
+- php -l nos ficheiros alterados.
+- Smoke test estático da blindagem de privacidade.
+- Verificação de ausência de SELECT m.* na Ficha 360º.
+- Verificação de ausência de telefone/erro técnico da fila WhatsApp no payload da Ficha 360º.
+- Verificação de bloqueio de URL directo de documentos quando a camada segura não está disponível.
+- Verificação de escape/sanitização dos atributos data-* do card do aluno.

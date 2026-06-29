@@ -1,0 +1,27 @@
+SIGE SoftGenial v12.11.9.60 - Mobile Header Consistency & Permission Nav PRO
+
+Área: App Shell / Mobile Global / Alunos
+
+Objectivo:
+- Corrigir as inconsistências finais do cabeçalho mobile reportadas após a v12.11.9.59 e reforçar a leitura da navegação inferior por permissões.
+
+Intervenções realizadas:
+- Remoção agressiva de folga superior no App Shell mobile global.
+- Topbar global colada ao topo útil do ecrã.
+- Curvas inferiores padronizadas na topbar mobile global.
+- Correção da topbar do módulo Alunos, que tinha curva inferior apenas no lado direito.
+- Aplicação de clip-path defensivo para manter as duas curvas visíveis no mobile.
+- Navegação inferior global mantém apenas atalhos permitidos pelo perfil/permissões do utilizador.
+- O botão “Mais” passa a ficar activo quando o utilizador está numa área fora dos atalhos principais.
+
+Como a navegação inferior responde às permissões:
+- Início aparece apenas se o utilizador puder ver o dashboard.
+- Alunos aparece apenas se tiver permissão alunos.ver.
+- Pagamentos aparece apenas se tiver permissão financeiro.pagar.
+- Mais abre o menu lateral, que já lista apenas áreas permitidas.
+
+Blindagem:
+- Sem alterações de base de dados.
+- Sem alterações em notas, pautas, boletins, DEC ou fórmulas.
+- Sem alterações em pagamentos, mensalidades, multas ou recibos.
+- Sem alterações na importação, Ficha 360º, Gestão Avançada de Encarregados ou auditoria.

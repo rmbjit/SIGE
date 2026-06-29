@@ -1,0 +1,7 @@
+SIGE SoftGenial v12.9.50 - Instant Remote Control
+
+- Adiciona endpoint REST /wp-json/sige/v1/hub/instant-refresh.
+- O Hub pode disparar refresh imediato sem esperar cron/heartbeat.
+- Suspensão, activação, cobrança e regularização passam a reflectir quase em tempo real.
+- Fallback por heartbeat mantido para escolas offline.
+- Mantém SMTP, fila, templates, cobrança popup e avisos sem regressão.

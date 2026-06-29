@@ -1,0 +1,43 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.166
+Data: 2026-06-14
+Ambito: Central de Comunicacoes - adopcao do design system (sg-finpro)
+
+PORQUE
+------
+O cabecalho ja era o do sistema, mas o corpo (cartoes, botoes, tabela) ainda
+usava estilo proprio e destoava. Agora a Central reutiliza os mesmos componentes
+das vistas financeiras "pro", ficando visualmente igual ao resto.
+
+O QUE MUDOU (so apresentacao)
+-----------------------------
+  - Cartoes de resumo  -> sg-finpro-kpi (icone + tom + numero grande), num grid
+    de 5 colunas para a linha ficar equilibrada.
+  - Paineis            -> sg-finpro-card (cantos arredondados, sombra suave).
+  - Botoes             -> sg-finpro-btn (primario / light) + is-danger (tokens)
+    para o Eliminar.
+  - Tabela             -> sg-finpro-table (linhas-cartao).
+
+PRESERVADO
+----------
+  Todos os ganchos de JavaScript: classes emc-bulk, ids (emc-process,
+  emc-save-templates, emc-smtp-test, emc-saude-process, modal), data-accao,
+  checkboxes e a logica de seleccao/accoes. So mudou o aspecto.
+
+CSS
+---
+  Removidas da vista as regras proprias de cartao, botao, tabela e KPI (agora
+  vem do sistema). Resultado: menos CSS embebido e primitivos magicos mais
+  baixos (consistencia re-baseline em 7499).
+
+MANTIDO DAS VERSOES ANTERIORES
+------------------------------
+  Acentuacao em portugues europeu; SMTP editavel so pelo administrador principal.
+
+NOTA DE VERIFICACAO
+-------------------
+  O resultado visual deve ser confirmado no demo (aqui nao ha navegador para
+  renderizar). Convem refrescar a baseline visual do arnes apos validar.
+
+NAO TOCADO
+----------
+  Nenhuma regra financeira ou academica.

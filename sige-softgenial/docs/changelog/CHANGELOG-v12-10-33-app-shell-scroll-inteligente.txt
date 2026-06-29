@@ -1,0 +1,21 @@
+SIGE SoftGenial v12.10.33 - App Shell: Scroll Inteligente
+
+Objectivo
+- Melhorar a experiência de navegação do sistema mantendo o padrão visual aprovado.
+- Fixar a barra lateral e manter o botão "Terminar sessão" sempre visível.
+- Fazer a área principal do sistema rolar de forma independente do menu lateral.
+- Fazer o menu lateral rolar apenas dentro da sua própria área, sem arrastar o conteúdo.
+
+Alterações
+- Adicionada camada CSS de scroll independente no App Shell para desktop.
+- A área principal (#sige-content) passa a ter scroll próprio.
+- A navegação lateral (.sg-app-nav) passa a ter scroll próprio entre a marca e o botão de saída.
+- O botão "Terminar sessão" permanece fixo no rodapé da sidebar.
+- Mantida a navegação off-canvas em telemóvel.
+- Adicionada pequena camada JS para preservar a posição do menu/conteúdo quando necessário.
+
+Segurança e regras preservadas
+- Não altera fórmulas.
+- Não altera mensalidades, multas, pagamentos, cobranças, recibos, estornos ou base de dados.
+- Não altera notas, pautas, DEC, boletins ou actas.
+- Não adiciona termos técnicos internos visíveis ao utilizador final.

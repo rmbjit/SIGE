@@ -1,0 +1,29 @@
+SIGE SoftGenial v12.10.100 - Jardim Boletim: Compliance Visual Integral
+
+Base
+- Construído por cima da v12.10.99 - Jardim Saúde: Compliance Visual Integral.
+
+Objectivo
+- Aplicar o padrão visual Produto PRO ao módulo &view=jardim_boletim.
+- Melhorar a experiência em ecrã sem comprometer o formato oficial de impressão A4.
+- Manter a intervenção exclusivamente visual, sem alterar cálculos pedagógicos, geração do boletim, dados gravados, permissões, notas, pagamentos ou base de dados.
+
+Ajustes aplicados
+- Barra antiga escura de controlo substituída por área de controlo Produto PRO.
+- Adicionado hero claro no padrão Painel Principal / Dashboard V2 MJS-grade.
+- Sequência visual aplicada: ícone canónico, área Pré-Escolar, título Boletim do Jardim, subtítulo, chips de contexto e painel lateral.
+- Adicionados KPIs de alunos na turma, alunos com avaliação, áreas/disciplinas e critérios configurados.
+- Filtros de turma e trimestre redesenhados como toolbar responsiva.
+- Botões Carregar, Imprimir Todos e Voltar harmonizados com ícones canónicos.
+- Pré-visualização A4 recebe nota explicativa e melhor adaptação em telas menores.
+- Botão de impressão individual redesenhado.
+- Layout de ecrã revisto para desktop, laptop 17", tablet e mobile.
+- Estilo de impressão preservado: controlos continuam ocultos em print e boletim mantém A4 portrait.
+
+Garantias
+- Sem alterar função boletim_nivel().
+- Sem alterar leitura de critérios, respostas ou avaliações.
+- Sem alterar geração/impressão dos boletins.
+- Sem alteração nos dados da escola, alunos, encarregados ou comentários.
+- Sem alteração em notas, Pauta, DEC, ACTA, boletins académicos principais ou pagamentos.
+- Sem alteração em Permission Engine, perfis, permissões ou base de dados.

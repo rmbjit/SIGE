@@ -1,0 +1,32 @@
+DEPLOY - SIGE SoftGenial v12.12.31
+Fase 9 incremento 4: Niveis de perfil editaveis
+Data: 2026-06-22
+
+O QUE MUDA NESTA VERSAO
+- A hierarquia de niveis dos perfis (introduzida antes como valores fixos em codigo) passa a ser editavel pela interface e guardada na base de dados.
+- No ecra de Perfis e Permissoes aparece um painel Hierarquia de niveis, onde se define o nivel de cada perfil (0 a 100). Um gestor so atribui e gere perfis abaixo do seu nivel, por isso estes valores determinam quem pode gerir quem.
+- Este painel e a sua gravacao sao exclusivos do administrador WordPress real (o dono). Quem apenas gere permissoes (por exemplo, um admin TI) nao ve o painel nem o pode gravar. Isto evita que alguem suba o seu proprio nivel ou baixe o dos outros para passar a geri-los.
+- Sem desvio guardado, vale o valor por omissao (o mesmo de antes), pelo que nada muda no comportamento ate o dono editar.
+
+PASSOS DE INSTALACAO (CloudPanel / File Manager)
+1. Faca uma copia de seguranca do plugin actual e da base de dados (rotina normal).
+2. Em Plugins, desactive o SIGE SoftGenial (nao apague: os dados ficam).
+3. Substitua a pasta do plugin pelo conteudo deste ZIP (a pasta sige-softgenial na raiz do ZIP). Em alternativa, instale o ZIP por cima pela administracao do WordPress.
+4. Reactive o plugin. Nao ha migracao de base de dados: os desvios de nivel sao guardados numa opcao, a medida que o dono editar.
+
+VERIFICACAO RAPIDA (5 minutos)
+1. Como administrador do sistema (administrador WordPress), abra Perfis e Permissoes e role ate ao painel Hierarquia de niveis. Confirme que cada perfil aparece com o seu nivel num campo numerico.
+2. Altere um nivel (por exemplo, suba o admin TI de 80 para 85) e carregue em Guardar niveis. Confirme a mensagem de sucesso.
+3. Confirme o efeito: como um gestor desse nivel, o selector de perfil e as accoes passam a respeitar o novo nivel imediatamente.
+4. Inicie sessao como um gestor que nao seja administrador WordPress (por exemplo, admin TI) e confirme que NAO ve o painel Hierarquia de niveis.
+5. Para voltar um perfil ao valor por omissao, basta repor o nivel original e guardar; o desvio e removido.
+
+NOTAS
+- Sem migracao de esquema: a versao do esquema nao muda. Os desvios vivem numa opcao (wp_options).
+- Sem alteracoes a regras de calculo financeiro ou academico.
+- Sem nova superficie de accao: o inventario de seguranca mantem-se em 199 accoes (33 em modo enforce).
+- Validacao: os niveis sao inteiros de 0 a 100; valores fora do intervalo sao limitados, e entradas invalidas sao ignoradas.
+- So o administrador WordPress real edita a hierarquia; a gravacao e auditada.
+
+REVERSAO
+- Reinstale o pacote da versao anterior (v12.12.30). Esta versao nao altera esquema; a reversao do codigo nao deixa o sistema inconsistente (a opcao de desvios fica, inerte, e volta a valer o mapa em codigo).

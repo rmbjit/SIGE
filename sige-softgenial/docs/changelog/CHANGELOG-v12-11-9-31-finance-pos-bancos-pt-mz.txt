@@ -1,0 +1,26 @@
+SIGE SoftGenial v12.11.9.31 - Formas de pagamento POS por banco
+Data: 2026-06-01
+Build: sige-12.11.9.31-finance-pos-bancos-pt-mz
+Base: v12.11.9.30
+
+Intervenção:
+- Adicionadas formas de pagamento POS por banco:
+  - POS BCI
+  - POS BIM
+  - POS STBANK
+  - POS MOZA
+  - POS NEDBANK
+  - POS FNB
+- Removido o POS genérico dos selects novos de pagamento, planos e despesas, para evitar registos sem banco.
+- Mantida compatibilidade com pagamentos antigos gravados como "pos", que passam a ser apresentados apenas como "POS".
+- Mantidos métodos bancários históricos/legados, como Millennium BIM e BCI, para leitura de dados antigos e relatórios.
+- Centralizadas labels de métodos de pagamento em includes/finance-core.php.
+- Actualizados pagamentos, planos, despesas, extratos, relatório mensal, dashboard, portal, aluno-portal e fecho de turno para usarem labels canónicas quando possível.
+
+Não alterado:
+- Cálculos financeiros.
+- Valores pagos.
+- Recibos públicos.
+- Fluxo de envio de WhatsApp.
+- Notas, pautas e boletins.
+- Estrutura multi-escola.

@@ -1,0 +1,16 @@
+SIGE SoftGenial v12.11.9.77 - Portaria On-Screen Result + Retake UX PRO
+
+Objectivo
+- Corrigir a fricção no telemóvel: depois do som de autorizado/negado, o Guarda não deve fazer scroll para ver o resultado.
+
+Mudanças
+- Resultado do scanner passa a aparecer no próprio espaço da câmara em mobile/tablet.
+- A câmara pausa automaticamente assim que o QR é lido, evitando duplicados e poupando bateria.
+- Botão "Ler próximo crachá" reinicia o leitor em um toque.
+- Botão "Processo manual" abre campo de processo dentro do mesmo overlay, sem obrigar scroll.
+- Feedback sonoro preservado e haptic feedback adicionado quando suportado pelo dispositivo.
+- Desktop mantém painel lateral de resultado; mobile/tablet esconde o duplicado e usa o overlay do scanner como fonte primária.
+- Rota limpa ?sige_portaria_camera=1, headers camera=(self), nonce e validação AJAX preservados.
+
+Blindagem
+- Sem alteração de base de dados, migrations, pagamentos, mensalidades, multas, recibos, notas, pautas, boletins, DEC, ACTA, fórmulas académicas, criação/edição/remoção de alunos, scanner/validação AJAX, permissões do Guarda ou isolamento da Portaria.

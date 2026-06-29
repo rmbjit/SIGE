@@ -1,0 +1,28 @@
+DEPLOY - SIGE SoftGenial v12.12.14 (Secret Vault incremento 1: credenciais dos gateways cifradas em repouso)
+Base: v12.12.13. Sem migracao de base de dados. Sem alteracao de regras de calculo.
+
+O QUE MUDA
+- As credenciais dos gateways de pagamento (M-Pesa: api_key e public_key; e-Mola: api_key e api_secret; e o webhook_token) passam a ser guardadas CIFRADAS na base de dados. Antes ficavam em claro.
+- A mudanca e transparente: os pagamentos continuam a funcionar e o webhook continua a validar. Nao e preciso reconfigurar nada.
+
+PASSOS
+1. Backup do plugin e da base de dados (rotina habitual).
+2. Substituir a pasta do plugin pela desta versao (ou actualizar via ZIP). Os 7 ficheiros canonicos da raiz mantem-se.
+3. Confirmar a versao: cabecalho do plugin, SIGE_VERSION e BUILD.json em 12.12.14.
+4. Sem passos de base de dados.
+
+MIGRACAO DOS SEGREDOS EXISTENTES (automatica)
+- As credenciais ja configuradas, que estavam em claro, continuam a funcionar (a leitura aceita texto em claro).
+- Ficam cifradas automaticamente na primeira vez que um administrador abrir a pagina de configuracao dos pagamentos (ou ao gravar de novo as credenciais). A cifragem ocorre uma so vez por segredo.
+- Em alternativa, abrir Pagamentos (M-Pesa/e-Mola) como administrador forca a cifragem dos segredos dessa escola.
+
+VERIFICACAO RAPIDA (opcional, tecnica)
+- Antes: o valor de sige_mpesa_escola_{ID}_api_key na base de dados era texto em claro.
+- Depois de um administrador abrir a configuracao: passa a comecar por sige2: (ou gcm1:), ou seja, esta cifrado. Um pagamento de teste continua a funcionar.
+
+NOTAS
+- A chave de cifra deriva dos salts do WordPress (AUTH_SALT, SECURE_AUTH_SALT no wp-config.php). Manter esses salts estaveis (uma rotacao de salts exigiria reintroduzir as credenciais). A rotacao de chave assistida fica para um incremento posterior do cofre.
+- Os ecras de configuracao nunca mostram o segredo; apenas indicam se esta definido.
+
+REVERSAO
+- Sem alteracao de esquema. Em caso de necessidade, reintroduzir as credenciais no ecra de configuracao repoe o funcionamento.

@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.9.28 - Central de Cobranças: Inteligência Temporal
+
+Base: v12.9.27 validada pelo utilizador.
+
+Alterações:
+- Adicionado filtro por comportamento de cobrança: Bom pagador, Irregular e Crónico.
+- Adicionado cálculo visual de meses em atraso total e meses consecutivos em atraso, apenas por leitura dos lançamentos existentes.
+- Refinada a prioridade de cobrança considerando meses em atraso e atraso consecutivo, sem alterar fórmulas financeiras.
+- Adicionada coluna Comportamento na Central de Cobranças.
+- Adicionado KPI de comportamento crónico.
+- Adicionada selecção inteligente de alunos crónicos.
+- Lista de cobrança imprimível passa a incluir comportamento.
+
+Garantias:
+- Não altera lançamentos, pagamentos, estornos, multas, descontos ou saldos.
+- Não cria tabelas.
+- Não modifica fórmulas financeiras ou académicas.
+- Mantém a evolução progressiva sobre o último ZIP validado.

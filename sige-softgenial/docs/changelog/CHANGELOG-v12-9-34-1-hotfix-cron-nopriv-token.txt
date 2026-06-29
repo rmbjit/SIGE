@@ -1,0 +1,8 @@
+SIGE SoftGenial v12.9.34.1 - Hotfix Cron Token sem Login
+
+- Corrige processamento do endpoint admin-post sem sessão WordPress quando a chave cron é válida.
+- Adiciona admin_post_nopriv_sige_process_queue_now para o cron central do VPS.
+- Mantém bloqueio quando a chave está ausente/errada.
+- Mantém permissões antigas para utilizadores logados.
+- Suporta também o alias de opção sige_cron_key, além de sige_wpp_queue_cron_key.
+- Não altera fórmulas financeiras, académicas, lançamentos, pagamentos ou dados.

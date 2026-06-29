@@ -1,0 +1,1933 @@
+## v12.12.26 - Fase 8 incremento 3.2: Completar o catalogo de PII (fechar as lacunas) (2026-06-22)
+
+- Fecha as 12 lacunas do catalogo de dados pessoais que o inventario da Incr 1 ja sinalizava: colunas com aspeto de dado pessoal que existiam no esquema mas estavam fora do catalogo. Isto importa porque o dossie de acesso e o apagamento leem o catalogo como fonte da verdade; uma coluna nao catalogada era invisivel para ambos.
+- Antes deste incremento, um pedido de direito ao esquecimento deixava para tras campos identificaveis que nao estavam catalogados: o documento de identidade digitalizado (doc_bi_url), a fotografia do aluno (foto), os dois contactos de emergencia e os dados da pessoa autorizada a buscar o aluno (telemovel e documento), alem das notas livres sobre o encarregado. Esses campos passam agora a ser exportados no dossie do titular e redigidos na anonimizacao.
+- As 12 colunas sao classificadas com categoria, sensibilidade, finalidade e base legal. O catalogo passa de 76 para 88 campos, as lacunas de 12 para 0 e os campos sensiveis de 19 para 24.
+- As nove colunas identificaveis de sige_alunos passam a ser tratadas automaticamente, por ja estarem catalogadas: aparecem no dossie e sao redigidas pelo motor de anonimizacao, sem novo codigo de motor.
+- As duas datas operacionais de cobranca (data do contacto e proximo contacto) sao classificadas mas preservadas na anonimizacao: entram na lista de preservacao, a par do numero de processo e do identificador do aluno, por serem registo financeiro operacional. Aparecem no dossie do titular, mas nao sao apagadas, para nao corromper a cronologia da cobranca.
+- A coluna de notas de funcionario (sige_professores.observacoes) e classificada, mas fica fora do ambito do apagamento do aluno, porque a tabela nao se liga ao aluno; sera tratada no futuro incremento do titular funcionario.
+- Sem nova superficie de accao: o manifesto e as regras do Security Kernel mantem-se em 199 (enforce 33), alinhados. Sem migracao de esquema: a versao do esquema nao muda. As regras de calculo financeiro ficam byte-identicas. As baselines de design nao sobem. Zero travessoes.
+- O teste do apagamento e estendido para provar que os novos campos identificaveis (incluindo o documento de identidade e os contactos de emergencia) sao redigidos e que as datas de cobranca sao preservadas. Os testes do inventario da Incr 1 mantem-se verdes com o catalogo maior. Corredor 66/66 verde. Rediagnostico adversarial Zero P0/P1.
+
+## v12.12.25 - Fase 8 incremento 3: Apagamento por Anonimizacao (direito ao apagamento) (2026-06-21)
+
+- Da continuidade a Fase 8 (Dados, privacidade e retencao) com a primeira operacao destrutiva do produto: o apagamento de um aluno em resposta a um pedido de direito ao esquecimento. Onde a Incr 2 permitia ver e exportar os dados do titular, a Incr 3 permite apaga-los, de forma controlada e auditada.
+- O apagamento e feito por anonimizacao, nao por eliminacao de linhas. Eliminar fisicamente um aluno com historico partiria a integridade das contas, os rastos de auditoria e o dever legal de retencao (foi essa classe de problema que ja tornou centenas de milhares de meticais invisiveis no passado). Em vez disso, redigem-se os campos pessoais identificaveis e preservam-se os registos: a pessoa deixa de ser identificavel, mas as contas e o historico ficam integros.
+- Pre-visualizacao de impacto: a partir do numero de processo ou do nome, encontra-se um aluno da escola activa e mostra-se, antes de qualquer accao, que campos serao redigidos, em que tabelas, e o que e preservado. A procura e a pre-visualizacao sao so de leitura.
+- Redaccao segura quanto ao tipo: o motor le o tipo vivo de cada coluna e redige em conformidade - o texto recebe um marcador ([apagado]) ajustado ao comprimento da coluna; as datas e numeros que admitem nulo ficam nulos; as datas obrigatorias recebem uma data neutra; os numeros obrigatorios ficam a zero; os campos de lista fechada sao mantidos. So sao tocadas colunas de dados pessoais catalogadas (da Incr 1), nunca colunas estruturais ou financeiras.
+- Preservam-se sempre o numero de processo, os identificadores internos e os carimbos estruturais (sao pseudonimos e ligacoes, nao identidade), e todos os valores financeiros e academicos. Foi verificado que nenhuma coluna redigida participa numa chave unica, pelo que nao ha colisoes.
+- Confirmacao em dois passos: a accao so executa depois de o operador escrever o numero de processo exacto do aluno, e essa coincidencia e validada no servidor. Um numero errado cancela tudo sem tocar em nada. A operacao e permanente e nao pode ser desfeita - a salvaguarda e a confirmacao, nao a reversao.
+- A execucao e a unica nova superficie e nasce ja governada: e um endpoint admin_post no Security Kernel em modo enforce e risco critico, com permissao, confirmacao de pedido (nonce), limite de frequencia (5 por 5 minutos), isolamento por escola e auditoria antes e depois (quem apagou, que aluno, que campos e quando). O manifesto e as regras do Kernel sobem de 198 para 199 e o enforce de 32 para 33, mantendo-se alinhados (199 == 199).
+- Nova permissao, Apagar dados pessoais (anonimizacao) (risco critico), concedida so a administracao e direccao e negada a tesouraria, secretaria e docencia, semeada por migracao idempotente; foi ainda adicionada a lista de permissoes sempre auditadas, para nenhum apagamento passar sem registo. A operacao e idempotente: reanonimizar um aluno ja anonimizado nao altera nada.
+- Sem eliminacao fisica de linhas e sem migracao de dados: a versao do esquema nao muda; so a versao do motor de permissoes e elevada. As regras de calculo financeiro ficam byte-identicas. Estilo so com tokens (incluindo a zona de perigo do ecra), sem estilo inline e sem cores magicas; as baselines de design nao sobem. Zero travessoes.
+- Teste e verificacao dedicados (apagamento por anonimizacao, estatico e runtime) acrescentados ao corredor, que passa para 66 verificacoes, todas verdes. O smoke prova que o nome e redigido, que o numero de processo e as colunas financeiras ficam intactos, que o isolamento por escola se mantem e que a operacao e fail-closed e idempotente. Rediagnostico adversarial Zero P0/P1.
+
+## v12.12.24 - Fase 8 incremento 2: Direito de Acesso e Portabilidade (dossie do titular) (2026-06-21)
+
+- Da continuidade a Fase 8 (Dados, privacidade e retencao) com um novo ecra de governanca de dados que operacionaliza dois direitos do titular: acesso (ver os seus dados) e portabilidade (leva-los consigo num formato reutilizavel). Onde a Incr 1 dizia que dados o sistema guarda, a Incr 2 permite reuni-los para um aluno concreto e entrega-los.
+- Procura e dossie: a partir do numero de processo ou do nome, encontra-se um aluno da escola activa e apresenta-se no ecra o seu dossie de dados pessoais, agrupado por tabela e categoria, com os valores reais. A procura e a navegacao sao so de leitura.
+- Exportacao em JSON: um botao gera um ficheiro estruturado com todo o dossie (identificacao, e cada seccao com os seus campos e registos), pronto a entregar ao titular ou a outro sistema. O ficheiro traz um aviso de confidencialidade.
+- O dossie le apenas tabelas existentes ligadas ao aluno (a propria ficha por id; saude, matriculas, pagamentos, contactos de cobranca, transacoes moveis, acessos e historico de encarregados por aluno_id) e e fail-closed por escola: um aluno de outra escola e recusado sem devolver qualquer dado. Os nomes de coluna sao validados por lista branca estrita antes de entrarem no SQL e os valores de aluno e escola sao sempre preparados.
+- A exportacao e a unica nova superficie e nasce ja governada: e um endpoint admin_post no Security Kernel em modo enforce, com permissao, confirmacao de pedido (nonce), limite de frequencia (10 por 5 minutos), isolamento por escola e auditoria obrigatoria de cada exportacao (quem exportou, que aluno e quando). O manifesto e as regras do Kernel sobem de 197 para 198 e o enforce de 31 para 32, mantendo-se alinhados (198 == 198).
+- Nova permissao, Exportar dossie de dados pessoais (risco alto), concedida so a administracao e direccao e negada a tesouraria, secretaria e docencia, semeada por migracao idempotente; foi ainda adicionada a lista de permissoes sempre auditadas, para nenhuma exportacao passar sem registo.
+- A base legal e as finalidades exibidas vem do catalogo da Incr 1, que e uma classificacao por omissao a rever pela instituicao enquanto responsavel pelo tratamento. Nao e parecer juridico.
+- Sem migracao de dados: a versao do esquema nao muda; so a versao do motor de permissoes e elevada. As regras de calculo financeiro ficam byte-identicas. Estilo so com tokens, sem estilo inline; as baselines de design nao sobem. Zero travessoes.
+- Teste e verificacao dedicados (direito de acesso e portabilidade) acrescentados ao corredor, que passa para 64 verificacoes, todas verdes. Rediagnostico adversarial Zero P0/P1.
+
+## v12.12.23 - Fase 8 incremento 1: Inventario de Dados Pessoais (governanca de PII, so leitura) (2026-06-21)
+
+- Arranca a Fase 8 (Dados, privacidade e retencao) com um novo ecra de governanca de dados, so de leitura, que mostra que dados pessoais o sistema guarda, por tabela e campo, com a finalidade e a base legal de cada um. Serve para a escola saber o que existe, para que e com que fundamento, como primeiro passo para os direitos do titular e a retencao limitada.
+- Catalogo declarado de dados pessoais: 76 campos em 10 tabelas centrais (alunos, agregado familiar, historico de encarregados, matriculas, saude do jardim, professores, pagamentos, contactos de cobranca, transacoes moveis e registos de acesso), dos quais 19 sao sensiveis, incluindo dados de saude e dados bancarios e salariais de funcionarios. Cada campo e classificado por categoria, sensibilidade, finalidade e base legal.
+- O inventario confronta o catalogo com a base de dados real e avisa de duas coisas: desvios (um campo classificado que ja nao existe no esquema) e lacunas (uma coluna com aspeto de dado pessoal que ainda nao foi classificada). Em vez de esconder o que falta, denuncia-o.
+- Mostra agregados por escola apenas com contagens (por exemplo, quantos alunos, quantos com registo de saude, quantos por tipo de consentimento). Nunca apresenta dados individuais, e e fail-closed por escola: sem escola valida, nao ha contagens.
+- Acesso por uma nova permissao, Ver inventario de dados pessoais, concedida a administracao e direccao e negada a tesouraria, secretaria e docencia. Quem nao a tiver ve a mensagem de area reservada.
+- A base legal indicada e uma classificacao por omissao, que a instituicao deve rever enquanto responsavel pelo tratamento. Nao e parecer juridico.
+- Sem nova superficie de accao: o ecra nao tem formularios nem gravacao, pelo que o manifesto e as regras do Security Kernel mantem-se em 197 (enforce 31). Sem migracao de dados: a versao do esquema nao muda; so a versao do motor de permissoes e elevada. As regras de calculo financeiro ficam byte-identicas.
+- Estilo so com tokens, sem cores nem medidas magicas e sem estilo inline (incluindo o item de menu); as baselines de design nao sobem. Zero travessoes.
+- Teste e verificacao dedicados (inventario de dados pessoais) acrescentados ao corredor, que passa para 62 verificacoes, todas verdes. Rediagnostico adversarial Zero P0/P1.
+
+## v12.12.22 - Correccao de roteamento da Fase 7: Reconciliacao e Aprovacoes Pendentes voltam a abrir (2026-06-21)
+
+- Corrige um defeito de roteamento que tornava inalcancaveis duas paginas entregues na Fase 7. Ao clicar em "Reconciliacao e Divergencias" (da v12.12.20) ou em "Aprovacoes Pendentes" (da regra de quatro-olhos, da v12.12.21), a aplicacao devolvia a pagina inicial em vez de abrir a pagina.
+- Causa: os enderecos internos das duas paginas (financeiro-reconciliacao e financeiro-aprovacoes) estavam registados no mapa de despacho, no Security Kernel, no manifesto e no menu, mas em falta na lista branca de seguranca (allowlist anti-LFI) e na matriz de permissoes da shell de administracao. A guarda de seguranca, que corre antes do despacho, reescrevia qualquer pagina fora da lista branca para o painel inicial; por isso as duas ficavam mortas na interface.
+- Reposicao das duas paginas na lista branca e na matriz de permissoes, com as permissoes identicas as guardas internas de cada pagina: a reconciliacao exige a permissao de gestao de pagamentos moveis (a mesma da pagina M-Pesa, ja validada); as aprovacoes exigem a permissao de estornar OU a de reabrir caixa (a mesma da guarda da pagina). Quem nao tiver a permissao ve a mensagem de area reservada, em vez de cair no painel inicial.
+- Endurecimento do controlo de qualidade em tres camadas, para esta classe de defeito nao voltar a passar: um invariante estrutural que exige que toda a rota do mapa de despacho conste da lista branca, mais verificacao explicita de lista branca e matriz nos testes dedicados das aprovacoes e da reconciliacao. O invariante foi validado por teste negativo (reintroduzir o defeito faz o teste falhar; repor volta ao verde).
+- Sem alteracao da superficie de accao: nenhum endpoint, AJAX, REST nem accao de pagina novos. O manifesto e as regras do Security Kernel mantem-se em 197 (enforce 31). Sem migracao de dados (a versao do esquema nao muda). As regras de calculo financeiro nao sao tocadas (as tres funcoes bloqueadas ficam byte-identicas a v12.12.21).
+- Estilo inalterado, zero travessoes. Corredor de gates completo verde e rediagnostico adversarial Zero P0/P1. Esta correccao precede o arranque da Fase 8.
+
+## v12.12.21 - Fase 7 incremento 2: regra de quatro-olhos (dupla aprovacao) para estornos e reaberturas (2026-06-21)
+
+- Fecha a Fase 7 (Caixa, estornos e reconciliacao). O estorno de pagamento e a reabertura de caixa deixam de executar com a decisao de uma so pessoa: cada um passa a ser pedido por um utilizador autorizado e aprovado por um utilizador diferente antes de produzir efeito (separacao de funcoes). Ninguem pode aprovar o seu proprio pedido.
+- Novo ecra "Aprovacoes Pendentes" no menu financeiro (acesso a quem pode estornar ou reabrir caixa), que lista os pedidos a aguardar decisao e as decisoes recentes, e permite aprovar ou rejeitar.
+- Fluxo: ao pedir um estorno ou uma reabertura, cria-se um pedido pendente e nada muda nas financas. Um segundo utilizador autorizado aprova (e a operacao executa, com confirmacao de identidade do aprovador) ou rejeita (e o pedido e descartado).
+- A execucao real reutiliza o servico de estorno existente (intacto, com FOR UPDATE e guarda de duplo estorno) e uma funcao de reabertura extraida do handler; as regras de calculo financeiro nao sao tocadas.
+- Tudo auditado no Ledger imutavel: pedido (fin_aprovacao_solicitada), aprovacao (fin_aprovacao_aprovada), rejeicao (fin_aprovacao_rejeitada), mais o evento da reabertura na execucao.
+- Nova tabela sige_fin_aprovacoes (SCHEMA_VERSION sobe; a migracao corre automaticamente). Pedidos pendentes duplicados para o mesmo alvo sao recusados.
+- Novo endpoint de decisao governado no Security Kernel em modo enforce (manifesto 196 para 197; enforce de 30 para 31). Acesso a quem detem financeiro.estornar OU financeiro.caixa_reabrir; o codigo aplica a permissao especifica por tipo. Nonce, rate limit, auditoria e isolamento por escola activos.
+- Estilo so com tokens (sem cores nem medidas magicas; sem regressao de design). Zero travessoes.
+- Corrige a nota da v12.12.20: a regra de quatro-olhos deixa de estar adiada e fica entregue. Com isto, a Fase 7 esta completa.
+- Governanca: gate e smoke dedicados no corredor (19 verificacoes, incluindo proibicao de auto-aprovacao, aprovacao por utilizador diferente, rejeicao, anti-duplicado, fail-closed e caminho de MFA). Rediagnostico adversarial Zero P0/P1.
+
+## v12.12.20 - Fase 7 incremento 1: relatorio de divergencias de reconciliacao (so leitura) (2026-06-21)
+
+- Comeca a Fase 7 (Caixa, estornos e reconciliacao). Novo ecra so de leitura "Reconciliacao e Divergencias" no menu financeiro (acesso de financeiro, Direccao, Secretaria Geral e administrador), que compara o dinheiro reportado pelos gateways moveis (M-Pesa e e-Mola) com os pagamentos registados e expoe, por escola, tres classes de divergencia que de outro modo passavam despercebidas:
+- Recebido mas nao conciliado: transacoes que o gateway confirmou ter recebido mas que ainda nao foram aplicadas a nenhum aluno (dinheiro em limbo).
+- Divergencia de montante: transacoes conciliadas cujo valor do gateway nao coincide com o valor do pagamento registado, com a diferenca.
+- Pagamento movel sem transacao de gateway: pagamentos registados como M-Pesa ou e-Mola sem nenhuma transacao do gateway a corresponder-lhes (lancamento manual ou webhook em falta).
+- Mostra ainda os totais por escola: recebido pelo gateway, conciliado, recebido por aplicar, pagamentos moveis registados, e a diferenca entre conciliado e pagamentos moveis.
+- So leitura: nao tem formularios nem POST, nao cria endpoint de escrita nem superficie nova. As accoes correctivas continuam a fazer-se pelos fluxos existentes (Pagamentos Moveis). A logica de dominio (sige_reconciliacao_divergencias) esta separada da apresentacao, faz apenas SELECT e e fail-closed por escola.
+- Idempotencia do e-Mola confirmada: o webhook e-Mola, tal como o M-Pesa, faz pre-verificacao por (escola, referencia) e devolve "Transaccao ja registada", e a chave unica garante-o ao nivel da base de dados. Transacoes repetidas nao sao contadas duas vezes.
+- Criterios da Fase 7 ja cumpridos por trabalho anterior, agora fechados nos registos: estorno com razao obrigatoria e como movimento inverso, reabertura de caixa so com permissao de Direccao, e auditoria/rastreabilidade pelo Ledger.
+- Adiado para o incremento 2: regra de quatro-olhos (dupla aprovacao) para estornos e reaberturas, por ser uma alteracao de fluxo.
+- Estilo so com tokens (sem cores nem medidas magicas; sem regressao de design). Sem novo endpoint: manifesto mantem-se em 196 e regras do Kernel inalteradas. Zero travessoes.
+- Governanca: gate e smoke dedicados no corredor (12 verificacoes sobre as tres classes de divergencia, os totais e o comportamento fail-closed). Rediagnostico adversarial Zero P0/P1.
+
+## v12.12.19 - Ledger incremento 4: despesas, creditos e fechos de caixa (cobertura financeira completa) (2026-06-20)
+
+- O livro-razao imutavel passa a cobrir os restantes movimentos financeiros institucionais: despesas, creditos e fechos de caixa. Com este incremento, a cobertura financeira do ledger fica completa: ajustes, pagamentos, cobrancas, despesas, creditos e fechos.
+- Cinco eventos novos, discretos e de gravacao imediata, reutilizando o encadeamento HMAC e a ancora externa ja existentes:
+- Despesa criada (fin_criar_despesa), com categoria e valor; o despesa_id e capturado antes do registo.
+- Transicao de estado de despesa (fin_despesa_transitar) em sige_fin_despesa_transitar_status, apos a transicao (aprovada, paga, cancelada), com o estado e o motivo.
+- Credito criado (fin_criar_credito) em sige_fin_criar_credito_pendente, com aluno e valor; o credito_id e capturado antes do registo.
+- Fecho de turno (fin_fechar_turno) em fecharTurno, com o total liquido (bruto e estornos no payload); o fecho_id e capturado antes do registo.
+- Reabertura de turno (fin_reabrir_turno) em reabrirTurno, com o fecho e o motivo (evento sensivel: reabrir um periodo de caixa fechado).
+- Fabricar ou apagar qualquer destes eventos passa a ser detectavel (cadeia HMAC append-only, ancora externa contra truncagem da cauda). Sem tocar nas regras de calculo (md5 bloqueados intactos).
+- Adiados como refinamento posterior: o consumo/aplicacao de credito e a edicao de valor de despesa, que sao inline e nao tem ponto unico limpo. A criacao (que fixa o valor) ja fica coberta.
+- Sem novo endpoint: manifesto mantem-se em 196 e regras do Kernel inalteradas. Zero travessoes.
+- Governanca: gate e smoke estendidos (27 verificacoes, incluindo os 5 novos eventos numa cadeia integra). Rediagnostico adversarial Zero P0/P1.
+
+## v12.12.18 - Ledger incremento 3: lancamentos no livro-razao com escrita em lote diferida (2026-06-20)
+
+- A criacao e a alteracao de valor de lancamentos (cobrancas) passam a ficar imutaveis no livro-razao. A funcao unica de criacao e actualizacao de cobranca (sige_fin_upsert_lancamento) alimenta o ledger em dois pontos: criacao (evento fin_criar_lancamento) e alteracao de valor de um lancamento existente (evento fin_actualizar_lancamento), com dados estruturados (aluno, servico, mes, valor). Cada cobranca fica registada individualmente, de modo que fabricar ou alterar uma cobranca para manipular o que um aluno deve passa a ser detectavel. Sem tocar nas regras de calculo (md5 bloqueados intactos).
+- Escrita em lote diferida, para nao penalizar a geracao mensal em massa. Em vez de gravar (e bloquear e escrever a ancora) por cada cobranca, os eventos de cobranca sao acumulados num buffer do pedido e gravados de uma so vez por escola no fim do pedido (no shutdown do WordPress), com um unico bloqueio e uma unica escrita de ancora por escola. A nova escrita em bloco (sige_ledger_append_many) encadeia a cadeia HMAC em memoria e insere em serie. Isto preserva a prova de adulteracao por cobranca sem o custo de centenas de bloqueios e escritas de ficheiro, e sem mexer no gerador procedimental.
+- Pagamentos e as 6 operacoes criticas (cancelar, isentar, reactivar, bloquear mes, desbloquear mes, estornar) continuam com gravacao imediata, inalterados.
+- Limite honesto desta fase: os eventos de cobranca sao gravados no fim do pedido. Uma falha catastrofica antes do shutdown perde os registos de cobranca em buffer desse pedido (as proprias cobrancas tambem podem ficar incompletas, e o gerador e idempotente e pode ser re-corrido). Pagamentos e ajustes, por serem imediatos, nao tem este risco. Documentado no rediagnostico.
+- Sem alteracao ao ecra de integridade nem a ancora: reutilizam o que ja existe. Sem novo endpoint: manifesto mantem-se em 196 (o shutdown nao e superficie rastreada) e regras do Kernel inalteradas. Zero travessoes.
+- Governanca: gate e smoke estendidos (25 verificacoes, incluindo escrita em bloco, buffer diferido e cadeia mista imediato mais diferido). Rediagnostico adversarial Zero P0/P1. Despesas, creditos e fechos de caixa ficam para o incremento seguinte (ultimo da cobertura financeira do ledger).
+
+## v12.12.17 - Ledger incremento 2: pagamentos no livro-razao e ancora externa contra truncagem da cauda (2026-06-20)
+
+- Os pagamentos passam a ficar imutaveis no livro-razao. O registo de pagamento (sige_fin_registar_pagamento) alimenta o ledger apos a transacao suceder, com evento estruturado (entidade pagamento, id do pagamento, montante aplicado, metodo, lancamento, referencia). Cobre todos os fluxos (M-Pesa, e-Mola, numerario, admin e planos) e tambem o pagamento anual, que delega nesta funcao, pelo que ha um unico ponto sem duplicacao. Sem tocar nas regras de calculo (md5 bloqueados intactos); o pagamento_id e capturado antes do registo.
+- Ancora externa contra truncagem da cauda. Cada escola passa a ter uma ancora guardada FORA da base de dados (ficheiro em wp-content/uploads/sige-private/ledger, protegido por index.php e .htaccess) com a ultima seq, o ultimo hash e a contagem da cadeia. A ancora e escrita de forma atomica (temp mais rename) dentro da seccao critica do escritor, e de forma resiliente (uma falha de disco nunca quebra o append nem a operacao).
+- O verificador passa a confrontar a cadeia da base de dados com a ancora: se a ancora regista uma seq superior a ultima da base de dados, assinala truncagem da cauda (apagar as entradas mais recentes, que uma cadeia simples nao detectava); se o hash da cabeca divergir, assinala adulteracao; se a ancora faltar, e um estado distinto e nao fatal; uma ancora atrasada e tolerada (confere o hash no ponto registado). Isto fecha o limite honesto que ficou no incremento 1, contra um atacante com acesso apenas a base de dados.
+- O ecra de integridade do Ledger ganha uma coluna "Ancora externa" (Confirmada, Ausente, A frente da BD, Divergente). Continua so leitura e so para o super admin, sem endpoint novo.
+- Modelo de ameaca: a ancora em ficheiro defende contra o atacante que so tem acesso a base de dados (DBA malicioso, SQL injection, adulteracao de backups). Um compromisso ao nivel dos ficheiros continua fora de ambito e fica declarado. A ancora deve entrar nos backups e persiste com o ledger na remocao suave do plugin.
+- Sem novo endpoint: manifesto mantem-se em 196 e regras do Kernel inalteradas. Zero travessoes.
+- Governanca: gate e smoke estendidos (19 verificacoes, incluindo truncagem da cauda, ancora divergente e ancora ausente). Rediagnostico adversarial Zero P0/P1. Instrumentacao de lancamentos, com desenho de lote para a geracao mensal, fica para o incremento 3.
+
+## v12.12.16 - Correccao: criacao da tabela do ledger e ecra resiliente (2026-06-20)
+
+- Correccao de um defeito da v12.12.15 apanhado em uso real: ao abrir Definicoes > Integridade do Ledger numa instalacao actualizada por substituicao de ficheiros, aparecia "Table '..._sige_fin_ledger' doesn't exist" e o ecra mostrava o erro cru da base de dados.
+- Causa-raiz: a migracao so re-corre quando a constante interna SCHEMA_VERSION muda (maybe_upgrade no admin_init). Na v12.12.15 a tabela foi acrescentada mas a SCHEMA_VERSION nao foi subida, pelo que a tabela so era criada por reactivacao do plugin, nao por actualizacao de ficheiros. Agora a SCHEMA_VERSION foi subida (20260611.1 para 20260620.1): a migracao volta a correr em qualquer instalacao desactualizada e cria a tabela via dbDelta (idempotente, sem perda de dados).
+- Resiliencia: novo guard sige_ledger_table_exists() (SHOW TABLES com supressao de erros), aplicado ao escritor, ao verificador, a lista de escolas e ao ecra. Sem a tabela, o escritor nao regista (devolve false), o verificador devolve vazio e o ecra mostra uma mensagem clara a indicar a actualizacao, em vez do erro cru.
+- Sem alteracao a logica do ledger, ao encadeamento HMAC, as 6 operacoes instrumentadas, ao calculo financeiro (md5 intactos) ou a superficie de accoes (manifesto 196 inalterado).
+- Gate reforcado (exige a subida da SCHEMA_VERSION quando a tabela e adicionada, e o guard de existencia aplicado nos quatro pontos) e smoke reforcado (14 verificacoes, incluindo a degradacao sem tabela). Rediagnostico adversarial Zero P0/P1; nenhum item adiado.
+
+## v12.12.15 - Ledger financeiro, incremento 1: livro-razao imutavel das operacoes criticas (2026-06-20)
+
+- Novo livro-razao financeiro append-only e a prova de adulteracao (includes/finance-ledger.php). Cada evento e encadeado por HMAC-SHA256 com chave derivada dos salts do WordPress: o hash de cada entrada cobre o seu conteudo canonico mais o hash da entrada anterior. Qualquer alteracao, remocao ou insercao no meio da historia financeira passa a ser detectavel, e um agente com acesso apenas a base de dados nao consegue forjar uma cadeia coerente (nao tem a chave).
+- Tabela nova append-only sige_fin_ledger (criada de forma idempotente pela migracao): escola_id, seq (sequencia monotonica por escola), event_type, entidade, entidade_id, montante, actor, ocorrido_em, payload (JSON canonico), prev_hash, hash, com chave unica (escola_id, seq). O modulo so insere, nunca actualiza nem apaga.
+- As 6 operacoes financeiras criticas passam a registar no ledger, apos sucesso: cancelar, isentar, reactivar lancamento, bloquear e desbloquear mes, e estornar pagamento. Apenas adicao de registo; sem tocar nas regras de calculo (md5 bloqueados intactos). No bloquear mes, o insert_id e capturado antes do registo para nao ser sobreposto.
+- Verificador sige_ledger_verify: percorre a cadeia por escola, recalcula o hash e confirma o encadeamento e a sequencia; aponta a primeira seq afectada. Deteta adulteracao de conteudo, remocao ou insercao no meio (salto de sequencia) e mudanca de chave (rotacao de salts).
+- Novo ecra de integridade do Ledger, so para o administrador WordPress real (super admin), so de leitura: mostra por escola o numero de eventos e se a cadeia esta integra ou onde quebrou. Sem POST, logo sem endpoint novo.
+- Escritor serializado por escola (GET_LOCK) e a fail-closed: sem escola valida nao regista (nunca atribui a uma escola por omissao). Nunca quebra a operacao financeira: o registo e feito apos a operacao suceder, com try/catch.
+- Limite honesto desta fase: a cadeia deteta modificacao e remocao/insercao no meio; a truncagem da cauda (apagar as entradas mais recentes de forma contigua) so e detectavel com ancoragem externa, que fica para um incremento posterior. Documentado no rediagnostico.
+- Sem novo endpoint: manifesto mantem-se em 196 e regras do Kernel inalteradas. Zero travessoes em codigo e documentos.
+- Governanca: gate check-ledger.php e smoke smoke-ledger-v12-12-15.php (11 verificacoes: cadeia HMAC, deteccao de adulteracao, de remocao e de mudanca de chave) ligados ao corredor. Rediagnostico adversarial Zero P0/P1; truncagem da cauda como limite conhecido adiado, e achados P3 documentados.
+
+## v12.12.14 - Secret Vault, incremento 1: credenciais dos gateways cifradas em repouso (2026-06-20)
+
+- Cofre de segredos unificado (includes/security-vault.php) construido sobre a cifra forte ja existente (sige_encrypt_token/sige_decrypt_token: sodium secretbox, com recuo para AES-256-GCM; chave derivada dos salts do WordPress; formatos com prefixo sige2: e gcm1:). Funcoes sige_vault_seal (cifra), sige_vault_reveal (decifra so os nossos formatos; texto em claro passa intacto), sige_vault_is_sealed, e um registo auditavel das chaves-segredo (sige_vault_secret_registry, sige_vault_is_secret_key).
+- As credenciais dos gateways de pagamento passam a ser cifradas em repouso: M-Pesa (api_key, public_key), e-Mola (api_key, api_secret) e o webhook_token. Antes eram gravadas em claro nas opcoes. A selagem e transparente: os clientes M-Pesa/e-Mola continuam a receber o valor em claro, e o webhook (find_school_by_token) revela o token antes da comparacao. Sem alteracao ao comportamento dos pagamentos.
+- Migracao retrocompativel sem operacao em massa: a leitura passa o texto em claro intacto (instalacoes pre-cofre continuam a funcionar), e ha auto-reparacao na leitura no admin (a primeira leitura de cada segredo regrava-o cifrado, uma so vez; nunca no caminho publico do webhook). Sem alteracao de esquema de base de dados.
+- Registo de segredos auditavel: cataloga as credenciais dos gateways (cifradas nesta fase) e tambem a password SMTP e o token WhatsApp/Z-API (que ja eram cifrados), para o registo ser completo. Um gate verifica que nenhuma chave-segredo registada e gravada em claro.
+- Redaccao confirmada: os ecras de configuracao dos gateways nao pre-preenchem o segredo (campos password sem valor; mostram apenas configurado/nao). Selar nunca perde o segredo (se a cifra falhar, mantem o original) e e idempotente.
+- Sem novo endpoint: manifesto mantem-se em 196 e as regras do Kernel inalteradas. Sem alteracao de regras de calculo. Sem alteracao de permissoes de configuracao dos pagamentos. Zero travessoes em codigo e documentos.
+- Governanca: gate check-vault.php e smoke smoke-vault-v12-12-14.php (26 verificacoes, incluindo a integracao real com os pagamentos e o webhook) ligados ao corredor. Rediagnostico adversarial Zero P0/P1; achados P3 e a decisao de adiar a rotacao de chave documentados.
+
+## v12.12.13 - Painel de controlo de seguranca (MFA), so super admin (2026-06-20)
+
+- Novo ecra "Seguranca (MFA)" sob Definicoes para o administrador WordPress real gerir os controlos de MFA sem codigo, WP-CLI ou base de dados: liga/desliga step-up (sige_mfa_stepup), reposicao automatica (sige_mfa_autoreplay) e modo estrito (sige_mfa_stepup_strict), e escolhe os perfis abrangidos (sige_mfa_stepup_roles). Mostra ainda, so para leitura, quantos utilizadores tem a aplicacao autenticadora inscrita.
+- Acesso restrito ao ADMIN Super pela funcao canonica sige_is_real_wp_admin_user(), em tripla camada: o ecra so e registado se for super admin real; o render e a gravacao voltam a verificar e recusam com wp_die 403; e o filtro de hardening que retira manage_options aos perfis SIGE continua a aplicar-se. O Admin IT (sige_admin_ti) e os outros perfis nativos do SIGE nunca veem nem alcancam o ecra (provado em runtime no smoke e no gate).
+- Novo endpoint governado admin_post:sige_mfa_settings_save, com nonce (check_admin_referer), gate duro, sanitizacao e auditoria de cada alteracao. Desligar o step-up gera um evento de auditoria distinto (mfa_stepup_disabled). Manifesto 195 -> 196; regra nova em observe; enforce mantem-se em 30.
+- Em producao (fora de WP_DEBUG) deixa de EXIBIR avisos/deprecations do PHP no wp-admin (continuam a ir para o log), removendo a faixa amarela strip_tags do nucleo do WordPress. Opcional pela opcao sige_admin_hide_php_notices (defeito on).
+- Sem alteracao a logica nem ao comportamento do MFA (step-up, TOTP, reposicao). Sem alteracao ao modelo de capacidades (reutiliza os helpers existentes). Sem migracao de base de dados. Sem alteracao de regras de calculo. Zero travessoes em codigo e documentos.
+- Governanca: gate check-mfa-settings.php e smoke smoke-mfa-settings-v12-12-13.php (14 verificacoes com o gate de acesso real) ligados ao corredor. Rediagnostico adversarial Zero P0/P1; dois achados P3 aceites e documentados.
+
+## v12.12.12 - MFA de Operacao: reposicao automatica apos confirmacao (2026-06-19)
+
+- Fase 4 (MFA critico), incremento 3. Depois de o utilizador confirmar a identidade no step-up (TOTP ou email), a operacao de servico que tinha sido bloqueada e re-executada automaticamente uma unica vez, com tenant e permissoes re-validados. Acaba a repeticao manual.
+- Novo modulo `includes/security-mfa-replay.php`: captura de descritor de uso unico (contexto + argumentos da chamada, via func_get_args) quando uma das 6 operacoes de servico e bloqueada; consumo atomico (apaga antes de despachar) e re-execucao uma unica vez no handler de confirmacao partilhado (`admin_post_sige_mfa_confirm`). Re-execucao por call_user_func_array sobre o mesmo metodo estatico.
+- Abrange exactamente as 6 operacoes de SIGE_FinanceActionService: cancelLancamento, isentarLancamento, reactivarLancamento, bloquearMes, desbloquearMes, estornarPagamento (cobre anular_recibo). Config (e-Mola, M-Pesa) e caixa (reabrir, fechar) mantem repeticao manual, por desenho.
+- Re-validacao garantida por passar pelo mesmo metodo: cada operacao corre sige_tenant_write_guard (tenant) e self::userCan (permissao) e os guards de estado (FSM). A reposicao nao contorna verificacoes.
+- Nao-execucao-dupla por consumo atomico (apaga o descritor antes de despachar) e pelas guardas de estado das operacoes. Argumentos capturados do lado do servidor; a confirmacao nao transporta argumentos da operacao.
+- Aviso ao utilizador com o resultado da reposicao (concluida automaticamente, ou aviso se nao pode concluir). Funciona igual com TOTP ou email. A mensagem de bloqueio das 6 operacoes passou a ser neutra (sem mencao a email, valida para TOTP e para a reposicao).
+- Desligado por defeito: opcao opt-in `sige_mfa_autoreplay` (defeito off) e kill-switch `SIGE_MFA_AUTOREPLAY_OFF`. A repeticao manual funciona sempre. Sem step-up ligado, nada muda.
+- Governacao: gate `check-mfa-autoreplay.php` e smoke `smoke-mfa-autoreplay-v12-12-12.php` (26 verificacoes, incluindo a prova de execucao unica) ligados ao corredor. Sem novo endpoint (manifesto mantem-se em 195); regras de Kernel inalteradas (enforce 30). Rediagnostico adversarial Zero P0/P1; dois achados P2 aceites e documentados.
+- Sem migracao de base de dados. Sem alteracao de regras de calculo (md5 de sige_fin_saldo_lancamento, sige_fin_saldo_sql e sige_fin_total_bruto_sql inalterados). Zero travessoes em codigo e documentos.
+
+## v12.12.11 - MFA de Operacao: TOTP (aplicacao autenticadora) (2026-06-19)
+
+- Fase 4 (MFA critico), incremento 2. Adiciona TOTP (Time-based One-Time Password, RFC 6238) como segundo factor alternativo ao OTP por email no step-up de operacoes criticas: o codigo de 6 digitos das aplicacoes autenticadoras (Google Authenticator, Microsoft Authenticator, Authy, FreeOTP).
+- Novo modulo `includes/security-mfa-totp.php`: nucleo RFC 6238 (HMAC-SHA1, 6 digitos, periodo 30s, tolerancia de mais ou menos um passo), validado byte-a-byte contra os vectores de referencia da norma. Segredo de 160 bits cifrado com `sige_encrypt_token` (sodium secretbox autenticado) em user meta, com flag de confirmacao separada: so inscrito apos confirmar um codigo de teste.
+- Inscricao sem JavaScript e sem CDN: codigo QR calculado no servidor e emitido em SVG, validado celula a celula contra referencia independente (byte puro, mascara 0, EC nivel L) para todas as versoes 1 a 10, e por decodificacao com leitor real. O segredo e tambem mostrado em texto para introducao manual (caminho garantido).
+- Integracao no step-up: o endpoint de confirmacao aceita o codigo TOTP (se inscrito) ou o OTP por email (retrocompativel). Quem inscreve NAO gera email, o que fecha de raiz o A2 (dependencia de entrega de email) para esses utilizadores. Tecto de tentativas para o TOTP (10 por janela de 5 min, depois esgotado). Comparacao em tempo constante.
+- Novo endpoint `admin_post:sige_mfa_totp_enroll` (login + nonce) para inscrever, confirmar e desactivar a propria aplicacao; cada utilizador so altera a sua conta (get_current_user_id). Pagina de gestao em Perfil. Regra de Security Kernel em observe (manifesto passa a 195 itens; enforce mantem-se em 30).
+- Governacao: gate `check-mfa-totp.php` e smoke `smoke-mfa-totp-v12-12-11.php` (44 verificacoes) ligados ao corredor. Rediagnostico adversarial Zero P0/P1; dois achados P2 (codigo reutilizavel dentro da validade; desactivar nao exige step-up) aceites e documentados como decisoes de desenho, com endurecimentos futuros identificados.
+- Desligado por defeito; sem alteracao de comportamento para quem nao inscrever. Sem migracao de base de dados. Sem alteracao de regras de calculo. Zero travessoes em codigo e documentos.
+
+## v12.12.10.1 - MFA de Operacao (correccao pos-rediagnostico) (2026-06-19)
+
+- Resulta do rediagnostico adversarial da v12.12.10. Todas as inconsistencias foram corrigidas na mesma sessao (regra: so se avanca de fase com zero em tudo). Zero P0/P1.
+- A1 (UX, era P2): o formulario de confirmacao passa a aparecer nas 10 operacoes criticas, nao so na caixa. Renderiza inline nos handlers em pedidos POST e via aviso nos pedidos GET (recarregamento e redireccionamento de config). O aviso so o renderiza em GET, evitando formulario duplicado no mesmo pedido.
+- A2 (seguranca, era P3): novo modo estrito opt-in `sige_mfa_stepup_strict` (option ou `SIGE_MFA_STEPUP_STRICT`). Quando ligado, uma falha de envio do codigo por email BLOQUEIA a operacao (seguranca acima de disponibilidade). Por defeito mantem-se o anti-lockout, agora como escolha explicita do operador. Total de primitivas: 13.
+- A5 (auditoria, era P3): o guard regista `satisfied_window` para cada operacao critica autorizada pela janela, completando o rasto de auditoria.
+- A7 (conformidade, era P3): limpeza de 919 em-dashes em 490 documentos historicos do pacote; o pacote inteiro fica a zero em/en-dashes. O gate de release passa a verificar documentos (.md/.txt), nao apenas codigo, para nunca recorrer.
+- A3, A4 e A6 documentados explicitamente como decisoes de design ou mitigacoes suficientes (fail-open defensivo coberto pelo gate; tecto de tentativas do OTP como controlo activo; janela por utilizador com semantica sudo e tenant garantido a parte).
+- Sem novos endpoints (manifesto mantem-se em 194); regras de Kernel inalteradas (enforce 30). Sem migracao de base de dados. Sem alteracao de regras de calculo. Em instalacoes que nao liguem o step-up, o comportamento e o de v12.12.9.
+
+
+
+
+- Inicia a Fase 4 (MFA critico). O 2FA de login ja protege a porta de entrada; este incremento exige um segundo factor (re-autenticacao por OTP) imediatamente ANTES de executar operacoes criticas que movem dinheiro ou alteram credenciais de pagamento.
+- Adiciona o modulo `includes/security-mfa-stepup.php` (12 primitivas `sige_mfa_*`), carregado a seguir ao escudo de login. Reutiliza as primitivas OTP existentes (`sige_otp_issue`, `sige_otp_verify`, `sige_otp_pending`); nao reimplementa criptografia. Modelo de janela: apos confirmar uma vez, abre-se um periodo curto (`SIGE_MFA_STEPUP_WINDOW`, defeito 300s) durante o qual as operacoes criticas prosseguem sem novo codigo.
+- Guard fail-closed `sige_mfa_require_step_up($contexto)` integrado em 10 pontos de operacao critica: 6 metodos de `SIGE_FinanceActionService` (cancelLancamento, isentarLancamento, reactivarLancamento, bloquearMes, desbloquearMes, estornarPagamento, este cobrindo tambem a anulacao de recibo), 2 handlers de credenciais (e-Mola, M-Pesa) e 2 handlers de caixa (reabrir, fechar).
+- Endpoint `admin_post:sige_mfa_confirm` (login + nonce) para submeter o codigo; o resultado e conduzido por transient, sem leitura de query string (nao se introduz nenhum query_handler novo).
+- Desligado por defeito (opt-in `update_option('sige_mfa_stepup','on')`); desactivacao de emergencia `SIGE_MFA_STEPUP_OFF`; perfis configuraveis (defeito sige_director, sige_admin_ti); anti-lockout (falha de SMTP permite a operacao nessa tentativa). Tudo auditado via `sige_security_log`.
+- Governacao: gate `check-mfa-stepup.php` e smoke `smoke-mfa-stepup-v12-12-10.php` (29 verificacoes, incluindo runtime fail-closed) ligados ao corredor; regra de Kernel `admin_post:sige_mfa_confirm` em modo observe (total 194 regras, enforce mantem-se em 30).
+- Rediagnostico adversarial Zero P0/P1: calculo financeiro byte-identico a v12.12.8.1, baselines de tenant congelados (138/139) e corrente 0, zero em-dashes no codigo, sem caminhos de bypass as operacoes de dinheiro. Sem migracao de base de dados. Em instalacoes que nao liguem o step-up, o comportamento e o de v12.12.9.
+
+
+
+
+- Remove o fallback CEGO para a escola 1 em toda a resolucao de contexto de tenant. O resolvedor `sige_get_escola_id()` deixa de assumir que a escola unica tem id 1: o passo final passa de `return SIGE_ESCOLA_MALISA` (constante = 1) para resolucao determinista pela escola unica activa, devolvendo 0 (auditado, `tenant_context_missing`) quando o contexto e ambiguo (zero ou varias escolas e sem contexto explicito).
+- Adiciona o helper `sige_multitenancy_single_active_school_id(): int`: devolve o id REAL da unica escola activa sse existir exactamente uma; caso contrario 0. Static-cached, trata tabela ausente.
+- Marca a constante `SIGE_ESCOLA_MALISA` como OBSOLETA (mantida definida por retrocompatibilidade, sem uso como fallback).
+- Limpa os call-sites de leitura: 132 ternarios mortos `function_exists('sige_get_escola_id') ? [(int)] sige_get_escola_id() : 1` (com ou sem cast) passam a fail-closed `: 0`, tornando o resolvedor a unica fonte de verdade; 7 fallbacks fixos (`$escola_id`, `$escola_id_contexto`, `$eid` = 1) passam a resolucao por escola unica activa.
+- Corrige uma classe de integridade de linha revelada no rediagnostico adversarial: 9 defaults cegos `escola_id ?? 1` (leitura de escola a partir de linhas de base de dados, incluindo `max(1, ...)` que forcava ate escola 0 para 1) passam a fail-closed `?? 0`. Elimina o risco de processar filas WhatsApp ou criar estornos sob a escola errada. Os sumidouros de escrita (v12.12.8.1) bloqueiam escola 0 a jusante.
+- Confirma os contextos publicos e cron: os webhooks M-Pesa/e-Mola resolvem a escola por token e payload (`escola_id`/`school_id`), com idempotencia por `UNIQUE (escola_id, referencia)` e o resolvedor apenas como secundario fail-closed; o cron de email usa escola por linha.
+- Adiciona o gate `check-tenant-read-resolver.php` (impede a reintroducao das quatro classes de id=1 cego) e o smoke `smoke-tenant-read-resolver-v12-12-9.php` (16 verificacoes).
+- Baseline de fallbacks de tenant desce de 138 para 0. Funcoes de calculo financeiro byte-identicas. Em mono-escola com escola id=1 o comportamento nao muda; em mono-escola com escola id diferente de 1 a resolucao passa a ser correcta. Fase 3 (isolamento de tenant), incremento final.
+
+
+
+- Remedia o P1 do rediagnostico da v12.12.8 (enumeracao de escrita incompleta): a superficie de escrita por tenant foi reclassificada por analise de fluxo, deslocando o endurecimento para a camada de SUMIDOURO. Nenhuma escrita pode agora visar `escola_id <= 0`, independentemente de como o chamador resolveu a escola.
+- Adiciona o helper auditado `sige_tenant_write_guard(int $escola_id, string $contexto): bool` em `includes/multitenancy.php`: devolve `true` se a escola e valida; caso contrario regista `tenant_write_blocked` e devolve `false` para o chamador abortar com o retorno tipado adequado (sem `wp_die`, seguro para cron).
+- Categoria A: guard fail-closed em 24 sumidouros que recebem `escola_id`/`eid` por parametro, com aborto tipado por contrato (array `ok/error`, array `ok/message`, bool, void, null). Inclui sumidouros financeiros (estorno, cancelamento, isencao, fecho de turno, agregados) e academicos (abertura, encerramento, nota votada).
+- Categoria B: guard fail-closed em 22 funcoes com escrita inline `'escola_id' => sige_get_escola_id()`. Handlers AJAX abortam com `wp_send_json_error`; funcoes de biblioteca com retorno tipado (`null`, `WP_Error`). Duas funcoes ficam por design como excecao de logging resiliente (`sige_audit_log`, `sige_registar_log`): registam o evento mesmo sem escola, para nao perder o rasto da anomalia.
+- Fecha o handler delegado `acta-pdf-handler.php:1610` (aprovacao de nota votada), perdido na v12.12.8: resolvedor fail-closed na origem (`sige_require_escola_id`) e guard no sumidouro.
+- Fecha a lacuna de auditoria silenciosa da v12.12.8: todo bloqueio de escrita passa agora por um caminho auditado.
+- Adiciona o gate `check-tenant-write-sinks.php` (governa a superficie real: falha se surgir um sumidouro com parametro de escola sem guard ou uma escrita inline sem guard, fora da allowlist de logging) e o smoke `smoke-tenant-write-isolation-v12-12-8-1.php`.
+- Baseline de fallbacks `': 1'` desce de 139 para 138; o baseline da v12.12.8 fica congelado a 139 (ratchet monotonico mantido). Em mono-escola o comportamento nao muda. Sem alteracoes a regras de calculo financeiro ou academico.
+
+## v12.12.8 - Tenant Isolation Hardening, escritas (2026-06-19)
+
+- Introduz o resolvedor fail-closed `sige_require_escola_id(string $contexto): int` em `includes/multitenancy.php`: devolve a escola resolvida e bloqueia com 403 (e regista `tenant_write_blocked`) quando nao ha escola valida em modo multi-escola estrito, em vez de cair para a escola 1.
+- Endurece 39 dos 41 call-sites de ESCRITA: 25 em contexto de request passam a usar o resolvedor fail-closed; 14 funcoes de biblioteca abortam a escrita (return tipado) sem `wp_die`, para nao matar processos de cron.
+- Em mono-escola ou ambiente relaxado o comportamento nao muda (o resolvedor devolve a escola unica).
+- Dois pontos de escrita ficam por design, ja protegidos e documentados: super-admin em `permissions-ui.php` e fallback relaxado gated em `permissions-layer.php`.
+- O baseline de fallbacks de tenant desce de 178 para 139 (menos 39). O gate `check-tenant-fallbacks.php` passa a impor ratchet monotonico: o numero so pode descer, nunca subir.
+- Adiciona o smoke `smoke-tenant-hardening-v12-12-8.php` (40.o gate). Sem alteracoes a regras de calculo financeiro ou academico. Fase 3, primeiro incremento (escritas); leituras e remocao do fallback final do resolvedor ficam para incrementos seguintes.
+
+## v12.12.7.1 - Mapa de Cobranca em PDF (2026-06-19)
+
+- Adiciona o botao Imprimir lista (PDF) na Central de Cobrancas (view=financeiro-devedores).
+- Novo query handler `sige_dev_print` (?sige_dev_print=lista) em `includes/finance-devedores-pdf.php`, despachado em template_redirect.
+- Regra `query_handler:sige_dev_print` no Security Kernel em `enforce`, com nonce, permissao, tenant, rate limit, auditoria e runtime antecipado multi-hook.
+- Documento pronto a imprimir e a guardar como PDF (sem biblioteca de PDF no servidor), com cabecalho de escola, cartoes de resumo, tabela e total.
+- O total e a contagem do PDF coincidem com a Central de Cobrancas: mesma populacao (alunos activos com matricula activa) e mesma funcao de saldo dos pagamentos (sige_fin_saldo_lancamento), sem multiplicacao por matriculas.
+- Leitura pura: o handler nunca escreve em tabelas financeiras. Tenant fail-closed.
+- Identidade da escola (nome e logotipo) pela fonte canonica sige_get_escola_perfil, igual as demais impressoes.
+- Permissao alinhada exactamente a pagina Central de Cobrancas (cobrancas_ver/gerir), sem alargar acesso.
+- Adiciona o gate `Mapa de Cobranca PDF (v12.12.7.1)`. Tarefa extraordinaria sobre a baseline v12.12.7, antes da v12.12.8.
+
+## v12.12.7 - Critical Actions Lockdown (2026-06-18)
+
+- Adiciona `view_action` ao Security Kernel para mutações directas em views administrativas.
+- Todas as acções críticas ficam `enforce`, `delegated` ou `retired`; zero critical observe.
+- Corrige isolamento tenant em M-Pesa manual, despesas, pagamentos e permissões.
+- Pagamentos passam a exigir permissões de escrita por acção.
+- Matriz de permissões passa a ter overrides por escola.
+- Remover aluno passa a arquivar/desactivar preservando histórico.
+- Webhooks M-Pesa/e-Mola entram em enforcement tokenizado pelo Kernel.
+- Adiciona gate específico `Critical Actions Lockdown (v12.12.7)`.
+
+## v12.12.6 - Security Kernel Query Runtime & Tenant Guard Closure (2026-06-17)
+
+- Corrige a segunda reverificacao adversarial da v12.12.5 antes de avancar para Critical Actions Lockdown.
+- Query handlers agora passam pelo Security Kernel em `admin_init`, `parse_request` e `template_redirect` com prioridade antecipada negativa.
+- `sige_print`, `sige_portaria_camera` e `sige_desp_print` deixam de depender apenas de `template_redirect` para cobertura runtime.
+- `wp_ajax:sige_settings_save` passa a exigir tenant no kernel e declara `tenant_scope=required_for_sige_config_writes`.
+- `SIGE_Settings_Repository` deixa de gravar em `sige_config` quando a escola não está resolvida; falha fechado sem cair para escola 1 em escrita.
+- Gates e smokes foram reforçados para testar precedência runtime e tenant guard, incluindo testes negativos.
+
+## v12.12.5 - Security Kernel Corrective Runtime Audit (2026-06-17)
+
+- Corrige o rediagnostico adversarial da v12.12.4 antes de avancar para lockdown.
+- REST routes agora possuem `route` explicito e matching runtime por namespace + route.
+- Shortcode e wp_hook declarados no manifesto passam a ter dispatch runtime em observe.
+- M-Pesa/e-Mola no piloto enforce deixam de gravar credenciais em opcoes globais quando ha contexto de escola; passam a usar options scoped por escola.
+- Adiciona gates runtime e testes negativos para evitar falso verde do Security Kernel.
+
+# Changelog
+
+## v12.12.4
+
+Security Kernel Foundation.
+
+Detalhe: `docs/changelog/CHANGELOG-v12-12-4.txt`
+
+- Criado `includes/security-kernel.php` como runtime central de seguranca para superficies de execucao.
+- Criado `includes/security-kernel-rules.php` e `docs/security/SECURITY_KERNEL_RULES-v12.12.4.json` como contrato operacional enforce/observe.
+- As 174 superficies do manifesto ficam cobertas pelo kernel: 4 em enforcement piloto e 170 em observe.
+- Enforcement piloto activo para `admin_post:sige_mpesa_guardar_config`, `admin_post:sige_emola_guardar_config`, `query_handler:sige_desp_print` e `wp_ajax:sige_settings_save`.
+- `sige_settings_save` preserva a autorizacao fina por `SIGE_Settings_Policy::can_edit`.
+- Adicionados gates de runtime, regras, smoke e testes negativos do Security Kernel.
+- Sem alteracao de schema, MFA, Secret Vault, Ledger, CSP ou lockdown global.
+
+
+## v12.12.3
+
+Notas Beta nos Módulos em Validação.
+
+Detalhe: `docs/changelog/CHANGELOG-v12-12-3.txt`
+
+- Adicionado selo `BETA` e nota operacional no cabeçalho central dos views `financeiro-mpesa`, `whatsapp_circulares`, `comunicacoes_central` e `presencas`.
+- A implementação foi feita no catálogo/cabeçalho central (`includes/ui-components.php`) para evitar duplicação de mensagens em cada view.
+- Adicionado CSS canónico em `assets/style.css` para badge e nota beta.
+- Adicionado smoke test dedicado e gate no corredor oficial.
+- Sem alteração de schema, permissões, cálculos financeiros, envio WhatsApp, presenças ou regras de negócio.
+
+## v12.12.2
+
+Extracto de Divida Detalhado para Encarregados.
+
+Detalhe: `docs/changelog/CHANGELOG-v12-12-2.txt`
+
+- O documento `?sige_print=factura` passa a imprimir `EXTRATO DE DÍVIDA DETALHADO`, com decomposicao por item: base/propina, transporte, extras, multa efectiva, descontos, desconto especial, ja pago e saldo.
+- O calculo do documento usa os helpers canonicos `sige_fin_total_lancamento` e `sige_fin_saldo_lancamento` quando disponiveis.
+- Dividas em `em_plano` entram no documento, alem de `pendente` e `parcial`.
+- Pagamentos abatidos por lancamento mostram recibos e ultimo pagamento quando existirem.
+- A Central de Devedores passa a apresentar os botoes `Extracto dívida` e `Histórico`, com nonce documental nos links gerados.
+- Adicionado smoke test dedicado e gate no corredor oficial.
+
+## v12.12.1
+
+Versao correctiva da Fase 0 - Governance Baseline Corrective Audit.
+
+Detalhe: `docs/changelog/CHANGELOG-v12-12-1.txt`
+
+- Corrigido bloqueador P0 em `sige_desp_print`: comprovativo/relatorio de despesas agora exigem `escola_id` valido, nonce, permissao e auditoria.
+- Manifesto de superficie reforcado para detectar hooks AJAX dinamicos por constantes, `template_redirect`, `admin_init`, `send_headers`, `parse_request` e query handlers.
+- Gate do manifesto passa a usar extraccao adversarial independente para evitar falso verde.
+- Adicionados gates de query handlers, tenant em despesas e testes negativos de governacao.
+- Documentado rediagnostico adversarial correctivo com P0/P1 fechados para esta versao.
+
+# CHANGELOG - SIGE SoftGenial
+
+Registo consolidado de versões. O detalhe integral de cada versão está em `docs/changelog/`.
+Relatórios de QA em `docs/qa/`, notas de deploy em `docs/deploy/`, relatórios de fase em `docs/relatorios/`.
+
+## v12.12.0
+Engineering Governance Baseline da Fase 0. A versão cria o protocolo interno de governação de engenharia dentro do pacote: Phase Charter, inventário técnico reproduzível, Definition of Done, matriz de rastreabilidade, risk register e rediagnóstico adversarial. Adiciona manifesto da superfície de execução, política de endpoints públicos, baselines de autorização legada, fallbacks tenant, opções sensíveis e dependências externas, com gates próprios integrados no corredor central. Corrige o P1 encontrado no diagnóstico: todas as views da allowlist passam a ter permissão explícita no mapa central, com permissões próprias, migração aditiva e guards internos compatíveis com `sige_can` (`comunicacoes_central`, `financeiro-mpesa`, `presencas`, `whatsapp_central`, `whatsapp_circulares`, `whatsapp_diag`). Esta versão não cria tabelas nem altera schema; inclui apenas migração aditiva de permissões. Não muda regras financeiras, não implementa MFA, ledger, Secret Vault ou CSP enforcement; esses itens ficam registados para fases próprias. 
+Detalhe: `docs/changelog/CHANGELOG-v12-12-0.txt`
+
+## v12.11.9.166
+Central de Comunicacoes com o visual do proprio sistema. A Central deixa de usar estilos proprios para os elementos principais e passa a reutilizar os componentes do design system, ficando igual aos restantes modulos: os cartoes de resumo passam a KPIs sg-finpro-kpi (icone, tom de cor e numero grande); os paineis passam a sg-finpro-card (cantos bem arredondados e sombra suave com o tom da casa); os botoes passam a sg-finpro-btn (primario e light, com uma variante is-danger feita so com tokens para o Eliminar); e a tabela passa a sg-finpro-table (estilo de linhas-cartao). Os ganchos de JavaScript foram todos preservados (as classes emc-bulk e os ids/data-accao continuam la), por isso so mudou a apresentacao, nao o comportamento. O CSS embebido na vista foi enxugado (removidas as regras proprias de cartao, botao, tabela e KPI, agora fornecidas pelo sistema), o que ate fez baixar os primitivos magicos. Os KPIs ficam num grid proprio de cinco colunas para a linha ficar equilibrada, mas com o estilo de cartao do sistema. Mantem-se a acentuacao em portugues europeu e a regra de SMTP so para o administrador principal. Sem regras financeiras ou academicas tocadas. 15/15 gates; 306 invariantes de regressao verdes; consistencia visual re-baseline em 7499 (abaixo da anterior).
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-166.txt`
+
+## v12.11.9.165
+Afinacoes na Central de Comunicacoes: acentuacao, visual do sistema e SMTP so para o super admin. (1) ACENTUACAO: todo o texto visivel ao utilizador passou a portugues europeu correctamente acentuado, na vista da Central (separadores, tabela, modelos, por encarregado, saude do e-mail, dialogos e avisos), nas mensagens do nucleo (comunicacoes-core), no e-mail de teste e na nota do WhatsApp. Feito por frase inteira, sem tocar em identificadores de codigo (accao, historico, etc.). (2) VISUAL: a Central deixa de desenhar um cabecalho proprio e passa a usar o cabecalho padrao do sistema (sg-product-page-head, alimentado pelos metadados area/titulo/subtitulo), ficando visualmente igual aos restantes modulos; os paineis continuam a usar os tokens do design system. (3) SMTP SO PARA O SUPER ADMIN: a alteracao de SMTP cabe apenas ao administrador principal. O endpoint de teste de SMTP passou a exigir sige_is_real_wp_admin_user (a mesma regra que o gravar/testar ja usavam no config_center); no separador Saude do e-mail, o link para a configuracao SMTP e o botao de enviar teste so aparecem ao super admin, enquanto os outros papeis (com acesso a Central) veem o estado em modo de leitura com uma nota a explicar que a configuracao cabe ao administrador principal. Nota: o gravar do SMTP no config_center ja estava protegido no servidor; isto fecha tambem a porta na nova superficie e na UI. Correcao adicional: reposta a abertura da seccao do separador Modelos, que tinha ficado sem o <section> e sem o paragrafo de ajuda numa edicao anterior. Sem regras financeiras ou academicas tocadas. 15/15 gates; 306 invariantes de regressao verdes; consistencia visual no baseline.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-165.txt`
+
+## v12.11.9.164
+Saude do e-mail na Central + reposicionamento do WhatsApp como Operacao WhatsApp. (1) Novo separador Saude do e-mail na Central de Comunicacoes: mostra o estado do envio de e-mail (SMTP activo ou desligado, nome e endereco do remetente a vista - o que torna obvia uma gralha como nonreplay - servidor e porta), com aviso quando o remetente esta vazio ou parece ter gralha; saude da fila de e-mail (pendentes, falhados, enviados) e a lista dos ultimos erros reais; e dois botoes: processar a fila agora e enviar um e-mail de teste. O teste usa um endpoint novo (sige_emc_smtp_test) que envia mesmo uma mensagem e, se falhar, devolve o erro do SMTP - serve de diagnostico end-to-end. (2) Decisao de arquitectura, explicada ao utilizador: NAO se criou uma vista separada so para e-mail. A operacao do e-mail e leve e as suas pecas ja tem casa (SMTP na configuracao, modelos/fila/processamento na Central); uma vista paralela ficaria meia-vazia. A paridade certa com o WhatsApp e de visibilidade, nao de vistas - por isso o e-mail ganha o painel de saude dentro da Central, que e a sua casa. (3) O whatsapp_central passa a chamar-se Operacao WhatsApp (menu, metadados e titulo), com uma nota a apontar para a Central para a vista cross-canal; deixa de ser a vista das mensagens e fica claramente a consola de operacao especifica do WhatsApp (saude do numero, quota, janela de envio, cron, reconciliacao de pedidos de recibo). As ferramentas WhatsApp nao foram tocadas. Seguranca: nonce + capability + escola_id em tudo. UX no kit (sigeUi). Sem regras financeiras ou academicas tocadas. 15/15 gates; 306 invariantes de regressao verdes.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-164.txt`
+
+## v12.11.9.163
+Central de Comunicacoes - NIVEL 3: historico por encarregado (cross-canal). Novo separador Por encarregado que mostra, para um aluno, a LINHA DO TEMPO UNICA das comunicacoes com e-mail e WhatsApp juntos, por ordem cronologica (ex.: fatura por WhatsApp a 3, recibo por e-mail a 10). Correlacao agnostica ao canal: WhatsApp pela coluna aluno_id da fila; e-mail por recipient IN (emails dos encarregados na ficha do aluno: email_encarregado/pai/mae/principal). Inclui busca de alunos por nome ou numero de processo (campo com debounce + AJAX), e uma ficha de contacto com os e-mails, telefones, o canal preferido (canal_preferencial_comunicacao) e os consentimentos (consent_whatsapp/consent_email) - dados que ja existiam na ficha e agora ficam visiveis e uteis. Reaproveita a camada de normalizacao do nivel 2 (mesmo modelo canonico e estados). Funcoes sige_comm_historico_aluno() / sige_comm_aluno_ficha() / sige_comm_buscar_alunos() e endpoints AJAX sige_comm_historico / sige_comm_buscar, todos com nonce + capability + escola_id + prepared statements (alinhamento placeholder/parametro validado por harness). Render no cliente com escape de HTML em todos os dados. UX no kit; tokens do design system. Sem regras financeiras ou academicas tocadas. 15/15 gates; 306 invariantes de regressao verdes.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-163.txt`
+
+## v12.11.9.162
+Central de Comunicacoes - fila UNIFICADA (e-mail + WhatsApp) com accoes em massa. Nova camada de normalizacao cross-canal (includes/comunicacoes-core.php): define um MODELO CANONICO comum (estados pendente/a_enviar/enviado/falhou/cancelado) para onde ambas as filas mapeiam - sige_email_queue e sige_whatsapp_queue. A consulta e feita por UNION ALL paginado em SQL e filtrado por escola_id (escalavel: nao traz tudo para memoria; alinhamento de placeholders/parametros validado em todas as combinacoes de filtro). A vista deixa de ter abas separadas por canal e passa a ter um separador unico Fila de envios que mostra os dois canais juntos, com coluna de canal, filtros por canal (todos/e-mail/whatsapp) e por estado, seleccao multipla com checkboxes e ACCOES EM MASSA (cancelar/reenviar/eliminar) - cada item respeita as MESMAS regras de estado do seu canal (so pendentes cancelam, so falhados/cancelados reenviam, so resolvidos eliminam). Endpoint unico sige_comm_action (1 ou ate 200 itens por chamada) e sige_comm_get_full (pre-visualizacao que mostra HTML para e-mail e texto para WhatsApp). A camada fica ISOLADA: nao altera o subsistema de WhatsApp, apenas le e aplica as suas regras ja existentes, para nao arrastar regressoes para o lado que esta estavel. Mantem-se o separador Modelos (editor de texto dos e-mails). Seguranca: nonce sige_emc_nonce + capability multi-papel + escola_id em TODAS as queries + prepared statements + auditoria sige_fin_log. UX nos dialogos canonicos do kit (sigeUi.confirm/toast/prompt), zero nativos. Tokens do design system em toda a UI. Sem regras financeiras ou academicas tocadas. 15/15 gates; 306 invariantes de regressao verdes.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-162.txt`
+
+## v12.11.9.161
+NOVO: Central de Comunicacoes (E-mail + WhatsApp) - view comunicacoes_central. Reune o controlo das comunicacoes da escola num so lugar, a semelhanca do Central de WhatsApp. BACKEND (includes/email-central.php) com a mesma seguranca do canal WhatsApp: nonce dedicado sige_emc_nonce em todos os endpoints, capability multi-papel (director/admin/admin_ti/financeiro/secretario/secretaria_geral), escola_id em TODAS as queries (multi-tenant), prepared statements, e auditoria via sige_fin_log. Endpoints AJAX: sige_emc_cancel (pendente->cancelled), sige_emc_retry (failed/cancelled->pending, attempts=0), sige_emc_delete (so sent/failed/cancelled), sige_emc_get_full (pre-visualizacao), sige_emc_process_now, sige_emc_save_templates, sige_emc_reset_template (repor default), sige_emc_test_template (enviar teste). VISTA com 3 separadores: E-mails (estatisticas + fila paginada por escola com filtros de estado e accoes ver/cancelar/reenviar/eliminar + processar agora), Modelos (editor do assunto e corpo de cada modelo, com variaveis, repor original e enviar teste - resolve de raiz a edicao de texto que ate agora so tinha backend) e WhatsApp (ligacao ao Central existente). UX nos diálogos canonicos do kit (sigeUi.confirm/toast/prompt), zero alert/confirm/prompt nativos (passa o invariante de extincao global). Registada no router com whitelist de seguranca, menu lateral, cabecalho proprio, metadados e no arnes visual. Toda a UI usa tokens do design system (debito de tokens inalterado). Sem regras financeiras ou academicas tocadas. 15/15 gates; 306 invariantes de regressao verdes.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-161.txt`
+
+## v12.11.9.160
+CRITICO: o link do recibo no email abria uma pagina em branco. ANALISE: o humanizador de email (sige_notify_humanize_outbound_email_html) corrompia o conteudo apos a substituicao. Dois defeitos: (a) sige_notify_human_fix_mz_concordance fazia str_replace(['__','_'],'') que removia TODOS os underscores, pelo que ?sige_recibo=... virava ?sigerecibo=... e o handler publico (que verifica $_GET['sige_recibo'] com underscore) nao disparava, caindo na pagina normal do WordPress; (b) a regra 'bot' => 'secretaria' (para suavizar tom robotico) substituia a SUBSTRING 'bot', transformando 'botao' em 'secretariaao'. CORRECCOES: (1) o humanizador de email passa a PROTEGER os URLs http(s) - extrai-os para sentinelas antes de transformar e repoe-os intactos no fim, blindando contra esta e qualquer futura corrupcao de links; (2) removida a remocao global de underscores, mantendo apenas a limpeza de _enfase_ markdown isolada (com fronteiras), que nao toca em URLs nem identificadores; (3) a suavizacao robo/robot passou a palavra-inteira via \b...\b e deixou de incluir 'bot' isolado (ambiguo em portugues - botao, botar); (4) o texto de reserva do link no email-engine passou a UTF-8 literal (botao/nao/endereco) em vez de entidades, evitando que o '&' parta a palavra. Validado em simulacao com o cenario exacto do screenshot: sige_recibo intacto (href e texto), 'botao' preservado, 0 corrupcao. O humanizador so e usado no canal de email. Sem regras financeiras tocadas. 15/15 gates.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-160.txt`
+
+## v12.11.9.159
+CORRECCAO: o email de recibo mostrava placeholders literais por substituir ({nomeescola}, {nomeencarregado}, {recibonumero}, {linkrecibo}) no titulo e no corpo. ANALISE: o texto do screenshot nao existe no codigo - era um template guardado na base de dados pela escola (option sige_email_templates_config) com placeholders SEM underscore. O motor sige_email_render_template substituia por chaves EXACTAS com underscore (nome_escola, recibo_numero, link_recibo, nome_encarregado), por isso os placeholders sem underscore ficavam literais; e como o titulo do cabecalho do email e o subject renderizado, o {nomeescola} aparecia tambem no topo. CORRECCAO MESTRA: a substituicao passou a ser TOLERANTE a formatacao - normaliza o nome do placeholder (remove underscores/espacos/hifens, ignora maiusculas) antes de casar, de modo que {nome_escola}, {nomeescola}, {Nome Escola} e {NOME-ESCOLA} resolvem todos para a mesma variavel. Isto conserta o template JA guardado sem a escola ter de o reeditar e cobre todos os templates de email (recibo, fatura, cobranca). Validado com o cenario exacto do screenshot: 0 placeholders por resolver. Observacao: o remetente nonreplay@softgenial.edu.mz e gralha da config SMTP da escola (noreply), nao do codigo. Sem regras financeiras tocadas. 15/15 gates.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-159.txt`
+
+## v12.11.9.158
+Email de confirmacao de pagamento ao encarregado: tom e link. (1) TOM: o template de recibo/confirmacao de pagamento foi reescrito de burocratico ("A secretaria confirma a recepcao do pagamento") para humano e caloroso, a condizer com o cuidado ja existente no WhatsApp e nos templates de fatura/cobranca, mantendo todas as variaveis ({nome_aluno}, {valor}, {recibo_numero}, {data}, {link_recibo}, {nome_escola}). (2) LINK: confirmado que o link do recibo JA e enviado por omissao (a opcao Enviar E-mail no registo de pagamento vem marcada) sempre que o aluno tem email valido em ficha e o recibo resolve para um aluno; reforcado o link para, alem do botao "Ver e descarregar o recibo", incluir o endereco publico em TEXTO como reserva (clientes de email que removem botoes mostram na mesma o link copiavel). (3) Plural correcto na descricao (item pago / itens pagos). (4) email-engine.php e email-queue-templates.php passam a isentos nos gates de tokens/consistencia, por o HTML de email exigir estilos inline literais (nao carrega folhas externas nem tokens). Nenhuma regra financeira tocada. 15/15 gates, baselines descidas.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-158.txt`
+
+## v12.11.9.157
+Hardening do guarda de tokens fora de contexto. (1) Varredura completa do plugin: confirmado que nao ha outras regressoes de tokens em contextos sem sige-tokens.css alem das 3 ja corrigidas; os ficheiros que enviam email (notas-view, aluno-accounts, hub-billing) tem os tokens DENTRO do <style> admin que carrega a escala, e zero no corpo do email. (2) Gate check-tokens-fora-de-contexto.php reescrito de lista-fixa para AUTO-DESCOBERTA: deteta os contextos sem tokens pelos marcadores estruturais inequivocos (login_head/login_enqueue_scripts, add_shortcode, document.write com DOCTYPE) mais uma semente para documentos standalone sem marcador (passagem-docs). Testado: apanha a reintroducao no login e tambem um ficheiro NOVO de shortcode que nunca foi listado, alem de tokens em popups de impressao. Resultado: qualquer nova pagina de login, shortcode front-end ou popup standalone fica protegida automaticamente, sem editar listas. 15/15 gates. Apenas ferramentas/hardening, sem alteracao do plugin.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-157.txt`
+
+## v12.11.9.156
+Arnes visual: cobertura dos contextos SEM tokens que causaram a regressao do logotipo. Acrescentados dois modulos ao arnes, capturados em contexto ANONIMO (sem login): login (/wp-login.php?loggedout=true, espera #login) e portal_aluno (pagina front-end do shortcode, espera .sp-wrap). O orquestrador arnes.js aprendeu: (1) modulos por URL propria (campo url) alem das vistas do admin-app (campo view); (2) modo de autenticacao por modulo (auth: admin|none), com dois contextos de browser separados (um autenticado no wp-admin, outro limpo); (3) waitSelector por modulo; (4) require preguicoso, para o comando list funcionar sem dependencias instaladas. Assim, login e portal entram na verificacao de pixel a pixel daqui para a frente, e o arnes teria apanhado sozinho a regressao da v150. Apenas ferramentas, sem alteracao do plugin.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-156.txt`
+
+## v12.11.9.155
+CORRECCAO DE REGRESSAO VISUAL (pagina de login). A tokenizacao em massa da v150 referenciou tokens de dimensao (var(--space-*), var(--fs-*), var(--radius-*)) em tres saidas que NAO carregam assets/sige-tokens.css: includes/login-page.php (wp-login, injeccao via login_head), includes/portal-logic.php (portal do aluno, shortcode front-end) e includes/passagem-docs-handler.php (documento standalone com :root proprio). Como uma custom property indefinida dentro de um shorthand invalida a declaracao INTEIRA, margin:0 auto var(--space-3) deixou de aplicar e o logotipo da pagina de login saiu do centro (sintoma reportado). Correccao: revertidos 51 tokens para os literais exactos nesses tres ficheiros, que voltam a ser byte-a-byte identicos ao original v148 (logotipo centrado, raios, paddings e tamanhos repostos). PREVENCAO: novo gate check-tokens-fora-de-contexto.php (15o gate do corredor) que falha se qualquer destes contextos voltar a usar tokens de dimensao; e os tres ficheiros ficam isentos nos gates de tokens/consistencia, por ser correcto usarem literais. Os popups de impressao das views-admin foram verificados e estao limpos (0 fugas). Baselines descidas: design-tokens 2646->2456, consistencia-visual 7841->7554. 15/15 gates verdes.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-155.txt`
+
+## v12.11.9.154
+Guiao da campanha de remocao de !important (docs/GUIAO-CAMPANHA-IMPORTANT). Ordena os 14 modulos do mais seguro ao mais sensivel com base no perfil medido de cada um (total no view, estilo generico que compete com o wp-admin, densidade de @media, raio de impacto). Cinco ondas: (1) provas rapidas boletim 13 / config_center 22 / portaria 30 / whatsapp 57; (2) medios isolados jardim_presencas 254 / notas 363 / turmas 382 / financeiro-devedores 400; (3) maiores scoped disciplinas 571 / equipe 613 / matriz 1342; (4) sensiveis financeiro-extratos 1068 e alunos_lista 2868 via --scope fatiado por componente; (5) admin-shell 587 por ultimo, por ser a moldura partilhada por todas as paginas (diff de TODOS os modulos). Define o funil de --scope para os vermelhos e o fecho de cada onda (--set baseline, placar, gates, bump). Esclarece que o alvo nao e zero absoluto mas zero EVITAVEL, provado a pixel. Apenas documentacao, sem alteracao de codigo.
+Detalhe: `docs/GUIAO-CAMPANHA-IMPORTANT-v12_11_9_154.md`
+
+## v12.11.9.153
+Novo ARNES DE VERIFICACAO VISUAL (tools/arnes-visual), para desbloquear a remocao segura dos ~14 mil !important. Componentes: (1) arnes.js, orquestrador Playwright que autentica no wp-admin, fotografa cada modulo (14 modulos x 4 viewports: desktop/laptop/tablet/mobile) com animacoes congeladas e regioes volateis mascaradas, e compara pixel a pixel com pixelmatch; (2) strip-important.php, codemod que remove !important dos blocos <style> de view preservando os blocos de impressao standalone (detectados por DOCTYPE/head/body), com backup .important-bak e --restore; (3) comando verify-strip <modulo>, que faz captura-antes, remove !important, captura-depois, compara, e REVERTE sozinho se houver qualquer diferenca de pixels (so fica se VERDE). Motor de diff auto-testado (imagens iguais racio 0; diferentes racio>0); codemod testado (613->0 num modulo, impressao byte-a-byte intacta, restauro OK). Dependencias resolvidas via npm. E dev-only: fora do run-gates e nunca em producao (corre em staging, ex. demo). Sem qualquer alteracao funcional do plugin.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-153.txt`
+
+## v12.11.9.152
+Auditoria de design do modulo EQUIPA/RH (equipe-view.php). (1) Escala de display estendida com --fs-4xl 40px, para dar token ao titulo-heroi (42px) e aos numeros KPI (34px). (2) Tipografia e espacamento do modulo migrados a 100 por cento para tokens por arredondamento ao mais proximo (empates para cima); deltas entre -2 e +2px: heroi 42->40, stat-value 34->32, titulos 31->32 e 30->32, 26->28, 27->28, 22->24, 18->20, subtitulo 15->16, 18 rotulos 12->13; espacos 6->8?nao (6->8 +2), 9->8, 10->12, 14->16, 18->20, 26->24, 28->32. (3) 12 !important redundantes das regras de icone .X svg removidos (seletor 0,1,1 vence a base; mesmo argumento do painel). (4) Dois blocos de impressao window.print detectados e preservados byte-a-byte; zero vazamento de var(--token). Tipografia e espacamento do modulo agora 100 por cento tokenizados (zero literais). Os 613 !important restantes sao um cobertor defensivo anti wp-admin e ficam para a fase de verificacao em render. 14/14 gates, 306 invariantes.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-152.txt`
+
+## v12.11.9.151
+Auditoria de design do modulo PAINEL PRINCIPAL (dashboard). (1) Escala tipografica estendida nos tokens com dois tamanhos de display: --fs-2xl 28px e --fs-3xl 32px, para o painel ter tokens reais para herois e numeros KPI (a escala parava em 24px). (2) Tipografia e espacamento do painel migrados a 100 por cento para a grelha de tokens por arredondamento ao mais proximo (empates para cima); todos os deltas entre -2 e +2px: hero-title 31->32, kpi-value 27->28, donut 26->28, fin-mini 18->20, dash-title 17->16, subtitle 15->16, 13 rotulos 12->13; espacos 9->8, 10->12, 11->12, 13->12, 14->16, 17->16, 18->20, 22->24, 34->32. (3) 51 !important redundantes removidos das 10 regras de icone .X svg: o seletor descendente (0,1,1) ja vence a base .sg-svg-icon (0,1,0) e o width vem de atributo HTML (mais fraco que CSS); especificidade verificada, sem rivais de maior peso, render identico. (4) Estilos inline confirmados legitimos (custom properties dinamicas data-driven, ja em tokens) - nao sao divida. (5) 6 tamanhos fraccionarios mobile (10.5-13.5px) mantidos de proposito (afinacao fina abaixo da escala 11px). Espacamento e cor do painel agora 100 por cento tokenizados; !important do painel 271->220 (restantes 220 sao de layout/media-query, adiados por exigirem verificacao em render). 14/14 gates, 306 invariantes. Placar de consistencia 14.5->15.0; cascata comecou a mover.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-151.txt`
+
+## v12.11.9.150
+Tokenizacao SEGURA por equivalencia exacta, em massa: 3708 trocas em 46 ficheiros (1183 raios, 1128 espacamentos em grelha, 770 tamanhos de fonte, 598 sombras, 29 transicoes), todas de valor IDENTICO (cada token resolve para o mesmo px). Migrador generalizado com deteccao automatica dos blocos <style> de impressao standalone (DOCTYPE/</head>/<body> ou template literal JS) e exclusao total destes, por nao carregarem sige-tokens.css. Tratador de espacamento multi-valor preserva 0 e auto. Zero mudanca visual; os !important NAO foram tocados (cascata intacta). Invariante de disciplinas actualizado da forma literal (padding:40px 20px) para a forma tokenizada equivalente. Resultado: placar de consistencia subiu de 1.8 para 14.5/100 (raios 65.5%, sombras 63.2%, tipografia 34%, espacamento 26.4%). Baselines descidas: design-tokens 4011->2646, consistencia-visual 10887->8030.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-150.txt`
+
+## v12.11.9.149
+Diagnostico 360 da consistencia visual e primeira correccao segura no maior ofensor (alunos_lista, gestao de alunos): 514 trocas de valor EXACTO por token no bloco de view (182 raios, 133 espacamentos em grelha, 111 sombras, 72 tamanhos de fonte, 16 transicoes de 0.2s), com zero mudanca visual (cada token resolve para o mesmo valor) e os 2173 !important preservados intactos (cascata nao tocada, sem risco de regressao). Templates de impressao (popup window.print) nao tocados por nao carregarem sige-tokens.css. Dois utilitarios novos: 14o gate check-consistencia-visual.php (anti-regressao dos primitivos sem token: font-size/espaco/sombra/transicao/z-index/inline) e controlador-consistencia-visual.php (placar 0-100 ponderado que so toca o sino ao zerar a divida). Baselines de tokens e de consistencia visual descidas.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-149.txt`
+
+## v12.11.9.148
+Diagnostico responsivo (mobile/tablet/laptop/pc) e correcoes seguras: 7 tabelas largas (min-width 780-1040px) envolvidas em wrapper overflow-x para nao estourarem o layout em celular; modal do equipe com max-height 90vh para os botoes nao ficarem fora do ecra. Novo 13o gate diag-responsivo.php com baseline (so desce). Diagnostico honesto: dos 12 suspeitos iniciais de tabela, 7 eram reais (resto ja tinha overflow:auto); gate refinado para resolver classes CSS e excluir overlays
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-148.txt`
+
+## v12.11.9.147
+CORRECAO CRITICA: bug de migracao de cor que destruiu entidades HTML (emojis e acentos) em financeiro-pagamentos e financeiro-config. Regex de cor apanhava por engano os 6 digitos de entidades de emojis, deixando o texto CSS visivel. Ficheiros restaurados do original limpo e re-auditados com script blindado. Invariante global anti-bug adicionado
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-147.txt`
+
+## v12.11.9.146
+Auditoria de design (financeiro-config/configuracao financeira) - O ULTIMO ECRA. Hierarquia de 3 niveis (5 pesos com 850-800 para 600-700), raios da escala (9 para 5), sombras (7 para 4), 159 cores migradas incluindo validacao vermelha e sucesso verde; tema dinamico preservado com fallback em token. AUDITORIA DE DESIGN COMPLETA: zero pesos nao-canonicos em todo o sistema
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-146.txt`
+
+## v12.11.9.145
+Auditoria de design (financeiro-lancamentos/lancamentos financeiros, penultimo ecra) - hierarquia de 3 niveis (6 pesos com 850 para 600-700), raios da escala (9 para 4), sombras (8 para 6), 42 cores migradas; CSS com inputs e botoes genericos sem semantica de credito-debito especifica; JS preservado
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-145.txt`
+
+## v12.11.9.144
+Auditoria de design (jardim_boletim/boletim do jardim) - hierarquia de 3 niveis (8 pesos com 850-800 dominantes para 500-600-700), raios da escala (11 para 4), sombras (16 para 6), 94 cores migradas incluindo mapa de avaliacao MB-B-S-NS via tokens semanticos; impressao dinamica herda os estilos migrados; @media print preservada
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-144.txt`
+
+## v12.11.9.143
+Auditoria de design (aprovar_notas/aprovacao de notas) - hierarquia de 3 niveis (7 pesos com 850 dominante para 500-600-700), raios da escala (8 para 4), sombras (10 para 4), 74 cores migradas incluindo estado de aprovacao (KPI pendente laranja, botao rejeitar vermelho) via tokens semanticos
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-143.txt`
+
+## v12.11.9.142
+Auditoria de design (dec/documento DEC, detalhe estatistico de classe) - hierarquia de 3 niveis (7 pesos com 850-800 dominantes para 500-600-700), raios da escala (4 para 3), sombras (10 para 5), 85 cores migradas incluindo cabecalhos de tabela e classificacao NS vermelha; template de impressao com DOCTYPE preservado; dec-meta-pill mantido 700
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-142.txt`
+
+## v12.11.9.141
+Auditoria de design (auditoria_notas/rastreio de notas) - hierarquia de 3 niveis (9 pesos com 850 dominante para 500-600-700), raios da escala (8 para 4), sombras (12 para 5), 101 cores migradas incluindo mapa de cor por modulo (Financeiro-Alunos-Notas-Turmas-etc) e logica de estado de erro vermelho; tema preservado
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-141.txt`
+
+## v12.11.9.140
+Auditoria de design (turmas/gestao de turmas) - estrutura complexa com 4 blocos style e 3 templates de impressao mais 1 de exportacao Excel; hierarquia de 3 niveis (7 pesos com 700-800-900-850 dominantes para 500-600-700), raios da escala (13 para 4), sombras (22 para 6), 181 cores migradas; templates de impressao Mapa de Turmas-Horario-Lista de Alunos e exportacao Excel preservados
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-140.txt`
+
+## v12.11.9.139
+Auditoria de design (financeiro-devedores/lista de devedores e cobranca) - hierarquia de 3 niveis (8 pesos com 900-850-800 dominantes para 500-600-700), raios da escala (12 para 4), sombras (25 para 7), 212 cores migradas incluindo valor de divida vermelho e tipo de cobranca; template de impressao Lista de Cobranca com doctype preservado; tema preservado
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-139.txt`
+
+## v12.11.9.138
+Auditoria de design (core-status/estado do nucleo, diagnostico do sistema) - hierarquia de 3 niveis (7 pesos com 850 dominante para 500-600-700), raios da escala (5 para 4), sombras (12 para 6), 81 cores migradas incluindo classes de estado de sistema ok-warn-grace via tokens semanticos
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-138.txt`
+
+## v12.11.9.137
+Auditoria de design (jardim_relatorio/relatorio de avaliacao do jardim) - hierarquia de 3 niveis (9 pesos com 700-850 dominantes para 500-600-700), raios da escala (14 para 4), sombras (15 para 6), 201 cores migradas incluindo DOIS mapas de avaliacao (estado emocional feliz-calmo-triste-agitado-cansado + desempenho excelente-bom-satisfatorio-necessita) via tokens semanticos; tema e cores JS preservados
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-137.txt`
+
+## v12.11.9.136
+Auditoria de design (notas/lancamento de notas, ecra academico nuclear) - hierarquia de 3 niveis (8 pesos com 850-700-800 dominantes para 500-600-700), raios da escala (12 para 6), sombras (16 para 7), 198 cores migradas incluindo cabecalhos de tabela e campos de nota; nota negativa vermelha preservada; tema dinamico com fallback em token; cores JS preservadas
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-136.txt`
+
+## v12.11.9.135
+Auditoria de design (whatsapp_central/central de mensagens) - hierarquia de 3 niveis (8 pesos com 850-900-800-700 dominantes para 500-600-700), raios da escala (10 para 4), sombras (19 para 7), 203 cores migradas incluindo mapa de estado de mensagem enviada-pendente-falhou-cancelada via tokens semanticos; tema e cores JS preservados
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-135.txt`
+
+## v12.11.9.134
+Auditoria de design (pauta-final/pauta final de avaliacao, documento oficial) - hierarquia de 3 niveis (8 pesos com 850-800 dominantes para 500-600-700), raios da escala (4 para 3), sombras (10 para 5), 104 cores migradas incluindo classes de situacao progride-transita-reprova e cabecalhos de tabela; template de impressao com DOCTYPE preservado; pf-meta-pill mantido 700
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-134.txt`
+
+## v12.11.9.133
+Auditoria de design (jardim_presencas/registo de presencas do jardim) - hierarquia de 3 niveis (6 pesos com 850 dominante para 500-600-700), raios da escala (8 para 4), sombras (14 para 5), 77 cores migradas incluindo mapa de estado de presenca presente-atraso-falta-justificada via tokens semanticos
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-133.txt`
+
+## v12.11.9.132
+Auditoria de design (permissions-ui/gestao de permissoes e papeis) - hierarquia de 3 niveis (8 pesos com 850-900 dominantes para 500-600-700 INCLUINDO 1 peso inline 800 fora do bloco apanhado pela licao da abertura), raios da escala (9 para 4), sombras (16 para 6), 143 cores migradas
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-132.txt`
+
+## v12.11.9.131
+Auditoria de design (financeiro-pagamentos/registo de pagamentos) - o maior ecra da auditoria 3744 linhas; hierarquia de 3 niveis (8 pesos com 700-33x-800-900-950 para 500-600-700), raios da escala (15 para 6), sombras (36 para 6), 361 cores migradas em 3 zonas HTML; classes de estado de pagamento (pago-vencido-pendente) e cores JS preservadas
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-131.txt`
+
+## v12.11.9.130
+Auditoria de design (abertura/abertura de periodo-ano lectivo) - hierarquia de 3 niveis (7 pesos com 850-900 dominantes para 500-600-700 INCLUINDO 2 pesos inline 650 fora do bloco style apanhados pelos gates), raios da escala (10 para 4), sombras (16 para 7), 138 cores migradas; @media print do log preservada
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-130.txt`
+
+## v12.11.9.129
+Auditoria de design (estatisticas-demograficas) - hierarquia de 3 niveis (8 pesos com 850/700 dominantes para 500/600/700), raios da escala (8 para 4), sombras (13 para 6), 113 cores migradas incluindo logica de cor por percentagem; template de impressao e graficos Chart.js preservados
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-129.txt`
+
+## v12.11.9.128
+Auditoria de design (pautas/pauta de avaliacao, documento oficial) - hierarquia de 3 niveis (10 pesos com 850/900 dominantes para 500/600/700), raios da escala (8 para 5), sombras (14 para 6), 148 cores migradas incluindo classes de nota negativa e mapa de situacao PROGRIDE/TRANSITA/REPROVA/PENDENTE; duas regras @media print de impressao preservadas
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-128.txt`
+
+## v12.11.9.127
+Auditoria de design (acta de avaliacao/conselho de turma) - hierarquia de 3 niveis (8 pesos com 850/900 dominantes para 500/600/700), raios da escala (9 para 4), sombras (11 para 5), 151 cores migradas incluindo estados de erro/alerta; regra @media print de impressao da acta preservada
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-127.txt`
+
+## v12.11.9.126
+Auditoria de design (dashboard) - SEGUNDA camada apos o piloto de cor da v108: hierarquia tipografica (9 pesos para 500/600/700), raios da escala (13 para 5), sombras (22 para 6). Zero cores para migrar (v108 ja tratou tudo). Chip .sg-day-meta mantido a 700 por ser pill de destaque, nao legenda
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-126.txt`
+
+## v12.11.9.125
+Auditoria de design (jardim_diario/diario do jardim de infancia) - hierarquia de 3 niveis (8 pesos com 700/850/900 dominantes para 500/600/700), raios da escala (12 para 4), sombras (23 para 6), 179 cores migradas incluindo mapa de cor por avaliacao MB-B-S-NS (verde-azul-laranja-vermelho via tokens semanticos)
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-125.txt`
+
+## v12.11.9.124
+Auditoria de design (jardim_saude/registo de saude do jardim de infancia) - hierarquia de 3 niveis (8 pesos com 850 dominante para 500/600/700), raios da escala (11 para 5), sombras (18 para 5), 158 cores migradas incluindo codificacao de estado de saude (saudavel verde/alerta vermelho via tokens semanticos)
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-124.txt`
+
+## v12.11.9.123
+Auditoria de design (transporte escolar) - hierarquia de 3 niveis (7 pesos com 850 dominante 12 de 25 para 500/600/700), raios da escala (12 para 5), sombras (16 para 6), 107 cores migradas incluindo logica de cor por lotacao (disponivel-no limite-em uso via tokens semanticos)
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-123.txt`
+
+## v12.11.9.122
+Auditoria de design (curriculum-engine) - hierarquia de 3 niveis (8 pesos com 850 dominante 15 de 29 para 500/600/700), raios da escala (10 para 4), sombras (17 para 7), 118 cores migradas incluindo KPIs/icones/passos inline; tema dinamico preservado com fallback em token
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-122.txt`
+
+## v12.11.9.121
+Auditoria de design (encerramento/fecho de periodo) - hierarquia de 3 niveis (7 pesos com 850 dominante para 500/600/700), raios da escala (9 para 4), sombras (13 para 6), 139 cores migradas incluindo logica de cor por taxa de aprovacao (verde-amarelo-vermelho via tokens semanticos)
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-121.txt`
+
+## v12.11.9.120
+Auditoria de design (portaria/controlo de entradas-saidas) - hierarquia de 3 niveis (8 pesos com 850/900 dominantes para 500/600/700), raios da escala (11 para 5), sombras (22 para 6), 130 cores migradas; cores JS de logica preservadas, semantica de entrada-saida (verde-vermelho) preservada
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-120.txt`
+
+## v12.11.9.119
+Auditoria de design (minhas_turmas, ecra dos icones reportados no inicio) - hierarquia de 3 niveis (6 pesos com 850 dominante para 500/600/700), raios da escala (7 para 4), sombras (17 para 6), 123 cores migradas incluindo cores de estado de progresso (verde/laranja/vermelho via tokens semanticos); fecha o ciclo do ecra que motivou a normalizacao de icones
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-119.txt`
+
+## v12.11.9.118
+Auditoria de design (equipe/RH) - hierarquia de 3 niveis (9 pesos para 500/600/700), raios da escala (17 para 5, a maior dispersao vista), sombras (55 para 7), 230 cores migradas; KPIs e tema dinamico preservados, templates de cracha de impressao preservados
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-118.txt`
+
+## v12.11.9.117
+Auditoria de design (boletim, documento que vai para casa) - hierarquia de 3 niveis (8 pesos para 400/600/700), raios da escala (11 para 5), sombras (17 para 6), 147 cores migradas; funcao de cor por nota e template de impressao do aproveitamento PRESERVADOS (semantica de classificacao intacta)
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-117.txt`
+
+## v12.11.9.116
+Auditoria de design (disciplinas) - hierarquia de 3 niveis (10 pesos para 600/700), raios da escala (14 para 6), sombras (33 para 6), 233 cores migradas incluindo icones de ciclo de ensino (distincao por cor preservada via tokens semanticos)
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-116.txt`
+
+## v12.11.9.115
+Auditoria de design (aluno-portal, portal externo das familias) - hierarquia de 3 niveis (10 pesos para 600/700, 950 dominava com 21 usos), raios da escala (12 para 4), sombras (13 para 4), 139 cores migradas incluindo estilos inline; tema dinamico da escola preservado
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-115.txt`
+
+## v12.11.9.114
+Auditoria de design (matriz curricular) - hierarquia de 3 niveis (8 pesos para 600/700, 950 dominava com 30 usos), raios da escala (10 para 4), sombras (13 para 4), 202 cores migradas para tokens
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-114.txt`
+
+## v12.11.9.113
+Auditoria de design (financeiro-extratos, ecra financeiro) - hierarquia de 3 niveis (9 pesos para 400/600/700), raios da escala (15 para 6), sombras (23 para 8), 268 cores migradas; semantica financeira de reconciliacao e template de impressao do Termo de Fecho PRESERVADOS
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-113.txt`
+
+## v12.11.9.112
+Auditoria de design (alunos_lista, ecra mais usado, 9228 linhas) - hierarquia de 3 niveis (12 pesos para 400/600/700), raios da escala (20 para 6), sombras da escala (110 para 9), 695 cores migradas para tokens; CSS principal tratado, templates de impressao e JS preservados
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-112.txt`
+
+## v12.11.9.111
+Auditoria de design (Config Center piloto) - hierarquia tipografica de 3 niveis (17 pesos para 400/600/700), raios e sombras da escala canonica, cores migradas para tokens; gate de tipografia (12o gate) com baseline anti-regressao
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-111.txt`
+
+## v12.11.9.110
+UI - normalizacao optica de icones: 34 SVG reescalados para a mesma diagonal aparente (dispersao 8.2px para 1.2px); funcao sige_ui_icon canoniza o involucro; regra base no design system; smoke-icones (11 verif, 11o gate)
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-110.txt`
+
+## v12.11.9.109
+Design System - reconciliacao dos CSS legados: style-consolidado morto eliminado (-1467 magicos); style.css vivo migrado 100% para tokens via ponte de compatibilidade --sg-* para --color-*; dourado unificado em warning; smoke do design system (15 verif)
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-109.txt`
+
+## v12.11.9.108
+Design System - fonte da verdade unica (sige-tokens.css: 7 familias x escala 50-900, raios, sombras, animacoes); gate guardiao anti-regressao; dashboard 100% migrado como piloto (231 hex magicos para 0)
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-108.txt`
+
+## v12.11.9.107
+Consolidacao CSS - disciplinas: 15 estilos reais para classes (larguras tabela, 2 estados vazios gemeos partilham classe), pixel-perfect; box-esg2 (slideDown jQuery) preservado
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-107.txt`
+
+## v12.11.9.106
+Consolidacao CSS - equipe/RH: 13 estilos reais para classes (larguras de tabela col-*, margens, alinhamentos), paleta e larguras pixel-perfect; 2 casos dinamicos (JS/innerHTML) preservados
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-106.txt`
+
+## v12.11.9.105
+Consolidacao CSS - dashboard (estreia): 5 estilos reais para classes utilitarias semanticas, paleta pixel-perfect; auditor v2.7 distingue custom properties e estilo dinamico de inline-divida
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-105.txt`
+
+## v12.11.9.104
+Triagem AO90 e botoes - 6 rotulos visiveis canonizados (cadastro->ficha), 11 botoes ao kit; AO90 e botoes sem classe ZERADOS no sistema com invariantes globais
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-104.txt`
+
+## v12.11.9.103
+Sprint UX-8 vassoura - 11 alert e 5 confirm nativos convertidos; alert/confirm/prompt EXTINTOS do sistema com 3 invariantes globais; confirmacao declarativa cobre links
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-103.txt`
+
+## v12.11.9.102
+Feature de cliente - Calendario de Devedores por Mes no ecra de devedores: 12 tiles com contagem e valor em aberto pela formula canonica, clicaveis para filtrar a lista
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-102.txt`
+
+## v12.11.9.101
+Sprint UX-7 - jardim diario, alocacao e circulares conformes; confirmacao com nome do aluno; confirmacao consciente das circulares cadeada
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-101.txt`
+
+## v12.11.9.100
+Sprint UX-6 - encerramento com confirmacoes dignas do risco, lancamentos limpo, portal verificado conforme e cadeado; auditor v2.5 reconhece vazios legitimos
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-100.txt`
+
+## v12.11.9.99
+Sprint UX-5 - acta, planos e devedores conformes; canonica dos planos e cobranca em massa cadeadas; auditor v2.4 sem botoes-fantasma nem termos de comentarios
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-99.txt`
+
+## v12.11.9.98
+Hotfix estrutural - kit migrado para namespace sgk (colisao com style.css provada e corrigida); Enter respeita confirmacao; gates novos de JS embebido e colisoes CSS
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-98.txt`
+
+## v12.11.9.97
+Sprint UX-4 - jardim_relatorio, estatisticas e turmas conformes; prompt() nativo extinto do sistema com invariante global
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-97.txt`
+
+## v12.11.9.96
+Sprint UX-3 - financeiro-config e mpesa-view conformes; sigeUi.prompt no kit; auditor conta prompt nativos
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-96.txt`
+
+## v12.11.9.95
+Sprint UX-2 - financeiro-pagamentos conforme (toast, botoes do kit, escudo anti duplo-clique) e auditor v2 sem falsos positivos SQL
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-95.txt`
+
+## v12.11.9.94
+Sprint UX-1 - Auditoria medida, UI Kit (tokens, componentes, sigeUi), canone de interface e modulo piloto WhatsApp Central conforme
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-94.txt`
+
+## v12.11.9.93
+Sprint 4 parcial - Canal e-Mola sobre o funil de pagamentos moveis e Mapa Mensal de Assiduidade em formato oficial
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-93.txt`
+
+## v12.11.9.92
+Sprint 3 - Saúde operacional com interruptores, cobrança push M-Pesa, primeira extracção assets/views e candidato de CSS consolidado
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-92.txt`
+
+## v12.11.9.91
+Sprint 2 - Presenças Académicas derivadas da Portaria e Pagamentos M-Pesa com conciliação automática
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-91.txt`
+
+## v12.11.9.90
+Sprint 1 - Fundação de Segurança e Produto: escudo de login com 2FA opcional, backups verificados, CI de release, regressão viva, status canónico, Circulares WhatsApp e relatório mensal automático
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-90.txt`
+
+## v12.11.9.89
+Estrutura PRO, copys de produto e blindagem de utilitários: raiz limpa com docs/ e CHANGELOG.md consolidado, rota Vincular reparada, texto visível sem jargão técnico nem versões, ortografia pré-AO90 na interface, travessões eliminados, guardas CLI nos tools e uninstall conservador.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-89.txt`
+
+## v12.11.9.88.2 - financeiro mensalidade virtual classe canonical hotfix
+- Após a v12.11.9.88.1, o lançamento de mensalidades podia processar o aluno, mas terminar com 0 mensalidades criadas/actualizadas e 1 item ignorado.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-88-2-financeiro-mensalidade-virtual-classe-canonical-hotfix.txt`
+
+## v12.11.9.88.1 - financeiro status sync hotfix
+Data: 10 de junho de 2026
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-88-1-financeiro-status-sync-hotfix.txt`
+
+## v12.11.9.88 - financeiro cash reconciliation pro
+Data: 10 de junho de 2026
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-88-financeiro-cash-reconciliation-pro.txt`
+
+## v12.11.9.87.1 - financeiro extratos deep smoke gate hotfix
+- Smoke test profundo adicional antes da Fase 2 do módulo Financeiro > Extractos/Caixa.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-87-1-financeiro-extratos-deep-smoke-gate-hotfix.txt`
+
+## v12.11.9.87 - financeiro extratos pro ux hardening
+Build ID: sige-12.11.9.87-financeiro-extratos-pro-ux-hardening
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-87-financeiro-extratos-pro-ux-hardening.txt`
+
+## v12.11.9.86 - financeiro extratos ux state hotfix
+- Hotfix incremental sobre v12.11.9.85 para corrigir o aviso:
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-86-financeiro-extratos-ux-state-hotfix.txt`
+
+## v12.11.9.85 - financeiro extratos ux ui mobile tablet pro
+Financeiro > Extractos/Caixa UX/UI Mobile-Tablet PRO
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-85-financeiro-extratos-ux-ui-mobile-tablet-pro.txt`
+
+## v12.11.9.84 - historico financeiro hotfix multitenant
+Histórico Financeiro: Hotfix Multi-Tenant (estado da matrícula no documento de extracto)
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-84-historico-financeiro-hotfix-multitenant.txt`
+
+## v12.11.9.83 - historico financeiro documento administrativo ux pro
+Histórico Financeiro: Documento Administrativo + UX PRO (Extractos/Caixa) + Excel institucional
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-83-historico-financeiro-documento-administrativo-ux-pro.txt`
+
+## v12.11.9.82 - historico financeiro oficial excel pro
+- Torna explícito o ambiente de Histórico Financeiro do Aluno ao abrir a partir de Alunos/Ficha 360º.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-82-historico-financeiro-oficial-excel-pro.txt`
+
+## v12.11.9.81 - historico financeiro aluno pro
+- Permitir que a escola baixe/guarde um histórico financeiro completo do aluno, com visão 360º, a partir de Alunos/Ficha 360º e do módulo Extractos/Caixa.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-81-historico-financeiro-aluno-pro.txt`
+
+## v12.11.9.80 - portaria state consistency gate pro
+- Corrigir a inconsistência visual/sonora em que um aluno bloqueado podia aparecer com selo/cor/som de Autorizado.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-80-portaria-state-consistency-gate-pro.txt`
+
+## v12.11.9.79 - portaria active only access gate pro
+- A Portaria Digital passa a autorizar entrada apenas para alunos em situação Activo.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-79-portaria-active-only-access-gate-pro.txt`
+
+## v12.11.9.78 - portaria copy essencial ux pro
+- Remover descrições técnicas da experiência visível da Portaria.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-78-portaria-copy-essencial-ux-pro.txt`
+
+## v12.11.9.77 - portaria onscreen result retake ux pro
+- Corrigir a fricção no telemóvel: depois do som de autorizado/negado, o Guarda não deve fazer scroll para ver o resultado.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-77-portaria-onscreen-result-retake-ux-pro.txt`
+
+## v12.11.9.76 - portaria camera clean room scanner pro
+- Corrigir as rondas persistentes de falsos bloqueios de câmara na Portaria, sobretudo quando o cadeado do navegador mostra Câmara permitida mas o documento wp-admin continua a falhar com NotAllowedError/NotReadableError.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-76-portaria-camera-clean-room-scanner-pro.txt`
+
+## v12.11.9.75 - portaria camera safe bootstrap pro
+- Em desktop/Edge a câmara podia aparecer como “ocupada” mesmo sem Teams/Zoom/WhatsApp abertos, porque o fluxo anterior tentava o leitor QR antes do teste nativo e podia provocar dupla captura/hand-off instável.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-75-portaria-camera-safe-bootstrap-pro.txt`
+
+## v12.11.9.74 - portaria permissions policy camera hotfix
+- O cadeado do navegador podia mostrar Câmara=Permitido, mas a Portaria continuava a apresentar “Câmara bloqueada”.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-74-portaria-permissions-policy-camera-hotfix.txt`
+
+## v12.11.9.73 - portaria camera permission diagnostics hotfix
+- Em Microsoft Edge/desktop, ao tocar em “Permitir uso da câmara”, a Portaria podia mostrar “Permissão negada”, mas o cadeado do navegador não exibia a opção Câmara.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-73-portaria-camera-permission-diagnostics-hotfix.txt`
+
+## v12.11.9.73
+Portaria Camera Diagnostics Fallback UX PRO
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-73.txt`
+
+## v12.11.9.73 - portaria camera diagnostics hotfix
+- Portaria Digital / Câmara / QR Code / UX mobile e tablet.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-73-portaria-camera-diagnostics-hotfix.txt`
+
+## v12.11.9.72 - portaria camera permission ux pro
+- Corrige o botão “Permitir uso da câmara” da Portaria Digital, que podia parecer clicável mas não abrir a permissão do navegador.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-72-portaria-camera-permission-ux-pro.txt`
+
+## v12.11.9.71 - alunos final qa gate
+- Fechar a verificação do módulo Alunos antes de avançar para outro módulo, após o hotfix do botão “Mais” da navegação inferior.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-71-alunos-final-qa-gate.txt`
+
+## v12.11.9.70 - alunos bottom nav mais deep smoke hotfix
+- Revisão adicional do módulo Alunos / Estudantes após reporte visual do botão “Mais” da navegação inferior mobile/tablet.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-70-alunos-bottom-nav-mais-deep-smoke-hotfix.txt`
+
+## v12.11.9.69 - alunos deep audit ux security hardening
+- Rever novamente o módulo Alunos após a primeira melhoria mobile/tablet, corrigindo pontos de UX, permissões, minimização de dados e coerência operacional que podiam ter escapado numa análise anterior.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-69-alunos-deep-audit-ux-security-hardening.txt`
+
+## v12.11.9.68 - alunos mobile tablet ux pro
+Aplicar ao módulo Alunos o mesmo rigor usado no Painel Principal e na camada Guarda/Portaria: fit-on-screen real em mobile/tablet, navegação intuitiva, interface táctil, leitura rápida e alinhamento visual às permissões efectivas do utiliza
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-68-alunos-mobile-tablet-ux-pro.txt`
+
+## v12.11.9.67 - dashboard mobile fit hotfix
+- Corrigir o problema observado no anexo de captura mobile: o bloco inicial de boas-vindas do Painel Principal não cabia integralmente no ecrã, sobretudo na linha de estado rápido, onde o chip "Cobrança" ficava cortado.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-67-dashboard-mobile-fit-hotfix.txt`
+
+## v12.11.9.66 - dashboard deep smoke permission aligned ux
+- Rever novamente o Painel Principal após a criação do perfil Guarda / Portaria.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-66-dashboard-deep-smoke-permission-aligned-ux.txt`
+
+## v12.11.9.65 - guarda portaria readonly pro
+- Criar uma camada operacional para o utilizador Guarda / Portaria.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-65-guarda-portaria-readonly-pro.txt`
+
+## v12.11.9.65 - role guarda portaria
+- Criar uma camada de utilizador operacional para Guarda / Portaria.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-65-role-guarda-portaria.txt`
+
+## v12.11.9.64 - painel principal mobile tablet ux pro
+- Primeira melhoria tela-a-tela da jornada Mobile e Tablet.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-64-painel-principal-mobile-tablet-ux-pro.txt`
+
+## v12.11.9.63 - mobile tablet ux jornada pro
+Área: Mobile UX / Tablet UX / App Shell / Produto PRO
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-63-mobile-tablet-ux-jornada-pro.txt`
+
+## v12.11.9.62 - deep smoke hardening areas nao cobertas mobile pro
+Área: Mobile UX Compliance Global / Smoke Test Profundo
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-62-deep-smoke-hardening-areas-nao-cobertas-mobile-pro.txt`
+
+## v12.11.9.61 - smoke hardening mobile global pro
+Área: Mobile App Visual System / App Shell / Alunos
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-61-smoke-hardening-mobile-global-pro.txt`
+
+## v12.11.9.60 - mobile header consistency permission nav pro
+Área: App Shell / Mobile Global / Alunos
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-60-mobile-header-consistency-permission-nav-pro.txt`
+
+## v12.11.9.59 - mobile ux compliance global pro
+Área: App Shell / UX Mobile Global / Produto PRO
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-59-mobile-ux-compliance-global-pro.txt`
+
+## v12.11.9.58 - mobile app visual system global pro
+Área: App Shell / UX Mobile Global
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-58-mobile-app-visual-system-global-pro.txt`
+
+## v12.11.9.57 - hero fine tune 10 10 mobile pro
+Área: Académico / Alunos e Matrículas / UX Mobile
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-57-hero-fine-tune-10-10-mobile-pro.txt`
+
+## v12.11.9.56 - header card alignment mobile pro
+Área: Académico / Alunos e Matrículas / UX Mobile
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-56-header-card-alignment-mobile-pro.txt`
+
+## v12.11.9.55 - smoke visual mobile app alunos pro
+Área: Académico / Alunos e Matrículas / Smoke UX Mobile
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-55-smoke-visual-mobile-app-alunos-pro.txt`
+
+## v12.11.9.54 - mobile app redesign alunos pro
+Área: Académico / Alunos e Matrículas / UX Mobile
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-54-mobile-app-redesign-alunos-pro.txt`
+
+## v12.11.9.53 - hotfix ux mobile cards alunos pro
+- Corrigir a experiência dos cards de alunos em telemóveis/tablets após a v12.11.9.52.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-53-hotfix-ux-mobile-cards-alunos-pro.txt`
+
+## v12.11.9.52 - ux responsivo alunos mobile tablet pro
+- Intervenção visual/UX no módulo Alunos e Matrículas.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-52-ux-responsivo-alunos-mobile-tablet-pro.txt`
+
+## v12.11.9.51 - smoke hardening encarregados pro
+Base: v12.11.9.50 - Auditoria Avançada de Encarregados PRO
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-51-smoke-hardening-encarregados-pro.txt`
+
+## v12.11.9.50 - auditoria avancada encarregados pro
+- Implementar a segunda sugestão aprovada para a Gestão Avançada de Encarregados: criação de uma tabela própria para histórico/auditoria de alterações sensíveis.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-50-auditoria-avancada-encarregados-pro.txt`
+
+## v12.11.9.49 - gestao avancada encarregados pro
+- Evolução do módulo Alunos e Matrículas para gestão avançada de encarregados.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-49-gestao-avancada-encarregados-pro.txt`
+
+## v12.11.9.48 - hotfix servidor ficha 360 pro
+- Corrigir a mensagem "O servidor não respondeu ao carregar a ficha 360º" reportada após a blindagem de privacidade.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-48-hotfix-servidor-ficha-360-pro.txt`
+
+## v12.11.9.47 - blindagem privacidade ficha 360 pro
+- Reforçar a privacidade e a segurança da Ficha 360º do Aluno antes de avançar para novas funcionalidades.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-47-blindagem-privacidade-ficha-360-pro.txt`
+
+## v12.11.9.46 - ficha 360 aluno qualidade dados pro
+- Iniciar a evolução do módulo Alunos para um verdadeiro cadastro mestre do estudante.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-46-ficha-360-aluno-qualidade-dados-pro.txt`
+
+## v12.11.9.45 - hotfix confirmacao importacao alunos pro
+- Após a pré-validação da importação de alunos, o botão “Confirmar e gravar” parecia não executar a gravação.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-45-hotfix-confirmacao-importacao-alunos-pro.txt`
+
+## v12.11.9.44 - hotfix loop download modelo excel pro
+- Ao clicar em “Baixar modelo Excel (.xlsx)”, o navegador descarregava o ficheiro, mas o App Shell activava o overlay global “A abrir área...” como se fosse uma navegação interna.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-44-hotfix-loop-download-modelo-excel-pro.txt`
+
+## v12.11.9.43 - modelo excel controlado importacao alunos pro
+- Acrescentar ao fluxo de importação de alunos um modelo Excel .xlsx profissional, com campos obrigatórios assinalados e listas controladas, mantendo o CSV como alternativa.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-43-modelo-excel-controlado-importacao-alunos-pro.txt`
+
+## v12.11.9.42 - hotfix definitivo scroll modal importacao alunos pro
+Área: Académico / Alunos e Matrículas / Importação CSV
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-42-hotfix-definitivo-scroll-modal-importacao-alunos-pro.txt`
+
+## v12.11.9.41 - hotfix scroll modal importacao alunos pro
+- O popup de importação de alunos ganhou histórico de lotes, anulação segura e relatório de pré-validação, ficando mais alto do que alguns ecrãs.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-41-hotfix-scroll-modal-importacao-alunos-pro.txt`
+
+## v12.11.9.40 - historico lotes importacao alunos pro
+- Completar o ciclo profissional da importação de estudantes com um histórico visual, rastreável e persistente dos lotes importados.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-40-historico-lotes-importacao-alunos-pro.txt`
+
+## v12.11.9.39 - anulacao lote importacao alunos pro
+- v12.11.9.38 - Importação de Alunos em Duas Etapas PRO.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-39-anulacao-lote-importacao-alunos-pro.txt`
+
+## v12.11.9.38 - importacao alunos duas etapas pro
+- Evolução da importação rápida de estudantes para fluxo em duas etapas.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-38-importacao-alunos-duas-etapas-pro.txt`
+
+## v12.11.9.37 - importacao rapida alunos pro
+Área: Académico / Alunos e Matrículas / Secretaria
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-37-importacao-rapida-alunos-pro.txt`
+
+## v12.11.9.36 - hotfix scroll modal disciplinas pro
+- Corrigir o popup "Nova Disciplina" / "Editar disciplina" no módulo Disciplinas, onde o conteúdo ultrapassava a altura do ecrã e o botão "Guardar Disciplina" ficava inacessível.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-36-hotfix-scroll-modal-disciplinas-pro.txt`
+
+## v12.11.9.35 - smtp zoho teste envio pro
+Ficheiros intervencionados:
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-35-smtp-zoho-teste-envio-pro.txt`
+
+## v12.11.9.34 - curriculos harmonia visual pro
+Intervenção principal:
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-34-curriculos-harmonia-visual-pro.txt`
+
+## v12.11.9.33 - portaria digital harmonia visual pro
+Escopo: Operação Escolar / Portaria Digital / Visual Produto PRO
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-33-portaria-digital-harmonia-visual-pro.txt`
+
+## v12.11.9.32 - lancamento notificacoes opt in
+Build: sige-12.11.9.32-lancamento-notificacoes-opt-in-seguro
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-32-lancamento-notificacoes-opt-in.txt`
+
+## v12.11.9.32 - mensalidades notificacoes optin seguro
+Build: sige-12.11.9.32-mensalidades-notificacoes-optin-seguro
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-32-mensalidades-notificacoes-optin-seguro.txt`
+
+## v12.11.9.31 - finance pos bancos pt mz
+Build: sige-12.11.9.31-finance-pos-bancos-pt-mz
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-31-finance-pos-bancos-pt-mz.txt`
+
+## v12.11.9.30 - whatsapp servicos contextuais pt mz
+Build: sige-12.11.9.30-whatsapp-servicos-contextuais-pt-mz
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-30-whatsapp-servicos-contextuais-pt-mz.txt`
+
+## v12.11.9.29 - whatsapp pt mz genero saudacao unica
+Build: sige-12.11.9.29-whatsapp-pt-mz-genero-saudacao-unica
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-29-whatsapp-pt-mz-genero-saudacao-unica.txt`
+
+## v12.11.9.28 - cobranca licenca humanizada
+O corpo da mensagem de cobranca ja vinha humanizado pelo Hub, mas a MOLDURA
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-28-cobranca-licenca-humanizada.txt`
+
+## v12.11.9.27 - phase2 tenant schema
+Build: sige-12.11.9.27-phase2-p2-1-tenant-schema
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-27-phase2-tenant-schema.txt`
+
+## v12.11.9.26 - phase1 hotfix capability recursion
+Build: sige-12.11.9.26-phase1-hotfix-capability-recursion
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-26-phase1-hotfix-capability-recursion.txt`
+
+## v12.11.9.25 - phase1 blindagem final candidate
+- Fechar tecnicamente a Fase 1 - Blindagem imediata no código, mantendo o pacote em canal test até validação final em staging.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-25-phase1-blindagem-final-candidate.txt`
+
+## v12.11.9.24 - phase1 blindagem p0 1
+Intervenções principais:
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-24-phase1-blindagem-p0-1.txt`
+
+## v12.11.9.23 - phase1 blindagem p0
+- Director deixa de receber manage_options no WordPress.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-23-phase1-blindagem-p0.txt`
+
+## v12.11.9.22 - topbar avatar mobile appbar
+v12.11.9.22 - Barra de Topo com Avatar + App-Bar Mobile
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-22-topbar-avatar-mobile-appbar.txt`
+
+## v12.11.9.21 - unificacao painel principal
+v12.11.9.21 - Unificacao Visual com o Painel Principal (Dashboard Design Language)
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-21-unificacao-painel-principal.txt`
+
+## v12.11.9.19 - acta situacao positiva consistente dec
+Diagnóstico a partir de dados reais (5ª Classe, Turma A - Malisa)
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-19-acta-situacao-positiva-consistente-dec.txt`
+
+## v12.11.9.18 - genero fonte unica diagnostico
+Sintoma reportado (persistência em 3 A / 4 A / 5 A)
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-18-genero-fonte-unica-diagnostico.txt`
+
+## v12.11.9.17 - acta genero canonico censo stale
+- Após a v12.11.9.16, todas as turmas ficaram com a estatística da ACTA correcta,
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-17-acta-genero-canonico-censo-stale.txt`
+
+## v12.11.9.16 - acta estatistica genero correcta
+- O DEC apresentava a estatística por género correcta, mas as estatísticas
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-16-acta-estatistica-genero-correcta.txt`
+
+## v12.11.9.15 - escopo docente dec aproveitamento acta pro test
+- Fechar o mesmo padrão de segurança já aplicado na PAUTA para DEC, Aproveitamento e Acta do Conselho.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-15-escopo-docente-dec-aproveitamento-acta-pro-test.txt`
+
+## v12.11.9.14 - pagina aluno pendencias financeiras reais
+- Corrigir casos em que alunos financeiramente regulares apareciam com pendências na Página do Aluno.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-14-pagina-aluno-pendencias-financeiras-reais.txt`
+
+## v12.11.9.13 - academico filtro turma aproveitamento pro test
+- Acrescentado filtro por turma no módulo Aproveitamento do Aluno.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-13-academico-filtro-turma-aproveitamento-pro-test.txt`
+
+## v12.11.9.12 - academico af map turma pro
+- v12.11.9.11 - Transportes Harmonia Visual PRO (TEST)
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-12-academico-af-map-turma-pro.txt`
+
+## v12.11.9.11 - transportes harmonia visual
+- Melhorar visualmente o módulo de Transportes, alinhando-o ao padrão Produto PRO do Painel Principal.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-11-transportes-harmonia-visual.txt`
+
+## v12.11.9.10 - transportes edicao rotas
+Base: v12.11.9.9 - RH Arquivo de Removidos PRO (TEST), versão validada pelo utilizador
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-10-transportes-edicao-rotas.txt`
+
+## v12.11.9.9 - rh arquivo removidos
+- Adicionada área “Arquivo de colaboradores removidos” no módulo RH / Equipa e Professores.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-9-rh-arquivo-removidos.txt`
+
+## v12.11.9.8 - rh 10 10 soft delete input integrity
+Módulo auditado: Recursos Humanos / Equipa e Professores (&view=equipe)
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-8-rh-10-10-soft-delete-input-integrity.txt`
+
+## v12.11.9.7 - rh senior audit hardening
+- Módulo Recursos Humanos / Equipa e Professores (&view=equipe).
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-7-rh-senior-audit-hardening.txt`
+
+## v12.11.9.6 - equipe professores desactivacao efectiva
+- Corrigir a regressão reportada em que a acção Desactivar mudava o indicador visual, mas não tinha efeito real sobre o acesso do utilizador.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-6-equipe-professores-desactivacao-efectiva.txt`
+
+## v12.11.9.5 - equipe professores modal action failsafe
+- Corrigir regressão de UX no módulo &view=equipe em que botões críticos pareciam não responder ao clique.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-5-equipe-professores-modal-action-failsafe.txt`
+
+## v12.11.9.4 - equipe professores ajax fatal fix
+- Após a v12.11.9.3, os fluxos Editar e Novo colaborador ainda podiam devolver HTTP 500.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-4-equipe-professores-ajax-fatal-fix.txt`
+
+## v12.11.9.3 - equipe professores user flow deep smoke fix
+- Módulo Equipa e Professores (&view=equipe).
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-3-equipe-professores-user-flow-deep-smoke-fix.txt`
+
+## v12.11.9.2 - equipe professores post hardening review
+- Revisão técnica imediata após a intervenção v12.11.9.1 no módulo Equipa e Professores.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-2-equipe-professores-post-hardening-review.txt`
+
+## v12.11.9.1 - equipe professores migration hotfix
+- Corrige fatal error introduzido na v12.11.9 durante a migração de índices do módulo Equipa e Professores.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-1-equipe-professores-migration-hotfix.txt`
+
+## v12.11.9 - equipe professores security hardening
+Escopo: módulo Equipa e Professores (&view=equipe).
+Detalhe: `docs/changelog/CHANGELOG-v12-11-9-equipe-professores-security-hardening.txt`
+
+## v12.11.8 - whatsapp test config comunicacao pro test
+- Corrigir a arquitectura visual da funcionalidade de teste de WhatsApp, evitando que pareça um módulo próprio.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-8-whatsapp-test-config-comunicacao-pro-test.txt`
+
+## v12.11.7 - whatsapp send test pro test
+Base: v12.11.6 - WhatsApp Health Recovery Hotfix PRO (TEST)
+Detalhe: `docs/changelog/CHANGELOG-v12-11-7-whatsapp-send-test-pro-test.txt`
+
+## v12.11.6 - whatsapp health recovery hotfix pro test
+Base: v12.11.5 - Teacher Dashboard Permission PRO (TEST)
+Detalhe: `docs/changelog/CHANGELOG-v12-11-6-whatsapp-health-recovery-hotfix-pro-test.txt`
+
+## v12.11.5 - teacher dashboard permission pro test
+- Tornar o Painel Principal uma permissão efectiva, não automática para Professores.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-5-teacher-dashboard-permission-pro-test.txt`
+
+## v12.11.4 - permission matrix enforcement pro test
+- Corrigir permissões que ficavam cosméticas, sobretudo para professores com acesso concedido a DEC e ACTA.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-4-permission-matrix-enforcement-pro-test.txt`
+
+## v12.11.3 - notification concordance pro test
+- Refinar a humanização das notificações B2C, removendo marcas residuais de template e corrigindo concordância em português de Moçambique.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-3-notification-concordance-pro-test.txt`
+
+## v12.11.2 - notification humanization pro test
+- Reforçar a humanização das notificações WhatsApp/e-mail.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-2-notification-humanization-pro-test.txt`
+
+## v12.11.1 - module gate consistency pro test
+- Corrigir inconsistência entre Módulos activos, Feature Flags/Hub e menu lateral.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-1-module-gate-consistency-pro-test.txt`
+
+## v12.11.0 - curriculum engine foundation pro test
+Base: v12.10.142 - Security Baseline PRO: Update Origin Hotfix.
+Detalhe: `docs/changelog/CHANGELOG-v12-11-0-curriculum-engine-foundation-pro-test.txt`
+
+## v12.10.142 - security baseline pro update origin hotfix
+- Corrigir bloqueio indevido de instalação/actualização manual causado pela validação de origem de pacote introduzida na v12.10.140/v12.10.141.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-142-security-baseline-pro-update-origin-hotfix.txt`
+
+## v12.10.141 - security baseline pro webhook off rest hardening
+Base: v12.10.140 - Security Baseline PRO.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-141-security-baseline-pro-webhook-off-rest-hardening.txt`
+
+## v12.10.140 - security baseline pro
+Base: v12.10.139 - UI PRO: Modais e HTML Oculto Blindados
+Detalhe: `docs/changelog/CHANGELOG-v12-10-140-security-baseline-pro.txt`
+
+## v12.10.139 - ui pro modais html oculto blindados
+Base: v12.10.138 - Pagamentos PRO: Checkbox Isentar Multas Clicável
+Detalhe: `docs/changelog/CHANGELOG-v12-10-139-ui-pro-modais-html-oculto-blindados.txt`
+
+## v12.10.138 - pagamentos pro checkbox isentar multas clicavel
+Base: v12.10.137 - Botões Financeiros PRO: Isenção de Dívidas Clicável
+Detalhe: `docs/changelog/CHANGELOG-v12-10-138-pagamentos-pro-checkbox-isentar-multas-clicavel.txt`
+
+## v12.10.137 - botoes financeiros pro isencao dividas clicavel
+Base: v12.10.136 - WhatsApp Guardrails PRO.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-137-botoes-financeiros-pro-isencao-dividas-clicavel.txt`
+
+## v12.10.136 - whatsapp guardrails pro envio seguro fila
+- Construído por cima da v12.10.135 - Agregados Familiares: Migração Segura.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-136-whatsapp-guardrails-pro-envio-seguro-fila.txt`
+
+## v12.10.135 - agregados familiares migracao segura
+- Construído por cima da v12.10.134 - Hub Control Alignment.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-135-agregados-familiares-migracao-segura.txt`
+
+## v12.10.134 - hub control alignment
+- Construído por cima da v12.10.133 - Dica do Dia: Gestão Restrita.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-134-hub-control-alignment.txt`
+
+## v12.10.133 - dica do dia gestao restrita
+- Construído por cima da v12.10.132 - Dica do Dia: Apenas Gestão Escolar.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-133-dica-do-dia-gestao-restrita.txt`
+
+## v12.10.132 - dica do dia apenas gestao escolar
+- Construído por cima da v12.10.131 - Dica do Dia: Cultura de Gestão Escolar.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-132-dica-do-dia-apenas-gestao-escolar.txt`
+
+## v12.10.131 - dica do dia cultura gestao escolar
+- Construído por cima da v12.10.130 - Página do Aluno: Primeiro Acesso Mobile PRO.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-131-dica-do-dia-cultura-gestao-escolar.txt`
+
+## v12.10.130 - pagina aluno primeiro acesso mobile pro
+- Construído por cima da v12.10.129 - Página do Aluno: Primeiro Acesso e Associação Segura.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-130-pagina-aluno-primeiro-acesso-mobile-pro.txt`
+
+## v12.10.129 - pagina aluno primeiro acesso associacao segura
+- Construído por cima da v12.10.128 - Página do Aluno: Mensagens Claras de Senha.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-129-pagina-aluno-primeiro-acesso-associacao-segura.txt`
+
+## v12.10.128 - pagina aluno mensagens claras senha
+- Construído por cima da v12.10.127 - Página do Aluno: Senha com Execução Real.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-128-pagina-aluno-mensagens-claras-senha.txt`
+
+## v12.10.127 - pagina aluno senha execucao real
+- Construído por cima da v12.10.126 - Página do Aluno: Senha sem Tela Branca.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-127-pagina-aluno-senha-execucao-real.txt`
+
+## v12.10.126 - pagina aluno senha sem tela branca
+- Construído por cima da v12.10.125 - Página do Aluno: Alteração Segura de Senha.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-126-pagina-aluno-senha-sem-tela-branca.txt`
+
+## v12.10.125 - pagina aluno alteracao segura senha
+- Construído por cima da v12.10.124 - Página do Aluno: Texto Mais Humano.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-125-pagina-aluno-alteracao-segura-senha.txt`
+
+## v12.10.124 - pagina aluno texto mais humano
+- Construído por cima da v12.10.123 - Página do Aluno: Menu Legível e Recibos Filtráveis.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-124-pagina-aluno-texto-mais-humano.txt`
+
+## v12.10.123 - pagina aluno menu legivel recibos filtraveis
+- Construído por cima da v12.10.122 - Página do Aluno: Menu Lateral Renderizado no Shell.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-123-pagina-aluno-menu-legivel-recibos-filtraveis.txt`
+
+## v12.10.122 - pagina aluno menu lateral shell
+- Construído por cima da v12.10.121 - Página do Aluno: Links Visíveis na Lateral.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-122-pagina-aluno-menu-lateral-shell.txt`
+
+## v12.10.121 - pagina aluno links visiveis lateral
+- Construído por cima da v12.10.120 - Página do Aluno: Menu na Lateral Azul.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-121-pagina-aluno-links-visiveis-lateral.txt`
+
+## v12.10.120 - pagina aluno menu lateral azul
+- Construído por cima da v12.10.119 - Página do Aluno: Compliance Visual PRO.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-120-pagina-aluno-menu-lateral-azul.txt`
+
+## v12.10.119 - pagina aluno compliance visual pro
+- Construído por cima da v12.10.118 - Página do Aluno: Permissão Real de Portal.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-119-pagina-aluno-compliance-visual-pro.txt`
+
+## v12.10.118 - pagina aluno permissao real portal
+- Construído por cima da v12.10.117 - Página do Aluno: Redireccionamento Correcto.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-118-pagina-aluno-permissao-real-portal.txt`
+
+## v12.10.117 - pagina aluno redireccionamento correto
+- Construído por cima da v12.10.116 - Página do Aluno: Dívida e Modo Leitura.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-117-pagina-aluno-redireccionamento-correto.txt`
+
+## v12.10.116 - pagina aluno divida modo leitura
+- Construído por cima da v12.10.115 - Página do Aluno Integrada PRO.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-116-pagina-aluno-divida-modo-leitura.txt`
+
+## v12.10.115 - pagina aluno integrada pro
+- Construído por cima da v12.10.114 - Jardim: Sono sem Minutos Incoerentes.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-115-pagina-aluno-integrada-pro.txt`
+
+## v12.10.114 - jardim sono sem minutos incoerentes
+- Construído por cima da v12.10.113 - Jardim: Aplicar a Todos com Efeito Real.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-114-jardim-sono-sem-minutos-incoerentes.txt`
+
+## v12.10.113 - jardim aplicar todos efeito real
+- Construído por cima da v12.10.112 - Jardim: Aplicar a Todos e Pop-up PRO.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-113-jardim-aplicar-todos-efeito-real.txt`
+
+## v12.10.112 - jardim aplicar todos popup pro
+- Construído por cima da v12.10.111 - Feedback Visível no Jardim.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-112-jardim-aplicar-todos-popup-pro.txt`
+
+## v12.10.111 - feedback visivel jardim
+- Construído por cima da v12.10.110 - Feedback Visível de Salvamento.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-111-feedback-visivel-jardim.txt`
+
+## v12.10.110 - feedback visivel salvamento
+- Construído por cima da v12.10.109 - Jardim: 5 Anos e Pré Reconhecidos.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-110-feedback-visivel-salvamento.txt`
+
+## v12.10.109 - jardim 5anos pre reconhecidos
+- Construído por cima da v12.10.108 - Jardim: Blindagem PRO Final.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-109-jardim-5anos-pre-reconhecidos.txt`
+
+## v12.10.108 - jardim blindagem pro final
+- Construído por cima da v12.10.107 - Jardim: Transferido Reactivado Visível.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-108-jardim-blindagem-pro-final.txt`
+
+## v12.10.107 - jardim transferido reativado visivel
+- Construído por cima da v12.10.106 - Jardim: Critérios e Alunos Reactivados.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-107-jardim-transferido-reativado-visivel.txt`
+
+## v12.10.106 - jardim criterios alunos reativados
+- Construído por cima da v12.10.105 - Jardim: Critérios PRO e Migração Segura.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-106-jardim-criterios-alunos-reativados.txt`
+
+## v12.10.105 - jardim criterios pro migracao segura
+- Construído por cima da v12.10.104 - Jardim de Infância: Fluxo PRO e Fonte de Verdade.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-105-jardim-criterios-pro-migracao-segura.txt`
+
+## v12.10.104 - jardim fluxo pro fonte verdade
+- Construído por cima da v12.10.103 - Jardim Presenças: Compliance Visual Integral.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-104-jardim-fluxo-pro-fonte-verdade.txt`
+
+## v12.10.103 - jardim presencas compliance visual integral
+- Construído por cima da v12.10.102 - Jardim Relatório: Compliance Visual Integral.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-103-jardim-presencas-compliance-visual-integral.txt`
+
+## v12.10.102 - jardim relatorio compliance visual integral
+- Construído por cima da v12.10.101 - Jardim Boletim: Wide Layout Responsivo.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-102-jardim-relatorio-compliance-visual-integral.txt`
+
+## v12.10.101 - jardim boletim wide layout responsivo
+- Construído por cima da v12.10.100 - Jardim Boletim: Compliance Visual Integral.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-101-jardim-boletim-wide-layout-responsivo.txt`
+
+## v12.10.100 - jardim boletim compliance visual integral
+- Construído por cima da v12.10.99 - Jardim Saúde: Compliance Visual Integral.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-100-jardim-boletim-compliance-visual-integral.txt`
+
+## v12.10.99 - jardim saude compliance visual integral
+- Construído por cima da v12.10.98 - Jardim Diário: Compliance Visual Integral.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-99-jardim-saude-compliance-visual-integral.txt`
+
+## v12.10.98 - jardim diario compliance visual integral
+- Construído por cima da v12.10.97 - Responsividade PRO Matriz e Alunos.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-98-jardim-diario-compliance-visual-integral.txt`
+
+## v12.10.97 - responsividade matriz alunos
+- Construído por cima da v12.10.96 - Correção Warnings e Responsividade 17 Pol.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-97-responsividade-matriz-alunos.txt`
+
+## v12.10.96 - warnings responsividade 17pol
+- Construído por cima da v12.10.95 - Notas Docentes: Edição por Disciplina Atribuída.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-96-warnings-responsividade-17pol.txt`
+
+## v12.10.95 - notas docentes edicao disciplina atribuida
+- Construído por cima da v12.10.94 - Merge Malisa: Transferidos PRO Académico-Financeiro.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-95-notas-docentes-edicao-disciplina-atribuida.txt`
+
+## v12.10.94 - merge malisa transferidos pro
+- Construído por cima da v12.10.93 - Permissões: Correção Tela Branca, validada.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-94-merge-malisa-transferidos-pro.txt`
+
+## v12.10.93 - permissoes correcao tela branca
+- Corrigir a tela branca no módulo &view=sige_permissoes após a introdução do catálogo de perfis operacionais.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-93-permissoes-correcao-tela-branca.txt`
+
+## v12.10.92 - permissoes secretario operacional
+- Corrigir o catálogo operacional de perfis para reflectir melhor a realidade das escolas.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-92-permissoes-secretario-operacional.txt`
+
+## v12.10.91 - permissoes perfis operacionais
+- Simplificar a experiência do módulo &view=sige_permissoes.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-91-permissoes-perfis-operacionais.txt`
+
+## v12.10.90 - permissoes ux pro efeito real
+- Simplificar a experiência do módulo &view=sige_permissoes.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-90-permissoes-ux-pro-efeito-real.txt`
+
+## v12.10.89 - permissoes compliance visual integral
+- Redesenhar visualmente o módulo &view=sige_permissoes com o mesmo rigor do Painel Principal / Dashboard V2 MJS-grade.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-89-permissoes-compliance-visual-integral.txt`
+
+## v12.10.88 - core status compliance visual integral
+- Redesenhar visualmente o módulo &view=sige_core_status com o mesmo rigor do Painel Principal / Dashboard V2 MJS-grade.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-88-core-status-compliance-visual-integral.txt`
+
+## v12.10.87 - estatisticas demo tabela idade responsiva
+- Corrigir o problema visual remanescente da secção "Por Idade", que ainda saía da escala da tela.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-87-estatisticas-demo-tabela-idade-responsiva.txt`
+
+## v12.10.86 - estatisticas demo graficos pro genero fiel
+- Corrigir o módulo &view=estatisticas_demo após validação visual.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-86-estatisticas-demo-graficos-pro-genero-fiel.txt`
+
+## v12.10.85 - estatisticas demo compliance visual integral
+- Redesenhar visualmente o módulo &view=estatisticas_demo com o mesmo rigor do Painel Principal / Dashboard V2 MJS-grade.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-85-estatisticas-demo-compliance-visual-integral.txt`
+
+## v12.10.84 - auditoria notas filtros responsivos
+- Corrigir a responsividade do bloco de filtros do módulo &view=auditoria_notas.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-84-auditoria-notas-filtros-responsivos.txt`
+
+## v12.10.83 - auditoria notas compliance visual integral
+- Redesenhar visualmente o módulo &view=auditoria_notas com o mesmo rigor do Painel Principal / Dashboard V2 MJS-grade.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-83-auditoria-notas-compliance-visual-integral.txt`
+
+## v12.10.82 - aprovar notas compliance visual integral
+- Redesenhar visualmente o módulo &view=aprovar_notas com o mesmo rigor do Painel Principal / Dashboard V2 MJS-grade.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-82-aprovar-notas-compliance-visual-integral.txt`
+
+## v12.10.81 - acta censo 3 marco snapshot estatistico oficial
+- Corrigir a lógica da linha “3 de Março” na ACTA para respeitar o Censo Escolar oficial de Moçambique.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-81-acta-censo-3-marco-snapshot-estatistico-oficial.txt`
+
+## v12.10.80 - acta impressao pro fontes automaticas
+- Corrigir a impressão/download da ACTA para evitar páginas cortadas.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-80-acta-impressao-pro-fontes-automaticas.txt`
+
+## v12.10.79 - acta download disciplinas canonicas
+- Corrigir o download/impressão da ACTA para respeitar efectivamente as disciplinas da turma/classe seleccionada.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-79-acta-download-disciplinas-canonicas.txt`
+
+## v12.10.78 - acta disciplinas dinamicas turma
+- Corrigir a secção “Cumprimento dos Programas” da Acta do Conselho para deixar de usar uma lista fixa/hardcoded de disciplinas.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-78-acta-disciplinas-dinamicas-turma.txt`
+
+## v12.10.77 - acta fluxo pro consistencia academica
+- Transformar a Acta do Conselho de Notas de simples formulário documental para fluxo académico controlado.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-77-acta-fluxo-pro-consistencia-academica.txt`
+
+## v12.10.76 - acta compliance visual integral
+- Redesenhar visualmente o módulo &view=acta com o mesmo rigor do Painel Principal / Dashboard V2 MJS-grade.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-76-acta-compliance-visual-integral.txt`
+
+## v12.10.75 - pauta final estatistica genero correcta
+- Corrigir a estatística por género na Pauta Final Oficial, replicando a lógica já corrigida no DEC.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-75-pauta-final-estatistica-genero-correcta.txt`
+
+## v12.10.74 - pauta final compliance visual integral
+- Melhorar o visual do módulo &view=pauta_final.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-74-pauta-final-compliance-visual-integral.txt`
+
+## v12.10.73 - dec estatistica genero correcta
+Problema identificado
+Detalhe: `docs/changelog/CHANGELOG-v12-10-73-dec-estatistica-genero-correcta.txt`
+
+## v12.10.72 - dec compliance visual integral
+- Melhorar o design do módulo page=sige-app&view=dec.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-72-dec-compliance-visual-integral.txt`
+
+## v12.10.71 - pautas mesma regra aproveitamento
+- Alinhar o resultado da Pauta Anual com a lógica já usada no módulo Aproveitamento do Aluno.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-71-pautas-mesma-regra-aproveitamento.txt`
+
+## v12.10.70 - pautas resultado fiel exportacao limpa
+- Corrigir duas falhas reais identificadas no módulo &view=pautas:
+Detalhe: `docs/changelog/CHANGELOG-v12-10-70-pautas-resultado-fiel-exportacao-limpa.txt`
+
+## v12.10.69 - pautas accoes responsivas exportacoes visiveis
+- Corrigir a experiência do módulo &view=pautas em ecrãs menores e médios.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-69-pautas-accoes-responsivas-exportacoes-visiveis.txt`
+
+## v12.10.68 - pautas fluxo pro exportacoes seguras
+- Analisar e melhorar o fluxo completo do módulo &view=pautas, mantendo o padrão Produto PRO e corrigindo falhas reais que podiam prejudicar a geração/exportação da pauta.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-68-pautas-fluxo-pro-exportacoes-seguras.txt`
+
+## v12.10.67 - pautas compliance visual integral
+- Harmonização visual do módulo &view=pautas com o padrão Produto PRO / Dashboard V2 MJS-grade.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-67-pautas-compliance-visual-integral.txt`
+
+## v12.10.66 - lancamento notas compliance visual integral
+- Rever o desenho do módulo &view=notas e garantir alinhamento rigoroso com o Painel Principal / Dashboard V2 MJS-grade.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-66-lancamento-notas-compliance-visual-integral.txt`
+
+## v12.10.65 - minhas turmas kpi icons centralizados
+- Corrigir a posição dos ícones nos cartões KPI do módulo &view=minhas_turmas.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-65-minhas-turmas-kpi-icons-centralizados.txt`
+
+## v12.10.64 - minhas turmas tabs compliance total
+- Corrigir especificamente os tabs de trimestre do módulo &view=minhas_turmas para ficarem no mesmo padrão visual do Painel Principal / Dashboard V2 MJS-grade.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-64-minhas-turmas-tabs-compliance-total.txt`
+
+## v12.10.63 - minhas turmas compliance visual integral
+- Rever o desenho do módulo &view=minhas_turmas e garantir alinhamento rigoroso com o Painel Principal / Dashboard V2 MJS-grade.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-63-minhas-turmas-compliance-visual-integral.txt`
+
+## v12.10.62 - financeiro config catalogo responsivo modal
+- Resolver a falta de responsividade da secção “Lista de Serviços” no módulo &view=financeiro-config.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-62-financeiro-config-catalogo-responsivo-modal.txt`
+
+## v12.10.61 - central cobrancas compliance visual integral
+- Rever o desenho do módulo &view=financeiro-devedores e garantir alinhamento rigoroso com o Painel Principal / Dashboard V2 MJS-grade.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-61-central-cobrancas-compliance-visual-integral.txt`
+
+## v12.10.60 - pagamentos turma compliance visual integral
+- Rever o desenho do módulo &view=pagamentos-turma e garantir alinhamento rigoroso com o Painel Principal / Dashboard V2 MJS-grade.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-60-pagamentos-turma-compliance-visual-integral.txt`
+
+## v12.10.59 - whatsapp central titulo compliance total
+- Corrigir especificamente o título principal do módulo &view=whatsapp_central para ficar no mesmo padrão visual e tipográfico do Painel Principal.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-59-whatsapp-central-titulo-compliance-total.txt`
+
+## v12.10.58 - whatsapp central header unico compliance integral
+- Corrigir definitivamente o módulo &view=whatsapp_central para cumprir duas regras mandatórias:
+Detalhe: `docs/changelog/CHANGELOG-v12-10-58-whatsapp-central-header-unico-compliance-integral.txt`
+
+## v12.10.57 - whatsapp central compliance visual integral
+- Rever o desenho do módulo &view=whatsapp_central com o mesmo rigor visual validado no Painel Principal / Dashboard V2 MJS-grade.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-57-whatsapp-central-compliance-visual-integral.txt`
+
+## v12.10.56 - aluno contas compliance visual integral
+- Corrigir o módulo &view=aluno_contas para atingir compliance visual integral com o Painel Principal / Dashboard V2 MJS-grade.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-56-aluno-contas-compliance-visual-integral.txt`
+
+## v12.10.55 - aluno contas harmonia visual
+Tipo: Produto PRO / Compliance Visual
+Detalhe: `docs/changelog/CHANGELOG-v12-10-55-aluno-contas-harmonia-visual.txt`
+
+## v12.10.54 - abertura academica segura
+Tipo: Produto PRO / Fluxo Académico Seguro
+Detalhe: `docs/changelog/CHANGELOG-v12-10-54-abertura-academica-segura.txt`
+
+## v12.10.53 - abertura harmonia visual
+Base: v12.10.52 - Encerramento Académico Seguro.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-53-abertura-harmonia-visual.txt`
+
+## v12.10.52 - encerramento academico seguro
+Base: v12.10.51 - Encerramento: Header Único
+Detalhe: `docs/changelog/CHANGELOG-v12-10-52-encerramento-academico-seguro.txt`
+
+## v12.10.51 - encerramento header unico
+- Corrigir a duplicação de cabeçalhos no módulo &view=encerramento.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-51-encerramento-header-unico.txt`
+
+## v12.10.50 - encerramento harmonia visual
+- Harmonização visual do módulo &view=encerramento com o Painel Principal / Dashboard V2 MJS-grade.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-50-encerramento-harmonia-visual.txt`
+
+## v12.10.49 - remocao total pontos verdes cabecalhos
+Base: v12.10.48 - Compliance Visual Fino.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-49-remocao-total-pontos-verdes-cabecalhos.txt`
+
+## v12.10.48 - compliance visual fino
+- Fechar a harmonização visual das páginas já melhoradas, mantendo o Painel Principal / Dashboard V2 MJS-grade como referência inegociável.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-48-compliance-visual-fino.txt`
+
+## v12.10.47 - compliance visual global
+- Reverificar e harmonizar as páginas já melhoradas para manter o Painel Principal como referência visual inegociável.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-47-compliance-visual-global.txt`
+
+## v12.10.46 - aproveitamento fonte global
+- Ajustar a hierarquia visual do módulo Aproveitamento/Boletim conforme o padrão aprovado.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-46-aproveitamento-fonte-global.txt`
+
+## v12.10.45 - boletim aproveitamento harmonia visual
+- Redesenho visual do módulo view=boletim / Aproveitamento do Aluno.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-45-boletim-aproveitamento-harmonia-visual.txt`
+
+## v12.10.44 - alunos modal registo padrao actual
+- Harmonizar o pop-up de Registar/Editar Aluno com o padrão visual aprovado do Painel Principal e dos módulos Produto PRO.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-44-alunos-modal-registo-padrao-actual.txt`
+
+## v12.10.43 - matriz curricular correcao visual integral
+- Refazer a camada visual real da Matriz Curricular, mantendo o Painel Principal aprovado como referência inegociável.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-43-matriz-curricular-correcao-visual-integral.txt`
+
+## v12.10.42 - matriz curricular harmonia visual
+- Módulo Matriz Curricular alinhado ao padrão visual aprovado do Painel Principal.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-42-matriz-curricular-harmonia-visual.txt`
+
+## v12.10.41 - disciplinas harmonia visual
+- Gestão de Disciplinas alinhada ao padrão visual aprovado do Painel Principal.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-41-disciplinas-harmonia-visual.txt`
+
+## v12.10.40 - equipa professores gravacao upload documentos
+- Corrigir a gravação real dos dados bancários e documentos no formulário de Novo/Editar Colaborador.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-40-equipa-professores-gravacao-upload-documentos.txt`
+
+## v12.10.39 - equipa professores modal colaborador
+- Harmonizar o pop-up de criação/edição de colaborador com o padrão visual aprovado do Painel Principal.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-39-equipa-professores-modal-colaborador.txt`
+
+## v12.10.38 - equipa professores kpis sem sobreposicao
+- Corrigir a sobreposição dos círculos decorativos nos cartões de indicadores do módulo Equipa e Professores.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-38-equipa-professores-kpis-sem-sobreposicao.txt`
+
+## v12.10.37 - equipa professores compliance visual
+- Reforça o alinhamento do módulo Equipa e Professores com o Painel Principal aprovado.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-37-equipa-professores-compliance-visual.txt`
+
+## v12.10.36 - equipa professores harmonia visual
+- Alinha o módulo Equipa e Professores ao padrão visual aprovado do Painel Principal.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-36-equipa-professores-harmonia-visual.txt`
+
+## v12.10.35 - aparencia cores documentos
+- A cor principal definida em Aparência da escola passa a sincronizar a Cor dos documentos.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-35-aparencia-cores-documentos.txt`
+
+## v12.10.34 - app shell topbar scroll natural
+- Ajustar o comportamento do App Shell para que a barra superior da escola role juntamente com o conteúdo principal.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-34-app-shell-topbar-scroll-natural.txt`
+
+## v12.10.33 - app shell scroll inteligente
+- Melhorar a experiência de navegação do sistema mantendo o padrão visual aprovado.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-33-app-shell-scroll-inteligente.txt`
+
+## v12.10.32 - aparencia aplicacao real cores
+Garantir que as cores definidas em Aparência da escola tenham efeito real no sistema, mantendo o padrão visual aprovado e evitando confusão com a cor usada nos documentos.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-32-aparencia-aplicacao-real-cores.txt`
+
+## v12.10.31 - aparencia design system
+- Criar um motor de temas visuais centralizado para permitir personalização controlada das cores da escola sem quebrar o padrão visual aprovado do Painel Principal.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-31-aparencia-design-system.txt`
+
+## v12.10.30 - turmas harmonia visual
+- Harmonização do módulo Turmas com o padrão visual aprovado do Painel Principal.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-30-turmas-harmonia-visual.txt`
+
+## v12.10.29 - alunos matriculas harmonia visual v2
+- Corrigir a falta de harmonia visual do módulo Alunos e Matrículas, assumindo o Painel Principal aprovado como referência visual inegociável.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-29-alunos-matriculas-harmonia-visual-v2.txt`
+
+## v12.10.28 - alunos matriculas harmonia visual
+- Alinhar o módulo Alunos e Matrículas ao padrão visual aprovado do Painel Principal.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-28-alunos-matriculas-harmonia-visual.txt`
+
+## v12.10.27 - recibos impressao harmonia visual
+- Harmonizar a experiência de recibos e documentos financeiros ao padrão visual aprovado do Painel Principal.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-27-recibos-impressao-harmonia-visual.txt`
+
+## v12.10.26 - inscricoes renovacoes harmonia visual
+Escopo desta entrega:
+Detalhe: `docs/changelog/CHANGELOG-v12-10-26-inscricoes-renovacoes-harmonia-visual.txt`
+
+## v12.10.25 - precos servicos escola id fix
+- Corrigida a criação dos serviços padrão no módulo Preços e Serviços.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-25-precos-servicos-escola-id-fix.txt`
+
+## v12.10.24 - precos servicos harmonia visual
+- Harmonizar o módulo Preços e Serviços com o padrão visual aprovado no Painel Principal, Centro de Configuração e módulos financeiros já validados.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-24-precos-servicos-harmonia-visual.txt`
+
+## v12.10.23 - planos pagamento harmonia visual
+- Harmonização visual do módulo Planos de Pagamento com o padrão aprovado do Painel Principal.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-23-planos-pagamento-harmonia-visual.txt`
+
+## v12.10.22 - lancar mensalidades popup sucesso
+- Ajustar a experiência após clicar em Gerar lançamentos, para que a mensagem de sucesso também apareça em pop-up real, seguindo a regra validada para confirmações e mensagens importantes.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-22-lancar-mensalidades-popup-sucesso.txt`
+
+## v12.10.21 - lancar mensalidades harmonia visual
+- Alinhar o módulo Lançar Mensalidades ao padrão visual aprovado do Painel Principal.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-21-lancar-mensalidades-harmonia-visual.txt`
+
+## v12.10.20 - centros custo harmonia visual
+- Alinhar o módulo Centros de Custo ao padrão visual aprovado do Painel Principal.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-20-centros-custo-harmonia-visual.txt`
+
+## v12.10.19 - auditoria financeira harmonia visual
+- Auditoria Financeira alinhada ao padrão visual aprovado do Painel Principal.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-19-auditoria-financeira-harmonia-visual.txt`
+
+## v12.10.18 - despesas harmonia visual
+- Alinhar o módulo Despesas da Escola ao padrão visual aprovado do Painel Principal e dos módulos financeiros já validados.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-18-despesas-harmonia-visual.txt`
+
+## v12.10.17 - lancamentos harmonia visual
+- Alinhar o módulo de Lançamentos Financeiros ao padrão visual aprovado do Painel Principal, mantendo a progressão Produto PRO sem regressões.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-17-lancamentos-harmonia-visual.txt`
+
+## v12.10.16 - relatorio mensal harmonia visual
+- Alinhar o módulo Relatório Mensal ao padrão visual já aprovado no Painel Principal e nos módulos financeiros anteriores.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-16-relatorio-mensal-harmonia-visual.txt`
+
+## v12.10.15 - extractos caixa harmonia visual
+- Alinhar o módulo Extractos e Caixa ao padrão visual aprovado no Painel Principal e nos módulos financeiros já validados.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-15-extractos-caixa-harmonia-visual.txt`
+
+## v12.10.14 - pagamentos turma harmonia visual
+- Alinhar o módulo Pagamentos por Turma ao padrão visual aprovado no Painel Principal, Painel Financeiro, Registar Pagamento e Central de Cobranças.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-14-pagamentos-turma-harmonia-visual.txt`
+
+## v12.10.13 - central cobrancas harmonia visual
+- Alinhar a Central de Cobranças ao padrão visual validado no Painel Principal e no Financeiro Produto PRO.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-13-central-cobrancas-harmonia-visual.txt`
+
+## v12.10.12 - financeiro harmonia visual
+- Corrigir a falta de harmonia visual entre Painel Principal, Painel Financeiro e Registar Pagamento.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-12-financeiro-harmonia-visual.txt`
+
+## v12.10.11 - registar pagamento modal centrado
+- Corrigir a experiência de confirmação do pagamento para que o aviso apareça como pop-up real, centrado no ecrã, e não numa entrelinha ou fora da área visível.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-11-registar-pagamento-modal-centrado.txt`
+
+## v12.10.10 - registar pagamento popup confirmacao
+- Reforçar a experiência do utilizador no fluxo de pagamento, evitando métodos de pagamento errados e removendo elementos visualmente ilegíveis, sem mexer nas fórmulas nem nas regras financeiras.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-10-registar-pagamento-popup-confirmacao.txt`
+
+## v12.10.9 - registar pagamento header limpo
+- Corrigir a duplicação visual de cabeçalhos nas páginas modernizadas com hero próprio, mantendo o padrão visual MJS-grade aprovado e linguagem final de produto.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-9-registar-pagamento-header-limpo.txt`
+
+## v12.10.8 - produto pro registar pagamento mjs grade
+- Aplicar o padrão visual aprovado do Dashboard V2 MJS-grade ao fluxo Registar Pagamento, mantendo a página com aparência de aplicação profissional e não de plugin WordPress.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-8-produto-pro-registar-pagamento-mjs-grade.txt`
+
+## v12.10.7 - produto pro financeiro mobile friendly
+Garantir que o App Shell Produto PRO e o Painel Financeiro MJS-grade tenham uma experiência mais confortável em tablets e telemóveis, sem alterar regras de negócio, fórmulas ou base de dados.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-7-produto-pro-financeiro-mobile-friendly.txt`
+
+## v12.10.6 - produto pro financeiro dashboard
+- Aplicar o padrão visual Produto PRO aprovado ao Painel Financeiro / Resumo Financeiro.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-6-produto-pro-financeiro-dashboard.txt`
+
+## v12.10.5 - produto pro centro configuracao wide
+- Alinhar o Centro de Configuração ao mesmo padrão de largura, respiração e presença visual aprovado no Dashboard V2 MJS-grade.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-5-produto-pro-centro-configuracao-wide.txt`
+
+## v12.10.4 - produto pro centro configuracao
+Base: v12.10.3 - Dashboard V2 MJS-grade aprovado.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-4-produto-pro-centro-configuracao.txt`
+
+## v12.10.3 - produto pro dashboard v2 mjs grade
+- Elevar o Painel Principal para uma aparência mais profissional, mais próxima da inspiração MJS e dos dashboards premium enviados como referência.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-3-produto-pro-dashboard-v2-mjs-grade.txt`
+
+## v12.10.2 - produto pro dashboard mjs assets
+- Modernização visual do Dashboard Principal dentro da estratégia Produto PRO.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-2-produto-pro-dashboard-mjs-assets.txt`
+
+## v12.10.1 - produto pro app shell
+- Criar a primeira base visual e estrutural do SoftGenial como produto acabado.
+Detalhe: `docs/changelog/CHANGELOG-v12-10-1-produto-pro-app-shell.txt`
+
+## v12.10.0.1 - hotfix design honestidade
+SIGE SoftGenial v12.10.0.1 - Hotfix de Design e Honestidade do Registry
+Detalhe: `docs/changelog/CHANGELOG-v12-10-0-1-hotfix-design-honestidade.txt`
+
+## v12.9.105 - saneamento legacy fechado
+Base: v12.9.104 - Saneamento Real do Centro de Configuração, validada em ambiente
+Detalhe: `docs/changelog/CHANGELOG-v12-9-105-saneamento-legacy-fechado.txt`
+
+## v12.9.104 - saneamento real centro configuracao
+- Transformar o Centro de Configuração em produto real, evitando que a escola altere campos sem efeito operacional comprovado.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-104-saneamento-real-centro-configuracao.txt`
+
+## v12.9.103 - centro configuracao unificado profissional
+Base: v12.9.102 validada em ambiente de teste.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-103-centro-configuracao-unificado-profissional.txt`
+
+## v12.9.102 - centro configuracao produtizado
+- Consolidar o Centro de Configuração como experiência de produto, sem depender de parâmetros manuais no URL para activar áreas técnicas.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-102-centro-configuracao-produtizado.txt`
+
+## v12.9.101 - centro canais whatsapp zapi
+Base: v12.9.100 - Unificação Real da Configuração Geral.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-101-centro-canais-whatsapp-zapi.txt`
+
+## v12.9.100 - unificacao real configuracao geral
+- v12.9.99 - Modo Escola Limpo + Modo Técnico SoftGenial, validada em ambiente de teste.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-100-unificacao-real-configuracao-geral.txt`
+
+## v12.9.99 - modo escola limpo tecnico
+- Construído sobre a v12.9.98 - Pacote Piloto Final validada em ambiente de teste.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-99-modo-escola-limpo-tecnico.txt`
+
+## v12.9.98 - pacote piloto final
+- v12.9.97 - Modo Produção Piloto e Bloqueio Informativo, validada em ambiente de teste.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-98-pacote-piloto-final.txt`
+
+## v12.9.97 - producao piloto bloqueio informativo
+- v12.9.96 - Manifesto de Versão Validada e Rollback Seguro, validada em ambiente de teste.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-97-producao-piloto-bloqueio-informativo.txt`
+
+## v12.9.96 - manifesto versao validada rollback seguro
+- Preparar a v12.9.95 validada em teste como base controlada para instalação piloto em escolas reais.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-96-manifesto-versao-validada-rollback-seguro.txt`
+
+## v12.9.95 - release candidate controlo anti regressao
+Base validada: v12.9.94 - Relatório Executivo de Go-live e Instalação Segura.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-95-release-candidate-controlo-anti-regressao.txt`
+
+## v12.9.94 - relatorio executivo golive instalacao segura
+Base: v12.9.93 validada em ambiente de teste.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-94-relatorio-executivo-golive-instalacao-segura.txt`
+
+## v12.9.93 - execucao controlada checklist golive
+Base: v12.9.92 validada em ambiente de teste.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-93-execucao-controlada-checklist-golive.txt`
+
+## v12.9.92 - plano correcao assistida pre producao
+- v12.9.91 - Validação Pré-Produção e Smoke Test Guiado, testada em ambiente de teste.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-92-plano-correcao-assistida-pre-producao.txt`
+
+## v12.9.91 - validacao pre producao smoke test
+- v12.9.90 - Assistente de Implantação e Checklist por Escola, validada em ambiente de teste.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-91-validacao-pre-producao-smoke-test.txt`
+
+## v12.9.90 - assistente implantacao checklist escola
+- v12.9.89 - Consolidação Visual e Mapa de Responsabilidades.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-90-assistente-implantacao-checklist-escola.txt`
+
+## v12.9.89 - consolidacao visual mapa responsabilidades
+- v12.9.88 - Normalização de Estado e Expansão Segura.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-89-consolidacao-visual-mapa-responsabilidades.txt`
+
+## v12.9.88 - normalizacao estado expansao segura
+- v12.9.87 - Sincronização Assistida e Auditoria de Configurações.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-88-normalizacao-estado-expansao-segura.txt`
+
+## v12.9.87 - sincronizacao assistida auditada
+- v12.9.86 - Fonte Canónica e Compatibilidade Segura.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-87-sincronizacao-assistida-auditada.txt`
+
+## v12.9.86 - fonte canonica compatibilidade segura
+Base: v12.9.85 - Saneamento Controlado de Configurações validado.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-86-fonte-canonica-compatibilidade-segura.txt`
+
+## v12.9.85 - saneamento controlado configuracoes
+- v12.9.84 - Centro de Configuração da Escola.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-85-saneamento-controlado-configuracoes.txt`
+
+## v12.9.84 - centro configuracao escola
+Base: v12.9.83 - Configuração PRO Foundation validado
+Detalhe: `docs/changelog/CHANGELOG-v12-9-84-centro-configuracao-escola.txt`
+
+## v12.9.83 - configuracao pro foundation
+Base: v12.9.82 - Link Principal Força Login validado.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-83-configuracao-pro-foundation.txt`
+
+## v12.9.82 - home login force
+Base: v12.9.81 validada.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-82-home-login-force.txt`
+
+## v12.9.81 - pagamentos dividas multa transporte
+Base: v12.9.78 validada recebida em anexo.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-81-pagamentos-dividas-multa-transporte.txt`
+
+## v12.9.78 - excel lancamentos financeiros
+Base: v12.9.77 validada pelo cliente.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-78-excel-lancamentos-financeiros.txt`
+
+## v12.9.77 - dashboard financeiro extracto periodos servicos
+Base: v12.9.76 - WhatsApp DB Index Hotfix
+Detalhe: `docs/changelog/CHANGELOG-v12-9-77-dashboard-financeiro-extracto-periodos-servicos.txt`
+
+## v12.9.76 - whatsapp db index hotfix
+- Corrigir o erro de base de dados: Duplicate key name 'idx_wpp_guardian'.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-76-whatsapp-db-index-hotfix.txt`
+
+## v12.9.75 - whatsapp health mode pro
+Base: v12.9.69 WhatsApp Destinatários Padrão validado.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-75-whatsapp-health-mode-pro.txt`
+
+## v12.9.69 - whatsapp destinatarios padrao
+Base: v12.9.68 - WhatsApp Operational Rules validado.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-69-whatsapp-destinatarios-padrao.txt`
+
+## v12.9.68 - whatsapp operational rules
+- Tornar o envio WhatsApp mais seguro, previsível e operacional para escolas com muitos alunos, sem alterar nenhuma regra financeira nem académica.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-68-whatsapp-operational-rules.txt`
+
+## v12.9.59 - bulk actions central mensagens
+Base: v12.9.58 saudacao-encarregado-pergunta-recibo
+Detalhe: `docs/changelog/CHANGELOG-v12-9-59-bulk-actions-central-mensagens.txt`
+
+## v12.9.58 - saudacao encarregado pergunta recibo
+Base: v12.9.57 notification-policy
+Detalhe: `docs/changelog/CHANGELOG-v12-9-58-saudacao-encarregado-pergunta-recibo.txt`
+
+## v12.9.54 - whatsapp purga fila hotfix
+Base: v12.9.53 (whatsapp-conversacional-secretaria) - não chegou a deploy.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-54-whatsapp-purga-fila-hotfix.txt`
+
+## v12.9.53 - whatsapp conversacional secretaria
+Base: v12.9.52 (hub-billing-no-duplicate-email) validada.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-53-whatsapp-conversacional-secretaria.txt`
+
+## v12.9.50 - instant remote control
+- Adiciona endpoint REST /wp-json/sige/v1/hub/instant-refresh.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-50-instant-remote-control.txt`
+
+## v12.9.49 - hub billing ui notices pro
+Base: v12.9.48 validada.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-49-hub-billing-ui-notices-pro.txt`
+
+## v12.9.47 - hub control bridge
+- Executa comandos remotos autenticados do SoftGenial Hub.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-47-hub-control-bridge.txt`
+
+## v12.9.46 - finance ui filters cobrancas fix
+Base: v12.9.45 validada.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-46-finance-ui-filters-cobrancas-fix.txt`
+
+## v12.9.45 - email engine warning version fix
+Base: v12.9.44 validada.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-45-email-engine-warning-version-fix.txt`
+
+## v12.9.44 - email templates mensalidades cobrancas
+Base: v12.9.43 validada.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-44-email-templates-mensalidades-cobrancas.txt`
+
+## v12.9.43 - email template pagamentos
+Base: v12.9.42 REBUILD validada.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-43-email-template-pagamentos.txt`
+
+## v12.9.42 - email queue templates pro
+Base: v12.9.41 SMTP Reply-To + From Name validado.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-42-email-queue-templates-pro.txt`
+
+## v12.9.41 - smtp replyto fromname
+Base: v12.9.40 SMTP Nativo Zoho validado.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-41-smtp-replyto-fromname.txt`
+
+## v12.9.40 - smtp nativo zoho
+Base: v12.9.39 - WhatsApp Guardrails Invisíveis validado.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-40-smtp-nativo-zoho.txt`
+
+## v12.9.39 - whatsapp guardrails invisiveis
+Base: v12.9.38 versionamento automático PRO
+Detalhe: `docs/changelog/CHANGELOG-v12-9-39-whatsapp-guardrails-invisiveis.txt`
+
+## v12.9.38 - versionamento pro
+- Corrige a divergência de versão que fez o WordPress mostrar 12.9.36 no ZIP v12.9.37.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-38-versionamento-pro.txt`
+
+## v12.9.36 - whatsapp throughput seguro adaptativo
+Base: v12.9.35 validada.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-36-whatsapp-throughput-seguro-adaptativo.txt`
+
+## v12.9.35 - whatsapp modo humano avancado
+- Adiciona desbloqueio inteligente automático da fila WhatsApp.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-35-whatsapp-modo-humano-avancado.txt`
+
+## v12.9.34.1 - hotfix cron nopriv token
+- Corrige processamento do endpoint admin-post sem sessão WordPress quando a chave cron é válida.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-34-1-hotfix-cron-nopriv-token.txt`
+
+## v12.9.34 - whatsapp engine cron token
+Base: v12.9.33 validada.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-34-whatsapp-engine-cron-token.txt`
+
+## v12.9.33 - whatsapp engine profissional
+Base: v12.9.32 validada.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-33-whatsapp-engine-profissional.txt`
+
+## v12.9.32 - whatsapp conversacional recibos
+Base: v12.9.31 validada.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-32-whatsapp-conversacional-recibos.txt`
+
+## v12.9.31 - whatsapp safety humanizado
+Reduzir o risco operacional de restrição do número WhatsApp através de boas práticas legítimas: menos automação, mais selecção humana, mensagens mais conversacionais, limites conservadores e respeito por opt-out.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-31-whatsapp-safety-humanizado.txt`
+
+## v12.9.30.7 - fix final icones central cobrancas
+- Identificada a origem real dos ícones persistentes: não era um ficheiro CSS externo; estavam no próprio admin/finance/financeiro-devedores-view.php.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-30-7-fix-final-icones-central-cobrancas.txt`
+
+## v12.9.30.6 - header isolado
+- Substitui o header por uma estrutura nova com classes sgcc-hero-v306.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-30-6-header-isolado.txt`
+
+## v12.9.30.5 - header sem icones decorativos
+- Removidos definitivamente os ícones decorativos do header da Central de Cobranças.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-30-5-header-sem-icones-decorativos.txt`
+
+## v12.9.30.4 - fix header icones duplicados
+- Mantidos os ícones horizontais no header da Central de Cobranças.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-30-4-fix-header-icones-duplicados.txt`
+
+## v12.9.30.3 - hotfix header horizontal
+Base: v12.9.30.2 validada.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-30-3-hotfix-header-horizontal.txt`
+
+## v12.9.30.2 - hotfix header definitivo
+- Removidos ícones decorativos soltos do header da Central de Cobranças.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-30-2-hotfix-header-definitivo.txt`
+
+## v12.9.30.1 - hotfix ui header cobrancas
+- Corrige versão interna do plugin para 12.9.30.1.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-30-1-hotfix-ui-header-cobrancas.txt`
+
+## v12.9.30 - central cobrancas ui
+Base: v12.9.29.1 hotfix validada.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-30-central-cobrancas-ui.txt`
+
+## v12.9.29.1 - hotfix selecao regua
+Base: v12.9.29 validada.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-29-1-hotfix-selecao-regua.txt`
+
+## v12.9.29 - central cobrancas regua
+Base: v12.9.28 validada.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-29-central-cobrancas-regua.txt`
+
+## v12.9.28 - central cobrancas inteligencia temporal
+Base: v12.9.27 validada pelo utilizador.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-28-central-cobrancas-inteligencia-temporal.txt`
+
+## v12.9.27 - central cobrancas inteligencia
+- v12.9.26.1 - Hotfix Selecção Central de Cobranças
+Detalhe: `docs/changelog/CHANGELOG-v12-9-27-central-cobrancas-inteligencia.txt`
+
+## v12.9.26.1 - hotfix selecao cobrancas
+Base: v12.9.26 validada.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-26-1-hotfix-selecao-cobrancas.txt`
+
+## v12.9.26 - central cobrancas acao inteligente
+Base: v12.9.25 validada pelo utilizador.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-26-central-cobrancas-acao-inteligente.txt`
+
+## v12.9.25 - central cobrancas prioridade
+Base: v12.9.24-extractos-periodo-ciclo validado.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-25-central-cobrancas-prioridade.txt`
+
+## v12.9.24 - extractos periodo ciclo
+Base validada: v12.9.23-filtros-pagamentos
+Detalhe: `docs/changelog/CHANGELOG-v12-9-24-extractos-periodo-ciclo.txt`
+
+## v12.9.23 - filtros pagamentos
+- v12.9.22 alunos-saldo-status validado pelo utilizador.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-23-filtros-pagamentos.txt`
+
+## v12.9.22 - alunos saldo status
+- Adiciona badge financeiro no card/lista de alunos: Regular, Em dívida, Parcial, Crédito ou Em plano.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-22-alunos-saldo-status.txt`
+
+## v12.9.21 - extracto excel classes ciclos
+Alteração cirúrgica sobre o ficheiro:
+Detalhe: `docs/changelog/CHANGELOG-v12-9-21-extracto-excel-classes-ciclos.txt`
+
+## v12.9.18 - whatsapp guardian
+Reduzir drasticamente o risco de restrições temporárias/banimento em números WhatsApp usados via Z-API para cobranças, confirmação de pagamentos, recibos e notificações financeiras.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-18-whatsapp-guardian.txt`
+
+## v12.9.13 - extracto excel metodos
+Base: v12.9.12 validada pelo cliente.
+Detalhe: `docs/changelog/CHANGELOG-v12-9-13-extracto-excel-metodos.txt`

@@ -1,0 +1,44 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.155
+Data: 2026-06-14
+Ambito: CORRECCAO DE REGRESSAO - tokens fora de contexto
+
+SINTOMA
+-------
+Na pagina de login, o logotipo saiu do centro (deslocado para a esquerda).
+
+CAUSA RAIZ
+----------
+A tokenizacao em massa (v150) substituiu literais por var(--token) tambem em
+saidas que NAO carregam assets/sige-tokens.css. Nesses contextos as variaveis
+ficam indefinidas. Uma custom property indefinida DENTRO de um shorthand invalida
+a declaracao inteira (regra do CSS), por isso:
+    #login h1 a{ ... margin:0 auto var(--space-3) ... }
+deixou de aplicar o "auto" e o logotipo perdeu a centragem horizontal. O mesmo
+afectou raios, paddings e tamanhos no login, no portal do aluno e num documento.
+
+A passagem da v150 ja excluia blocos de impressao com DOCTYPE/head/body, mas o
+<style> do login e injectado via login_head (sem esses marcadores) e o portal e
+um shortcode front-end, por isso escaparam a deteccao.
+
+FICHEIROS CORRIGIDOS (revertidos para literais, identicos ao v148)
+------------------------------------------------------------------
+    includes/login-page.php            13 tokens revertidos
+    includes/portal-logic.php          37 tokens revertidos
+    includes/passagem-docs-handler.php  1 token  revertido
+Total: 51. Os tres ficam byte-a-byte iguais ao original v148.
+
+PREVENCAO (nunca regredir)
+--------------------------
+  - Novo gate tools/check-tokens-fora-de-contexto.php (15o do corredor): falha se
+    qualquer contexto sem tokens voltar a usar var(--space/fs/radius/shadow/
+    duration). Testado: apanha a reintroducao.
+  - Os tres ficheiros ficam isentos em check-design-tokens.php e
+    check-consistencia-visual.php (e no controlador): literais sao a forma
+    correcta la, nao contam como divida.
+
+VERIFICACAO
+-----------
+  - login-page / portal-logic / passagem-docs: 0 tokens de dimensao restantes.
+  - Popups de impressao das views-admin: 0 fugas de token (verificado).
+  - php -l limpo; corredor 15/15 verde.
+  - Baselines: design-tokens 2646->2456; consistencia-visual 7841->7554.

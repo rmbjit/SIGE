@@ -1,0 +1,7 @@
+SIGE SoftGenial v12.9.22 - Alunos: Saldo e Status Financeiro Operacional
+
+- Adiciona badge financeiro no card/lista de alunos: Regular, Em dívida, Parcial, Crédito ou Em plano.
+- Badge abre directamente a página de pagamentos do aluno.
+- Usa a fórmula canónica sige_fin_saldo_sql() apenas para leitura; não altera fórmulas nem escreve na BD.
+- Query agregada por página para evitar N+1 e preservar performance.
+- Zero alterações destrutivas ao financeiro, pagamentos, lançamentos ou cálculos.

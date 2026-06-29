@@ -1,0 +1,23 @@
+SIGE SoftGenial v12.11.9.32 - Lançamento com controlo de WhatsApp e E-mail
+Build: sige-12.11.9.32-lancamento-notificacoes-opt-in-seguro
+Data: 2026-06-01
+Canal: test
+
+Base: v12.11.9.31 - POS por banco.
+
+Alterações principais:
+- O lançamento de mensalidades passa a ter escolha explícita para enviar ou não WhatsApp.
+- O lançamento de mensalidades passa a ter escolha explícita para enviar ou não E-mail.
+- Mensagens ficam desligadas por padrão.
+- O operador vê no modal de confirmação quais canais serão usados.
+- O sucesso do lançamento mostra estatísticas de WhatsApp e E-mail.
+- WhatsApp em lançamento anual é desligado automaticamente por segurança.
+- WhatsApp em lote grande é bloqueado por limite conservador, configurável por filtro.
+- Envio WhatsApp continua a entrar na fila e a respeitar espaçamento/guardrails.
+- A política central de notificações continua a bloquear faturas por padrão, abrindo apenas com opt-in validado e nonce.
+
+Não alterado:
+- Cálculos financeiros.
+- Valores, multas, descontos e mensalidades.
+- Recibos, pagamentos e POS por banco.
+- Notas, pautas, boletins e regras académicas.

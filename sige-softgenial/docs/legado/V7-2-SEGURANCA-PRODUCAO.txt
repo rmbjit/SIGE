@@ -1,0 +1,15 @@
+SIGE SoftGenial 12.9.9.3 - V7.2 Segurança de Produção
+
+Base: 12.9.9.2 V7.1 Performance Financeiro.
+
+Inclui:
+- Nova camada includes/security-hardening.php com helpers reutilizáveis de permissão, auditoria e rate limit opcional.
+- Fortalecimento de impressão financeira (recibos, recibo de massa, facturas, extractos): permissões explícitas, limite seguro de IDs e headers anti-indexação/sniffing.
+- Protecção adicional para PDF/Excel de pautas, boletim individual, MAP, Acta e documentos finais de passagem, respeitando permissões SIGE e capacidades legadas.
+- Rate limit foi apenas preparado como helper; NÃO foi aplicado a lançamentos financeiros em massa.
+
+Não altera:
+- Regras financeiras.
+- Regras académicas.
+- Layout/UI.
+- Fluxo de lançamentos de mensalidades em massa.

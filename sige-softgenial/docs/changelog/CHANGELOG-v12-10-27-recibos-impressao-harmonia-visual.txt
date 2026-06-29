@@ -1,0 +1,33 @@
+SIGE SoftGenial v12.10.27 - Recibos e Impressão: Harmonia Visual
+
+Objectivo
+- Harmonizar a experiência de recibos e documentos financeiros ao padrão visual aprovado do Painel Principal.
+- Melhorar a leitura e impressão dos recibos sem mexer nos valores, fórmulas ou regras financeiras.
+
+Alterações realizadas
+1. Recibos de pagamento
+   - Template visual dos recibos redesenhado com acabamento mais profissional.
+   - Mantido o formato A4 horizontal com ORIGINAL e CÓPIA no mesmo papel.
+   - Botões superiores modernizados: Imprimir / Guardar PDF e Fechar.
+   - Melhor contraste, cantos arredondados, áreas de identificação mais limpas e rodapé mais elegante.
+   - Texto visível mais humano: Validação do documento, referência do documento e assinatura/carimbo.
+
+2. Recibo unificado
+   - Antes de abrir o recibo consolidado, o utilizador vê um pop-up real de confirmação.
+   - Quando não há pagamentos seleccionados, o aviso também aparece em pop-up real.
+   - Abertura do recibo em janela própria para impressão ou PDF.
+
+3. Extracto de dívida e extracto financeiro
+   - Template documental reutilizável harmonizado ao visual Produto PRO.
+   - Botões de impressão/PDF e Fechar modernizados.
+   - Tabelas e blocos de identificação com melhor leitura.
+
+4. Ícones
+   - Adicionado ícone SVG local de recibo em assets/icons/sg/receipt.svg.
+
+Garantias
+- Sem alteração de fórmulas.
+- Sem alteração de mensalidades, multas, descontos, pagamentos, cobranças, recibos, estornos ou base de dados.
+- Sem alteração de notas, pautas, DEC, boletins ou actas.
+- Sem termos técnicos internos visíveis ao utilizador final.
+- Mantido o padrão visual aprovado do Painel Principal como referência.

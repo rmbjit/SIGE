@@ -1,0 +1,6 @@
+v12.9.30.6 - Header isolado da Central de Cobranças
+
+- Substitui o header por uma estrutura nova com classes sgcc-hero-v306.
+- Remove dependência das classes antigas que estavam a herdar/renderizar ícones decorativos verticais.
+- Mantém apenas título, subtítulo e badges operacionais.
+- Não altera lógica financeira, académica, pagamentos, lançamentos, saldos ou WhatsApp.

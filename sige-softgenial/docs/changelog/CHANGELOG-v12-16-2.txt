@@ -1,0 +1,28 @@
+# Changelog - v12.16.2 Baseline Preservation & Operational Readiness
+
+## Tipo de release
+Release de preservacao, readiness operacional e QA. Nao e release funcional.
+
+## Alteracoes
+- Versao actualizada para 12.16.2.
+- BUILD.json actualizado com origem v12.16.1 aprovada.
+- Adicionada matriz de regressao v12.16.2.
+- Adicionado checklist pos-instalacao por perfil real.
+- Adicionado Phase Charter v12.16.2.
+- Adicionada Definition of Done v12.16.2.
+- Adicionado Risk Register v12.16.2.
+- Adicionado plano de rollback v12.16.2.
+- Adicionados gates v12.16.2 ao run-gates.
+
+## Nao alterado
+- Financeiro.
+- Academico.
+- Permissoes reais.
+- Tenant isolation.
+- Schema.
+- Dados historicos.
+- Alunos lista.
+- Security kernel rules.
+
+## Checklist obrigatorio
+Executar lint PHP, release gate, run-gates, zip integrity e validacao humana em staging.

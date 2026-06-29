@@ -1,0 +1,49 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.153
+Data: 2026-06-14
+Ambito: Ferramentas / Arnes de verificacao visual (dev-only)
+
+PORQUE
+------
+A maior fatia da divida de consistencia que falta sao ~14 mil !important,
+"cobertores defensivos" anti wp-admin. Remove-los por analise estatica e aposta:
+dependem de estilos do wp-admin que so existem com o WordPress a correr. Este
+arnes da a unica garantia honesta - o pixel antes e depois.
+
+COMPONENTES (tools/arnes-visual/)
+---------------------------------
+  arnes.js            Orquestrador Playwright.
+                      - login no wp-admin; sessao reutilizada.
+                      - captura full-page de cada modulo x viewport.
+                      - congela animacoes/transicoes e mascara regioes volateis
+                        (relogio, contadores) para diffs estaveis.
+                      - diff com pixelmatch: racio de pixels + imagem de diferenca.
+                      - comandos: capture, diff, verify-strip, list.
+  strip-important.php Codemod: remove !important dos blocos <style> de VIEW,
+                      preservando blocos de impressao standalone (window.print).
+                      Suporta --scope=SELECTOR, backup .important-bak e --restore.
+  config.example.json 14 modulos (slug ?page=sige-app&view=...) e 4 viewports.
+  package.json        playwright, pngjs, pixelmatch (versoes fixas).
+  README.md           Instalacao, fluxo, afinacao, seguranca.
+
+COMANDO PRINCIPAL
+-----------------
+  node arnes.js verify-strip <modulo> [--scope=SEL]
+    1) captura ANTES  2) remove !important  3) captura DEPOIS  4) compara.
+    VERDE (render identico) -> fica; backup guardado.
+    VERMELHO -> reverte automaticamente; deixa imagens de diferenca.
+
+VALIDACAO FEITA
+---------------
+  - Motor de diff auto-testado: imagens iguais -> racio 0 (VERDE);
+    imagens diferentes -> racio > 0 (VERMELHO).
+  - Codemod testado num modulo real: 613 !important -> 0 no view, dois blocos de
+    impressao byte-a-byte intactos, php -l limpo, --restore funcional.
+  - Dependencias npm resolvidas (pngjs, pixelmatch importam; playwright presente).
+
+SEGURANCA E AMBITO
+------------------
+  - Dev-only: NAO entra no run-gates.php nem corre em producao.
+  - verify-strip altera ficheiros do plugin no servidor (com backup) -> usar em
+    STAGING (ex.: demo). Credenciais por SIGE_ADMIN_USER / SIGE_ADMIN_PASS.
+  - screens/, node_modules/, arnes.config.json e *.important-bak no .gitignore.
+  - Sem qualquer alteracao funcional do plugin nesta versao.

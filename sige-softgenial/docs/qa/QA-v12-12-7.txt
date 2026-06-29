@@ -1,0 +1,10 @@
+v12.12.7 - Critical Actions Lockdown
+
+Validação executada:
+- PHP lint integral: 347 ficheiros PHP, 0 falhas.
+- php tools/run-gates.php: 38/38 gates verdes.
+- Smoke específico Critical Actions Lockdown: 89 verificações OK.
+- Security Kernel rules: 192 regras, enforce=29, delegated=17, observe=146.
+- Zero acções críticas em observe.
+
+Decisão técnica automatizada: aprovado para validação em staging.

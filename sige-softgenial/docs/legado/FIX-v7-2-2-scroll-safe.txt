@@ -1,0 +1,12 @@
+SIGE SoftGenial 12.9.9.4 - V7.2.2 Scroll Safe UI Restored
+
+Base usada:
+- sige-softgenial-12-9-9-3-v7-2-seguranca-producao.zip
+
+Correção:
+- Reverte a abordagem problemática do scroll global.
+- Integra persistência de scroll via admin_footer, apenas dentro de page=sige-app.
+- Só restaura posição quando a view é a mesma.
+- A restauração espera 250ms para CSS/layout do SIGE estabilizar.
+- Não inclui ficheiro .js separado, evitando falso positivo de antivírus.
+- Não altera regras financeiras, académicas, permissões, PDFs ou WhatsApp.

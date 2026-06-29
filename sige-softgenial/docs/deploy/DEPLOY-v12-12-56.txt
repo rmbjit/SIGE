@@ -1,0 +1,47 @@
+DEPLOY - SIGE SoftGenial v12.12.56
+Fase 4 (CSP e front-end seguro) - incremento 2
+Nonce CSP nos redireccionamentos echo
+Data: 2026-06-23
+
+NATUREZA DA ENTREGA
+- Pacote instalavel completo (pasta sige-softgenial na raiz do ZIP).
+- Continuacao da preparacao para o CSP. Aplica o nonce por pedido aos
+  redireccionamentos construidos por echo nas vistas autenticadas. Inocuo
+  enquanto o cabecalho CSP nao for activado: os navegadores ignoram o nonce sem
+  politica CSP. Nao altera o comportamento dos redireccionamentos.
+- Nao toca em regras de calculo financeiro nem no ficheiro canonico finance-core.
+
+PRE-REQUISITOS
+- Sem alteracao de base de dados. Sem migracao. Sem alteracao de configuracao.
+- Sem novas dependencias externas (mantem-se 9 hosts).
+
+PASSOS
+1. Fazer copia de seguranca do plugin actual (pasta wp-content/plugins/sige-softgenial).
+2. Em alternativa recomendada, desactivar o plugin antes de substituir os ficheiros.
+3. Substituir a pasta sige-softgenial pela desta entrega (pacote completo).
+4. Reactivar o plugin, se tiver sido desactivado.
+5. Confirmar a versao 12.12.56 no cabecalho do plugin.
+
+VERIFICACAO POS-DEPLOY
+- Exercitar os redireccionamentos abrangidos e confirmar que funcionam como
+  antes:
+  - dashboard: o reencaminhamento para minhas turmas e para o diario do jardim.
+  - disciplinas: a recarga e o reencaminhamento apos accoes.
+  - encerramento de periodos: o reencaminhamento apos gravar.
+  - configuracoes financeiras: o reencaminhamento apos gravar.
+  - notas: o reencaminhamento apos gravar.
+  - transporte: o reencaminhamento apos accoes.
+- No HTML gerado destes reencaminhamentos, confirmar que a tag script passou a
+  incluir um atributo nonce com um valor base64. O comportamento mantem-se,
+  porque ainda nao ha cabecalho CSP a impor o nonce.
+
+NOTAS
+- Esta entrega nao activa nenhum cabecalho CSP. O cabecalho (primeiro em
+  Report-Only e depois enforce) sera um incremento posterior.
+- As paginas autonomas (modelos PDF, motor de documentos, camara da portaria)
+  serao tratadas a seguir, com cabecalho CSP proprio por pagina.
+- A catraca de blocos script inline desceu de 25 para 14 e impede regressao em
+  entregas futuras.
+
+REVERSAO
+- Repor a pasta a partir da copia de seguranca. Sem passos de base de dados.

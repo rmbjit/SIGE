@@ -1,0 +1,110 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.47
+Data: 2026-06-23
+Titulo: Fase 4 incr 2 vaga 2 - Estilos academicos para utilitarios
+Tipo: Incremento de funcionalidade (vaga de migracao de inline)
+Base: 12.12.46
+Canal: validated-feature
+
+================================================================
+CONTEXTO
+================================================================
+Segunda vaga do incremento 2 da Fase 4 (CSP e front-end seguro). O incremento 2
+migra o inline por vagas, area a area, sob uma catraca que garante que o inline so
+desce. A vaga 1 (v12.12.46) tratou os onclick da area financeira com o despachante
+data-sige-act. Esta vaga trata os estilos inline da area academica. Nao muda o
+comportamento visual.
+
+================================================================
+UTILITARIOS DE ESTILO
+================================================================
+NOVO  assets/sige-utilities.css
+      - Doze utilitarios, cada um com !important para replicar a especificidade do
+        estilo inline (1000) e evitar regressao de cascata:
+        .sige-u-tal / .sige-u-tac / .sige-u-tar   (text-align left/center/right)
+        .sige-u-fw7 / .sige-u-fw6 / .sige-u-fw5    (font-weight 700/600/500)
+        .sige-u-m0                                  (margin: 0)
+        .sige-u-shrink-0                            (flex-shrink: 0)
+        .sige-u-flex-1                              (flex: 1)
+        .sige-u-nowrap                              (white-space: nowrap)
+        .sige-u-oxa                                 (overflow-x: auto)
+        .sige-u-wfull                               (width: 100%)
+      - Sem utilitario de display: display none/flex pode ser alternado por
+        JavaScript, pelo que fica de fora por seguranca.
+
+EDIT  includes/admin-shell.php
+      - wp_enqueue_style do sige-utilities, dependente do sige-design-system, nas
+        paginas do SIGE.
+
+================================================================
+MIGRACAO DAS VISTAS ACADEMICAS (49 trocas em 10 ficheiros)
+================================================================
+EDIT  admin/academic/abertura-view.php                 (10 trocas)
+EDIT  admin/academic/acta-view.php                      (1)
+EDIT  admin/academic/alunos_lista.php                   (1)
+EDIT  admin/academic/aprovar_notas-view.php             (6)
+EDIT  admin/academic/auditoria_notas-view.php           (1)
+EDIT  admin/academic/boletim-view.php                   (2)
+EDIT  admin/academic/encerramento-view.php              (12)
+EDIT  admin/academic/estatisticas-demograficas-view.php (9)
+EDIT  admin/academic/matriz-view.php                    (2)
+EDIT  admin/academic/turmas-view.php                    (5)
+      - So foram migrados atributos style 100 por cento compostos por declaracoes do
+        mapa seguro, estaticas, sem PHP interpolado e sem class ja existente no
+        elemento. Exemplos:
+          <th style="text-align:center;">            -> <th class="sige-u-tac">
+          <td style="text-align:center;font-weight:700;"> -> <td class="sige-u-tac sige-u-fw7">
+      - Os casos com class existente e os display ficam para vagas futuras. Outros
+        atributos do elemento (colspan, method, etc.) sao preservados.
+
+================================================================
+CATRACA E MECANISMO
+================================================================
+EDIT  tools/check-inline-frontend.php
+      - SIGE_INLINE_STYLE_MAX de 2191 para 2142 (trava a reducao desta vaga).
+        onclick mantem-se em 250 e blocos script em 81.
+EDIT  tools/smoke-inline-frontend.php
+      - Etiqueta de saida normalizada para SMOKE INLINE FRONT-END.
+EDIT  tools/run-gates.php
+      - smoke-inline-frontend registado no corredor (de 98 para 99). O gate
+        duplicado foi removido numa etapa anterior; existe um unico gate de catraca.
+EDIT  tools/diag-responsivo.php
+      - Passa a semear as classes utilitarias de overflow do sige-utilities.css.
+        Assim, uma tabela embrulhada por <div class="sige-u-oxa"> conta como
+        protegida, tal como o antigo style="overflow-x:auto" inline. Sem este ajuste,
+        a migracao da guarda de scroll de boletim-view.php para utilitario seria lida
+        como regressao (tabela a estourar). A deteccao de tabelas genuinamente
+        desprotegidas mantem-se (confirmado por teste de injeccao).
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- Nao toca em regras de calculo nem em ficheiros canonicos.
+- Superficie de accao: 199 itens (enforce 33). Vistas: 60. Opcoes: 132.
+- Dependencias externas: 9 (inalteradas). Sem alteracao de esquema.
+- Calculo academico e financeiro byte-identico. Aspecto visual identico.
+- Versao sincronizada nas cinco fontes. Zero travessoes. Ficheiros de codigo em LF.
+
+================================================================
+VALIDACAO
+================================================================
+- php tools/check-inline-frontend.php  -> OK (style 2142 de 2142, sem folga)
+- php tools/smoke-inline-frontend.php    -> OK (18 verificacoes)
+- php tools/check-governance-docs.php     -> OK (21 documentos v12.12.47)
+- php tools/smoke-release-gate.php          -> verde a partir de pasta limpa
+- gates de pagamentos, cofre, Fase 1 e Fase 4 incr 1 -> sem regressao
+- extractor de superficie / opcoes / hosts  -> 199 / 132 / 9
+- php -l nas 10 vistas + admin-shell + gate/smoke -> limpo; node -c sige-ui.js -> limpo
+
+================================================================
+INSTALACAO E REVERSAO
+================================================================
+- Instalacao: backup, desactivar, substituir a pasta sige-softgenial, reactivar.
+- Reversao: reinstalar a versao anterior. Sem alteracao de esquema; reversao directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Vagas seguintes do incremento 2: mais areas de estilo e de onclick (recursos
+  humanos, jardim, sistema, includes), depois os blocos script inline, e por fim o
+  CSP em enforcement (nonce por pedido e flip do cabecalho).

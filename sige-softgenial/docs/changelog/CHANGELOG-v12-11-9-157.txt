@@ -1,0 +1,35 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.157
+Data: 2026-06-14
+Ambito: Hardening - guarda de tokens fora de contexto (auto-descoberta)
+
+VARREDURA DE SEGURANCA
+----------------------
+Procurados em todo o plugin os contextos que nao carregam sige-tokens.css
+(login_head, add_shortcode, email HTML, document.write com DOCTYPE) que usem
+tokens de dimensao. Resultado: alem das 3 regressoes ja corrigidas, NENHUMA.
+Os ficheiros que enviam email (admin/academic/notas-view.php,
+includes/aluno-accounts.php, includes/hub/class-sige-hub-billing.php) tem os
+tokens dentro do <style> admin (que carrega a escala) e ZERO no corpo do email.
+
+GUARDA AGORA AUTOMATICO
+-----------------------
+check-tokens-fora-de-contexto.php deixou de depender de uma lista fixa. Descobre
+os contextos sem tokens pelos marcadores estruturais:
+  - login_head / login_enqueue_scripts   (pagina de wp-login)
+  - add_shortcode(...)                    (saida front-end, ex. portal)
+  - document.write(`...<!DOCTYPE...`)      (popup de impressao standalone)
+mais uma semente para documentos echo com :root proprio (passagem-docs).
+Proibe var(--space/fs/radius/shadow/duration) em qualquer um deles.
+
+TESTES
+------
+  - reintroducao de token no login            -> apanhado (exit 1)
+  - ficheiro NOVO de shortcode com token       -> apanhado (sem estar em lista)
+  - token em popup document.write com DOCTYPE   -> apanhado
+  - codigo limpo                                -> verde (3 contextos vigiados)
+
+EFEITO
+------
+Qualquer nova pagina de login, shortcode front-end ou popup standalone que algum
+dia volte a usar tokens de dimensao falha o corredor automaticamente. O principio
+"so tokens onde a escala existe" passa a ser estrutural, nao um remendo.

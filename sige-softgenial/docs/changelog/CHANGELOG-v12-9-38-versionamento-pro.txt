@@ -1,0 +1,10 @@
+SIGE SoftGenial v12.9.38 - Versionamento Automático PRO
+======================================================
+
+- Corrige a divergência de versão que fez o WordPress mostrar 12.9.36 no ZIP v12.9.37.
+- Header do plugin, SIGE_VERSION e BUILD.json alinhados em 12.9.38.
+- Adiciona includes/versioning.php para diagnosticar inconsistências de versionamento.
+- Adiciona ferramenta CLI tools/build-release.php para futuras builds.
+- Estado do Sistema passa a mostrar Build e integridade do versionamento.
+- Mantém motor WhatsApp seguro, throughput adaptativo e templates inteligentes.
+- Não altera fórmulas financeiras nem académicas.

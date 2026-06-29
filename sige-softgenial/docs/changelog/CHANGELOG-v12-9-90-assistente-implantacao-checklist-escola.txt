@@ -1,0 +1,57 @@
+SIGE SoftGenial v12.9.90 - Assistente de Implantação e Checklist por Escola
+
+Base validada:
+- v12.9.89 - Consolidação Visual e Mapa de Responsabilidades.
+
+Objectivo:
+- Criar uma visão prática de implantação por escola, especialmente útil para validar o ambiente de teste antes de instalar em escolas reais.
+- Manter o princípio de zero regressão, sem alterar lógica operacional.
+
+Alterações principais:
+1. Nova camada apenas leitura:
+   - includes/settings/class-sige-settings-onboarding.php
+
+2. Novo separador no Centro de Configuração:
+   - "Implantação da escola".
+
+3. Checklist por fases:
+   - Identidade institucional.
+   - Localização e contactos.
+   - Marca e documentos.
+   - Ano lectivo e estrutura escolar.
+   - Financeiro protegido.
+   - Comunicação operacional.
+   - Segurança e acessos.
+   - Pronto para operação.
+
+4. Visão executiva:
+   - Maturidade geral.
+   - Itens obrigatórios.
+   - Itens críticos pendentes.
+   - Estado de prontidão para produção.
+
+5. Política de passagem para produção:
+   - Validar no ambiente de teste.
+   - Fazer smoke test operacional.
+   - Rever itens críticos.
+   - Congelar alterações sensíveis.
+   - Promover para produção apenas a versão validada.
+
+Garantias anti-regressão:
+- Não grava configurações.
+- Não remove campos.
+- Não migra valores.
+- Não sincroniza automaticamente.
+- Não altera financeiro, académico, WhatsApp, SMTP, Hub/licença, permissões, pautas, boletins, recibos ou schema.
+- Mantém segredos mascarados e áreas críticas protegidas.
+
+Versionamento:
+- Header do plugin: 12.9.90.
+- SIGE_VERSION: 12.9.90.
+- BUILD.json: 12.9.90.
+
+Teste recomendado:
+1. Instalar sobre a v12.9.89 validada no ambiente de teste.
+2. Aceder a Sistema Técnico → Centro de Configuração → Implantação da escola.
+3. Confirmar maturidade, fases, itens críticos e política de passagem para produção.
+4. Testar páginas principais e confirmar ausência de regressão operacional.

@@ -1,0 +1,24 @@
+DEPLOY - SIGE SoftGenial v12.12.20
+Fase 7 incremento 1: relatorio de divergencias de reconciliacao (so leitura)
+Base: v12.12.19
+
+O QUE MUDA
+- Novo ecra so de leitura "Reconciliacao e Divergencias" no menu financeiro (Tesouraria), por baixo de "Pagamentos Moveis". Acesso: financeiro, Direccao, Secretaria Geral, administrador.
+- Mostra, por escola, tres classes de divergencia (recebido por aplicar, divergencia de montante, pagamento movel sem transacao de gateway) e os totais.
+- So leitura: nao altera dados nem fluxos, nao tem POST, nao cria endpoint novo.
+
+PASSOS (Hostinger File Manager, sem SSH)
+1. Salvaguardar a pasta actual do plugin (wp-content/plugins/sige-softgenial) por precaucao.
+2. Substituir a pasta sige-softgenial/ pela do ZIP v12.12.20 (instalacao completa).
+3. Confirmar versao em Plugins: deve ler 12.12.20.
+4. Abrir o menu financeiro e confirmar a nova entrada "Reconciliacao".
+
+NOTAS
+- Sem migracao de base de dados nova (usa as tabelas existentes sige_mpesa_transacoes e sige_fin_pagamentos). SCHEMA_VERSION inalterado.
+- Idempotencia do e-Mola confirmada (pre-verificacao por referencia + chave unica), sem alteracao.
+- Manifesto de accoes mantem-se em 196; regras do Kernel inalteradas.
+- Sem alteracao das regras de calculo financeiro (md5 bloqueados intactos).
+- Se a escola ainda nao tiver pagamentos moveis, o ecra indica-o e fica vazio (comportamento normal).
+
+REVERSAO
+- Repor a pasta salvaguardada do plugin. Nao ha migracao a desfazer.

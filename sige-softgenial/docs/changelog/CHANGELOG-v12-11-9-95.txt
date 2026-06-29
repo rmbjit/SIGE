@@ -1,0 +1,50 @@
+SIGE SoftGenial v12.11.9.95
+============================
+
+Sprint UX-2 - financeiro-pagamentos conforme (toast, botoes do kit, escudo anti duplo-clique) e auditor v2 sem falsos positivos SQL
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+DETALHE COMPLETO DO SPRINT UX-2
+===============================
+
+UX - MÓDULO 2: FINANCEIRO-PAGAMENTOS (score v2: 41,2 -> 28,9)
+Âmbito cirúrgico e deliberado: a INTERFACE muda, as REGRAS FINANCEIRAS
+não se tocam. Todas as alterações vivem na view; os dois caminhos de
+registo continuam a passar por sige_fin_registar_pagamento (cadeado
+por invariante novo).
+- O único alert() nativo (motivo do desconto especial) virou
+  sigeUi.toast 'aviso' com foco no campo e reposição defensiva do
+  botão de confirmação (se o operador esvaziar o motivo com o modal
+  aberto, nada fica preso em "A processar...").
+- ESCUDO ANTI DUPLO-CLIQUE no botão "Sim, confirmar pagamento": ao
+  primeiro clique o botão desactiva e entra em estado de carregamento;
+  cliques repetidos no momento mais sensível do sistema deixam de
+  poder gerar dupla submissão.
+- 4 botões sem classe (Seleccionar Tudo / Limpar, dívidas e família)
+  entram na hierarquia do kit (sg-btn sg-btn-sec sg-btn-sm); a
+  variante da família preserva a cor violeta de contexto.
+- O que NÃO mudou, de propósito: o modal de confirmação de pagamento
+  existente (já era bom), os 289 estilos inline de layout (congelados
+  até à consolidação CSS, regra 8 do cânone) e qualquer linha de
+  lógica financeira.
+
+UX - INSTRUMENTO: AUDITOR v2 (HONESTIDADE DE MEDIÇÃO)
+- Descoberta do recon: as 14 ocorrências "AO90" deste ecrã eram TODAS
+  falsos positivos (ativo=1 é coluna de schema; 'activa','ativa' é
+  tolerância deliberada de dados; o resto eram identificadores).
+- O auditor passou a medir AO90 apenas em contexto visível ao
+  utilizador: linhas com SQL/$wpdb/IN(...) excluídas, identificadores
+  ignorados. Recalibração do sistema: 881,2 -> 608,2 -> 595,9 (59+
+  falsos positivos removidos). Correcção de instrumento NÃO é
+  progresso e está reportada em separado no PAINEL-UX.
+
+QUALIDADE - GATES
+- tools/smoke-regression-pack.php: 68 -> 75 invariantes. Novos:
+  pagamentos sem diálogos nativos, função canónica presente nos 2
+  caminhos, zero INSERT financeiro directo na view, escudo anti
+  duplo-clique presente, zero botões sem classe, auditor v2 marcado.

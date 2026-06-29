@@ -1,0 +1,25 @@
+SIGE SoftGenial v12.10.73 - DEC: Estatística por Género Correcta
+
+Problema identificado
+- A estatística do DEC interpretava o valor "M" do campo género como Mulheres.
+- Em bases onde "M" significa Masculino, um aluno homem avaliado era contado na secção Mulheres.
+- O caso visível no teste: Aibo Bacar estava avaliado, mas o Nº de avaliados aparecia em Mulheres.
+
+Correção aplicada
+- Criada normalização segura do género para o contexto do DEC:
+  - M, Masculino, Homem, H → Homens (H)
+  - F, Feminino, Mulher → Mulheres (M)
+- A estatística por género passou a usar esta normalização antes de preencher Homens/Mulheres.
+- A coluna G da tabela do DEC passou a apresentar a sigla normalizada do DEC: H para Homens e M para Mulheres.
+- Valores de género desconhecidos não são forçados para Homens; entram apenas no Total HM quando houver nota.
+- Exportação Excel também usa a sigla normalizada.
+
+Melhoria visual solicitada
+- Secção Homens recebeu cor própria.
+- Secção Mulheres recebeu cor própria.
+- Secção Total (HM) mantém destaque separado.
+
+Garantias
+- Sem alteração nas fórmulas de AC, ACP, Média, AT ou MT.
+- Sem alteração nas queries principais, permissões, impressão popup ou exportação Excel.
+- Sem alteração em Pautas, Aproveitamento, Pauta Final, Boletins, pagamentos ou base de dados.

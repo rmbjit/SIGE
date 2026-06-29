@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.10.46 - Aproveitamento e Fonte Global
+
+Objectivo
+- Ajustar a hierarquia visual do módulo Aproveitamento/Boletim conforme o padrão aprovado.
+- Adicionar uma definição segura de Fonte do sistema em Aparência da escola.
+
+Alterações
+- O hero do view=boletim passa a apresentar: Aproveitamento, Aproveitamento do Aluno e descrição em sequência correcta.
+- Removida a fonte local divergente do módulo de boletim/aproveitamento.
+- Adicionada opção Fonte do sistema em Centro de Configuração > Aparência da escola.
+- A fonte escolhida é aplicada globalmente ao App Shell, menu, módulos, formulários, tabelas, botões e pop-ups.
+- A pré-visualização de Aparência reflecte também a fonte escolhida.
+- Mantidas cores personalizadas da escola e protecções de contraste.
+
+Garantias
+- Sem alteração de fórmulas.
+- Sem alteração de notas, pautas, DEC, boletins, mensalidades, pagamentos, multas, descontos, recibos, estornos ou base de dados.
+- Sem termos técnicos internos visíveis ao utilizador final.

@@ -1,0 +1,75 @@
+SIGE SoftGenial v12.11.9.87 - Financeiro Extractos PRO UX Hardening
+Data: 2026-06-10
+Build ID: sige-12.11.9.87-financeiro-extratos-pro-ux-hardening
+
+Resumo
+------
+Build incremental da Fase 1 PRO sobre a v12.11.9.86. A intervenção melhora a experiência operacional do módulo Financeiro > Extractos/Caixa com foco em mobile, tablet e laptop, mantendo intactas as regras financeiras, cálculos, recibos, estornos, fecho/reabertura de caixa e exportação existente.
+
+Melhorias aplicadas
+-------------------
+1. Presets rápidos de período
+   - Adicionados atalhos visuais para Hoje, Ontem, Este mês, Mês anterior e Este ano.
+   - Os atalhos respeitam o centro, o modo actual e a densidade visual seleccionada.
+
+2. Densidade visual personalizável
+   - Adicionado selector Compacta / Normal / Confortável.
+   - A preferência é guardada por utilizador através de user meta.
+   - A densidade afecta cards, KPIs, tabela e filtros sem alterar dados ou regras.
+
+3. Barra inferior de acções para mobile
+   - Adicionada navegação fixa em telemóveis para acções frequentes: Pagar, Filtros, Excel, Recibo e contexto actual.
+   - A barra respeita disponibilidade de dados e desactiva acções não aplicáveis.
+
+4. Checklist operacional para caixa
+   - Adicionada checklist visual antes de fechar/reabrir caixa.
+   - O objectivo é reduzir erro humano em acções críticas sem mudar a lógica de caixa.
+
+5. Prevenção de duplo envio
+   - Formulários críticos receberam bloqueio leve contra duplo submit.
+   - Botões mostram feedback “A processar…” durante o envio.
+   - Confirmação de fecho/reabertura agora evita submissão repetida.
+
+6. Acessibilidade e modais
+   - Modais receberam role="dialog", aria-modal, aria-labelledby e aria-describedby onde aplicável.
+   - Adicionado foco inicial previsível, retorno de foco e trap de Tab dentro do modal.
+   - Escape fecha o modal activo conforme o seu contexto.
+   - Foco visível reforçado para teclado.
+
+7. Micro-interacções PRO
+   - Exportação mostra estado visual de geração.
+   - Botões com estado de busy usam aria-busy.
+   - Scroll assistido destaca temporariamente o alvo em mobile.
+
+8. CSS global de suporte
+   - Reforço em assets/style.css para garantir consistência da barra mobile, foco visível e densidades.
+
+Ficheiros principais alterados
+------------------------------
+- admin/finance/financeiro-extratos.php
+- assets/style.css
+- sige-softgenial.php
+- BUILD.json
+
+Ficheiros adicionados
+---------------------
+- tools/smoke-financeiro-extratos-pro-ux-hardening-v12-11-9-87.php
+- CHANGELOG-v12-11-9-87-financeiro-extratos-pro-ux-hardening.txt
+- DEPLOY-v12-11-9-87-financeiro-extratos-pro-ux-hardening.md
+
+Garantias desta build
+---------------------
+- Não altera cálculos financeiros.
+- Não altera regras de estorno.
+- Não altera geração de recibos.
+- Não altera fecho/reabertura de caixa.
+- Não altera permissões existentes.
+- Não altera estrutura de tabelas da base de dados.
+- Não adiciona dependências externas.
+
+Validações realizadas
+---------------------
+- php -l admin/finance/financeiro-extratos.php
+- php -l em todos os ficheiros PHP do plugin
+- tools/smoke-financeiro-extratos-pro-ux-hardening-v12-11-9-87.php
+- Teste de integridade do ZIP com unzip -t

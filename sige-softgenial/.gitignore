@@ -1,0 +1,14 @@
+# Sistema / editores
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Artefactos de build (o ZIP gera-se no CI, nunca se commita)
+*.zip
+node_modules/
+
+# Segredos locais de teste (nunca commitar credenciais)
+.env
+wp-config-local.php

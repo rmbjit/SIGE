@@ -1,0 +1,69 @@
+SIGE SoftGenial v12.9.77 - Dashboard Financeiro e Extracto por Período/Serviço
+Data: 2026-05-07
+Base: v12.9.76 - WhatsApp DB Index Hotfix
+
+OBJECTIVO
+- Responder à necessidade operacional da escola/cliente: visualizar valores recebidos por serviço e por aluno num dia, mês ou ano.
+- Corrigir a filtragem de Creche no Extracto/Diário de Caixa.
+- Melhorar a escolha de período no Extracto: diário = dia; mensal = mês; anual = ano.
+- Garantir que o Excel descarregável reflita o período/ciclo filtrado e inclua resumo por serviço.
+
+ALTERAÇÕES PRINCIPAIS
+1) Dashboard Financeiro
+- Mantidos os KPIs executivos existentes.
+- Adicionada secção “Recebimentos por serviço e por aluno”.
+- Novos filtros:
+  • Período: Diário, Mensal, Anual.
+  • Dia específico quando Diário.
+  • Mês específico quando Mensal.
+  • Ano específico quando Anual.
+  • Serviço financeiro.
+  • Aluno/número de processo.
+- Novas leituras:
+  • Total recebido no período.
+  • Número de movimentos.
+  • Número de alunos pagos.
+  • Número de serviços pagos.
+  • Tabela/gráfico de valores recebidos por serviço.
+  • Tabela de valores recebidos por aluno.
+  • Últimos movimentos detalhados do período.
+- Estornos ficam fora da visão operacional de “recebidos” para evitar inflacionar a leitura de entradas.
+
+2) Extracto / Diário de Caixa
+- A filtragem de Creche passa a considerar:
+  • Classe/turma actual do aluno.
+  • Ciclo do serviço financeiro.
+  • Nome do serviço financeiro.
+- Isto reduz falsos zeros quando os alunos da Creche estão registados como Jardim, Infantil, Berçário, Pré-escolar, Maternal, Sala dos 2/3/4/5 anos, ou quando a classe actual vem vazia.
+- O filtro de período fica contextual:
+  • Diário mostra apenas campo de dia.
+  • Mensal mostra apenas campo de mês.
+  • Anual mostra apenas campo de ano.
+- O backend ignora o dia quando o período é mensal/anual, usando mês/ano próprios.
+
+3) Excel do Extracto
+- O Excel continua a exportar a tabela filtrada.
+- Acrescentado resumo “VALORES RECEBIDOS POR SERVIÇO”.
+- O resumo respeita os filtros já aplicados no ecrã: período, ciclo e centro.
+
+SEGURANÇA / ZERO REGRESSÃO
+- Sem alterações de schema.
+- Sem alteração das fórmulas canónicas de mensalidades, pagamentos, estornos, multas, descontos ou saldos.
+- Sem alteração nas regras WhatsApp.
+- Alterações confinadas a leitura, filtros, visualização e exportação.
+
+SMOKE TEST RECOMENDADO
+1. Dashboard Financeiro:
+   - Abrir Dashboard.
+   - Filtrar período Diário por uma data com pagamentos.
+   - Filtrar Mensal por um mês conhecido.
+   - Filtrar Anual por ano lectivo.
+   - Filtrar por serviço e por nome/processo do aluno.
+   - Confirmar que as tabelas por serviço/aluno mudam correctamente.
+
+2. Extracto/Diário de Caixa:
+   - Seleccionar Diário e confirmar campo Dia.
+   - Seleccionar Mensal e confirmar campo Mês.
+   - Seleccionar Anual e confirmar campo Ano.
+   - Seleccionar Ciclo = Creche e confirmar que já não retorna zero indevidamente quando há pagamentos de Creche.
+   - Exportar Excel e confirmar a presença da secção “VALORES RECEBIDOS POR SERVIÇO”.

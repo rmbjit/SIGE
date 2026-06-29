@@ -1,0 +1,70 @@
+SIGE SoftGenial v12.9.97 - Produção Piloto e Bloqueio Informativo
+====================================================================
+
+Base utilizada
+--------------
+- v12.9.96 - Manifesto de Versão Validada e Rollback Seguro, validada em ambiente de teste.
+
+Objectivo
+---------
+Preparar a passagem segura de teste para a primeira escola real piloto, mantendo o princípio de zero regressão e sem alterar a lógica operacional validada.
+
+O que foi acrescentado
+----------------------
+1. Novo relatório de Produção Piloto dentro de:
+   Sistema Técnico → Centro de Configuração → Pré-produção.
+
+2. Nova camada apenas de leitura:
+   includes/settings/class-sige-settings-production-pilot.php
+
+3. O painel passa a mostrar:
+   - ambiente detectado;
+   - modo recomendado: teste, produção piloto ou produção validada futura;
+   - portões mínimos para produção piloto;
+   - checklist da primeira escola real;
+   - plano de observação 24-48h;
+   - ondas de rollout por escola;
+   - registo seguro para suporte;
+   - política de produção piloto.
+
+4. Bloqueio informativo de alterações críticas:
+   - regras financeiras;
+   - regras académicas;
+   - WhatsApp/Z-API;
+   - SMTP/email;
+   - Hub/licença;
+   - permissões críticas;
+   - schema/migrações;
+   - campos sensíveis.
+
+Garantias anti-regressão
+------------------------
+- Não grava configurações operacionais.
+- Não remove campos.
+- Não migra valores.
+- Não sincroniza automaticamente.
+- Não altera financeiro, académico, WhatsApp, SMTP, Hub/licença, permissões, documentos, pautas, boletins, recibos ou schema.
+- Não promove produção automaticamente.
+- Não bloqueia fluxos operacionais já existentes.
+- Não expõe tokens, senhas, SMTP, Z-API, API keys, dados bancários ou segredos.
+
+Ficheiros adicionados
+---------------------
+- includes/settings/class-sige-settings-production-pilot.php
+- CHANGELOG-v12-9-97-producao-piloto-bloqueio-informativo.txt
+
+Ficheiros alterados
+-------------------
+- sige-softgenial.php
+- BUILD.json
+- includes/settings/settings-loader.php
+- admin/system/config-center-view.php
+- includes/settings/class-sige-settings-diagnostics.php
+
+Como testar
+-----------
+1. Instalar no ambiente de teste.
+2. Abrir Sistema Técnico → Centro de Configuração → Pré-produção.
+3. Confirmar a nova secção "Modo produção piloto e bloqueio informativo".
+4. Confirmar que não há fatal error, que os estados aparecem e que o painel continua apenas orientativo.
+5. Validar que financeiro, académico, WhatsApp, recibos, documentos e permissões continuam com o mesmo comportamento da versão validada anterior.

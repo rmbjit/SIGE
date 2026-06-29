@@ -1,0 +1,27 @@
+SIGE SoftGenial v12.10.80 - Acta do Conselho: Impressão PRO e Fontes Automáticas
+
+Objectivo
+- Corrigir a impressão/download da ACTA para evitar páginas cortadas.
+- Tornar claro quais secções do documento são preenchidas manualmente e quais são calculadas automaticamente pelo sistema.
+- Manter a intervenção segura, sem alterar nota votada, aprovação do Director Pedagógico, fórmulas ou regras académicas.
+
+Correções aplicadas
+- A ACTA impressa passa a ter paginação lógica:
+  - página 1: cabeçalho, introdução, presentes, nota votada e ausentes;
+  - página 2: Fim do Trimestre e estatística por disciplina;
+  - página 3: Quadro de Honra, cumprimento dos programas e observações.
+- Adicionadas regras CSS de impressão para evitar corte interno de tabelas/blocos.
+- Reduzidas linhas vazias em secções que não são campos manuais.
+- "Sem notas votadas", "sem ausências" e "sem alunos elegíveis para Quadro de Honra" passam a aparecer como mensagens claras, em vez de campos vazios que parecem estar por preencher.
+- Linhas de desistências, óbitos e transferências deixam de mostrar zero falso quando a instalação ainda não possui estados de matrícula parametrizados; passam a mostrar " - ".
+- Adicionadas notas de fonte automática no PDF:
+  - Fim do Trimestre;
+  - Estatística por disciplina;
+  - Quadro de Honra.
+- Adicionado card no módulo digital "Dados automáticos da ACTA", explicando de onde vêm essas secções.
+
+Garantias
+- Sem alteração na nota votada.
+- Sem alteração na aprovação do Director Pedagógico.
+- Sem alteração em fórmulas, médias, pautas, DEC, pauta final, boletins ou regras académicas.
+- Sem alteração em pagamentos, multas, mensalidades ou base de dados financeira.

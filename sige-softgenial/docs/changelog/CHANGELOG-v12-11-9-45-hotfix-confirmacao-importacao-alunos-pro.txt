@@ -1,0 +1,23 @@
+SIGE SoftGenial v12.11.9.45 - Hotfix Confirmação Importação de Alunos PRO
+
+Problema corrigido
+- Após a pré-validação da importação de alunos, o botão “Confirmar e gravar” parecia não executar a gravação.
+
+Causa provável
+- A acção de confirmação abria um segundo popup de confirmação. Esse popup podia ficar atrás do modal de importação por causa da hierarquia de z-index, dando a impressão de que nada acontecia.
+- Além disso, a Etapa 2 não apresentava feedback suficientemente visível no próprio bloco de resultado.
+
+Intervenções
+- O botão “Confirmar e gravar” passa a executar directamente a Etapa 2, pois ele próprio já representa a confirmação final depois da pré-validação.
+- Foi adicionado feedback visual claro “Etapa 2 em curso” durante a gravação.
+- O botão de confirmação fica temporariamente desactivado e muda para “A gravar alunos...”.
+- O popup genérico de confirmação foi elevado acima do modal de importação para manter compatibilidade com outras acções, como anulação segura de lote.
+
+Preservado
+- Importação em duas etapas.
+- Hash de pré-validação.
+- Histórico de lotes.
+- Anulação segura.
+- Modelo Excel controlado.
+- Validações de duplicados, contactos e campos obrigatórios.
+- Notas, pautas, boletins, DEC, finanças, pagamentos, recibos e base de dados sem alteração de regra de negócio.

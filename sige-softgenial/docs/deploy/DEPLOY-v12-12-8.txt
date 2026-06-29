@@ -1,0 +1,54 @@
+DEPLOY - SIGE SoftGenial v12.12.8 (Tenant Isolation Hardening, escritas)
+========================================================================
+
+RESUMO
+Primeiro incremento da Fase 3 (Tenant Isolation Hardening): caminhos de
+ESCRITA. Introduz o resolvedor fail-closed sige_require_escola_id e endurece
+39 dos 41 call-sites de escrita que caiam silenciosamente para a escola 1.
+Sem migracao de base de dados. Sem alteracao de regras de calculo financeiro
+ou academico. Em mono-escola (caso actual) o comportamento nao muda.
+
+FICHEIROS NOVOS
+- tools/smoke-tenant-hardening-v12-12-8.php (40.o gate)
+- docs/governance/*-v12.12.8.md e docs/security/*-v12.12.8.(md|json)
+- docs/changelog/CHANGELOG-v12-12-8.txt, este ficheiro de deploy
+
+FICHEIROS ALTERADOS (codigo)
+- includes/multitenancy.php (novo resolvedor sige_require_escola_id)
+- 25 sites de request (views admin e handlers AJAX) -> sige_require_escola_id
+- 14 funcoes de biblioteca -> aborto tipado quando escola <= 0
+  (acta-pdf-handler, aluno-fetch-ajax, centros-helpers, curriculum-engine,
+   db-handler, encarregados-advanced, finance-core, finance-data-efectiva,
+   notification-policy, settings/class-sige-settings-technical-mode,
+   whatsapp-destinatarios-policy, whatsapp-guardian, financeiro-config seeder)
+- includes/permissions-layer.php (limpeza do : 1 morto; relaxado gated mantido)
+
+FICHEIROS ALTERADOS (governacao)
+- sige-softgenial.php (Version, SIGE_VERSION)
+- tools/governance-lib.php (SIGE_GOV_VERSION = 12.12.8)
+- tools/inventory-surface.php (base_version 12.12.7.1 e purpose)
+- tools/check-tenant-fallbacks.php (ratchet monotonico)
+- tools/run-gates.php (novo gate ligado)
+- BUILD.json, CHANGELOG.md
+
+PASSOS DE DEPLOY
+1. Fazer backup do plugin actual (pasta wp-content/plugins/sige-softgenial).
+2. Substituir a pasta do plugin pelo conteudo deste ZIP.
+3. Nao ha migracao de base de dados nem alteracao de esquema.
+4. Limpar cache de objecto/opcoes se aplicavel.
+5. Verificar versao activa: 12.12.8 (Plugins ou rodape do SIGE).
+
+VERIFICACAO POS-DEPLOY (mono-escola, caso actual)
+- Abrir uma view de escrita (ex.: lancar notas, guardar config financeira) e
+  confirmar funcionamento normal: o resolvedor devolve a escola unica.
+- Guardar um pagamento/lancamento e confirmar o fluxo habitual.
+
+NOTA MULTI-ESCOLA (futuro)
+- Em instalacoes multi-escola estritas, uma escrita sem contexto de escola
+  passa a ser bloqueada (403, com auditoria tenant_write_blocked) em vez de
+  gravar na escola 1. Garantir que o contexto de escola resolve por constante
+  SIGE_CURRENT_ESCOLA, meta do utilizador, subdominio ou subdiretorio.
+
+ROLLBACK
+- Restaurar o backup da pasta do plugin. Sem efeitos colaterais em dados, por
+  nao haver migracao nem alteracao de calculo.

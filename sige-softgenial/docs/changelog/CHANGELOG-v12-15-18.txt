@@ -1,0 +1,13 @@
+v12.15.18 - P2 fechada: caminho rapido de presencas ligado por defeito
+
+- Fecho da P2 em producao, apos prova visual em browser confirmada pelo operador.
+- A flag sige_presencas_fast_path_v121517_enabled passa a LIGADA por defeito (default '0' para '1' na view).
+- A secretaria (e qualquer papel que possa corrigir presencas) passa a ver o caminho rapido no ecra de presencas, em vez do modal por registo.
+- Caminho rapido: popover inline ancorado a celula, seleccao por rato e teclado, barra de accao em lote, navegacao por teclado.
+- Continua reversivel: definir a option a '0' repoe o modal classico, sem reinstalar.
+- Nenhuma outra view muda.
+- Toda a mecanica (nucleo puro partilhado, handler de lote com guarda completa, registo no Security Kernel) ja tinha sido entregue e endurecida na v12.15.17.
+- O gate passa a check-presencas-fastpath-v12-15-18: exige a flag ligada por defeito e mantem todos os invariantes.
+- O smoke do nucleo puro mantem-se em smoke-presencas-fastpath-v12-15-17 porque o motor nao mudou.
+- Nao altera PHP financeiro, formulas, Finance Score, saldos nem queries financeiras.
+- As regras academicas de derivacao de estado de presenca continuam intactas.

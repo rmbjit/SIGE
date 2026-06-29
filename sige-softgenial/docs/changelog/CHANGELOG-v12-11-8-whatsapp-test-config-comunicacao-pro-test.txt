@@ -1,0 +1,29 @@
+SIGE SoftGenial v12.11.8 - WhatsApp Test in Communication Config PRO (TEST)
+
+Objectivo
+- Corrigir a arquitectura visual da funcionalidade de teste de WhatsApp, evitando que pareça um módulo próprio.
+- Colocar o teste exactamente onde faz sentido para operação e suporte: Centro de Configuração → Comunicação, logo abaixo da URL Z-API e Token Z-API.
+
+Alterações realizadas
+1. Centro de Configuração → Comunicação
+   - Adicionado bloco “Teste de envio WhatsApp” imediatamente após o campo Token Z-API.
+   - O teste permite informar número com indicativo do país e mensagem opcional.
+   - O botão “Enviar teste agora” usa a configuração WhatsApp já guardada da escola.
+   - O resultado mostra HTTP, tempo de resposta, ID/messageId quando devolvido e resposta resumida da API.
+   - O último teste fica registado por escola com número mascarado.
+
+2. Remoção da exposição como módulo próprio
+   - Removido o item de menu “Testar WhatsApp” da navegação lateral.
+   - Removido o bloco de teste da página antiga de diagnóstico WhatsApp.
+   - O atalho da Central de Mensagens deixa de apontar para uma página de teste e passa a apontar para Centro de Configuração → Comunicação.
+
+3. Segurança e permissões
+   - O endpoint interno de envio controlado continua com nonce.
+   - A permissão do teste passa a alinhar-se com configuração/sistema, evitando exposição para perfis operacionais que não devem mexer em canais.
+   - Tokens continuam mascarados e não são expostos na interface.
+
+Garantias de não regressão
+- Sem alteração de cobranças, recibos, mensalidades, multas, notas, pautas, permissões académicas, fórmulas financeiras ou regras de negócio.
+- Sem alteração da fila normal de WhatsApp.
+- Sem alteração da cadência de envio, limites diários, janela segura ou guardrails anti-restrição.
+- O teste é directo e controlado, apenas para validar configuração e entrega real.

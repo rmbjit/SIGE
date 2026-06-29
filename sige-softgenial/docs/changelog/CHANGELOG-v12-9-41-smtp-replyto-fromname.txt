@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.9.41 - SMTP Reply-To + From Name por escola
+
+Base: v12.9.40 SMTP Nativo Zoho validado.
+
+Mudanças:
+- Corrigido Reply-To opcional: agora é aplicado directamente no PHPMailer via addReplyTo().
+- Limpa Reply-To anterior antes de aplicar o novo, evitando conflito com headers herdados.
+- Mantém envio por SMTP nativo sem plugin externo.
+- Mantém suporte a usar um único e-mail SMTP/remetente técnico e nomes de remetente diferentes por escola/instância.
+- Regista eventual falha de Reply-To em sige_smtp_last_replyto_error sem bloquear o envio.
+
+Teste recomendado:
+1. Configurações Gerais → Comunicação → SMTP Nativo do SIGE.
+2. Definir Email remetente como a conta autenticada/autorizada.
+3. Definir Nome remetente específico da escola.
+4. Definir Reply-To com o e-mail real da escola.
+5. Gravar + testar envio.
+6. No Gmail/Outlook, clicar Responder e confirmar que o destinatário da resposta é o Reply-To configurado.

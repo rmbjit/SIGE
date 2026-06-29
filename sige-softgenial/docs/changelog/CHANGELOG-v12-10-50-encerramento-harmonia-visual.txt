@@ -1,0 +1,15 @@
+SIGE SoftGenial v12.10.50 - Encerramento: Harmonia Visual
+
+Escopo
+- Harmonização visual do módulo &view=encerramento com o Painel Principal / Dashboard V2 MJS-grade.
+
+Ajustes visuais
+- Cabeçalho refeito com sequência obrigatória: área com ícone canónico, título principal e texto explicativo.
+- Remoção de emojis visuais no hero, botões, estado e tabela.
+- Uso de ícones canónicos do sistema via sige_ui_icon(), no mesmo padrão de Extractos e Caixa.
+- Cards, botões, toolbar, alertas, tabela e estados alinhados ao padrão Produto PRO.
+- Layout responsivo melhorado, com tabela em área rolável em ecrãs pequenos.
+
+Garantias
+- Sem alterações em SQL, fórmulas, cálculo de aproveitamento, pauta final, encerramento/reabertura, permissões ou base de dados.
+- Intervenção restrita à apresentação visual e textos de interface.

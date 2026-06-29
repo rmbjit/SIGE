@@ -1,0 +1,7 @@
+SIGE SoftGenial v12.10.35 - Aparência: Cores nos Documentos
+
+- A cor principal definida em Aparência da escola passa a sincronizar a Cor dos documentos.
+- Recibos, extractos e documentos financeiros passam a usar variáveis documentais seguras derivadas da cor da escola.
+- Declaração e Boletim de Passagem passam a respeitar a cor documental nos elementos de borda, destaque e acção.
+- Marca e documentos continua a controlar logotipos, cabeçalho oficial, rodapé e ajuste manual da cor documental.
+- Sem alterações em fórmulas, valores, pagamentos, mensalidades, multas, notas, pautas, DEC, boletins ou base de dados.

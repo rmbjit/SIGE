@@ -1,0 +1,27 @@
+SIGE SoftGenial v12.11.9.55 - Smoke Visual Mobile App Alunos PRO
+
+Área: Académico / Alunos e Matrículas / Smoke UX Mobile
+
+Objectivo:
+- Validar profundamente o redesign mobile v12.11.9.54 e corrigir pequenos desalinhamentos visuais/funcionais antes de considerar o fluxo 10/10 no uso real.
+
+Intervenções realizadas:
+- Hero mobile ajustado para texto curto: “Consulte alunos, matrículas e documentos.”
+- KPI de aniversários alinhado ao padrão mobile: “Aniversários / Hoje”.
+- Placeholder de pesquisa alinhado ao screenshot: “Pesquisar aluno, processo ou turma”.
+- Pesquisa client-side passou a considerar também turma e estado do aluno.
+- Card do aluno ajustado de “Proc:” para “Processo:”.
+- Bottom navigation recebeu protecção de safe-area para telemóveis modernos.
+- Mantidos topbar premium, hero compacto, KPIs 2x2, chips rápidos, cards app-grade e navegação inferior fixa.
+
+Blindagem:
+- Sem alterações de base de dados.
+- Sem alterações em importação de alunos.
+- Sem alterações na Ficha 360º.
+- Sem alterações na Gestão Avançada de Encarregados.
+- Sem alterações em notas, pautas, boletins, DEC, fórmulas, pagamentos, recibos, mensalidades ou multas.
+
+Validação:
+- PHP lint completo.
+- Smoke test visual/funcional específico.
+- Teste de integridade do ZIP.

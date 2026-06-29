@@ -1,0 +1,87 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.34
+Data: 2026-06-22
+Titulo: Blindagem de uploads e ficheiros (anti-execucao e bloqueio de tipos perigosos)
+Fase: Seguranca de documentos e ficheiros (fecha a Fase 9 original) - incremento 1 de 3
+Base: 12.12.33
+Canal: validated-feature
+
+================================================================
+RESUMO
+================================================================
+Incremento 1 da fase de seguranca do sistema de ficheiros. Garante que nada
+perigoso entra no directorio de uploads e que, mesmo que entrasse, nao pode ser
+executado nem servido directamente pelo web. Nao move ficheiros, nao altera onde
+a Biblioteca de Media os guarda (isso fica para o incremento 2), nao toca em
+regras de calculo nem no esquema.
+
+================================================================
+DIAGNOSTICO
+================================================================
+- O lado dos downloads ja estava solido: includes/secure-document-download.php
+  serve os documentos do aluno e de RH por endpoints autenticados, com nonce por
+  campo, controlo de acesso por permissao e por escola, proteccao de path
+  traversal (realpath dentro de uploads), servico so de ficheiros locais,
+  auditoria e cabecalhos nosniff.
+- Faltava blindar a entrada e o directorio:
+  1. Os ficheiros sensiveis entram pela Biblioteca de Media e ficam no directorio
+     publico wp-content/uploads, com a URL guardada na base de dados.
+  2. Nada filtrava o que entrava e o directorio nao tinha blindagem
+     anti-execucao (nem wp_handle_upload_prefilter nem upload_mimes).
+
+================================================================
+ALTERACOES
+================================================================
+NOVO  includes/security-uploads.php
+      - sige_uploads_harden_dir (admin_init): escreve .htaccess e web.config em
+        wp-content/uploads que negam a execucao e o acesso web a ficheiros
+        perigosos. Idempotente (so escreve se faltar ou se o marcador de versao
+        nao estiver presente). FilesMatch Require all denied (com recuo Apache
+        2.2); php_admin_flag dentro de IfModule mod_php para nao quebrar em
+        LiteSpeed ou PHP-FPM; RemoveHandler e RemoveType dentro de mod_mime.
+      - sige_uploads_prefilter (wp_handle_upload_prefilter): recusa ficheiros
+        perigosos por extensao (incluindo duplas extensoes), por bytes magicos
+        (finfo), por inicio de ficheiro (MZ, ELF, Mach-O, shebang, abertura PHP,
+        sem confundir XML), por imagem declarada que nao e imagem (getimagesize)
+        e por SVG com script ou eventos. So bloqueia o comprovadamente perigoso.
+      - sige_uploads_validate_import_file: validacao de conteudo real para as
+        importacoes (xlsx tem de ser ZIP; csv/txt tem de ser texto sem codigo).
+
+EDIT  sige-softgenial.php
+      - require_once de includes/security-uploads.php logo apos backup-safety.
+
+EDIT  includes/aluno-fetch-ajax.php
+      - Importacao de alunos chama sige_uploads_validate_import_file antes de
+        analisar o ficheiro, recusando um executavel ou script disfarcado.
+
+NOVO  tools/check-uploads-hardening.php (gate estatico)
+NOVO  tools/smoke-uploads-hardening.php (smoke de runtime, 26 verificacoes)
+EDIT  tools/run-gates.php (corredor passa de 78 para 80 verificacoes)
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- Superficie de accao: 199 itens (admin_init contabilizado uma vez, deduplicado;
+  o prefilter e filtro, nao endpoint). Confirmado pelo extractor.
+- Regras do Security Kernel: 199; enforce 33. Lista de views: 60.
+- Opcoes: 132 (nenhuma nova). Dependencias externas: 12 (nenhuma nova).
+- Sem alteracao de esquema. Calculo academico e financeiro byte-identico.
+- Versao sincronizada nas cinco fontes. Zero travessoes. Ficheiros em LF.
+
+================================================================
+VALIDACAO
+================================================================
+- php tools/check-uploads-hardening.php  -> OK
+- php tools/smoke-uploads-hardening.php   -> OK (26/26)
+- php tools/check-governance-docs.php     -> OK (21 documentos v12.12.34)
+- php tools/smoke-release-gate.php         -> verde a partir de pasta limpa
+- extractor de superficie                  -> 199 itens
+- php -l                                    -> limpo nos ficheiros tocados
+
+================================================================
+RESIDUAL CONHECIDO (PROXIMOS INCREMENTOS)
+================================================================
+- Incremento 2: mover os documentos sensiveis para armazenamento privado
+  (sige-private), migrar os existentes e bloquear o acesso web directo.
+- Incremento 3: links com expiracao, reforco do registo de download, limpeza
+  de orfaos e confirmacao do QR local.

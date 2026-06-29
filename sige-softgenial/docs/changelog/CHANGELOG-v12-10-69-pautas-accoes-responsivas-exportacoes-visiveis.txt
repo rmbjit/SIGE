@@ -1,0 +1,17 @@
+SIGE SoftGenial v12.10.69 - Pautas: Acções Responsivas e Exportações Visíveis
+
+Objectivo
+- Corrigir a experiência do módulo &view=pautas em ecrãs menores e médios.
+- Garantir que os botões Gerar Pauta, Exportar PDF e Exportar Excel fiquem sempre visíveis, clicáveis e com cursor de mão.
+
+Ajustes aplicados
+- Os botões de acção foram agrupados numa área própria: .sige-pautas-actions.
+- A grelha de filtros deixou de tentar colocar todos os campos e botões na mesma linha rígida.
+- Exportar PDF e Exportar Excel passam a quebrar para a linha seguinte quando não houver espaço, sem ficarem cortados à direita.
+- Os botões receberam cursor:pointer, pointer-events activo e hover consistente com o padrão Produto PRO.
+- Em ecrãs pequenos, os botões passam a ocupar largura total em coluna, mantendo leitura e clique fáceis.
+
+Garantias
+- Sem alteração na geração da pauta.
+- Sem alteração em PDF ou Excel, apenas na forma como os botões aparecem no ecrã.
+- Sem alteração em fórmulas de médias, negativas, resultado final, regras académicas, permissões, base de dados, boletins ou DEC.

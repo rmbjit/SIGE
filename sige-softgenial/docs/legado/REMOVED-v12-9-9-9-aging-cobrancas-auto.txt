@@ -1,0 +1,3 @@
+SIGE SoftGenial v12.9.9.9 - limpeza cirúrgica de duas áreas financeiras descontinuadas.
+
+Mantidos intactos: cálculos financeiros, académico, documentos, boletins, DEC, pautas, extractos, auditoria e despesas.

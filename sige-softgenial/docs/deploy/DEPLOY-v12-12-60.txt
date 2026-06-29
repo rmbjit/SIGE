@@ -1,0 +1,44 @@
+DEPLOY - SIGE SoftGenial v12.12.60
+Fase 4 (CSP e front-end seguro) - incremento 2
+onclick seguros das vistas admin em data-sige-act
+Data: 2026-06-23
+
+NATUREZA DA ENTREGA
+- Pacote instalavel completo (pasta sige-softgenial na raiz do ZIP).
+- Preparacao para o CSP enforce do shell admin: converte os onclick seguros das
+  vistas admin para o despachante data-sige-act. Comportamento identico.
+- Nao toca em regras de calculo financeiro nem no ficheiro canonico finance-core.
+- Nao acrescenta nem altera nenhum cabecalho CSP.
+
+PRE-REQUISITOS
+- Sem alteracao de base de dados. Sem migracao. Sem alteracao de configuracao.
+- Sem novas dependencias externas (mantem-se 9 hosts).
+
+PASSOS
+1. Fazer copia de seguranca do plugin actual (pasta wp-content/plugins/sige-softgenial).
+2. Em alternativa recomendada, desactivar o plugin antes de substituir os ficheiros.
+3. Substituir a pasta sige-softgenial pela desta entrega (pacote completo).
+4. Reactivar o plugin, se tiver sido desactivado.
+5. Confirmar a versao 12.12.60 no cabecalho do plugin.
+
+VERIFICACAO POS-DEPLOY
+Nas vistas admin afectadas, confirmar que os botoes convertidos continuam a
+funcionar (chamam a mesma accao):
+- Lista de alunos: novo aluno, importar alunos, imprimir cartoes em lote, filtros
+  de aniversariantes, abrir e editar a ficha de um aluno (botoes de inteiro).
+- Turmas: nova turma, imprimir mapa de turmas e restantes botoes sem argumento.
+- Extracto financeiro: botoes de accao sem argumento.
+- Equipa: botoes de accao sem argumento.
+- DEC, Pauta Final, Estatisticas demograficas, Boletim: botoes de impressao e
+  exportacao convertidos.
+
+NOTAS
+- Esta entrega nao activa nem altera nenhum cabecalho CSP. O enforce do shell admin
+  e um passo posterior, dependente da conversao dos onclick restantes (93) e dos
+  estilos inline (2051).
+- Os onclick difíceis (com event, codigo inline, jQuery, argumentos string)
+  ficaram intactos e serao tratados em incrementos proprios.
+- A catraca de onclick desceu de 149 para 93.
+
+REVERSAO
+- Repor a pasta a partir da copia de seguranca. Sem passos de base de dados.

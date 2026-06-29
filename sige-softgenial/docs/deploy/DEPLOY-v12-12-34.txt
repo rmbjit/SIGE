@@ -1,0 +1,76 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.34
+Data: 2026-06-22
+Titulo: Blindagem de uploads e ficheiros
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+Esta versao blinda o directorio de uploads contra a execucao de ficheiros e
+recusa tipos perigosos no momento do upload e nas importacoes. Nao move
+ficheiros, nao altera onde a Biblioteca de Media guarda os documentos e nao toca
+em regras de calculo. E uma actualizacao apenas defensiva e nao tem migracao de
+dados.
+
+================================================================
+INSTALACAO (CloudPanel / Hostinger, LiteSpeed)
+================================================================
+1. Faca uma copia de seguranca do plugin actual (pasta wp-content/plugins/
+   sige-softgenial) e da base de dados, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+5. Entre na area de administracao do SIGE uma vez (qualquer pagina). E nesse
+   primeiro carregamento que a blindagem do directorio de uploads e escrita.
+
+================================================================
+VERIFICACAO RAPIDA
+================================================================
+1. Confirme que passaram a existir, em wp-content/uploads, os ficheiros:
+   - .htaccess (deve conter a linha "SIGE-UPLOADS-HARDENING v1" e regras
+     FilesMatch ... Require all denied)
+   - web.config
+   - index.php
+   (Pode confirmar pelo Gestor de Ficheiros do CloudPanel.)
+2. Tente carregar, pela Biblioteca de Media, um ficheiro .php (ou um ficheiro de
+   texto renomeado para .php). Deve ser recusado com a mensagem de seguranca.
+3. Na importacao de alunos, tente importar um ficheiro que nao seja um Excel
+   valido (por exemplo, um .txt renomeado para .xlsx). Deve ser recusado.
+4. Confirme que continua a conseguir:
+   - carregar uma foto ou um PDF legitimo de um aluno;
+   - importar a lista de alunos pelo modelo Excel (.xlsx) do SoftGenial;
+   - abrir os documentos do aluno e da equipa pelo botao seguro de sempre.
+
+================================================================
+NGINX (apenas se o servidor for Nginx, nao LiteSpeed nem Apache)
+================================================================
+O .htaccess so e lido por Apache e LiteSpeed. Em Nginx, a regra equivalente para
+negar a execucao de PHP no directorio de uploads deve ser acrescentada ao bloco
+do site (pelo administrador do servidor):
+
+  location ~* /wp-content/uploads/.*\.(php|phtml|phps|phar|pht|cgi|pl|py|jsp|asp|aspx|sh|exe|com|bat|cmd|msi|dll|so|jar|vbs|ps1)$ {
+      deny all;
+      return 403;
+  }
+
+Sem esta regra, a blindagem por filtro de upload (que recusa o ficheiro a
+entrada) continua activa; apenas a defesa adicional ao nivel do servidor fica por
+aplicar.
+
+================================================================
+NOTA IMPORTANTE (PROXIMO INCREMENTO)
+================================================================
+Os documentos sensiveis que ja existem continuam guardados no directorio publico
+e a sua URL directa ainda responde. O bloqueio do acesso directo a esses
+ficheiros, com a sua passagem para armazenamento privado, e o objecto do proximo
+incremento desta fase. Esta versao impede que novos ficheiros perigosos entrem e
+que qualquer ficheiro do directorio de uploads seja executado.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, basta reinstalar a versao anterior do plugin. Os ficheiros de
+proteccao (.htaccess, web.config, index.php) em wp-content/uploads sao inofensivos
+e podem ser mantidos; se quiser remove-los, faca-o manualmente pelo Gestor de
+Ficheiros.

@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.10.11 - Registar Pagamento: modal centrado
+
+Objectivo
+- Corrigir a experiência de confirmação do pagamento para que o aviso apareça como pop-up real, centrado no ecrã, e não numa entrelinha ou fora da área visível.
+
+Alterações visuais/UX
+- Modal de confirmação removido da estrutura interna da tabela de dívidas.
+- Modal passa a ser renderizado fora do formulário, evitando marcação HTML inválida e comportamento visual imprevisível.
+- Abertura de modal usa montagem no body da página para garantir centralização no viewport.
+- CSS de modal reforçado com position fixed, largura/altura de viewport, overlay global, z-index elevado e scroll controlado.
+- Mantido o aviso preventivo para confirmar método de pagamento, referência, total e aluno antes de gravar.
+- Mantida a correcção de contraste do texto “Isentar multas”.
+
+Perímetro preservado
+- Sem alteração de fórmulas financeiras.
+- Sem alteração de mensalidades, multas, descontos, pagamentos, recibos, cobranças ou estornos.
+- Sem alteração de notas, pautas, DEC, boletins, actas ou regras académicas.
+- Sem alteração de schema/base de dados.

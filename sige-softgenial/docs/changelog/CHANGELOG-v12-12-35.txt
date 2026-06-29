@@ -1,0 +1,92 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.35
+Data: 2026-06-22
+Titulo: Armazenamento privado dos documentos sensiveis
+Fase: Seguranca de documentos e ficheiros (fecha a Fase 9 original) - incremento 2 de 3
+Base: 12.12.34
+Canal: validated-feature
+
+================================================================
+RESUMO
+================================================================
+Fecha o vector que ficou em aberto no incremento 1: os documentos sensiveis
+viviam no directorio publico wp-content/uploads e a sua URL publica directa
+respondia a quem a tivesse. Este incremento move-os para um directorio privado
+negado ao acesso web e serve-os apenas pelo endpoint autenticado. A foto fica de
+fora (mostrada em linha). Sem alteracao de esquema, sem tocar em calculo.
+
+================================================================
+DIAGNOSTICO
+================================================================
+- O endpoint de download ja era seguro (autenticado, nonce por campo, controlo
+  de acesso por permissao e por escola, proteccao de path traversal, servico so
+  de ficheiros locais, auditoria e nosniff).
+- Mas os ficheiros entravam pela Biblioteca de Media e ficavam no directorio
+  publico, com a URL guardada na base de dados; quem conhecesse essa URL obtinha
+  o ficheiro sem autenticacao. As views ja acedem a estes documentos so pelo
+  endpoint, pelo que torna-los privados e transparente.
+
+================================================================
+ALTERACOES
+================================================================
+NOVO  includes/security-uploads-private.php
+      - Directorio privado wp-content/uploads/sige-private/docs/<escola_id> com
+        .htaccess e web.config de negacao total e index.php de silencio
+        (sige_uploads_ensure_private_dir, sige_uploads_write_deny_all).
+      - Choke-point sige_uploads_privatize_doc_value: move o documento para o
+        directorio privado e devolve a URL privada; vazio ou ja privado fica
+        inalterado; qualquer falha devolve o valor original (sem regressao).
+      - sige_uploads_move_to_private: copia, verifica o tamanho, constroi a URL
+        privada e so consuma depois de remover o original; em falha aborta
+        apagando a copia. Move tambem as miniaturas ao lado do original.
+      - sige_uploads_private_migration_drain e sige_uploads_maybe_run_private_migration:
+        dreno idempotente e resumivel no admin_init das paginas do SIGE, em lotes
+        de ate 150, sem opcao de estado.
+
+EDIT  sige-softgenial.php
+      - require_once de includes/security-uploads-private.php apos o modulo de
+        blindagem de uploads.
+
+EDIT  includes/db-handler.php
+      - Gravacao do aluno: doc_bi_url, doc_cert_url e doc_vacina_url passam pelo
+        choke-point (com guarda function_exists). A foto NAO e privatizada.
+
+EDIT  includes/ajax-handlers.php
+      - Gravacao da equipa (caminho AJAX): doc_bi, doc_cv e doc_cert passam pelo
+        choke-point antes de serem gravados em documentos_urls.
+
+NOVO  tools/check-uploads-private.php (gate estatico)
+NOVO  tools/smoke-uploads-private.php (smoke de runtime, 15 verificacoes)
+EDIT  tools/run-gates.php (corredor passa de 80 para 82 verificacoes)
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- Superficie de accao: 199 itens (admin_init contabilizado uma vez, deduplicado).
+- Regras do Security Kernel: 199; enforce 33. Lista de views: 60.
+- Opcoes: 132 (nenhuma nova; a migracao nao usa marcador de estado). Dependencias
+  externas: 12 (nenhuma nova).
+- Sem alteracao de esquema. Calculo academico e financeiro byte-identico.
+- O endpoint de download nao foi alterado. Versao sincronizada nas cinco fontes.
+- Zero travessoes. Ficheiros em LF.
+
+================================================================
+VALIDACAO
+================================================================
+- php tools/check-uploads-private.php  -> OK
+- php tools/smoke-uploads-private.php   -> OK (15/15)
+- php tools/check-uploads-hardening.php -> OK (incremento 1, sem regressao)
+- php tools/smoke-uploads-hardening.php -> OK (26/26)
+- php tools/check-governance-docs.php   -> OK (21 documentos v12.12.35)
+- php tools/smoke-release-gate.php       -> verde a partir de pasta limpa
+- extractor de superficie                -> 199 itens
+- php -l                                  -> limpo nos ficheiros tocados
+
+================================================================
+RESIDUAL CONHECIDO (PROXIMO INCREMENTO)
+================================================================
+- Incremento 3: links com expiracao, reforco do registo de download, limpeza de
+  orfaos (ficheiros publicos que tenham ficado sem referencia) e confirmacao do
+  QR local.
+- A foto permanece publica por desenho (mostrada em linha); qualquer decisao
+  sobre a foto fica para fora desta fase.

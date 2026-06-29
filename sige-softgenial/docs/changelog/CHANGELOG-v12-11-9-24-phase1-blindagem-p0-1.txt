@@ -1,0 +1,22 @@
+SIGE SoftGenial v12.11.9.24 - Fase 1 Blindagem Imediata P0.1
+
+Intervenções principais:
+- Corrigido o fluxo de recibo público/WhatsApp para não depender de fallback da escola 1.
+- Adicionado token v2 de recibo público com contexto de escola e aluno.
+- URL pública do recibo passa a incluir e=escola_id e a=aluno_id, sem exigir login.
+- Handler público valida token, escola, aluno e ambiguidade antes de renderizar.
+- Renderer de recibo aceita escola_id explícito e deixa de usar contexto global em links públicos.
+- Removido fallback público que podia mostrar todos os itens do recibo quando o aluno filtrado não tinha linhas.
+- Adicionado Security Scope Guard para validar IDs tenant-scoped em AJAX/admin-post/admin views.
+- Bypasses baseados em manage_options foram convertidos para administrador WordPress real onde aplicável.
+- Link de BI na lista de alunos passa a usar endpoint seguro de documentos.
+- Adicionado Backup Safety Layer: snapshot JSON da configuração antes de restauro.
+
+Não alterado:
+- Fórmulas financeiras.
+- Fórmulas académicas.
+- Cálculo de notas.
+- Cálculo de mensalidades.
+- Regras de pauta/boletim.
+
+Canal: test

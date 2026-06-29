@@ -1,0 +1,18 @@
+SIGE SoftGenial v12.10.70 - Pautas: Resultado Fiel e Exportação Limpa
+
+Objectivo
+- Corrigir duas falhas reais identificadas no módulo &view=pautas:
+  1) exportação Excel descarregava o ficheiro mas deixava a página com sensação de processamento contínuo;
+  2) aluno sem notas suficientes podia aparecer indevidamente como PROGRIDE.
+
+Correcções aplicadas
+- Exportação Excel passou a ser feita por iframe oculto, preservando a página actual e evitando estado preso de carregamento.
+- Botão Gerar Pauta é reposto automaticamente após accionamento de exportação.
+- Resultado final passa a validar completude mínima das disciplinas nucleares antes de emitir PROGRIDE/TRANSITA/REPROVA.
+- Aluno sem notas finais nucleares suficientes passa a aparecer como PENDENTE, com MG/Negativas em branco/traço conforme o contexto.
+- A mesma protecção foi aplicada ao ecrã, ao PDF, ao Excel e ao motor académico central `sige_calcular_situacao_final`.
+
+Garantias
+- Sem alteração de fórmulas de MT, MFD, MG, negativas ou regras SNE.
+- Sem alteração em lançamento de notas, aprovação, permissões, base de dados, boletins ou DEC.
+- Sem alteração no formato estrutural da exportação PDF/Excel; apenas impedida a classificação indevida e corrigida a UX do download.

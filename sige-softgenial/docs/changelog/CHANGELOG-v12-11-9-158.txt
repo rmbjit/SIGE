@@ -1,0 +1,43 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.158
+Data: 2026-06-14
+Ambito: Email de confirmacao de pagamento (tom + link)
+
+RESPOSTA A PERGUNTA "OS ENCARREGADOS RECEBEM O LINK?"
+-----------------------------------------------------
+SIM, por omissao. No registo de pagamento (financeiro-pagamentos) a opcao
+"Enviar E-mail" vem MARCADA. Quando marcada, sige_enviar_recibo_email() constroi
+um botao com o URL publico tokenizado do recibo e enfileira o envio. O link so
+nao vai se: (a) o aluno nao tiver email valido em ficha (email_encarregado/pai/
+mae), ou (b) o recibo for familiar/ambiguo sem aluno definido.
+
+TOM HUMANO
+----------
+Templates 'recibo' e 'confirmacao_pagamento' reescritos de burocratico para
+caloroso, a condizer com fatura/cobranca e com a humanizacao do WhatsApp.
+Mantidas todas as variaveis. Nota: isto altera os DEFAULTS; escolas que ja
+gravaram um template proprio mantem o seu (e podem reeditar).
+
+LINK REFORCADO
+--------------
+Alem do botao "Ver e descarregar o recibo", o email passa a mostrar o endereco
+publico em TEXTO logo abaixo, para clientes de email que removem botoes/CSS.
+Plural correcto: "item pago" / "itens pagos".
+
+GATES
+-----
+email-engine.php e email-queue-templates.php passam a isentos nos gates de
+tokens e consistencia: o HTML de email exige estilos inline literais (nao ha
+folhas externas nem sige-tokens.css no email). Baselines: design-tokens
+2456->2415; consistencia-visual 7554->7490.
+
+NAO TOCADO
+----------
+Nenhuma regra de calculo financeiro. O valor pago e a numeracao do recibo vem
+inalterados do registo de pagamento.
+
+A SEGUIR (planeado)
+-------------------
+Central de Comunicacoes unificada (WhatsApp + Email no mesmo lugar): ver/cancelar/
+reenviar emails e editar o texto dos templates pela escola. O backend de fila e
+de edicao de templates ja existe; falta a vista. Sera construido com verificacao
+visual (arnes) por ser uma area sensivel.

@@ -1,0 +1,19 @@
+SIGE SoftGenial v12.10.57 - Central WhatsApp: Compliance Visual Integral
+
+Objectivo
+- Rever o desenho do módulo &view=whatsapp_central com o mesmo rigor visual validado no Painel Principal / Dashboard V2 MJS-grade.
+- Manter a Central WhatsApp como módulo operacional crítico, sem alterar regras anti-bloqueio, fila, cron, templates, guardrails ou lógica de envios.
+
+Principais ajustes visuais
+- Removido o header visual antigo com emoji e substituído por hero claro no padrão Produto PRO.
+- Adicionado header próprio com sequência obrigatória: ícone canónico, área Comunicação, título Central de Mensagens WhatsApp e texto explicativo.
+- Adicionado resumo lateral da quota diária, alinhado ao padrão de painel informativo usado no Dashboard.
+- KPIs redesenhados com cartões claros, ícones canónicos, cantos arredondados e formas decorativas suaves.
+- Quota diária, saúde do número, cron, tabs, filtros, bulk actions, tabela, paginação e modal receberam harmonização visual.
+- Removidos emojis visuais principais dos botões, tabs, alertas e labels operacionais.
+- View adicionada à lista de páginas com header próprio para impedir duplicação pelo App Shell.
+
+Garantias
+- Sem alteração em envio WhatsApp, fila, agendamento, cron, limites, janela segura, Z-API, templates, opt-in, opt-out ou anti-bloqueio.
+- Sem alteração em pagamentos, recibos, multas, mensalidades, notas, pautas, DEC, boletins ou base de dados.
+- Intervenção visual conservadora, feita por cima da versão validada v12.10.56.

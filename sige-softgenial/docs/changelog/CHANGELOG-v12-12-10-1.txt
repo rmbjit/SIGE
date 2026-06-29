@@ -1,0 +1,37 @@
+SIGE SoftGenial v12.12.10.1 - MFA de Operacao (correccao pos-rediagnostico)
+===========================================================================
+
+Base: v12.12.10. Resulta do rediagnostico adversarial; corrige tudo na mesma
+sessao (regra: zero em tudo antes de avancar). Zero P0/P1.
+
+CORRECCOES
+- A1 (UX): formulario de confirmacao nas 10 operacoes (inline em POST, aviso em
+  GET, sem duplicacao). Antes so a caixa o mostrava inline.
+- A2 (seguranca): modo estrito opt-in sige_mfa_stepup_strict (option ou
+  SIGE_MFA_STEPUP_STRICT) bloqueia a operacao se o email falhar; defeito mantem
+  anti-lockout.
+- A5 (auditoria): satisfied_window registado por operacao autorizada pela janela.
+- A7 (conformidade): 919 em-dashes limpos em 490 documentos; pacote a zero
+  em/en-dashes; gate de release passa a verificar documentos.
+- A3/A4/A6: documentados como design/mitigacao (fail-open coberto pelo gate;
+  tecto de tentativas do OTP; janela por utilizador, semantica sudo).
+
+FICHEIROS ALTERADOS (codigo)
+- includes/security-mfa-stepup.php: sige_mfa_stepup_strict, auditoria de janela,
+  aviso so renderiza formulario em GET.
+- admin/finance/financeiro-lancamentos-view.php, financeiro-pagamentos.php,
+  financeiro-extratos.php: formulario inline no retorno mfa_required.
+- tools/smoke-release-gate.php: verificacao de em/en-dash em documentos.
+- tools/check-mfa-stepup.php, tools/smoke-mfa-stepup-v12-12-10.php: 13 primitivas,
+  asserts A1/A2/A5.
+
+COMPORTAMENTO
+- Desligado por defeito. Modo estrito: update_option('sige_mfa_stepup_strict','on')
+  ou define('SIGE_MFA_STEPUP_STRICT', true).
+- Sem novos endpoints. Sem migracao de base de dados. Calculo inalterado.
+
+QA
+- Rediagnostico adversarial: Zero P0/P1; A1/A2/A5/A7 fechados; A3/A4/A6 documentados.
+- Integracao WordPress executada (endpoint, aviso, formulario, modo estrito,
+  auditoria, nao-duplicacao). Calculo byte-identico a v12.12.8.1. Baselines de
+  tenant congelados (138/139) e corrente 0. Pacote a zero em/en-dashes.

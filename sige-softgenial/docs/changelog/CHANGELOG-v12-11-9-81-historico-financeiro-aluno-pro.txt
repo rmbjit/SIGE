@@ -1,0 +1,25 @@
+SIGE SoftGenial v12.11.9.81 - Histórico Financeiro do Aluno PRO
+
+Objetivo
+- Permitir que a escola baixe/guarde um histórico financeiro completo do aluno, com visão 360º, a partir de Alunos/Ficha 360º e do módulo Extractos/Caixa.
+
+Entregas
+- Novo motor includes/financeiro-historico-aluno-pro.php.
+- Nova rota documental sige_print=historico_financeiro_aluno.
+- Documento HTML imprimível/guardar PDF, com design profissional, KPIs financeiros, resumo executivo, pagamentos, lançamentos, dívida, crédito e próximos acompanhamentos.
+- Exportação CSV controlada pelo mesmo escopo financeiro.
+- CTA em cards do módulo Alunos, menu de acções e Ficha 360º.
+- CTA no modo Histórico de aluno em Extractos/Caixa.
+- Pesquisa de aluno em Extractos/Caixa por nome ou número de processo.
+- Excel do modo aluno com título e nome de ficheiro próprios.
+
+Segurança
+- Perfil Guarda/Portaria sem acesso financeiro.
+- Escopo financeiro exigido para baixar histórico.
+- Tenant/escola validado por aluno_id.
+- Cálculos canónicos preservados via finance-core quando disponível.
+
+Validação
+- PHP lint completo sem erros.
+- Smoke Histórico Financeiro do Aluno v12.11.9.81 aprovado.
+- Regressão JS da Portaria State Consistency aprovada.

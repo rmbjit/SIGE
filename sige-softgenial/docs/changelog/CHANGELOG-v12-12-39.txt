@@ -1,0 +1,88 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.39
+Data: 2026-06-22
+Titulo: Fase 2 - Cofre de segredos - rotacao e segredos por escola
+Tipo: Funcionalidade (incremento 3 da Fase 2)
+Base: 12.12.38
+Canal: validated-feature
+
+================================================================
+CONTEXTO
+================================================================
+Terceiro incremento da Fase 2 (cofre de segredos completo). Sobre o incremento 1
+(gateways cifrados) e o incremento 2 (mascaramento, redaccao em registos e
+auditoria de alteracao). Camada de gestao sobre o cofre, totalmente aditiva: nao
+altera o armazenamento nem a leitura dos segredos ja existentes, nao toca na cifra
+partilhada nem em ficheiros canonicos.
+
+================================================================
+FRENTE 1 - SEGREDOS POR ESCOLA
+================================================================
+EDIT  includes/security-vault.php
+      - sige_secret_school_option: nome de opcao dinamico por escola (sufixo _esc).
+      - sige_secret_set_for_school / sige_secret_get_for_school /
+        sige_secret_delete_for_school: guardam e leem um segredo isolado por escola,
+        cifrado em repouso. Texto em claro de instalacoes pre-cofre passa intacto.
+
+================================================================
+FRENTE 2 - RASTREIO DE ROTACAO
+================================================================
+EDIT  includes/security-vault.php
+      - sige_secret_rotation_meta_option, sige_secret_rotation_days (constante
+        SIGE_SECRET_ROTATION_DAYS, por omissao 180 dias), sige_secret_mark_rotated,
+        sige_secret_rotated_at, sige_secret_rotation_due.
+
+================================================================
+FRENTE 3 - GERACAO E ROTACAO
+================================================================
+EDIT  includes/security-vault.php
+      - sige_secret_generate_token: segredo aleatorio forte e url-safe (random_bytes).
+      - sige_secret_rotate_for_school: gera um novo segredo, guarda-o cifrado por
+        escola, marca a rotacao, audita segredo_rodado e devolve o novo segredo em
+        claro para configurar no fornecedor.
+      - sige_vault_reseal: re-sela um valor por higiene de formato; um valor nao
+        decifravel fica intacto (nunca se perde o segredo).
+
+================================================================
+FRENTE 4 - ROTACAO CONCRETA DO WEBHOOK DE PAGAMENTO
+================================================================
+EDIT  includes/payments/mobile-tenant-options.php
+      - sige_mobile_payment_rotate_webhook_token: gera e instala um novo
+        webhook_token por escola, reutilizando o armazenamento cifrado e auditado, e
+        audita segredo_rodado.
+
+================================================================
+QUALIDADE
+================================================================
+NOVO  tools/check-secret-rotation.php (gate estatico)
+NOVO  tools/smoke-secret-rotation.php (smoke de runtime, 21 verificacoes)
+EDIT  tools/run-gates.php (corredor passa de 87 para 89 verificacoes)
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- Cifra partilhada (sige_encrypt_token / sige_decrypt_token) e ficheiros canonicos
+  (finance-core e outros) nao foram tocados. A camada reutiliza seal/reveal.
+- Superficie de accao: 199 itens. Regras do Kernel: 199; enforce 33. Views: 60.
+- Opcoes: 132 (nenhuma nova; nomes de opcao por escola sao dinamicos).
+- Dependencias externas: 11 (nenhuma nova). Sem alteracao de esquema.
+- Calculo academico e financeiro byte-identico. Versao nas cinco fontes. LF.
+
+================================================================
+VALIDACAO
+================================================================
+- php tools/check-secret-rotation.php   -> OK
+- php tools/smoke-secret-rotation.php     -> OK (21 verificacoes)
+- php tools/check-vault.php / smoke-vault -> OK (sem regressao, 27 verificacoes)
+- php tools/check-vault-coverage.php / smoke -> OK (sem regressao, 14 verificacoes)
+- php tools/check-governance-docs.php      -> OK (21 documentos v12.12.39)
+- php tools/smoke-release-gate.php           -> verde a partir de pasta limpa
+- extractor de superficie / opcoes           -> 199 / 132
+- php -l                                      -> limpo nos ficheiros tocados
+
+================================================================
+NOTA OPERACIONAL
+================================================================
+A chave da cifra deriva dos salts do WordPress. Rotar os salts (AUTH_KEY,
+SECURE_AUTH_KEY e respectivos sais) continua a exigir re-introducao (ou re-selagem
+previa) dos segredos. Ver o guia de instalacao desta versao.

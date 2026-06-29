@@ -1,0 +1,15 @@
+SIGE SoftGenial v12.9.76 - WhatsApp DB Index Hotfix
+
+Objectivo:
+- Corrigir o erro de base de dados: Duplicate key name 'idx_wpp_guardian'.
+
+Alterações:
+- Migração do WhatsApp Recovery/Guardian tornou-se idempotente para o índice idx_wpp_guardian.
+- Antes de executar ALTER TABLE ADD INDEX, o sistema verifica SHOW INDEX.
+- Pequena blindagem adicional no índice centro_id para evitar duplicação futura.
+
+Garantias:
+- Não altera regras financeiras.
+- Não altera regras académicas.
+- Não altera cálculos, mensalidades, pagamentos, notas, pautas ou documentos.
+- Mantém integralmente as regras WhatsApp da v12.9.75.

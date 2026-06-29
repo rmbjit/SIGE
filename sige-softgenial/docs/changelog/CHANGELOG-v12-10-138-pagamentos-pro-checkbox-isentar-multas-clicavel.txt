@@ -1,0 +1,22 @@
+SIGE SoftGenial v12.10.138 - Pagamentos PRO: Checkbox Isentar Multas Clicável
+
+Base: v12.10.137 - Botões Financeiros PRO: Isenção de Dívidas Clicável
+
+Correcções aplicadas:
+- Corrigido o controlo “Isentar multas” no módulo de pagamento individual.
+- Adicionado id/for/role/aria e suporte a teclado para o checkbox de isenção de multa.
+- Adicionado binding JavaScript robusto para clique no label, clique directo no checkbox e tecla Enter/Espaço.
+- Reforçado CSS de pointer-events, appearance e z-index para checkboxes, labels, botões, inputs, selects e textareas no módulo financeiro.
+- Pseudo-elementos decorativos do cartão de pagamento deixam de poder capturar cliques.
+- A pré-visualização do total passa a remover a multa seleccionada quando “Isentar multas” está marcado.
+- Para dívidas reais, foi adicionado data-multa-efectiva apenas para cálculo visual; o motor de pagamento continua a ser a fonte de verdade.
+- Escopo limitado ao módulo de pagamentos, sem alteração em fórmulas centrais, mensalidades, multas automáticas, recibos, notas, Pauta, DEC, ACTA, Jardim, Portal ou permissões.
+
+Validação esperada:
+1. Abrir Financeiro > Pagamentos.
+2. Seleccionar aluno com dívida e multa.
+3. Seleccionar um ou mais lançamentos.
+4. Clicar no texto “Isentar multas” e no quadradinho. Ambos devem marcar/desmarcar.
+5. Confirmar que o total visual reduz ao marcar isenção.
+6. Confirmar que o motivo passa a ser obrigatório apenas quando a isenção estiver marcada.
+7. Confirmar que botões de pagar, trocar aluno, seleccionar tudo, limpar, cancelar/isentar lançamento continuam clicáveis.

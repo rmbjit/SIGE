@@ -1,0 +1,19 @@
+SIGE SoftGenial v12.10.78 - Acta do Conselho: Disciplinas Dinâmicas da Turma
+
+Objectivo
+- Corrigir a secção “Cumprimento dos Programas” da Acta do Conselho para deixar de usar uma lista fixa/hardcoded de disciplinas.
+- Garantir que a ACTA usa a turma seleccionada como fonte da verdade.
+
+Correcções aplicadas
+- A lista do Cumprimento dos Programas passa a vir directamente de `sige_turma_disciplinas` da turma seleccionada.
+- A matriz curricular é usada apenas para ordenação quando existir `ordem_pauta`; não cria disciplinas artificiais na acta.
+- Cada linha do cumprimento passa a guardar também `disciplina_id`, não apenas o nome da disciplina.
+- Dados antigos já guardados são reaproveitados por `disciplina_id` quando possível e, como fallback, pelo nome da disciplina.
+- O PDF/Impressão da ACTA passa a usar a mesma lista dinâmica de disciplinas da turma, eliminando a ordem fixa anterior.
+- Quando a turma não tem disciplinas vinculadas, o módulo mostra uma mensagem clara em vez de apresentar disciplinas erradas.
+
+Garantias
+- Sem alteração no fluxo de nota votada.
+- Sem alteração na aprovação do Director Pedagógico.
+- Sem alteração em notas, fórmulas, pauta, DEC, pauta final, boletim ou regras académicas.
+- Sem alteração em pagamentos, multas, mensalidades ou base de dados financeira.

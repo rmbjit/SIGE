@@ -1,0 +1,46 @@
+SIGE SoftGenial v12.11.9.63 - Jornada Mobile + Tablet UX PRO
+
+Área: Mobile UX / Tablet UX / App Shell / Produto PRO
+
+Objectivo:
+- Começar a jornada de melhoria Mobile e Tablet com uma camada transversal, segura e progressiva, focada em intuitividade, navegação, leitura, toque, tabelas e modais.
+
+Diagnóstico inicial:
+- O sistema já possuía várias camadas mobile até à v12.11.9.62, sobretudo para telemóvel até 760px.
+- O tablet ainda estava menos coberto: entre 761px e 1100px a navegação ficava dependente do menu lateral/hamburger, com menos tratamento de bottom navigation, topbar, tabelas e toolbars.
+- Existem muitas telas com tabelas, formulários e modais customizados, o que exige uma camada global progressiva antes de redesenhos tela-a-tela.
+
+Intervenções realizadas:
+- Nova folha assets/mobile-tablet-ux.css carregada após o design system.
+- Novo script assets/mobile-tablet-ux.js carregado no App Shell SIGE.
+- Classe/atributo de viewport: mobile, tablet e desktop para futuras melhorias faseadas.
+- Tablet UX entre 761px e 1100px:
+  - App Shell em modo tablet-first.
+  - Topbar sticky compacta com hamburger integrado, logo, título, ano lectivo e utilizador.
+  - Bottom navigation global também visível em tablet para módulos sem navegação própria.
+  - Conteúdo com safe-area inferior para não ficar escondido pela navegação.
+  - Grids/KPIs/atalhos em duas colunas para melhor aproveitamento do espaço.
+  - Toolbars e filtros com wrap táctil, evitando compressão ou overflow.
+- Mobile + Tablet:
+  - Tabelas recebem wrapper com scroll horizontal até 1100px, incluindo tabelas injectadas por AJAX.
+  - Wrapper de tabela tem role, aria-label, tabindex e dica visual “Deslize para ver mais”.
+  - Modais customizados recebem reforço progressivo para scroll interno e contenção de overscroll até 1100px.
+  - Alvos tácteis mínimos reforçados para botões, links de acção e campos.
+  - Sidebar/Menu lateral recebe sincronização de aria-expanded/aria-hidden, fecho por overlay, Escape e retorno de foco.
+  - Estados de foco visível reforçados.
+
+Blindagem:
+- Sem alterações de base de dados.
+- Sem alterações em regras académicas, notas, pautas, boletins, DEC ou fórmulas.
+- Sem alterações em pagamentos, mensalidades, multas, recibos ou cálculos financeiros.
+- Sem alterações em permissões, AJAX de negócio, importação, Ficha 360º ou Gestão Avançada de Encarregados.
+- Intervenção concentrada em assets e carregamento visual/progressivo no App Shell.
+
+Validação executada:
+- PHP lint completo.
+- BUILD.json alinhado com SIGE_VERSION.
+- Smoke test estático v12.11.9.63.
+- Integridade do ZIP final validada.
+
+Próxima fase recomendada:
+- Redesenho tela-a-tela por prioridade: Dashboard, Alunos/Ficha 360º, Pagamentos, Turmas/Disciplinas, Jardim, WhatsApp e Configurações.

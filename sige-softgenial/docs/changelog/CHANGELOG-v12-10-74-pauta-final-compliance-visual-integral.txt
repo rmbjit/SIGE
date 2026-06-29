@@ -1,0 +1,22 @@
+SIGE SoftGenial v12.10.74 - Pauta Final Oficial: Compliance Visual Integral
+
+Objectivo
+- Melhorar o visual do módulo &view=pauta_final.
+- Garantir compliance visual com o Painel Principal / Dashboard V2 MJS-grade.
+- Manter intervenção exclusivamente visual, sem tocar em cálculos, notas, progressão, transição, impressão ou exportação.
+
+Ajustes aplicados
+- Removido o cabeçalho genérico do App Shell para esta view, mantendo header único.
+- Hero antigo escuro substituído por hero claro no padrão Produto PRO.
+- Sequência visual obrigatória aplicada: ícone canónico, área Académico, título, subtítulo e painel lateral de estado.
+- Filtros de turma e ano lectivo harmonizados como cartão claro com campos arredondados.
+- Barra de contexto da pauta convertida para chips informativos com ícones canónicos.
+- Botões Imprimir/PDF e Exportar Excel redesenhados no padrão do sistema, com cursor, hover e responsividade.
+- Tabela da pauta final, estatísticas, legenda e assinaturas receberam bordas, sombras, raio, cabeçalhos e leitura visual Produto PRO.
+- Estado vazio redesenhado sem seta/emoji visual.
+
+Garantias
+- Sem alteração em MT, MFD, AF, MF, MG, negativas ou resultado final.
+- Sem alteração em progressão, transição, reprovação ou regras académicas.
+- Sem alteração em notas, pautas, DEC, boletins, pagamentos, multas, mensalidades ou base de dados.
+- Sem alteração na impressão popup ou exportação Excel.

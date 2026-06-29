@@ -1,0 +1,15 @@
+SIGE SoftGenial v12.11.9.8 - RH 10/10 Soft Delete & Input Integrity PRO (TEST)
+
+Módulo auditado: Recursos Humanos / Equipa e Professores (&view=equipe)
+
+Fechos principais:
+- Remoção de colaborador passou de hard delete de wp_users para soft delete seguro.
+- Revogação efectiva de acesso: status RH/meta, role WordPress removida, sessões invalidadas, perfil SIGE desactivado e utilizador ocultado da equipa.
+- Histórico académico/RH/auditoria preservado, evitando efeitos secundários em notas, logs, documentos e vínculos antigos.
+- Bloqueio explícito de edição/activação/reset para colaboradores removidos.
+- Validação server-side reforçada para nome, email, perfil, telefone, NUIT, NIB/IBAN, M-Pesa, datas, valores monetários, fotos e documentos.
+- Documentos RH limitados a ficheiros seguros da própria instância/uploads.
+- Crachás deixam de embutir NUIT no DOM, por minimização de dados pessoais.
+- Fallback de autorização AJAX endurecido: nunca trata role SIGE legada com manage_options como admin WordPress real.
+
+Sem alterações em fórmulas financeiras, regras académicas, notas, pautas, mensalidades, pagamentos ou base de dados fora do escopo RH.

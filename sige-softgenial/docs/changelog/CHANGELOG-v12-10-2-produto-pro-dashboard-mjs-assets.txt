@@ -1,0 +1,17 @@
+SIGE SoftGenial v12.10.2 - Produto PRO: Dashboard Principal, Assets SVG e Visual inspirado no MJS
+
+Escopo desta entrega
+- Modernização visual do Dashboard Principal dentro da estratégia Produto PRO.
+- Criação da pasta assets/icons/sg/ com ícones SVG próprios do SoftGenial.
+- Actualização do helper visual sige_ui_icon() para carregar ícones da pasta de assets, com fallback seguro.
+- Ajuste do App Shell para um visual mais próximo do MJS: sidebar roxa, área principal clara, cartões brancos, sombras suaves e navegação mais limpa.
+- Dashboard com cartões, hero, indicadores, tabelas e acessos rápidos mais consistentes e com aparência de produto acabado.
+
+Garantias de não regressão
+- Não foram alteradas fórmulas financeiras.
+- Não foram alteradas fórmulas académicas.
+- Não foram alteradas regras de notas, pautas, DEC, mensalidades, multas, descontos ou pagamentos.
+- A intervenção concentrou-se na camada visual, assets e organização de UI.
+
+Observação técnica de segurança
+- Foi corrigida uma duplicação sintática evidente numa query do alerta de alunos sem turma no Dashboard, sem alterar a regra de cálculo.

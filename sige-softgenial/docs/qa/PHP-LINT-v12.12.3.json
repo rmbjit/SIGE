@@ -1,0 +1,9 @@
+{
+  "version": "12.12.3",
+  "scope": "all PHP files in package",
+  "command": "find . -name \"*.php\" -print0 | sort -z | xargs -0 -n1 -P8 php -l",
+  "checked": 334,
+  "failures_count": 0,
+  "status": "OK",
+  "failures": []
+}

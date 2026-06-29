@@ -1,0 +1,96 @@
+CHANGELOG v12.9.59 - Bulk Actions na Central de Mensagens WhatsApp
+====================================================================
+Data: 2026-05-04
+Base: v12.9.58 saudacao-encarregado-pergunta-recibo
+
+OBJECTIVO
+---------
+Permitir seleccionar várias mensagens ao mesmo tempo na Central de Mensagens
+WhatsApp e aplicar uma acção única a todas (cancelar, re-enviar, eliminar).
+Antes era 1 a 1, lento para volumes grandes.
+
+NOVO
+----
+Frontend (admin/whatsapp_central-view.php):
+  - Coluna nova com checkbox em cada linha.
+  - Master checkbox no header da tabela: "seleccionar todas nesta página".
+  - Barra sticky azul que aparece quando há ≥ 1 linha seleccionada:
+      [ N ] mensagens seleccionadas
+      🚫 Cancelar seleccionadas
+      🔁 Re-enviar seleccionadas
+      🗑️ Eliminar seleccionadas
+      ✕ Limpar selecção
+  - Botões da barra ficam DISABLED quando não há linha elegível para essa acção
+    (ex: se só há mensagens enviadas seleccionadas, botão "Cancelar" fica
+    cinza porque enviadas não podem ser canceladas).
+  - Tooltips informam quantas das seleccionadas são elegíveis.
+  - Cada toggle individual e o master checkbox actualizam a barra em tempo real.
+
+Backend (includes/whatsapp-central.php):
+  - Endpoint AJAX novo: sige_wppc_bulk
+    POST: op=cancel|retry|delete, ids=array de IDs
+  - Validação por linha (preserva regras das acções individuais):
+      cancel: só status 'pendente' ou 'forcar_envio'
+      retry:  só status 'falhou' ou 'cancelado'
+      delete: só status 'enviado','falhou','cancelado'
+  - Linhas que não cumprem o filtro são SKIP, não FAIL.
+  - Resposta inclui sumário: { total, ok, skip, fail, message }
+    Mensagem: "5 aplicadas • 2 ignoradas (estado incompatível)"
+  - Limite: max 500 IDs por chamada (proteção contra timeouts e DoS).
+  - Multi-tenant: WHERE escola_id = current_eid em todas as queries.
+  - 1 UPDATE/DELETE em lote por op (IN clause), não N queries individuais.
+
+CAPABILITY GATE / SEGURANÇA
+---------------------------
+- Mesmo gate dos outros endpoints da Central:
+  manage_options, sige_director, sige_admin, sige_admin_ti,
+  sige_financeiro, sige_secretario, sige_secretaria_geral.
+- Nonce sige_wppc_nonce reutilizado.
+- $wpdb->prepare() com placeholders em todas as queries.
+- IDs validados como int positivo + array_unique antes de qualquer query.
+- IDs de outras escolas são silenciosamente ignorados (skip), não dão erro.
+
+NÃO ALTERA
+----------
+- Schema BD (zero ALTER TABLE).
+- Fórmulas financeiras (finance-core.php INTACTO).
+- Fórmulas académicas (academic-logic.php INTACTO).
+- Motor WhatsApp (engine, recovery-mode, guardian, templates INTACTOS).
+- Cron tasks (cron-tasks.php INTACTO).
+- Comportamento das acções individuais (continuam a funcionar como sempre).
+
+EXPERIÊNCIA DO UTILIZADOR
+-------------------------
+Antes: para cancelar 30 mensagens pendentes de uma cobrança em massa que
+correu mal, eram 30 cliques + 30 confirmações + 30 round-trips HTTP.
+
+Agora:
+  1. Filtra por status=Pendentes (ou usa o tab)
+  2. Click no master checkbox do header → seleciona todas
+  3. Click em "🚫 Cancelar seleccionadas"
+  4. Confirma uma vez
+  5. 1 HTTP call → todas canceladas
+
+Performance: para 100 linhas, passou de ~30s (sequential) para ~200ms (batch).
+
+VALIDAÇÃO
+---------
+- php -l: OK em todos os ficheiros tocados (3) e em todo o plugin
+- Smoke test: 6/6 hooks AJAX registados (incluindo o novo bulk), 11/11 funções
+- Particionamento {apply, skip}: 6/6 PASS
+  (testado: 6 status × 3 ops, todos só-skip, IDs inexistentes, pendente-com-delete)
+- JS: sintaxe válida (11.7 KB)
+- Render com dados: todos os elementos novos presentes (bulkbar, master,
+  checkboxes por linha, data-status, JS handler runBulk)
+- Empty state: colspan=10 correcto (era 9 na v12.9.58)
+- Ficheiros canónicos byte-a-byte intactos: 8/8 INTACTO
+  (finance-core, academic-logic, motor WhatsApp completo, cron, schema BD)
+
+FICHEIROS
+---------
+TOCADOS (3):
+  ~ sige-softgenial.php           (version 12.9.58 → 12.9.59)
+  ~ includes/whatsapp-central.php (+ endpoint sige_wppc_bulk)
+  ~ admin/whatsapp_central-view.php (+ coluna checkbox + barra bulk + JS)
+
+NOVOS: 0

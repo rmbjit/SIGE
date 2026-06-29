@@ -1,0 +1,12 @@
+SIGE v12.9.46 - Finance UI Filters + Cobranças JS Fix
+
+Base: v12.9.45 validada.
+
+Correções:
+- Central de Cobranças: corrige erro de JavaScript causado por CSS multiline dentro de string JS, restaurando checkbox, seleccionar todos, selecção inteligente, lista de cobrança e submit.
+- Extractos/Caixa: normalização robusta de datas e intervalos SQL por data/hora para evitar comportamento diferente entre escolas.
+- Relatório Mensal Consolidado: cálculo do início/fim do mês com DateTimeImmutable e iteração por dias sem wp_date(strtotime()), evitando omissão da tabela em algumas instâncias.
+- Versionamento: Header, SIGE_VERSION e BUILD.json alinhados em 12.9.46.
+
+Sem regressão intencional:
+- SMTP nativo, Reply-To, fila de email e templates inteligentes permanecem intactos.

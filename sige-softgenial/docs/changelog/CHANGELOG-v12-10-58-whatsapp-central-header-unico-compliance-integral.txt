@@ -1,0 +1,22 @@
+SIGE SoftGenial v12.10.58 - Central WhatsApp: Header Único + Compliance Integral
+
+Objectivo
+- Corrigir definitivamente o módulo &view=whatsapp_central para cumprir duas regras mandatórias:
+  1) header único, sem duplicação do cabeçalho genérico do App Shell;
+  2) compliance visual integral com o Painel Principal / Dashboard V2 MJS-grade.
+
+Correcções aplicadas
+- Adicionado `whatsapp_central` à lista oficial de views com header próprio dentro do App Shell.
+- Eliminada a renderização do cabeçalho genérico do módulo “Mensagens WhatsApp”, que estava a duplicar informação acima do hero.
+- Reestruturado o hero para seguir de forma mais rígida o padrão do Painel Principal:
+  - área/título/subtítulo na sequência correcta;
+  - título com a mesma hierarquia visual do dashboard;
+  - botões principais no mesmo padrão do painel principal;
+  - painel lateral de resumo mantido de forma harmonizada.
+- Mantidos os pills informativos de guardrails/janela/fila abaixo das acções, sem poluir o topo.
+- Acrescentados âncoras visuais para “Ver operação da fila” e “Ver saúde do número”, sem mexer na lógica do módulo.
+
+Garantias
+- Sem alteração em fila, cron, limites, janela segura, Z-API, templates, opt-in, opt-out ou regras anti-bloqueio.
+- Sem alteração em pagamentos, recibos, multas, mensalidades, notas, pautas, DEC, boletins ou base de dados.
+- Correcção focada em apresentação visual e controlo de duplicação do header.

@@ -1,0 +1,56 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.151
+Data: 2026-06-14
+Modulo: Painel Principal (dashboard-view.php)
+Ambito: Consistencia visual / Design
+
+ESCALA TIPOGRAFICA ESTENDIDA (tokens)
+-------------------------------------
+A escala de tokens parava em --fs-xl (24px), insuficiente para um painel com
+herois e numeros KPI grandes. Adicionados dois tamanhos de display (aditivo, nao
+altera nenhum token existente):
+    --fs-2xl: 28px
+    --fs-3xl: 32px
+
+REMAP TIPOGRAFICO (px antigo -> token; delta)
+---------------------------------------------
+    hero-title          31px -> --fs-3xl (32)   +1
+    kpi-value           27px -> --fs-2xl (28)   +1
+    donut-center        26px -> --fs-2xl (28)   +2
+    fin-mini strong     18px -> --fs-lg  (20)   +2
+    focus-copy strong   22px -> --fs-xl  (24)   +2
+    dash-title h3       17px -> --fs-md  (16)   -1
+    hero-subtitle       15px -> --fs-md  (16)   +1
+    13 rotulos/notas    12px -> --fs-sm  (13)   +1
+    hero-title (mobile) 24px -> --fs-xl  (24)    0  (exacto)
+Mantidos de proposito: 6 tamanhos fraccionarios mobile (10.5px, 10.8px, 13.5px)
+abaixo da escala (xs=11px), afinacao fina para telemoveis pequenos.
+
+REMAP DE ESPACAMENTO (nearest na grelha 4px; empates para cima)
+---------------------------------------------------------------
+    7->8  9->8  10->12  11->12  13->12  14->16  17->16  18->20  22->24  34->32
+Espacamento do painel: 100 por cento na grelha (zero literais restantes).
+
+REMOCAO DE !important REDUNDANTE (51)
+-------------------------------------
+As 10 regras .X svg{width;height;stroke;color;fill;opacity !important} usavam
+!important sem necessidade:
+  - o seletor descendente .X svg tem especificidade (0,1,1);
+  - a unica regra-base e .sg-svg-icon (0,1,0), de MENOR peso;
+  - o tamanho do icone vem de atributo HTML width="24" (presentacional, mais
+    fraco que qualquer CSS de autor).
+Logo .X svg ja vence sem !important. Verificado que nao existe regra .sg-svg-icon
+de maior especificidade. Resultado de render identico. !important do painel: 271->220.
+Os 220 restantes (layout e media-queries) ficam para uma fase com verificacao em
+render, por interagirem com wp-admin e queries sobrepostas.
+
+ESTILOS INLINE (nao sao divida)
+-------------------------------
+Os 24 style="..." do painel sao ligacoes dinamicas de custom properties
+(--h:45% alturas de barra, --kpi-color:var(--color-brand-500) tema por cartao,
+--action-color via PHP). E o uso correcto de inline (valores data-driven) e ja
+usam tokens. Mantidos.
+
+GARANTIAS
+---------
+  php -l limpo; run-gates.php 14/14; 306 invariantes; placar 14.5->15.0.
+  Baselines descidas (--set): consistencia-visual 8030->7946.

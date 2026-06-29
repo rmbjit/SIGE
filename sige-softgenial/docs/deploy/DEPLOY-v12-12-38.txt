@@ -1,0 +1,56 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.38
+Data: 2026-06-22
+Titulo: Fase 2 - Cofre de segredos - cobertura, mascaramento e nao-vazamento
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+Reforco interno do cofre de segredos. Quatro melhorias, todas internas:
+1. Mascaramento de segredos na exibicao: quando um segredo e mostrado, so
+   aparecem os ultimos caracteres.
+2. Os segredos deixam de poder aparecer nos registos (logs): o canal de seguranca
+   apaga automaticamente qualquer segredo antes de registar.
+3. Os segredos nao sao colocados em enderecos (URL): garantido por verificacao.
+4. Alteracao de segredos auditada: quando alguem altera uma credencial (SMTP,
+   gateway de pagamento), fica registado o que foi alterado, nunca o valor.
+Nao ha alteracao a base de dados. A forma como os segredos sao guardados e lidos
+nao muda (as integracoes continuam a funcionar como antes).
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+5. Nao e preciso limpar cache do navegador: as alteracoes sao de servidor.
+
+================================================================
+VERIFICACAO
+================================================================
+1. Confirme que o email (SMTP/Zoho) continua a enviar normalmente.
+2. Confirme que os pagamentos moveis (M-Pesa, e-Mola) continuam a funcionar.
+3. Altere uma credencial (por exemplo a configuracao SMTP) e confirme, no registo
+   de auditoria, um evento "segredo_alterado" com a chave alterada e sem o valor.
+4. Nos ecras onde um segredo e mostrado, confirme que aparece mascarado (so os
+   ultimos caracteres).
+
+================================================================
+NOTA TECNICA
+================================================================
+Os ficheiros centrais de calculo (finance-core e outros) nao foram tocados. A
+redaccao de segredos liga-se ao canal de seguranca, nao ao registo de auditoria
+financeiro. Sem nova superficie, sem opcoes novas, sem dependencias externas novas.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera dados
+nem esquema, pelo que a reversao e directa.
+
+================================================================
+A SEGUIR (FASE 2)
+================================================================
+Rotacao de segredos e segredos por escola (alem do que ja existe para pagamentos).

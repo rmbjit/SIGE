@@ -1,0 +1,60 @@
+SIGE SoftGenial v12.11.9.37 - Importação Rápida de Alunos PRO
+
+Data: 05/06/2026
+Área: Académico / Alunos e Matrículas / Secretaria
+
+Objectivo
+- Permitir que a escola importe rapidamente a sua lista de estudantes a partir de um ficheiro CSV, evitando registo manual aluno a aluno.
+
+Ficheiros alterados
+- sige-softgenial.php
+- BUILD.json
+- admin/academic/alunos_lista.php
+- includes/aluno-fetch-ajax.php
+
+Melhorias implementadas
+1. Novo botão “Importar Lista” no hero do módulo Alunos e Matrículas.
+2. Novo modal Produto PRO para importação de estudantes.
+3. Download de modelo CSV compatível com Excel.
+4. Importação por AJAX com ficheiro CSV e turma de destino.
+5. Validação obrigatória de dados base:
+   - nome_completo
+   - data_nascimento
+   - genero
+6. Validação rigorosa de contactos dos pais:
+   - nome_pai
+   - telemovel_pai
+   - nome_mae
+   - telemovel_mae
+7. Modo controlado para contactos pendentes:
+   - por padrão, linhas sem dados dos pais/contactos são bloqueadas;
+   - se a escola activar a opção de pendentes, o aluno é importado, mas a ficha recebe observação para actualizar contactos antes do envio por WhatsApp.
+8. Normalização de telemóveis moçambicanos:
+   - aceita 82, 83, 84, 85, 86 e 87 com 9 dígitos;
+   - limpa +258/258/00258, espaços e separadores.
+9. Detecção de duplicados:
+   - número de processo repetido;
+   - mesmo nome completo + mesma data de nascimento.
+10. Geração automática de número de processo quando a coluna vem vazia.
+11. Criação automática da matrícula na turma seleccionada e no ano lectivo activo.
+12. Relatório visual pós-importação com:
+   - total de linhas;
+   - importados;
+   - pendentes;
+   - erros/duplicados;
+   - detalhe por linha.
+13. Auditoria técnica da importação via sige_audit_log quando disponível.
+
+Garantias preservadas
+- Não foram alteradas fórmulas de notas.
+- Não foram alteradas pautas, boletins, DEC ou regras académicas.
+- Não foram alteradas regras financeiras, mensalidades, multas, pagamentos ou recibos.
+- Não foram alteradas permissões globais nem base de dados estrutural.
+- A importação respeita escola_id, ano lectivo activo e permissões de gestão de alunos.
+
+Testes executados
+- php -l em admin/academic/alunos_lista.php.
+- php -l em includes/aluno-fetch-ajax.php.
+- php -l em sige-softgenial.php.
+- Smoke test estático da presença do endpoint AJAX, botão de importação, modal, modelo CSV, validações de contactos, anti-duplicados e versão.
+- Validação da integridade do pacote ZIP final.

@@ -1,0 +1,20 @@
+SIGE SoftGenial v12.9.19 - WhatsApp Recovery Mode Completo
+
+Camada adicionada:
+1. Recovery Mode por escola/instância após restrição ou sinais de risco.
+2. Reaquecimento automático: Dia 1=15 mensagens, Dia 2=25, Dia 3=40, depois progressivo.
+3. Bloqueio/limitação de links no recovery: Dia 1 sem links, Dia 2 poucos links, Dia 3 gradual.
+4. Priorização de contactos quentes: contactos que respondem SIM/RECIBO/PAGO têm prioridade.
+5. Contactos frios são adiados durante recovery.
+6. Auto-stop por 48h quando há falhas elevadas.
+7. Webhook /wp-json/sige/v1/whatsapp-webhook interpreta SIM/NÃO/PARAR/STOP/RECIBO/PAGO.
+8. Mensagens humanizadas e com opt-out.
+9. Separação automática de links: mensagem principal primeiro, link depois com atraso aleatório.
+10. Migração defensiva: cria tabelas sige_whatsapp_contacts e sige_whatsapp_instance_state, e adiciona colunas scheduled_at, priority, risk_flags e guardian_meta à fila.
+
+Configuração obrigatória na Z-API:
+- Ao receber: https://SEU-DOMINIO/wp-json/sige/v1/whatsapp-webhook
+- Receber status da mensagem: mesma URL, recomendado.
+
+Observação honesta:
+Nenhum sistema garante 100% contra restrição/ban do WhatsApp, mas esta versão reduz drasticamente padrões de spam e automatiza a recuperação pós-restrição.

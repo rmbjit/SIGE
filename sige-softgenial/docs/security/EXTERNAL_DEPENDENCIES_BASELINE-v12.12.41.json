@@ -1,0 +1,147 @@
+{
+    "version": "12.12.41",
+    "items": [
+        {
+            "host": "api.z-api.io",
+            "files": [
+                "includes/whatsapp-diagnostics.php:20",
+                "includes/whatsapp-diagnostics.php:21"
+            ]
+        },
+        {
+            "host": "cdnjs.cloudflare.com",
+            "files": [
+                "includes/cdn-scripts.php:20",
+                "includes/cdn-scripts.php:21",
+                "includes/cdn-scripts.php:22",
+                "includes/cdn-scripts.php:23",
+                "includes/cdn-scripts.php:24",
+                "includes/cdn-scripts.php:25",
+                "sige-softgenial.php:174"
+            ]
+        },
+        {
+            "host": "fonts.googleapis.com",
+            "files": [
+                "assets/style.css:302",
+                "includes/login-page.php:12",
+                "includes/portal-logic.php:323",
+                "includes/portal-logic.php:325"
+            ]
+        },
+        {
+            "host": "purl.org",
+            "files": [
+                "includes/aluno-fetch-ajax.php:1707",
+                "includes/financeiro-historico-aluno-pro.php:630"
+            ]
+        },
+        {
+            "host": "rmbjconsulting.com",
+            "files": [
+                "includes/hub/class-sige-hub-update-checker.php:99",
+                "includes/update-checker.php:107",
+                "sige-softgenial.php:8"
+            ]
+        },
+        {
+            "host": "schemas.openxmlformats.org",
+            "files": [
+                "includes/aluno-fetch-ajax.php:1542",
+                "includes/aluno-fetch-ajax.php:1584",
+                "includes/aluno-fetch-ajax.php:1614",
+                "includes/aluno-fetch-ajax.php:1647",
+                "includes/aluno-fetch-ajax.php:1665",
+                "includes/aluno-fetch-ajax.php:1666",
+                "includes/aluno-fetch-ajax.php:1667",
+                "includes/aluno-fetch-ajax.php:1668",
+                "includes/aluno-fetch-ajax.php:1669",
+                "includes/aluno-fetch-ajax.php:1675",
+                "includes/aluno-fetch-ajax.php:1690",
+                "includes/aluno-fetch-ajax.php:1691",
+                "includes/aluno-fetch-ajax.php:1692",
+                "includes/aluno-fetch-ajax.php:1693",
+                "includes/aluno-fetch-ajax.php:1699",
+                "includes/aluno-fetch-ajax.php:1707",
+                "includes/aluno-fetch-ajax.php:1714",
+                "includes/financeiro-historico-aluno-pro.php:424",
+                "includes/financeiro-historico-aluno-pro.php:474",
+                "includes/financeiro-historico-aluno-pro.php:616",
+                "includes/financeiro-historico-aluno-pro.php:619",
+                "includes/financeiro-historico-aluno-pro.php:621",
+                "includes/financeiro-historico-aluno-pro.php:626",
+                "includes/financeiro-historico-aluno-pro.php:627",
+                "includes/financeiro-historico-aluno-pro.php:628",
+                "includes/financeiro-historico-aluno-pro.php:630",
+                "includes/pauta-excel-handler.php:799",
+                "includes/pauta-excel-handler.php:821",
+                "includes/pauta-excel-handler.php:927",
+                "includes/pauta-excel-handler.php:951",
+                "includes/pauta-excel-handler.php:953",
+                "includes/pauta-excel-handler.php:955",
+                "includes/pauta-excel-handler.php:957",
+                "includes/pauta-excel-handler.php:963",
+                "includes/pauta-excel-handler.php:965",
+                "includes/pauta-excel-handler.php:971",
+                "includes/pauta-excel-handler.php:973",
+                "includes/pauta-excel-handler.php:981"
+            ]
+        },
+        {
+            "host": "softgenial.edu.mz",
+            "files": [
+                "admin/whatsapp_diag-view.php:216",
+                "includes/core/class-sige-core.php:80",
+                "includes/hub/class-sige-hub-update-checker.php:100",
+                "includes/hub/class-sige-hub-update-checker.php:56",
+                "includes/hub/class-sige-hub-update-checker.php:66",
+                "includes/hub/class-sige-hub-update-checker.php:77",
+                "includes/update-checker.php:108",
+                "includes/update-checker.php:11",
+                "includes/update-checker.php:42",
+                "includes/update-checker.php:73",
+                "includes/update-checker.php:86",
+                "sige-softgenial.php:4"
+            ]
+        },
+        {
+            "host": "ui-avatars.com",
+            "files": [
+                "admin/jardim/jardim_diario-view.php:676",
+                "admin/jardim/jardim_diario-view.php:780",
+                "admin/jardim/jardim_presencas-view.php:571",
+                "admin/jardim/jardim_relatorio-view.php:890",
+                "admin/jardim/jardim_relatorio-view.php:974",
+                "admin/jardim/jardim_saude-view.php:589"
+            ]
+        },
+        {
+            "host": "unpkg.com",
+            "files": [
+                "includes/cdn-scripts.php:26",
+                "includes/portaria-camera-safe-page.php:84",
+                "sige-softgenial.php:174"
+            ]
+        },
+        {
+            "host": "wa.me",
+            "files": [
+                "admin/academic/alunos_lista.php:5934"
+            ]
+        },
+        {
+            "host": "www.w3.org",
+            "files": [
+                "admin/academic/alunos_lista.php:1190",
+                "admin/academic/turmas-view.php:1887",
+                "admin/academic/turmas-view.php:530",
+                "assets/style.css:796",
+                "includes/aluno-fetch-ajax.php:1707",
+                "includes/financeiro-historico-aluno-pro.php:630",
+                "includes/portal-logic.php:353",
+                "includes/security-mfa-totp.php:407",
+                "includes/ui-components.php:107"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+## v12.12.19 - Ledger incremento 4: despesas, creditos e fechos de caixa (cobertura financeira completa) (2026-06-20)
+
+- O livro-razao imutavel passa a cobrir os restantes movimentos financeiros institucionais: despesas, creditos e fechos de caixa. Com este incremento, a cobertura financeira do ledger fica completa: ajustes, pagamentos, cobrancas, despesas, creditos e fechos.
+- Cinco eventos novos, discretos e de gravacao imediata, reutilizando o encadeamento HMAC e a ancora externa ja existentes:
+- Despesa criada (fin_criar_despesa), com categoria e valor; o despesa_id e capturado antes do registo.
+- Transicao de estado de despesa (fin_despesa_transitar) em sige_fin_despesa_transitar_status, apos a transicao (aprovada, paga, cancelada), com o estado e o motivo.
+- Credito criado (fin_criar_credito) em sige_fin_criar_credito_pendente, com aluno e valor; o credito_id e capturado antes do registo.
+- Fecho de turno (fin_fechar_turno) em fecharTurno, com o total liquido (bruto e estornos no payload); o fecho_id e capturado antes do registo.
+- Reabertura de turno (fin_reabrir_turno) em reabrirTurno, com o fecho e o motivo (evento sensivel: reabrir um periodo de caixa fechado).
+- Fabricar ou apagar qualquer destes eventos passa a ser detectavel (cadeia HMAC append-only, ancora externa contra truncagem da cauda). Sem tocar nas regras de calculo (md5 bloqueados intactos).
+- Adiados como refinamento posterior: o consumo/aplicacao de credito e a edicao de valor de despesa, que sao inline e nao tem ponto unico limpo. A criacao (que fixa o valor) ja fica coberta.
+- Sem novo endpoint: manifesto mantem-se em 196 e regras do Kernel inalteradas. Zero travessoes.
+- Governanca: gate e smoke estendidos (27 verificacoes, incluindo os 5 novos eventos numa cadeia integra). Rediagnostico adversarial Zero P0/P1.
+

@@ -1,0 +1,56 @@
+SIGE SoftGenial v12.11.9.104
+============================
+
+Triagem AO90 e botoes - 6 rotulos visiveis canonizados (cadastro->ficha), 11 botoes ao kit; AO90 e botoes sem classe ZERADOS no sistema com invariantes globais
+
+Checklist obrigatório:
+- Header Version actualizado.
+- SIGE_VERSION actualizado.
+- BUILD.json actualizado.
+- php -l executado nos ficheiros alterados.
+
+DETALHE DA TRIAGEM AO90 + BOTÕES (v12.11.9.104)
+================================================
+
+Antes da consolidação CSS, fechámos as duas últimas categorias
+comportamentais ainda com vestígios: terminologia BR e botões nus.
+
+AO90 -> ZERO (rótulos corrigidos + régua afinada)
+Triagem caso a caso das 8 ocorrências que o auditor contava:
+- RÓTULOS VISÍVEIS corrigidos (cadastro -> ficha, PT-MZ):
+  * alunos_lista: "Cadastro mestre" -> "Ficha mestra";
+  * dashboard: "Cadastro saudável"/"Rever cadastros" -> "Fichas
+    saudáveis"/"Rever fichas"; tooltip "Abrir cadastro" -> "Abrir
+    ficha de aluno";
+  * financeiro-gerador: 2x "cadastro do aluno" -> "ficha do aluno".
+- FALSOS POSITIVOS confirmados e excluídos pela régua (não eram
+  interface): o identificador de variável $__sg_cadastro_pct e o
+  fragmento SQL concatenado "AND ativo = 1" dentro de strings PHP.
+  Auditor v2.6: filtro de linha exclui $...(cadastr|ativ)... e
+  "ativo = 1". Resultado: AO90 = 0 em TODAS as 53 views.
+
+BOTÕES SEM CLASSE -> ZERO (11 botões em 9 ficheiros)
+- Submits de filtro/Carregar (financeiro-dashboard x2, relatorio-
+  mensal, config-center, jardim_saude): sgk-btn sgk-btn-sec;
+- Botões primários com cor de marca (vincular verde, jardim_saude
+  verde): sgk-btn-primario com a cor preservada;
+- Impressão flutuante (devedores): sgk-btn-sec sgk-btn-sm;
+- Portaria (botão manual): sgk-btn-sec;
+- boletim-pdf-template (janela ISOLADA de impressão, sem o CSS do
+  kit): classe local .bpdf-btn + CSS mínimo injectado no <style> da
+  própria página - decisão consciente, esta página não carrega sgk-.
+
+EXTINÇÃO SELADA
+- 2 invariantes globais novos: AO90 visível = 0 e botões sem classe
+  = 0, varridos em todas as views.
+- Estado comportamental do sistema agora: 0 alert, 0 confirm, 0
+  prompt, 0 AO90 visível, 0 botão sem classe.
+- Score: 263,2 -> 221,2 (a queda real dos rótulos/botões; o que
+  resta - 1.792 inline - é layout para a fase de consolidação CSS).
+- regressão: 127 -> 129 invariantes.
+
+NOTA DE MÉTODO
+O auditor evoluiu para v2.6 com afinações de filtro reportadas SEMPRE
+em separado do progresso. O ranking final mostra que NENHUMA view tem
+inconsistências comportamentais; o score residual é exclusivamente
+densidade de estilo inline, cuja remoção exige a fase visual dedicada.

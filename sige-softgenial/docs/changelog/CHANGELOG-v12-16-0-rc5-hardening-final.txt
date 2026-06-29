@@ -1,0 +1,22 @@
+# CHANGELOG - v12.16.0 RC5 - Hardening Final
+
+## Tipo
+
+Release Candidate interna. Nao e ZIP final.
+
+## Alteracoes
+
+- Normalizada a matriz de rastreabilidade RC0-RC5.
+- Corrigido o plano de rollback para reflectir a sequencia real dos RCs.
+- Declarados riscos residuais de staging, mobile, dados reais e validacao humana.
+- Criado manifesto de Release Candidate RC5.
+- Criado checklist de validacao em staging.
+- Criados gates dedicados de RC readiness.
+
+## Proteccoes
+
+- Nenhuma formula financeira alterada.
+- Nenhuma formula academica alterada.
+- Nenhuma migracao criada.
+- Nenhum schema alterado.
+- Nenhum ZIP final gerado.

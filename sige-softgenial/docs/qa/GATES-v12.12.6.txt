@@ -1,0 +1,847 @@
+Intervalo de gates: 1-37 de 37
+----------------------------------------------------------------
+GATE: Release gate (versões/CLI/canónicas)
+OK   Versão sincronizada nas 3 fontes (header=12.12.6, const=12.12.6, build=12.12.6)
+OK   Zero ficheiros com CRLF em código
+OK   Zero CR isolado em código
+OK   Zero BOM em código
+OK   Zero travessões (em/en-dash) em código
+OK   Todos os tools/*.php têm guarda CLI
+OK   Raiz contém apenas os 7 ficheiros canónicos (.gitignore, BUILD.json, CHANGELOG.md, README.md, index.php, sige-softgenial.php, uninstall.php)
+OK   Raiz sem pastas fora da lista canónica
+OK   Pasta docs/changelog/ presente
+OK   Pasta docs/deploy/ presente
+OK   Pasta docs/qa/ presente
+OK   Pasta docs/relatorios/ presente
+OK   Pasta docs/legado/ presente
+OK   Pasta languages/ presente
+OK   Pasta tools/ presente
+OK   tools/.htaccess presente
+OK   index.php de silêncio em admin/
+OK   index.php de silêncio em includes/
+OK   index.php de silêncio em assets/
+OK   index.php de silêncio em tools/
+OK   index.php de silêncio em admin/finance/
+OK   index.php de silêncio em admin/academic/
+OK   index.php de silêncio em includes/settings/
+OK   Ficheiro órfão sedw9tqQh ausente
+OK   Rota 'vincular' mapeada
+OK   Rota 'whatsapp_central' mapeada
+OK   Rota 'whatsapp_diag' mapeada
+OK   Rota 'whatsapp_circulares' mapeada
+OK   Rota 'presencas' mapeada
+OK   Rota 'financeiro-mpesa' mapeada
+OK   Todas as views da allowlist resolvem para ficheiro
+OK   Diagnóstico WhatsApp sem badge de versão obsoleta
+OK   Diagnóstico usa 'Tarefas automáticas de envio'
+OK   Central WhatsApp sem jargão pending/backfill na copy
+OK   Central WhatsApp sem referência de versão na copy
+OK   Acta sem referência de versão na copy
+OK   Acta usa 'Censo' em vez de 'snapshot' na copy
+OK   Extractos: selo 'Reconciliação concluída'
+OK   Extractos: cabeçalho humano da nota de fecho
+OK   Extractos: marcador de reconciliação intacto
+OK   Mensagens '(nonce)' substituídas por linguagem de sessão
+OK   Pagamentos: nova mensagem de sessão presente
+OK   Currículos: copy de produto
+OK   Permissões: copy de produto
+OK   Extractos: data-labels pré-AO90
+OK   CSS: pseudo-elemento Seleccionar pré-AO90
+OK   db-handler: mensagem actualizada pré-AO90
+OK   Lançamentos: Reactivação pré-AO90
+OK   Contrato de acção 'reativar_lancamento' intocado
+OK   Dupla grafia de compatibilidade na camada de dados intocada
+OK   uninstall.php presente e guardado
+OK   CHANGELOG.md contém a entrada da versão corrente
+OK   Changelog detalhado da versão corrente em docs/changelog/
+------------------------------------------------------------
+RELEASE GATE OK - 53 verificações passaram (v12.12.6).
+OK      Release gate (versões/CLI/canónicas)             
+----------------------------------------------------------------
+GATE: Regressão (invariantes)
+OK   Handler salvar_aluno existe
+OK   Handler remover_aluno existe
+OK   salvar_aluno: nonce + matriz de permissões
+OK   salvar_aluno exige alunos.editar/criar conforme o caso
+OK   remover_aluno: nonce + alunos.apagar
+OK   Helper de visualização de documentos presente
+OK   Helper de emissão de documentos presente
+OK   Helper de exportação presente
+OK   Whitelist de purpose no export AJAX
+OK   Contagem de alunos sem duplicar por joins
+OK   Joins de matrícula/turma com escopo de escola
+OK   Perfil Guarda/Portaria preservado no seed
+OK   Portaria devolve acesso_permitido
+OK   Portaria devolve ui_estado coerente
+OK   Portaria devolve selo coerente
+OK   Portaria devolve som coerente
+OK   Migration tenant-aware existe
+OK   Substituição segura de UNIQUE indexes existe
+OK   Backfill de escola_id por relação canónica existe
+OK   Nenhuma UNIQUE KEY global em tabelas tenant-scoped
+OK   Fórmula canónica sige_fin_saldo_sql presente
+OK   Fórmula canónica sige_fin_saldo_lancamento presente
+OK   Sincronizador de status de lançamento presente
+OK   Marcador de reconciliação [SIGE_RECON_V1] presente
+OK   Enfileirador WhatsApp financeiro presente
+OK   Allowlist de views presente no router
+OK   Allowlist aplicada antes do include
+OK   Escudo de login ligado aos hooks de autenticação
+OK   Escudo de login carregado no bootstrap
+OK   Motor de presenças: derivação pura presente
+OK   Presenças: AJAX de correcção registado
+OK   Presenças: whitelist de estados de excepção
+OK   Presenças nunca escrevem no log da Portaria
+OK   Schema: UNIQUE de excepção por escola+aluno+data
+OK   Conciliação M-Pesa chama a função financeira canónica
+OK   Conciliação M-Pesa NUNCA insere directamente em tabelas financeiras
+OK   Conciliação M-Pesa tem caminho de decisão humana
+OK   Webhook M-Pesa valida o token com hash_equals
+OK   Webhook M-Pesa verifica idempotência por referência
+OK   Schema: UNIQUE de idempotência (escola_id, referencia_mpesa)
+OK   Cliente M-Pesa cifra o bearer com RSA PKCS1
+OK   Presenças: view usa sige_view_assets (regra do escuteiro paga)
+OK   Presenças: zero blocos <style> no PHP
+OK   Assets extraídos existem em assets/views/
+OK   Código CSS morto removido (consolidado candidato + ferramenta obsoleta)
+OK   Cobrança push: capacidade + nonce verificados
+OK   Cobrança push usa o cliente oficial
+OK   Cobrança push NUNCA insere em tabelas financeiras
+OK   Interruptores de saúde: nonce + capacidade verificados
+OK   Conciliação regista pelo método do provider (mpesa/emola), não hardcoded
+OK   Webhook e-Mola valida o token com hash_equals
+OK   Webhook e-Mola insere com provider=emola no funil partilhado
+OK   e-Mola usa a MESMA conciliação canónica do M-Pesa
+OK   Webhook e-Mola NUNCA insere em tabelas financeiras
+OK   Parser monetário partilhado (anglo + europeu) presente
+OK   Relatório oficial alimentado pelo agregador do motor
+OK   Ramo do relatório fica DEPOIS da guarda de visualização
+OK   Totais por dia (rodapé oficial) como função pura
+OK   UI Kit: os 3 ficheiros da fundação existem
+OK   UI Kit carregado no bootstrap
+OK   UI Kit declara dependência do design system (carrega depois)
+OK   sigeUi exposto globalmente
+OK   Piloto WhatsApp Central: zero alert() nativos
+OK   Piloto WhatsApp Central: zero confirm() nativos
+OK   Piloto usa os diálogos canónicos do kit
+OK   Piloto: terminologia 100% canónica (Remover/Guardar/Pesquisar)
+OK   Auditor UX presente (medição repetível)
+OK   Pagamentos: zero alert() nativos
+OK   Pagamentos: zero confirm() nativos
+OK   Pagamentos: regista SEMPRE pela função financeira canónica (2 caminhos)
+OK   Pagamentos: view NUNCA insere directo em tabelas financeiras
+OK   Pagamentos: escudo anti duplo-clique no botão que move dinheiro
+OK   Pagamentos: zero botões sem classe
+OK   Auditor v2: AO90 medido só em contexto visível (sem falsos positivos SQL)
+OK   Config: rótulos BR canonizados (ficha do aluno)
+OK   Pagamentos Móveis: zero diálogos nativos (alert/confirm/prompt)
+OK   Rejeitar: prompt do kit com a referência da transacção
+OK   Pagamentos Móveis: banners, cartões e badges do kit
+OK   Kit JS expõe sigeUi.prompt
+OK   Auditor conta prompt( nativos
+OK   Jardim relatório: confirms declarativos do kit (envio mensal + individual)
+OK   Jardim relatório: zero botões sem classe
+OK   Estatísticas: zero alert(), feedback por toast
+OK   Turmas: horário edita com sigeUi.prompt (disciplina + professor)
+OK   Kit: sigeUi.prompt aceita valor inicial
+OK   Verificador de JS embebido nas views existe (6º gate)
+OK   Kit: confirmação declarativa intercepta também a submissão por teclado
+OK   Kit: usa o submitter real do formulário quando disponível
+OK   Gate de colisões CSS existe (7º gate)
+OK   Kit CSS vive no namespace sgk- (classes e variáveis)
+OK   Kit CSS NUNCA redefine classes sg- da casa
+OK   Kit JS cria elementos com classes sgk-
+OK   Helpers PHP do kit emitem classes sgk-
+OK   Acta: aprovação à pauta com confirmação do kit (zero confirm nativo)
+OK   Acta: botão Carregar na hierarquia do kit
+OK   Planos: prestações pagam SEMPRE pela função financeira canónica
+OK   Planos: view NUNCA insere directo em tabelas financeiras
+OK   Planos: zero botões sem classe (HTML real)
+OK   Devedores: zero alert(); cobrança em massa SEMPRE com confirmação própria
+OK   Auditor v2.4: botões em HTML puro e termos sem comentários
+OK   Portal do aluno: estados vazios existentes (notas + financeiro) protegidos
+OK   Encerramento: as 3 acções de ano pedem confirmação do kit
+OK   Encerramento: Encerrar o ano é vermelho e mantém a classe local
+OK   Encerramento: zero botões sem classe (HTML real)
+OK   Lançamentos: zero alert() nativos
+OK   Lançamentos: view NUNCA insere directo em tabelas financeiras
+OK   Auditor v2.5: vazios genéricos e tolerância de dados excluída do AO90
+OK   Jardim diário: botões na hierarquia do kit (violeta de marca preservado)
+OK   Alocação: zero diálogos nativos
+OK   Alocação: remover da turma confirma com o NOME do aluno
+OK   Alocação: estado vazio existente protegido
+OK   Circulares: zero alert() nativos
+OK   Circulares: envio em massa SEMPRE atrás da confirmação consciente (checkbox + botão bloqueado)
+OK   Auditor v2.5d: fragmentos de schema fora do AO90; vazios reconhecem formulações
+OK   Calendário: agregado usa a saldo CANÓNICA e conta devedores distintos
+OK   Calendário: devedor do mês exige saldo em aberto positivo
+OK   Calendário: motor é LEITURA PURA (zero escritas na BD)
+OK   Devedores: calendário reutiliza as MESMAS condições da lista (sem o mês)
+OK   Devedores: tiles clicáveis aplicam o filtro de mês existente
+OK   Calendário: CSS em ficheiro próprio (gate de colisões cobre) e enfileirado
+OK   Calendário: smoke do motor puro existe (8º conjunto)
+OK   Corredor de gates existe e cobre os 8 (exit codes nunca mascarados)
+OK   EXTINÇÃO GLOBAL: zero prompt() nativos em TODAS as views
+OK   EXTINÇÃO GLOBAL: zero alert() nativos em TODAS as views
+OK   EXTINÇÃO GLOBAL: zero confirm() nativos em TODAS as views
+OK   Kit: confirmação declarativa cobre também links <a> (preservando href/nonce)
+OK   EXTINÇÃO GLOBAL: zero rótulos AO90 visíveis (usuário/cadastro) em todas as views
+OK   EXTINÇÃO GLOBAL: zero botões sem classe em todas as views
+OK   Dashboard: classes utilitárias semânticas usam tokens canónicos
+OK   Dashboard: zero inline de cor real (migrado para classes)
+OK   Dashboard: papéis de cor preservados via tokens (sucesso/perigo/marca)
+OK   Auditor v2.7: custom properties e estilo dinâmico PHP não contam como inline-dívida
+OK   Equipe: larguras da tabela de staff em classes (col-* semânticas)
+OK   Equipe: zero inline estático de largura/margem (migrado para classes)
+OK   Equipe: larguras de coluna preservadas (pixel-perfect)
+OK   Equipe: alternância JS do detalhe de confirmação intacta
+OK   Disciplinas: larguras de tabela e estado vazio em classes
+OK   Disciplinas: zero inline estático de largura/padding
+OK   Disciplinas: estados vazios gémeos usam a mesma classe (consolidação real)
+OK   Disciplinas: sem atributos órfãos (input da sigla íntegro)
+OK   Disciplinas: animação jQuery do box-esg2 intacta (display inicial preservado)
+OK   Design tokens: ficheiro canónico existe (fonte única da verdade)
+OK   Design tokens: paleta de marca e neutros ancorada nas cores reais
+OK   Design tokens: 7 familias completas (info azul incluida)
+OK   Dashboard: ZERO cores hex mágicas (100% migrado para tokens)
+OK   Dashboard: cores vêm da fonte da verdade (var(--color-*))
+OK   Dashboard: azul informativo e marca usam tokens semânticos correctos
+OK   style.css: ZERO cores hex mágicas (100% migrado para tokens)
+OK   style.css: ponte --sg-* -> --color-* instalada (uma só fonte da verdade)
+OK   style.css: cores vêm da fonte da verdade (700+ referências)
+OK   Smoke do design system existe (10º conjunto de garantias)
+OK   Ícones: função de canonização do invólucro <svg> existe
+OK   Ícones: sige_ui_icon canoniza cada ícone ao servir
+OK   Ícones: ferramenta de normalização e smoke versionados
+OK   Ícones: os dos cartões (school/pin/file/palette/users/check) estão normalizados
+OK   Ícones: regra base canónica no design system (tamanho + cor herdada)
+OK   Config Center: hierarquia de 3 níveis (só pesos reais, zero 850/950)
+OK   Config Center: raios da escala canónica (4/8/12/16/22/pill)
+OK   Config Center: cores do <style> migradas para tokens
+OK   Gate de tipografia e baseline registados
+OK   alunos_lista: hierarquia de pesos reais (zero 850/950 em todo o ficheiro)
+OK   alunos_lista: CSS principal migrado para tokens (450+ referências)
+OK   alunos_lista: todas as referências de cor resolvem no canónico
+OK   alunos_lista: CSS bem-formado (chavetas balanceadas)
+OK   financeiro-extratos: hierarquia de pesos reais (zero 850/950)
+OK   financeiro-extratos: CSS principal migrado para tokens (200+ referências)
+OK   financeiro-extratos: template de impressão preservado
+OK   financeiro-extratos: semântica financeira de reconciliação preservada no termo impresso
+OK   financeiro-extratos: CSS bem-formado (chavetas balanceadas)
+OK   matriz: hierarquia de pesos reais (zero 850/950)
+OK   matriz: CSS migrado para tokens (150+ referências)
+OK   matriz: CSS bem-formado (chavetas balanceadas)
+OK   aluno-portal: hierarquia de pesos reais (zero 850/950)
+OK   aluno-portal: CSS e inline migrados para tokens (100+ referências)
+OK   aluno-portal: tema dinâmico da escola preservado (fallback intacto)
+OK   aluno-portal: CSS bem-formado (chavetas balanceadas)
+OK   disciplinas: hierarquia de pesos reais (zero 850/950)
+OK   disciplinas: CSS e ícones de ciclo migrados para tokens (180+ referências)
+OK   disciplinas: CSS bem-formado (chavetas balanceadas)
+OK   boletim: hierarquia de pesos reais (zero 850/950)
+OK   boletim: CSS e inline migrados para tokens (110+ referências)
+OK   boletim: função de cor por nota preservada (semântica de classificação em lógica)
+OK   boletim: template de impressão do aproveitamento preservado
+OK   boletim: CSS bem-formado (chavetas balanceadas)
+OK   equipe: hierarquia de pesos reais (zero 850/950)
+OK   equipe: CSS migrado para tokens (200+ referências)
+OK   equipe: CSS bem-formado (chavetas balanceadas)
+OK   minhas_turmas: hierarquia de pesos reais (zero 850/950)
+OK   minhas_turmas: CSS e cores de estado migrados para tokens (100+ referências)
+OK   minhas_turmas: CSS bem-formado (chavetas balanceadas)
+OK   portaria: hierarquia de pesos reais no CSS (zero 850/950)
+OK   portaria: CSS migrado para tokens (100+ referências)
+OK   portaria: CSS bem-formado (chavetas balanceadas)
+OK   encerramento: hierarquia de pesos reais (zero 850/950)
+OK   encerramento: CSS, inline e lógica migrados para tokens (110+ referências)
+OK   encerramento: lógica de cor por taxa de aprovação preservada (via tokens)
+OK   encerramento: CSS bem-formado (chavetas balanceadas)
+OK   curriculum-engine: hierarquia de pesos reais (zero 850/950)
+OK   curriculum-engine: CSS e inline migrados para tokens (100+ referências)
+OK   curriculum-engine: tema dinâmico preservado (com fallback em token)
+OK   curriculum-engine: CSS bem-formado (chavetas balanceadas)
+OK   transporte: hierarquia de pesos reais (zero 850/950)
+OK   transporte: CSS, inline e lógica migrados para tokens (90+ referências)
+OK   transporte: lógica de cor por lotação preservada (via tokens)
+OK   transporte: CSS bem-formado (chavetas balanceadas)
+OK   jardim_saude: hierarquia de pesos reais (zero 850/950)
+OK   jardim_saude: CSS e inline de saúde migrados para tokens (120+ referências)
+OK   jardim_saude: CSS bem-formado (chavetas balanceadas)
+OK   jardim_diario: hierarquia de pesos reais (zero 850/950)
+OK   jardim_diario: CSS, inline e mapa de avaliação migrados (120+ referências)
+OK   jardim_diario: mapa de cor por avaliação MB/B/S/NS preservado (via tokens)
+OK   jardim_diario: CSS bem-formado (chavetas balanceadas)
+OK   dashboard: hierarquia de pesos reais (zero 850/950)
+OK   dashboard: zero cores mágicas (migração de cor da v108 intacta)
+OK   dashboard: CSS bem-formado (chavetas balanceadas)
+OK   acta: hierarquia de pesos reais (zero 850/950)
+OK   acta: CSS e inline migrados para tokens (130+ referências)
+OK   acta: regra de impressão preservada
+OK   acta: CSS bem-formado (chavetas balanceadas)
+OK   pautas: hierarquia de pesos reais (zero 850/950)
+OK   pautas: CSS, inline e mapa de situação migrados (130+ referências)
+OK   pautas: mapa de cor por situação (PROGRIDE/TRANSITA/REPROVA) preservado
+OK   pautas: regras de impressão preservadas
+OK   pautas: CSS bem-formado (chavetas balanceadas)
+OK   estatisticas-demograficas: hierarquia de pesos reais (zero 850/950)
+OK   estatisticas-demograficas: CSS e inline migrados (90+ referências)
+OK   estatisticas-demograficas: template de impressão preservado
+OK   estatisticas-demograficas: CSS bem-formado (chavetas balanceadas)
+OK   abertura: hierarquia de pesos reais (zero 850/950)
+OK   abertura: CSS e inline migrados para tokens (120+ referências)
+OK   abertura: regra de impressão do log preservada
+OK   abertura: CSS bem-formado (chavetas balanceadas)
+OK   financeiro-pagamentos: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   financeiro-pagamentos: CSS, corpo e recibos migrados (300+ referências)
+OK   financeiro-pagamentos: classes de estado de pagamento (pago/vencido) preservadas
+OK   financeiro-pagamentos: CSS bem-formado (chavetas balanceadas)
+OK   permissions-ui: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   permissions-ui: CSS e inline migrados para tokens (130+ referências)
+OK   permissions-ui: CSS bem-formado (chavetas balanceadas)
+OK   jardim_presencas: hierarquia de pesos reais (zero 850/950)
+OK   jardim_presencas: CSS e mapa de presença migrados (70+ referências)
+OK   jardim_presencas: mapa de cor por estado de presença (presente/atraso/falta) preservado
+OK   jardim_presencas: CSS bem-formado (chavetas balanceadas)
+OK   pauta-final: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   pauta-final: CSS e corpo migrados para tokens (90+ referências)
+OK   pauta-final: template de impressão preservado
+OK   pauta-final: classes de situação (progride/reprova) preservadas
+OK   pauta-final: CSS bem-formado (chavetas balanceadas)
+OK   whatsapp_central: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   whatsapp_central: CSS, corpo e mapa de estado migrados (170+ referências)
+OK   whatsapp_central: mapa de cor por estado de mensagem (enviada/falhou/pendente) preservado
+OK   whatsapp_central: CSS bem-formado (chavetas balanceadas)
+OK   notas: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   notas: CSS e corpo migrados para tokens (170+ referências)
+OK   notas: tema dinâmico preservado (com fallback em token)
+OK   notas: CSS bem-formado (chavetas balanceadas)
+OK   jardim_relatorio: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   jardim_relatorio: CSS, corpo e mapas migrados (170+ referências)
+OK   jardim_relatorio: mapas de avaliação (estado emocional + desempenho) preservados
+OK   jardim_relatorio: CSS bem-formado (chavetas balanceadas)
+OK   core-status: hierarquia de pesos reais (zero 850/950)
+OK   core-status: CSS migrado para tokens (75+ referências)
+OK   core-status: classes de estado de sistema (ok/warn) preservadas
+OK   core-status: CSS bem-formado (chavetas balanceadas)
+OK   financeiro-devedores: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   financeiro-devedores: CSS e corpo migrados (200+ referências)
+OK   financeiro-devedores: template de impressão (Lista de Cobrança) preservado
+OK   financeiro-devedores: classe de valor de dívida preservada
+OK   financeiro-devedores: CSS bem-formado (chavetas balanceadas)
+OK   turmas: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   turmas: blocos CSS e corpo migrados (170+ referências)
+OK   turmas: templates de impressão (Mapa de Turmas, Lista de Alunos, Horário) preservados
+OK   turmas: template de exportação Excel preservado
+OK   turmas: CSS bem-formado (chavetas balanceadas)
+OK   auditoria_notas: hierarquia de pesos reais (zero 850/950)
+OK   auditoria_notas: CSS, mapa de módulo e estado de erro migrados (75+ referências)
+OK   auditoria_notas: lógica de estado de erro (vermelho) preservada
+OK   auditoria_notas: CSS bem-formado (chavetas balanceadas)
+OK   dec: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   dec: CSS e corpo migrados para tokens (75+ referências)
+OK   dec: template de impressão preservado
+OK   dec: CSS bem-formado (chavetas balanceadas)
+OK   aprovar_notas: hierarquia de pesos reais (zero 850/950)
+OK   aprovar_notas: CSS e inline migrados para tokens (65+ referências)
+OK   aprovar_notas: estado de aprovação (pendente/rejeitar) preservado
+OK   aprovar_notas: CSS bem-formado (chavetas balanceadas)
+OK   jardim_boletim: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   jardim_boletim: CSS e corpo migrados para tokens (75+ referências)
+OK   jardim_boletim: mapa de avaliação MB/B/S/NS preservado
+OK   jardim_boletim: CSS bem-formado (chavetas balanceadas)
+OK   financeiro-lancamentos: hierarquia de pesos reais (zero 850/950)
+OK   financeiro-lancamentos: CSS migrado para tokens (40+ referências)
+OK   financeiro-lancamentos: CSS bem-formado (chavetas balanceadas)
+OK   financeiro-config: hierarquia de pesos reais no ficheiro (zero 850/950)
+OK   financeiro-config: CSS e corpo migrados para tokens (150+ referências)
+OK   financeiro-config: tema dinâmico preservado (com fallback em token)
+OK   financeiro-config: CSS bem-formado (chavetas balanceadas)
+OK   PROTECCAO ANTI-ENTIDADE: nenhum ficheiro com &var( partido
+OK   RESPONSIVO: tabelas do financeiro-config com wrapper de scroll
+OK   RESPONSIVO: tabela do whatsapp_central com wrapper de scroll
+OK   RESPONSIVO: tabelas do financeiro-pagamentos protegidas
+OK   RESPONSIVO: modal do equipe com max-height (botões acessíveis)
+OK   Design tokens: raios, sombras e durações canónicos definidos
+OK   Design tokens: animações de entrada canónicas partilhadas
+OK   Design tokens: carregam ANTES do kit e das views (cascata correcta)
+OK   Design tokens: gate guardião e baseline registados
+------------------------------------------------------------
+REGRESSÃO OK - 306 invariantes verdes.
+OK      Regressão (invariantes)                           
+----------------------------------------------------------------
+GATE: Presenças (motor puro)
+OK   Entrada antes do corte = Presente
+OK   Entrada exactamente no corte = Presente
+OK   Um segundo depois do corte = Atraso
+OK   Entrada tardia = Atraso
+OK   Sem entradas = Falta
+OK   Primeira entrada decide (07:10 entre leituras)
+OK   Primeira entrada 07:45 = Atraso mesmo com outras leituras
+OK   Justificação vence a falta
+OK   Presença manual vence a falta
+OK   Dispensa vence até a presença derivada
+OK   Excepção desconhecida é ignorada (cai na derivação)
+OK   Corte 08:00: entrada 07:45 = Presente
+OK   Corte 08:00: entrada 08:10 = Atraso
+OK   Junho/2026 tem 22 dias lectivos (seg-sex), obteve 22
+OK   Junho/2026 começa em segunda, dia 1
+OK   Sábado 6 e domingo 7 excluídos
+OK   Fevereiro/2024 (bissexto) inclui dia 29 (quinta-feira)
+OK   Contagens por estado correctas
+OK   Percentagem de presença 71.4 (dispensa fora do denominador), obteve 71.4
+OK   Só dispensas: percentagem 0 sem divisão por zero
+OK   Mês perfeito: 100%
+OK   Totais por dia: P/AT/PM contam, F/J/D não (2,1,2)
+OK   Turma vazia: totais a zero sem erro
+------------------------------------------------------------
+SMOKE PRESENÇAS OK - 23 verificações passaram.
+OK      Presenças (motor puro)                            
+----------------------------------------------------------------
+GATE: M-Pesa/e-Mola (funil)
+OK   Bearer gerado em base64 válido
+OK   Decifrar o bearer com a chave privada devolve a API key exacta
+OK   Public key em base64 nu é normalizada para PEM e cifra igual
+OK   Chave pública inválida devolve bearer vazio (sem fatal)
+OK   9 dígitos começados em 8 ganham 258
+OK   +258 com espaços normaliza
+OK   Já normalizado mantém-se
+OK   Prefixo 00 internacional removido
+OK   Formato input_* mapeado
+OK   Formato output_* mapeado
+OK   Chaves em maiúsculas resolvidas case-insensitive
+OK   Moeda por defeito MZN
+OK   Só os dígitos da referência contam
+OK   Dígitos no meio de texto extraídos
+OK   Sem dígitos devolve vazio
+OK   Valor exacto vai ao mais antigo com saldo (31)
+OK   Pagamento parcial vai ao mais antigo (31)
+OK   Tolerância de 0,50 MT aceita arredondamento
+OK   Valor que excede o mais antigo vai a pendente_manual (sem inventar divisões)
+OK   Aluno sem dívida em aberto vai a pendente_manual
+OK   Ordenação por vencimento é feita internamente (51 vence)
+OK   Parser: '1500.00' = 1500
+OK   Parser: '2.350,50' europeu = 2350.5
+OK   Parser: '2,350.50' anglo = 2350.5
+OK   Parser: '1.500' = milhares = 1500
+OK   Parser: '1,50' = decimal = 1.5
+OK   Parser: sufixo de moeda ignorado
+OK   Provider mpesa regista com método 'mpesa'
+OK   Provider emola regista com método 'emola'
+OK   Provider case-insensitive
+OK   Provider desconhecido cai no método mpesa (defeito seguro)
+OK   Rótulo humano do e-Mola correcto
+OK   Rótulo humano do M-Pesa correcto
+OK   e-Mola formato transid/amount mapeado
+OK   e-Mola formato alternativo + vírgula decimal
+OK   e-Mola moeda por defeito MZN
+OK   e-Mola payload irreconhecível devolve vazio (webhook recusa com 400)
+------------------------------------------------------------
+SMOKE M-PESA OK - 37 verificações passaram.
+OK      M-Pesa/e-Mola (funil)                              
+----------------------------------------------------------------
+GATE: Escudo de login
+OK   4 falhas: ainda livre
+OK   5ª falha tranca por 600s (<= 600)
+OK   Bloqueio de utilizador expira após a janela
+OK   Falhas fora da janela não acumulam (3 antigas + 4 novas = livre)
+OK   Sucesso faz reset ao contador do utilizador
+OK   Spray de 20 utilizadores tranca o IP (1800s)
+OK   Outro IP continua livre
+OK   Falhas de A não trancam B (abaixo do tecto de IP)
+OK   OTP tem 6 dígitos
+OK   OTP fica pendente após emissão
+OK   Código errado devolve "errado"
+OK   Código certo devolve "ok"
+OK   OTP consumido deixa de estar pendente
+OK   Reutilizar o código devolve "ausente"
+OK   OTP expira após 600s
+OK   Código certo após esgotar tentativas é recusado
+------------------------------------------------------------
+SMOKE LOGIN SHIELD OK - 16 verificações passaram.
+OK      Escudo de login                                    
+----------------------------------------------------------------
+GATE: JS embebido nas views
+Views varridas: 58 | blocos <script> verificados: 65
+JS-VIEWS OK - sintaxe limpa em todos os blocos.
+OK      JS embebido nas views                              
+----------------------------------------------------------------
+GATE: Colisões CSS
+CSS meus: 3 ficheiro(s) | classes definidas: 93 | variáveis: 30 | casa: 2 ficheiro(s)
+COLISÕES CSS OK - namespaces limpos (kit em sgk-, zero intersecções com a casa).
+OK      Colisões CSS                                      
+----------------------------------------------------------------
+GATE: Calendário de devedores (motor puro)
+OK   Grelha tem sempre 12 células
+OK   Células ordenadas Jan..Dez
+OK   Rótulos PT nas pontas
+OK   ym no formato YYYY-MM
+OK   Mapeamento do mês com dados (Mar)
+OK   Linhas em objecto também são aceites (Abr)
+OK   Zero-fill em mês sem dados (Fev)
+OK   Máximo do ano detectado (8)
+OK   Pior mês recebe nível 4 (Ago)
+OK   Mês mínimo com devedores recebe nível 1 (Jan)
+OK   Nível proporcional: 7 de 8 dá nível 3 (Mar)
+OK   Mês corrente marcado (Jun)
+OK   Mês filtrado marcado (Mar)
+OK   Flag de filtro activo
+OK   Linha de outro ano fica fora da grelha (Dez=0)
+OK   Valores negativos clampados a zero (Mai)
+OK   Total em aberto soma só o ano da grelha
+OK   Cenário vazio: max=0 e sem filtro
+OK   Cenário vazio: todos os níveis a zero
+------------------------------------------------------------
+SMOKE CALENDÁRIO DEVEDORES OK - 19 verificações passaram.
+OK      Calendário de devedores (motor puro)              
+----------------------------------------------------------------
+GATE: Extracto de dívida detalhado (documento devedores)
+OK   Helper documental de decomposicao existe
+OK   Helper usa total canonico quando disponivel
+OK   Helper usa saldo canonico quando disponivel
+OK   Extracto inclui pendente, parcial e em_plano
+OK   Campo financeiro valor_original considerado
+OK   Campo financeiro valor_transporte considerado
+OK   Campo financeiro valor_extras considerado
+OK   Campo financeiro valor_multa_cobrada considerado
+OK   Campo financeiro valor_desconto considerado
+OK   Campo financeiro valor_desconto_especial considerado
+OK   Campo financeiro valor_pago considerado
+OK   Pagamentos abatidos por lancamento consultados
+OK   Consulta de pagamentos limita lancamentos do aluno
+OK   Query de dividas usa aluno_id e escola_id
+OK   Query de pagamentos usa escola_id e aluno_id
+OK   Documento nao chama recalculador com side effects
+OK   Titulo do documento detalhado presente
+OK   Resumo geral da divida presente
+OK   Decomposicao visivel por item presente
+OK   Multa, desconto especial e pago visiveis
+OK   Recibos e ultimo pagamento aparecem quando existirem
+OK   Nota de leitura financeira presente
+OK   Links de impressao geram nonce documental
+OK   Labels da Central de Devedores ficaram claros
+OK   Label antigo Factura removido do fluxo de devedores
+------------------------------------------------------------
+SMOKE EXTRACTO DETALHADO OK - 25 verificacoes passaram.
+OK      Extracto de dívida detalhado (documento devedores)
+----------------------------------------------------------------
+GATE: Views beta (notas operacionais)
+OK   Catalogo UI contem o view beta financeiro-mpesa
+OK   View financeiro-mpesa marcado como beta no catalogo
+OK   View financeiro-mpesa tem nota beta declarada
+OK   Catalogo UI contem o view beta whatsapp_circulares
+OK   View whatsapp_circulares marcado como beta no catalogo
+OK   View whatsapp_circulares tem nota beta declarada
+OK   Catalogo UI contem o view beta comunicacoes_central
+OK   View comunicacoes_central marcado como beta no catalogo
+OK   View comunicacoes_central tem nota beta declarada
+OK   Catalogo UI contem o view beta presencas
+OK   View presencas marcado como beta no catalogo
+OK   View presencas tem nota beta declarada
+OK   Renderizador imprime badge BETA
+OK   Renderizador imprime nota beta
+OK   Nota beta tem rotulo claro
+OK   CSS da linha titulo mais badge presente
+OK   CSS do badge beta presente
+OK   CSS da nota beta presente
+OK   View financeiro-mpesa usa cabecalho central para renderizar nota beta
+OK   View whatsapp_circulares usa cabecalho central para renderizar nota beta
+OK   View comunicacoes_central usa cabecalho central para renderizar nota beta
+OK   View presencas usa cabecalho central para renderizar nota beta
+OK   Rota preservada: 'financeiro-mpesa' => 'admin/finance/mpesa-view.php'
+OK   Rota preservada: 'whatsapp_circulares' => 'admin/whatsapp_circulares-view.php'
+OK   Rota preservada: 'comunicacoes_central' => 'admin/comunicacoes_central-view.php'
+OK   Rota preservada: 'presencas'        => 'admin/academic/presencas-view.php'
+BETA VIEWS SMOKE OK - 26 verificacoes passaram.
+OK      Views beta (notas operacionais)                    
+----------------------------------------------------------------
+GATE: Design System (fonte da verdade + ponte)
+OK   Fonte da verdade: 7 famílias completas (70 tokens de cor 50-900)
+OK   Fonte da verdade: marca ancorada em #7c3aed
+OK   Fonte da verdade: info (azul) ancorada em #2563eb
+OK   Fonte da verdade: primitivos estruturais (raios/sombras/espaço/z/easing)
+OK   Fonte da verdade: animações de entrada canónicas
+OK   Ponte: bloco de compatibilidade presente no style.css
+OK   Ponte: zero variáveis --sg-* órfãs (todas resolvem para token canónico)
+OK   Ponte: --sg-primary mapeia para a marca canónica
+OK   Ponte: --sg-error mapeia para danger canónico
+OK   Ponte: dourado (accent) unificado em warning
+OK   Resolução: toda referência var(--color-*) no style.css existe no canónico
+OK   Higiene: style.css tem ZERO cores hex mágicas (100% via tokens)
+OK   Integridade: chavetas balanceadas no style.css
+OK   Cascata: tokens carregam ANTES do kit e das views
+OK   Higiene: CSS morto (consolidado candidato) continua removido
+----------------------------------------------------------------
+SMOKE DESIGN SYSTEM OK - 15 verificações passaram.
+OK      Design System (fonte da verdade + ponte)           
+----------------------------------------------------------------
+GATE: Ícones (consistência visual)
+OK   Conjunto de ícones presente (34 SVG)
+OK   Todos os ícones: width/height = 24 (tamanho de invólucro uniforme)
+OK   Todos os ícones: viewBox 0 0 24 24 canónico
+OK   Todos os ícones: fill="none" (traço, não sólido)
+OK   Todos os ícones: stroke="currentColor" (herdam a cor do contexto)
+OK   Todos os ícones: stroke-linecap="round" (remates uniformes)
+OK   Todos os ícones: normalizados opticamente (<g transform scale>)
+OK   Todos os ícones: stroke-width compensado pela escala (espessura óptica constante)
+OK   Função sige_ui_icon_canonizar existe (blinda a tag <svg> raiz)
+OK   sige_ui_icon aplica a canonização ao servir cada ícone
+OK   Ferramenta de normalização versionada (build reproduzível)
+----------------------------------------------------------------
+SMOKE ÍCONES OK - 11 verificações passaram.
+OK      Ícones (consistência visual)                     
+----------------------------------------------------------------
+GATE: Design tokens (sem regressão de mágicos)
+Valores mágicos actuais: 2411 (baseline: 2415)
+PROGRESSO: 4 abaixo da baseline. Corra --set para registar o novo mínimo.
+DESIGN TOKENS OK - sem regressão de valores mágicos.
+OK      Design tokens (sem regressão de mágicos)         
+----------------------------------------------------------------
+GATE: Tipografia (hierarquia de pesos)
+OK   Ecrã auditado mantém hierarquia de pesos: admin/system/config-center-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/academic/alunos_lista.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/finance/financeiro-extratos.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/academic/matriz-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/academic/aluno-portal-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/academic/disciplinas-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/academic/boletim-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/hr/equipe-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/academic/minhas_turmas-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/system/portaria-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/academic/encerramento-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/system/curriculum-engine-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/logistics/transporte-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/jardim/jardim_saude-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/jardim/jardim_diario-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/system/dashboard-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/academic/acta-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/academic/pautas-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/academic/estatisticas-demograficas-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/academic/abertura-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/finance/financeiro-pagamentos.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/system/permissions-ui.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/jardim/jardim_presencas-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/academic/pauta-final-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/whatsapp_central-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/academic/notas-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/jardim/jardim_relatorio-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/system/core-status-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/finance/financeiro-devedores-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/academic/turmas-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/academic/auditoria_notas-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/academic/dec-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/academic/aprovar_notas-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/jardim/jardim_boletim-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/finance/financeiro-lancamentos-view.php
+OK   Ecrã auditado mantém hierarquia de pesos: admin/finance/financeiro-config.php
+Pesos não-canónicos: 0 (baseline: 0)
+TIPOGRAFIA OK - sem regressão; ecrãs auditados com hierarquia limpa.
+OK      Tipografia (hierarquia de pesos)                   
+----------------------------------------------------------------
+GATE: Consistencia visual (primitivos sem token)
+Primitivos magicos actuais: 7490 (baseline: 7499)
+PROGRESSO: 9 abaixo da baseline. Corra --set para registar o novo minimo.
+CONSISTENCIA VISUAL OK - sem regressao de primitivos magicos.
+OK      Consistencia visual (primitivos sem token)         
+----------------------------------------------------------------
+GATE: Tokens fora de contexto (login/portal/standalone)
+TOKENS FORA DE CONTEXTO OK - 4 contexto(s) sem tokens vigiado(s) (auto-descoberta login/shortcode/popup + semente), todos a usar literais.
+OK      Tokens fora de contexto (login/portal/standalone)  
+----------------------------------------------------------------
+GATE: Responsivo (mobile/tablet sem quebras)
+RESPONSIVO OK - 0 antipadrões (baseline 0; só desce).
+OK      Responsivo (mobile/tablet sem quebras)             
+----------------------------------------------------------------
+GATE: Governação (inventário técnico)
+Inventario SIGE v12.12.6
+Ficheiros totais: 1193
+PHP runtime: 204
+Superficie de accao: 174
+ - admin_post: 36
+ - admin_post_nopriv: 1
+ - cron_hook: 9
+ - query_handler: 5
+ - rest_route: 5
+ - shortcode: 1
+ - wp_ajax: 113
+ - wp_hook: 4
+Views allowlist: 54
+Views com permissao: 54
+current_user_can: 471
+sige_can: 57
+Fallbacks tenant candidatos: 187
+Opcoes WordPress: 125
+Hosts externos: 12
+INVENTARIO OK
+OK      Governação (inventário técnico)                
+----------------------------------------------------------------
+GATE: Governação (documentos e baselines)
+GOVERNANCE DOCS OK - documentos e baselines obrigatorios presentes.
+OK      Governação (documentos e baselines)              
+----------------------------------------------------------------
+GATE: Governação (views com permissões)
+VIEW PERMISSION MAP OK - 54 views cobertas por matriz.
+OK      Governação (views com permissões)               
+----------------------------------------------------------------
+GATE: Governação (manifesto de acções)
+ACTION SURFACE MANIFEST OK - 174 superficies declaradas, extractor primario e independente alinhados.
+OK      Governação (manifesto de acções)               
+----------------------------------------------------------------
+GATE: Governação (query handlers críticos)
+QUERY HANDLER SURFACE OK - query handlers criticos cobertos no manifesto.
+OK      Governação (query handlers críticos)            
+----------------------------------------------------------------
+GATE: Governação (tenant em queries sensíveis)
+TENANT SENSITIVE QUERIES OK - sige_desp_print com escola_id, nonce e auditoria.
+OK      Governação (tenant em queries sensíveis)        
+----------------------------------------------------------------
+GATE: Governação (testes negativos)
+GOVERNANCE NEGATIVE TESTS OK - detectores adversariais exercitados.
+OK      Governação (testes negativos)                    
+----------------------------------------------------------------
+GATE: Governação (endpoints públicos)
+PUBLIC ENDPOINTS POLICY OK - endpoints publicos cobertos.
+OK      Governação (endpoints públicos)                 
+----------------------------------------------------------------
+GATE: Governação (baseline de autorização)
+AUTHORIZATION BASELINE OK - divida congelada sem aumento de current_user_can.
+OK      Governação (baseline de autorização)           
+----------------------------------------------------------------
+GATE: Governação (fallbacks tenant)
+TENANT FALLBACKS OK - nenhum fallback novo fora do registo.
+OK      Governação (fallbacks tenant)                    
+----------------------------------------------------------------
+GATE: Governação (segredos e opções)
+SECRETS/OPTIONS REGISTER OK - candidatos sensiveis registados.
+OK      Governação (segredos e opções)                 
+----------------------------------------------------------------
+GATE: Governação (dependências externas)
+EXTERNAL DEPENDENCIES REGISTER OK - hosts classificados.
+OK      Governação (dependências externas)              
+----------------------------------------------------------------
+GATE: Security Kernel (runtime e bootstrap)
+SECURITY KERNEL OK - runtime, bootstrap e pontos de intercepcao presentes.
+OK      Security Kernel (runtime e bootstrap)              
+----------------------------------------------------------------
+GATE: Security Kernel (regras enforce/observe)
+SECURITY KERNEL RULES OK - 174 regras cobrem o manifesto; enforce=4; observe=170.
+OK      Security Kernel (regras enforce/observe)           
+----------------------------------------------------------------
+GATE: Security Kernel (smoke v12.12.4)
+OK   Contrato do kernel cobre 174 superficies
+OK   4 superficies em enforcement piloto
+OK   170 superficies em observe
+OK   admin_post:sige_mpesa_guardar_config existe
+OK   admin_post:sige_mpesa_guardar_config em enforce
+OK   admin_post:sige_mpesa_guardar_config protegido por nonce
+OK   admin_post:sige_mpesa_guardar_config nonce action correcto
+OK   admin_post:sige_mpesa_guardar_config com permissao esperada
+OK   admin_post:sige_mpesa_guardar_config tenant_required correcto
+OK   admin_post:sige_mpesa_guardar_config com rate limit
+OK   admin_post:sige_mpesa_guardar_config com auditoria
+OK   admin_post:sige_emola_guardar_config existe
+OK   admin_post:sige_emola_guardar_config em enforce
+OK   admin_post:sige_emola_guardar_config protegido por nonce
+OK   admin_post:sige_emola_guardar_config nonce action correcto
+OK   admin_post:sige_emola_guardar_config com permissao esperada
+OK   admin_post:sige_emola_guardar_config tenant_required correcto
+OK   admin_post:sige_emola_guardar_config com rate limit
+OK   admin_post:sige_emola_guardar_config com auditoria
+OK   query_handler:sige_desp_print existe
+OK   query_handler:sige_desp_print em enforce
+OK   query_handler:sige_desp_print protegido por nonce
+OK   query_handler:sige_desp_print nonce action correcto
+OK   query_handler:sige_desp_print com permissao esperada
+OK   query_handler:sige_desp_print tenant_required correcto
+OK   query_handler:sige_desp_print com rate limit
+OK   query_handler:sige_desp_print com auditoria
+OK   wp_ajax:sige_settings_save existe
+OK   wp_ajax:sige_settings_save em enforce
+OK   wp_ajax:sige_settings_save protegido por nonce
+OK   wp_ajax:sige_settings_save nonce action correcto
+OK   wp_ajax:sige_settings_save com permissao esperada
+OK   wp_ajax:sige_settings_save tenant_required correcto
+OK   wp_ajax:sige_settings_save com rate limit
+OK   wp_ajax:sige_settings_save com auditoria
+OK   settings save preserva autorizacao fina delegada
+OK   settings save aponta para SIGE_Settings_Policy::can_edit
+OK   kernel contem marcador security_kernel.allowed
+OK   kernel contem marcador security_kernel.denied
+OK   kernel contem marcador auth_required
+OK   kernel contem marcador invalid_intent
+OK   kernel contem marcador permission_denied
+OK   kernel contem marcador tenant_missing
+OK   kernel contem marcador rate_limited
+OK   kernel redige contexto de auditoria
+OK   kernel tem prioridade antecipada formal
+OK   query handlers registados em admin_init
+OK   query handlers registados em parse_request
+OK   query handlers registados em template_redirect
+OK   query handlers usam dispatcher multi-hook antecipado
+SMOKE SECURITY KERNEL OK - 50 verificacoes passaram.
+OK      Security Kernel (smoke v12.12.4)                   
+----------------------------------------------------------------
+GATE: Security Kernel (runtime audit v12.12.5)
+OK   REST /sige/v1/mpesa/callback mapeia para rest_route:sige/v1:/mpesa/callback
+OK   REST /sige/v1/emola/callback mapeia para rest_route:sige/v1:/emola/callback
+OK   REST /sige/v1/process-queue mapeia para rest_route:sige/v1:/process-queue
+OK   REST /sige/v1/whatsapp-webhook mapeia para rest_route:sige/v1:/whatsapp-webhook
+OK   REST /sige/v1/hub/instant-refresh mapeia para rest_route:sige/v1:/hub/instant-refresh
+OK   hook runtime registado admin_post_sige_mpesa_guardar_config@0
+OK   hook runtime registado admin_post_sige_emola_guardar_config@0
+OK   hook runtime registado wp_ajax_sige_settings_save@0
+OK   hook runtime antecipado registado template_redirect@-1000
+OK   hook runtime antecipado registado admin_init@-1000
+OK   hook runtime antecipado registado parse_request@-1000
+OK   hook runtime antecipado registado send_headers@-1000
+OK   dispatcher multi-hook de query handlers existe
+OK   filter rest_pre_dispatch antecipado com 3 argumentos
+OK   filter pre_do_shortcode_tag antecipado com 4 argumentos
+OK   shortcode:sige_portal despachavel sem substituir output em observe
+OK   wp_hook:template_redirect despachavel
+OK   dispatch enforce settings_save permite request valida
+SMOKE SECURITY KERNEL 12.12.5 OK - 18 verificacoes passaram.
+OK      Security Kernel (runtime audit v12.12.5)           
+----------------------------------------------------------------
+GATE: Security Kernel (query runtime closure v12.12.6)
+OK   query handlers interceptados em admin_init@-1000
+OK   query handlers interceptados em parse_request@-1000
+OK   query handlers interceptados em template_redirect@-1000
+OK   wp_hook send_headers interceptado antes de headers funcionais
+OK   REST pre_dispatch usa prioridade antecipada
+OK   shortcode pre_do usa prioridade antecipada
+OK   sige_print passa pelo kernel em admin_init antes de handlers de impressao
+OK   sige_portaria_camera passa pelo kernel em template_redirect antes do render standalone
+OK   sige_desp_print valido passa pelo dispatcher antecipado
+SMOKE SECURITY KERNEL 12.12.6 OK - 9 verificacoes passaram.
+OK      Security Kernel (query runtime closure v12.12.6)   
+----------------------------------------------------------------
+GATE: Settings tenant guard closure v12.12.6
+OK   Repository bloqueia escrita sige_config sem escola resolvida
+OK   Repository devolve erro fail-closed de tenant
+OK   Repository nao executa update/insert quando tenant falta
+OK   Regra settings_save existe
+OK   Regra settings_save exige tenant_required=true
+OK   Regra settings_save declara tenant_scope de escrita sige_config
+SMOKE SETTINGS TENANT GUARD 12.12.6 OK - 6 verificacoes passaram.
+OK      Settings tenant guard closure v12.12.6             
+----------------------------------------------------------------
+GATE: Pagamentos moveis (tenant-scoped options v12.12.5)
+OK   admin logado usa escola do utilizador, nao escola_id injectado no request
+OK   nome scoped M-Pesa correcto
+OK   nome scoped e-Mola correcto
+OK   M-Pesa escreve option scoped por escola
+OK   e-Mola escreve option scoped por escola
+OK   M-Pesa nao sobrescreve global em multi-escola estrito
+OK   e-Mola nao sobrescreve global em multi-escola estrito
+OK   M-Pesa le option scoped
+OK   e-Mola le option scoped
+OK   M-Pesa resolve escola por token scoped
+OK   e-Mola resolve escola por token scoped
+SMOKE MOBILE TENANT OPTIONS OK - 11 verificacoes passaram.
+OK      Pagamentos moveis (tenant-scoped options v12.12.5) 
+----------------------------------------------------------------
+GATE: Security Kernel (testes negativos)
+SECURITY KERNEL NEGATIVE TESTS OK - gates falham quando regras obrigatorias sao removidas ou enfraquecidas.
+OK      Security Kernel (testes negativos)                 
+================================================================
+TODOS OS GATES VERDES - 37 de 37 neste intervalo; cobertura total declarada: 37 gates.

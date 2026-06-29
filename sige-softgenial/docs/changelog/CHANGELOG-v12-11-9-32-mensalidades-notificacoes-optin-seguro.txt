@@ -1,0 +1,33 @@
+SIGE SoftGenial v12.11.9.32 - Mensalidades com opt-in seguro de WhatsApp e E-mail
+Data: 2026-06-01
+Build: sige-12.11.9.32-mensalidades-notificacoes-optin-seguro
+Canal: test
+
+Resumo
+- Adicionada escolha explícita no lançamento de mensalidades para enviar ou não WhatsApp e/ou E-mail.
+- O envio continua desactivado por padrão.
+- A política central continua a bloquear notificações de lançamento/fatura por defeito; a excepção só ocorre no POST validado do gerador, com nonce válido e opt-in marcado.
+- WhatsApp é bloqueado no modo “Gerar ano todo”.
+- WhatsApp é bloqueado em lotes grandes acima do limite conservador de 80 alunos, ajustável por filtro.
+- E-mail pode continuar quando escolhido, mesmo que o WhatsApp seja bloqueado por limite de lote.
+- As mensagens WhatsApp continuam a entrar na fila e a passar pelos guardrails/humanização; não são enviadas directamente no clique.
+
+Ficheiros alterados
+- BUILD.json
+- sige-softgenial.php
+- includes/notification-policy.php
+- admin/finance/financeiro-gerador.php
+- tools/smoke-lancamento-notificacoes-v12-11-9-32.php
+- tools/smoke-finance-lancamento-notificacoes-v12-11-9-32.php
+
+Não alterado
+- Cálculo de mensalidades
+- Descontos
+- Multas
+- Recibos
+- Pagamentos
+- Pautas
+- Notas
+- Boletins
+- Regras académicas
+- Schema multi-escola

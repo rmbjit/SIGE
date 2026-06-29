@@ -1,0 +1,21 @@
+SIGE SoftGenial v12.10.76 - Acta do Conselho: Compliance Visual Integral
+
+Objectivo
+- Redesenhar visualmente o módulo &view=acta com o mesmo rigor do Painel Principal / Dashboard V2 MJS-grade.
+- Manter a intervenção exclusivamente visual, sem alterar gravação, impressão, presenças, nota votada, cumprimento dos programas, observações, permissões ou regras académicas.
+
+Ajustes aplicados
+- Removido o cabeçalho genérico do App Shell para esta view, garantindo header único.
+- Hero antigo escuro substituído por hero claro no padrão Produto PRO.
+- Sequência visual obrigatória aplicada: ícone canónico, área Académico, título, subtítulo e painel lateral de estado.
+- Filtros de turma, ano lectivo e trimestre redesenhados como cartão claro, com campos arredondados e botão no padrão do sistema.
+- Cards de Cabeçalho, Presenças, Nota Votada, Cumprimento dos Programas e Observações harmonizados com cantos arredondados, sombras suaves e hierarquia clara.
+- Tabelas editáveis melhoradas visualmente, com cabeçalhos limpos, campos consistentes e melhor comportamento em ecrãs menores.
+- Botões Guardar, Imprimir ACTA, Adicionar linha e Adicionar nota votada receberam ícones canónicos, hover e cursor adequados.
+- Estado vazio e mensagem de sucesso redesenhados sem emojis visuais.
+
+Garantias
+- Sem alteração em funções de guardar a acta.
+- Sem alteração no PDF/impressão da acta.
+- Sem alteração em presenças, ausências, nota votada, cumprimento dos programas ou observações.
+- Sem alteração em notas, pautas, DEC, pauta final, boletins, pagamentos, multas, mensalidades ou base de dados.

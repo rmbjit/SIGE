@@ -1,0 +1,13 @@
+SIGE SoftGenial 12.9.9.5 - V7.2.3 Scroll Context Safe
+
+Base usada:
+- sige-softgenial-12-9-9-4-v7-2-2-scroll-safe-ui-restored.zip
+
+Melhorias:
+- Mantém a posição do menu lateral após navegação.
+- Garante que o item activo do menu lateral fica visível.
+- Mantém a zona do módulo após guardar/actualizar formulários.
+- Mantém refresh manual na mesma posição.
+- Actua apenas em page=sige-app.
+- Não inclui ficheiro .js separado.
+- Não altera regras financeiras, académicas, documentos, permissões ou WhatsApp.

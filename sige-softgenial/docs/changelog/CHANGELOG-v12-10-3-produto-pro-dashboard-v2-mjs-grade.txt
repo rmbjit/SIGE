@@ -1,0 +1,35 @@
+SIGE SoftGenial v12.10.3 - Produto PRO: Dashboard V2 MJS-grade
+
+Objectivo
+- Elevar o Painel Principal para uma aparência mais profissional, mais próxima da inspiração MJS e dos dashboards premium enviados como referência.
+- Corrigir a sensação de painel “plain/brega” sem tocar nas fórmulas ou regras de negócio.
+
+Alterações visuais
+- Novo Dashboard V2 com hero de boas-vindas, acções principais, ilustração institucional em CSS e melhor hierarquia visual.
+- KPIs principais redesenhados: Alunos Activos, Docentes, Pagamentos Hoje e Dívida Total.
+- Resumo Financeiro redesenhado com cartões internos e gráfico visual leve.
+- Distribuição por Classe com donut chart visual e lista dinâmica das classes.
+- Alertas de Conformidade com cartões coloridos, ícones visíveis e contadores claros.
+- Visão Operacional com barras de acompanhamento.
+- Resumo do Dia com leitura rápida da operação.
+- Acessos Rápidos redesenhados em grid premium.
+- Sidebar Produto PRO refinada: gradiente, cantos laterais, active state mais profissional, melhor espaçamento e ícones mais visíveis.
+- Adicionado fallback visual de marca “S” quando a escola não tiver logotipo do sistema.
+
+Perímetro preservado
+- Não foram alteradas fórmulas financeiras.
+- Não foram alteradas fórmulas académicas.
+- Não foram alteradas regras de mensalidades, multas, pagamentos, notas, pautas, DEC ou boletins.
+- Não foram adicionadas migrações de base de dados.
+- Não foram alterados handlers de negócio.
+
+Validação
+- php -l executado em todos os ficheiros PHP do plugin.
+- Todos os ficheiros PHP passaram sem erros de sintaxe.
+
+Ficheiros alterados
+- admin/system/dashboard-view.php
+- assets/style.css
+- includes/admin-shell.php
+- sige-softgenial.php
+- BUILD.json

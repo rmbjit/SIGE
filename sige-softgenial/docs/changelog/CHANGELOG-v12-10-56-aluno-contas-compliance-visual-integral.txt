@@ -1,0 +1,12 @@
+SIGE SoftGenial v12.10.56 - Contas dos Alunos: Compliance Visual Integral
+
+Objectivo
+- Corrigir o módulo &view=aluno_contas para atingir compliance visual integral com o Painel Principal / Dashboard V2 MJS-grade.
+- Eliminar o hero roxo divergente e alinhar rigorosamente a página ao padrão já validado como referência inegociável.
+
+Principais ajustes
+- Hero redesenhado no padrão claro do Painel Principal: kicker simples, título escuro, subtítulo cinza e painel lateral suave.
+- Indicadores recriados no mesmo espírito visual dos cards do Painel Principal, com cartões claros, ícones em badges e formas decorativas suaves.
+- Botões primários alinhados ao padrão dos módulos aprovados, com azul profundo e visual de aplicação profissional.
+- Secções, filtros, tabela e callout harmonizados para aparência mais coerente com o App Shell Produto PRO.
+- Sem alterações em lógica de provisionamento, envio de credenciais, permissões, dados ou regras de negócio.

@@ -1,0 +1,76 @@
+================================================================================
+SIGE SoftGenial - CHANGELOG
+v12.11.9.22 - Barra de Topo com Avatar + App-Bar Mobile
+Data: 2026-05-30
+Canal: teste
+================================================================================
+
+OBJECTIVO
+---------
+Continuar a unificacao visual com o Painel Principal, focando agora a pagina
+padrao (?page=sige-app) e a amigabilidade em telemovel. Barra de topo com a
+foto/identidade de quem entrou, barra fixa no topo, e Painel mais "app" no movel.
+
+
+O QUE MUDA
+----------
+
+1) AVATAR DO UTILIZADOR NA BARRA DE TOPO
+   - Mostra a foto do utilizador (Gravatar) num circulo.
+   - Se nao houver foto (ou a rede bloquear o Gravatar), mostra as INICIAIS do
+     nome num circulo com o gradiente violeta do tema (fonte unica de verdade).
+   - Ao lado: nome do utilizador + papel (ADMINISTRACAO, DIRECCAO, SECRETARIA,
+     TESOURARIA, DOCENTE, RH, DIRECCAO PEDAGOGICA, EDUCADOR(A)...).
+   - No telemovel, a pilula colapsa elegantemente para so o circulo do avatar.
+
+2) BARRA DE TOPO FIXA
+   - Desktop: a barra ja era fixa (sticky) dentro do conteudo - mantem-se.
+   - Telemovel (<=860px): passa a ser uma APP-BAR fixa no topo do ecra, com:
+       [ menu ] [ titulo da escola ] ............................ [ avatar ]
+     O botao de menu (hamburger) foi INTEGRADO na barra (a esquerda). Antes era
+     um botao flutuante solto que pairava sobre o conteudo.
+   - Removido o vao de 76px que existia so para nao tapar o hamburger flutuante;
+     o conteudo passa a comecar logo abaixo da barra, ganhando espaco util.
+   - Hamburger reestilizado com icone SVG limpo (em vez do caractere "menu").
+
+3) PAINEL PRINCIPAL MAIS AMIGAVEL NO TELEMOVEL
+   - KPIs (Alunos, Docentes, Pagamentos, Divida) e atalhos passam a 2 COLUNAS
+     (em vez de 1), para uma grelha densa ao estilo de uma app.
+   - Heroi e botoes de accao ocupam a largura; cartoes mais compactos.
+   - Em ecras muito estreitos (<=430px) volta a 1 coluna para legibilidade.
+
+
+COMO FUNCIONA (tecnico)
+-----------------------
+- A barra fixa no movel usa position:sticky;top:0 dentro do body que ja faz
+  scroll nesse ponto de quebra (o bloco desktop @media min-width:861px nao se
+  aplica), por isso a fixacao e estavel.
+- O avatar usa get_avatar_url() com referrerpolicy="no-referrer" e um fallback
+  onerror que esconde a imagem, deixando aparecer as iniciais por baixo
+  (::before com attr(data-initials)).
+- Toda a cor vem de var(--sg-theme-*, #fallback): segue a cor de cada escola.
+
+
+O QUE NAO FOI TOCADO (inviolavel)
+--------------------------------
+- Formulas e regras (MT/MFD, media, progressao, fim-de-ciclo, SNE).
+- Financeiro, RH, Genero/GALS, WhatsApp.
+- Permissoes, papeis e isolamento multi-tenant (escola_id).
+- Base de dados e logica de calculo.
+- Documentos oficiais (acta/pauta/DEC/boletim) - continuam navy.
+
+
+FICHEIROS ALTERADOS
+-------------------
+- includes/admin-shell.php
+    * variaveis de identidade do utilizador (nome, papel, iniciais, URL do avatar);
+    * barra de topo reestruturada (hamburger + titulo + pilula de avatar);
+    * hamburger flutuante movido para dentro da barra (mesmo id/accao).
+- assets/style.css
+    * estilos do avatar/pilula; app-bar fixa no movel; Painel denso no movel.
+    * chavetas equilibradas 2073/2073; 0 bytes CR.
+- sige-softgenial.php (versao), BUILD.json (versao + notas).
+
+Versao: 12.11.9.21 -> 12.11.9.22 (header, SIGE_VERSION, BUILD.json).
+A subida de versao renova o cache-buster do style.css.
+================================================================================

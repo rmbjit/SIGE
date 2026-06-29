@@ -1,0 +1,17 @@
+SIGE SoftGenial v12.10.30 - Turmas: Harmonia Visual
+
+Resumo
+- Harmonização do módulo Turmas com o padrão visual aprovado do Painel Principal.
+- Hero claro, amplo e consistente com Dashboard/Alunos.
+- KPIs de turmas redesenhados no mesmo padrão dos cartões aprovados.
+- Filtros, cards de turma, acções, modais e estados vazios alinhados ao visual de App.
+- Eliminar turma e limpar horário passaram a usar pop-up real de confirmação.
+- Mensagens de erro simples substituem alertas nativos em pontos principais.
+- Ícones reforçados para permanecerem visíveis.
+- Layout mobile-friendly preservado.
+
+Garantias
+- Sem alteração de fórmulas.
+- Sem alteração de mensalidades, multas, pagamentos, recibos, cobranças, estornos ou base de dados.
+- Sem alteração de notas, pautas, DEC, boletins ou actas.
+- Sem termos técnicos internos visíveis ao utilizador final.

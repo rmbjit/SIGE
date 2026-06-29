@@ -1,0 +1,185 @@
+{
+  "name": "SIGE SoftGenial v12.19.1 - Dashboard Copy & Português Final Hotfix",
+  "product": "SIGE SoftGenial - Gestao Escolar Mocambique",
+  "version": "12.19.1",
+  "date": "2026-06-29",
+  "build_id": "sige-12-19-1-20260628224835",
+  "build_time": "2026-06-28T22:48:35+00:00",
+  "channel": "stable-dashboard-copy-hotfix",
+  "label": "SIGE SoftGenial v12.19.1 - Dashboard Copy & Português Final Hotfix",
+  "scope": "Hotfix localizado do copy do Dashboard Executivo por perfil para português final, acentuado e adequado ao utilizador real, preservando lógica, permissões, dados, dashboard core e módulos sensíveis.",
+  "build": "sige-12-19-1-20260628224835",
+  "summary": "Corrige kicker, headline, resumo, cards, hints e labels de grupos/áreas do bloco de inteligência por perfil, sem escrita na base de dados e sem alterações funcionais sensíveis.",
+  "source_package": {
+    "version": "12.19.0",
+    "sha256": "4c5ad105ddd42e804e9ec216bc3095f512cb6196bf1ec8def1738e7df373a59f",
+    "staging_status": "functional_smoke_positive_copy_issue_reported_by_user",
+    "validated_in_staging_by_user": false
+  },
+  "runtime_evidence": {
+    "browser_staging": "prepared_not_executed_here",
+    "manual_staging_required": true,
+    "suite": "tools/runtime-evidence/run-browser-evidence.mjs",
+    "config_example": "tools/runtime-evidence/config.example.json",
+    "profiles": [
+      "administrador",
+      "director",
+      "financeiro",
+      "secretaria",
+      "professor",
+      "guarda",
+      "encarregado",
+      "aluno"
+    ],
+    "viewports": [
+      360,
+      390,
+      430,
+      768,
+      1366
+    ]
+  },
+  "qa_summary": {
+    "php_lint": "521/521 OK",
+    "gates": "164/164 OK (executed in validated segments: 1-70, 71-139, 140-164)",
+    "release_gate": "54/54 OK",
+    "zip_integrity": "verified_during_final_package_creation",
+    "browser_staging": "manual_staging_required_not_executed_here"
+  },
+  "protected_contracts": {
+    "finance": "No formula, ledger, receipt, debt, discount, transport or payment core file changed versus v12.16.2 baseline.",
+    "academic": "No grade formula, pauta, boletim or assessment rule changed versus v12.16.2 baseline.",
+    "permissions": "No real permission expansion, tenant isolation weakening or privileged role broadening.",
+    "data": "No schema migration, historical data write, deletion, normalization or metadata rewrite."
+  },
+  "baseline_preservation": {
+    "status": "future_phase_over_frozen_operational_baseline",
+    "baseline_version": "12.16.2",
+    "baseline_sha256": "fa48b4d950ac12d8345fd7ed92046d0de745026c2a786d46fec81ad4b695cdd7",
+    "regression_matrix": "docs/qa/REGRESSION_MATRIX-v12.16.2-baseline-preservation-operational-readiness.md",
+    "post_install_checklist": "docs/deploy/POST_INSTALL_CHECKLIST-v12.16.2-baseline-preservation-operational-readiness.md",
+    "protected_hashes_gate": "tools/check-v12-16-2-baseline-preservation.php"
+  },
+  "alunos_performance_contract": {
+    "status": "enabled",
+    "list_select": "includes/alunos-performance-contract.php::sige_alunos_perf_list_select_sql",
+    "export_select": "includes/alunos-performance-contract.php::sige_alunos_perf_export_select_sql",
+    "card_payload": "includes/alunos-performance-contract.php::sige_alunos_perf_card_document_payload",
+    "deferred_vendor_scripts": "ExcelJS, FileSaver and QRious tags are deferred on alunos_lista",
+    "main_view": "admin/academic/alunos_lista.php",
+    "ajax_endpoint": "includes/aluno-fetch-ajax.php",
+    "no_schema_change": true,
+    "editing_full_payload_preserved": "sige_get_aluno_full remains the full edit payload endpoint"
+  },
+  "rc_line": [
+    "RC1 diagnostico de dashboard por perfil e risco de excesso de informacao",
+    "RC2 camada read-only fora do dashboard core",
+    "RC3 catalogo de estrategia por perfil e payload filtrado por permissoes",
+    "RC4 CSS/JS leves sem fetch, AJAX ou cookies",
+    "RC5 gates de contrato, smoke, regressao sensivel e manifesto",
+    "RC6 ZIP final validado localmente"
+  ],
+  "alunos_mobile_header_hotfix": {
+    "status": "enabled",
+    "main_view": "admin/academic/alunos_lista.php",
+    "css_contract": "v12.17.1 Alunos mobile header containment hotfix",
+    "mobile_scope": "max-width 760px only",
+    "year_chip_mobile": "hidden in alunos mobile header",
+    "avatar_column": "fixed 42px column with avatar-only metadata",
+    "narrow_mobile": "40px containment for max-width 390px",
+    "no_schema_change": true,
+    "no_permission_change": true,
+    "no_finance_change": true,
+    "no_academic_change": true
+  },
+  "operational_workflow_hardening": {
+    "status": "enabled",
+    "include": "includes/operational-workflow-hardening.php",
+    "css": "assets/operational-workflow-v12-18-0.css",
+    "js": "assets/operational-workflow-v12-18-0.js",
+    "render_strategy": "non_blocking_dom_injection_inside_sg_app_page",
+    "storage": "sessionStorage_only_for_optional_dismissal",
+    "catalog_views": [
+      "alunos_lista",
+      "financeiro-pagamentos",
+      "financeiro-devedores",
+      "financeiro-gerador",
+      "financeiro-extratos",
+      "notas",
+      "minhas_turmas",
+      "aprovar_notas",
+      "pautas",
+      "portaria",
+      "whatsapp_central",
+      "comunicacoes_central",
+      "turmas"
+    ],
+    "contracts": {
+      "no_db_write": true,
+      "no_schema_change": true,
+      "no_permission_change": true,
+      "no_finance_formula_change": true,
+      "no_academic_formula_change": true,
+      "admin_shell_preserved": true,
+      "dashboard_preserved": true,
+      "alunos_core_preserved": true,
+      "portaria_core_preserved": true
+    }
+  },
+  "dashboard_profile_intelligence": {
+    "status": "enabled",
+    "include": "includes/profile-dashboard-intelligence.php",
+    "css": "assets/profile-dashboard-intelligence-v12-19-0.css",
+    "js": "assets/profile-dashboard-intelligence-v12-19-0.js",
+    "render_strategy": "non_blocking_dom_injection_after_dashboard_hero",
+    "storage": "sessionStorage_only_for_optional_dismissal",
+    "source_of_truth": "sige_institutional_profile_context_v121600 and filtered institutional actions",
+    "profiles": [
+      "gestao",
+      "tesouraria",
+      "secretaria",
+      "academico",
+      "portaria",
+      "comunicacao"
+    ],
+    "dashboard_only": true,
+    "contracts": {
+      "no_db_write": true,
+      "no_schema_change": true,
+      "no_permission_change": true,
+      "no_finance_formula_change": true,
+      "no_academic_formula_change": true,
+      "dashboard_core_preserved": true,
+      "admin_shell_preserved": true,
+      "alunos_core_preserved": true,
+      "portaria_core_preserved": true,
+      "uses_filtered_actions_only": true
+    },
+    "copy_quality": "pt_PT_pre_AO90_accented_final_user_copy",
+    "context_version": "12.19.1"
+  },
+  "dashboard_profile_intelligence_copy_hotfix": {
+    "status": "enabled",
+    "issue": "O bloco aparecia correctamente, mas o copy estava sem acentuação e pouco natural para utilizador final.",
+    "decision": "Corrigir apenas strings visíveis e humanização de labels, mantendo a camada read-only e sem tocar no dashboard core.",
+    "scope": [
+      "includes/profile-dashboard-intelligence.php",
+      "assets/profile-dashboard-intelligence-v12-19-0.js",
+      "assets/profile-dashboard-intelligence-v12-19-0.css",
+      "docs/changelog/CHANGELOG-v12-19-1.txt",
+      "docs/qa/QA-v12.19.1-dashboard-copy-portugues-final-hotfix.md",
+      "docs/traceability/MATRIZ_RASTREABILIDADE-v12.19.1-dashboard-copy-portugues-final-hotfix.md",
+      "docs/migration/MIGRACAO_ROLLBACK-v12.19.1-dashboard-copy-portugues-final-hotfix.md"
+    ],
+    "contracts": {
+      "no_db_write": true,
+      "no_schema_change": true,
+      "no_permission_change": true,
+      "no_finance_formula_change": true,
+      "no_academic_formula_change": true,
+      "dashboard_core_preserved": true,
+      "admin_shell_preserved": true,
+      "copy_only": true
+    }
+  }
+}

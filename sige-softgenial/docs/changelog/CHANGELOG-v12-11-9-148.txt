@@ -1,0 +1,54 @@
+SIGE SoftGenial v12.11.9.148 - DIAGNÓSTICO RESPONSIVO + correções seguras
+=========================================================================
+
+NOVO TIPO DE DIAGNÓSTICO
+Já não é sobre tokens (cor/peso/raio), mas sobre comportamento responsivo:
+sobreposições, modais não-flexíveis e conteúdo que estoura em
+celular/tablet/laptop/pc.
+
+MÉTODO (Via B: estático + correções de baixo risco)
+- Scanner mede antipadrões: tabelas largas sem scroll, modais sem
+  max-height, larguras fixas, flex sem wrap.
+- HONESTIDADE: a 1ª passagem deu 12 "tabelas problemáticas"; a verificação
+  rigorosa (resolver classes CSS com overflow) revelou que só 7 eram reais.
+  As outras 5 já tinham overflow:auto nos wrappers - eu procurava
+  overflow-x literal e não resolvia a cadeia classe->wrapper. Diagnóstico
+  corrigido antes de tocar em código.
+
+CORREÇÕES APLICADAS (7 tabelas em 5 ecrãs + 1 modal)
+- financeiro-config: 2 tabelas (.fc-table, min-width 1040px) -> wrapper
+  .fc-table-wrap com overflow-x:auto;
+- whatsapp_central: 1 tabela (.wppc-table, 980px) -> .wppc-table-wrap;
+- aluno-accounts: 2 tabelas (.sige-ac-table 780px + 1 inline) -> wrappers;
+- financeiro-pagamentos: 1 tabela (L2462, .sige-table 920px) -> wrapper
+  overflow-x (as outras 2 já tinham);
+- acta: 1 tabela (L1031, preventivo) -> wrapper;
+- equipe: .modal-content -> max-height:90vh + overflow-y:auto (botões
+  sempre acessíveis em conteúdo alto).
+Técnica: wrapper HTML com overflow-x:auto (não toca no border-collapse nem
+nas larguras de coluna; em desktop nada muda, em mobile a tabela scrolla
+na sua caixa em vez de empurrar a página). É o padrão do Bootstrap
+table-responsive e do Stripe.
+
+NOVO GATE (13º): tools/diag-responsivo.php
+- Mede tabelas largas sem wrapper de scroll + modais reais sem max-height.
+- Resolve classes CSS com overflow (não conta falsos positivos) e exclui
+  overlays/backdrops.
+- Baseline (só desce), como os outros 12. Baseline actual: 0.
+- Integrado em run-gates.php.
+
+PROVA VISUAL
+- responsivo-tabelas-antes-depois.png: tabela de 1040px num celular de
+  375px, antes (estoura a página) e depois (scrolla na caixa).
+
+ESTADO
+- 13 gates verdes. Regressão: 306 invariantes (4 novos selam os wrappers).
+- Baseline responsiva: 0 antipadrões.
+- Nenhuma regra financeira/académica tocada.
+
+PRÓXIMO
+- Para diagnóstico responsivo de PROFUNDIDADE TOTAL (botões escondidos por
+  z-index, sobreposições reais, comportamento de flex em runtime), a via
+  robusta é renderização com browser headless em viewports reais (375/768/
+  1366/1920px) no ambiente de teste. Esta versão cobre o que análise
+  estática deteta com confiança.

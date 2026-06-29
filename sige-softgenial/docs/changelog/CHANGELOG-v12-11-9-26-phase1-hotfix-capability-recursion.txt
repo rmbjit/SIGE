@@ -1,0 +1,28 @@
+SIGE SoftGenial v12.11.9.26 - Hotfix Recursão user_has_cap
+Data: 2026-05-31
+Build: sige-12.11.9.26-phase1-hotfix-capability-recursion
+Canal: test
+
+Resumo
+- Corrige erro fatal de recursão infinita observado após a v12.11.9.25.
+- A causa era a chamada a is_super_admin() dentro de sige_is_real_wp_admin_user(), usada por um filtro user_has_cap.
+- No WordPress, is_super_admin() pode consultar capabilities e reentrar no próprio filtro, gerando loop até esgotar a stack.
+
+Intervenções
+- Adicionada função sige_is_real_wp_admin_user_raw(), sem is_super_admin(), current_user_can() ou user_can().
+- sige_is_real_wp_admin_user() passa a delegar para a verificação raw.
+- O filtro sige_security_strip_technical_caps_from_sige_users() passa a usar o WP_User recebido pelo próprio WordPress.
+- Adicionada guarda anti-recursão no filtro user_has_cap.
+- page-guard.php e permissions-layer.php passam a reutilizar a verificação segura quando disponível.
+
+Não alterado
+- Fórmulas financeiras.
+- Fórmulas académicas.
+- Notas, pautas, boletins, mensalidades, multas, descontos ou recibos.
+- Regras de negócio da Fase 1 já aplicadas na v12.11.9.25.
+
+Validação esperada
+- WordPress admin abre sem fatal error.
+- Login de administrador real preservado.
+- Director continua sem manage_options técnico.
+- Recibos WhatsApp e protecções documentais mantidas.

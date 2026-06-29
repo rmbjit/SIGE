@@ -1,0 +1,26 @@
+SIGE SoftGenial v12.10.60 - Pagamentos por Turma: Compliance Visual Integral
+
+Objectivo
+- Rever o desenho do módulo &view=pagamentos-turma e garantir alinhamento rigoroso com o Painel Principal / Dashboard V2 MJS-grade.
+- Manter a intervenção estritamente visual, sem alterar cálculos, consultas, saldos, estados financeiros, centro de custo ou regras de pagamento.
+
+Ajustes aplicados
+- Reforçado o hero no padrão do Painel Principal:
+  - fundo claro;
+  - bordas arredondadas;
+  - sombra suave;
+  - kicker com ícone canónico;
+  - título com a mesma hierarquia tipográfica do dashboard;
+  - subtítulo com a mesma leitura visual;
+  - botões no padrão do Painel Principal.
+- Painel lateral do hero harmonizado com o padrão visual dos módulos validados.
+- Filtro “Consultar turma” convertido para cartão claro com sombras, campos e botão no padrão Produto PRO.
+- KPIs de Pagos, Parciais, Pendentes e Total da turma redesenhados no mesmo modelo dos KPIs do Painel Principal.
+- Cartões de leitura da cobrança, estado dos alunos e lista de alunos receberam reforço visual para manter consistência com o painel.
+- Header genérico continua removido, respeitando a regra de header único para páginas com hero próprio.
+
+Garantias
+- Sem alteração em fórmulas financeiras.
+- Sem alteração em pagamentos, saldos, cobranças, mensalidades, multas ou estados.
+- Sem alteração em centro de custo, filtros, queries ou base de dados.
+- Sem alteração em notas, pautas, DEC, boletins ou regras académicas.

@@ -1,0 +1,36 @@
+SIGE SoftGenial v12.9.39 - WhatsApp Guardrails Invisíveis
+
+Base: v12.9.38 versionamento automático PRO
+
+Objectivo:
+- Fechar a etapa WhatsApp com protecções invisíveis e sem painel operacional para as escolas.
+- Impedir que estados manuais como forcar_envio contornem a política anti-restrição.
+
+Principais melhorias:
+1. Guardrail invisível antes de cada envio:
+   - valida janela humana segura;
+   - valida limite diário;
+   - valida falhas recentes;
+   - valida limite horário;
+   - valida intervalo mínimo por contacto.
+
+2. forcar_envio deixou de ser bypass:
+   - passa a ser apenas prioridade operacional;
+   - respeita scheduled_at futuro;
+   - respeita limite diário, horário e janelas humanas.
+
+3. Reagendamento seguro:
+   - mensagens bloqueadas pelo guardrail voltam para pendente;
+   - scheduled_at/next_retry_at são ajustados para próxima janela humana;
+   - motivo fica registado em erro/ultimo_erro/risk_flags/guardian_meta, quando as colunas existem.
+
+4. Sem painel para escolas:
+   - não adiciona botões de retoma;
+   - não dá controlo de força à escola;
+   - mantém o controlo pelo motor central.
+
+Não alterado:
+- Fórmulas financeiras.
+- Fórmulas académicas.
+- Cálculo de dívida, pagamento ou notas.
+- Templates já validados, salvo protecção no processo de envio.

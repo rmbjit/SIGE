@@ -1,0 +1,47 @@
+SIGE SoftGenial v12.10.52 - Encerramento Académico Seguro
+
+Base: v12.10.51 - Encerramento: Header Único
+
+Objectivo
+- Transformar o encerramento do ano lectivo numa operação académica segura, auditável e coerente com um produto escolar profissional, evitando encerramentos com notas incompletas, pendentes ou rejeitadas.
+
+Principais melhorias
+1. Checklist obrigatório antes do encerramento
+   - Valida turmas do ano.
+   - Valida alunos matriculados/activos.
+   - Bloqueia encerramento quando existem notas pendentes de aprovação.
+   - Bloqueia encerramento quando existem notas rejeitadas ainda não corrigidas/re-submetidas.
+   - Bloqueia encerramento quando existem lacunas em notas obrigatórias.
+   - Bloqueia turmas sem disciplinas obrigatórias configuradas.
+
+2. Snapshot final académico
+   - Cria tabela formal de snapshot: sige_ano_lectivo_snapshots.
+   - Congela por escola, ano, turma e aluno: situação final, média global, negativas, classe, turma, dados detalhados e hash de integridade.
+   - Mantém fonte de dados para consulta histórica e futura integração com abertura de ano.
+
+3. Estado final da matrícula
+   - Adiciona campos não destrutivos à tabela sige_matriculas, se ainda não existirem: situacao_final, media_final, negativas_final, encerramento_status, encerrado_em e encerrado_por.
+   - Actualiza a matrícula com o estado final no momento do encerramento.
+
+4. Reabertura real
+   - Ao reabrir o ano, a Pauta Final é desactivada em todas as turmas do ano.
+   - Snapshots activos são marcados como reabertos.
+   - As matrículas ficam marcadas como reabertas, sem apagar o histórico.
+
+5. Defesa em profundidade
+   - Toggle de Pauta Final fica bloqueado se o ano estiver encerrado.
+   - Activação global da Pauta Final fica bloqueada se o ano estiver encerrado.
+   - Aprovação/Rejeição de notas fica bloqueada para ano lectivo encerrado.
+   - Registos de auditoria criados para encerramento, bloqueio, snapshot e reabertura.
+
+6. Interface Produto PRO
+   - Mantém header único já validado.
+   - Adiciona card de checklist de segurança no mesmo padrão visual.
+   - Botão Encerrar fica desactivado quando existem pendências.
+
+Garantias
+- Não altera fórmulas de cálculo académico.
+- Não altera regras de notas, pautas, DEC, boletins ou documentos oficiais.
+- Não altera pagamentos, multas, mensalidades ou regras financeiras.
+- Alterações de base de dados são apenas aditivas e não destrutivas.
+- Todos os ficheiros PHP foram validados com php -l.

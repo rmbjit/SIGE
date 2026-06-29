@@ -1,0 +1,59 @@
+SIGE SoftGenial v12.9.92 - Plano de Correcção Assistida Pré-Produção
+
+Base validada:
+- v12.9.91 - Validação Pré-Produção e Smoke Test Guiado, testada em ambiente de teste.
+
+Objectivo:
+- Transformar bloqueios, avisos, smoke tests pendentes e riscos pré-produção em acções accionáveis.
+- Manter padrão de produto escalável, segurança elevada e zero regressão antes de instalar em escolas reais.
+
+O que foi acrescentado:
+1. Nova camada apenas leitura:
+   - includes/settings/class-sige-settings-correction-plan.php
+
+2. Nova área dentro de Pré-produção:
+   - Plano de correcção assistida.
+   - Próximas acções recomendadas.
+   - Checklist final de go-live.
+   - Política do plano de correcção.
+
+3. Cada item de correcção apresenta:
+   - Prioridade: crítica, alta, média ou baixa.
+   - Origem: portão de prontidão, smoke test ou risco.
+   - Problema/evidência segura.
+   - Onde corrigir.
+   - Responsável.
+   - Acção recomendada.
+   - Como validar.
+   - Risco de não corrigir.
+
+4. Segurança e anti-regressão:
+   - Não grava configurações.
+   - Não remove campos.
+   - Não migra valores.
+   - Não sincroniza automaticamente.
+   - Não altera cálculos, WhatsApp, financeiro, académico, SMTP, Hub/licença, permissões, pautas, boletins, recibos ou schema.
+   - Não mostra tokens, senhas, API keys ou segredos em claro.
+
+5. Uso recomendado:
+   - Corrigir sempre no ambiente de teste.
+   - Repetir smoke test após cada correcção.
+   - Promover para escola real apenas o ZIP validado.
+   - Fazer backup antes da promoção.
+
+Ficheiros adicionados:
+- includes/settings/class-sige-settings-correction-plan.php
+- CHANGELOG-v12-9-92-plano-correcao-assistida-pre-producao.txt
+
+Ficheiros alterados:
+- sige-softgenial.php
+- BUILD.json
+- includes/settings/settings-loader.php
+- includes/settings/class-sige-settings-diagnostics.php
+- includes/settings/class-sige-settings-preproduction.php
+- admin/system/config-center-view.php
+
+Validação esperada:
+- Abrir Sistema Técnico → Centro de Configuração → Pré-produção.
+- Confirmar nova área “Plano de correcção assistida”.
+- Confirmar que nenhuma acção é executada automaticamente.

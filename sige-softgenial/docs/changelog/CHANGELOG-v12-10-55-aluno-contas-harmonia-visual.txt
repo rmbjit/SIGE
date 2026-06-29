@@ -1,0 +1,23 @@
+SIGE SoftGenial v12.10.55 - Contas dos Alunos: Harmonia Visual
+Data: 2026-05-17
+Tipo: Produto PRO / Compliance Visual
+
+Objectivo
+- Redesenhar o módulo &view=aluno_contas no padrão visual validado do Painel Principal / Dashboard V2 MJS-grade.
+
+Alterações principais
+- Adicionado header/hero próprio do módulo com sequência obrigatória: ícone canónico, área Secretaria, título Contas dos Alunos e texto explicativo.
+- Removido o header genérico superior do App Shell para esta view, respeitando a regra mandatória de header único.
+- Substituídos emojis visuais por ícones canónicos do sistema no padrão usado em Extractos e Caixa.
+- Reorganizados cartões de resumo, bloco de criação em lote, filtros, tabela e paginação.
+- Removidos pontos/pontinhos decorativos nos cabeçalhos.
+- Ajustada a microcopy para linguagem de produto, evitando termos técnicos internos no primeiro nível da interface.
+- Mantida responsividade e leitura em ecrãs menores.
+
+Garantias
+- Sem alteração em fórmulas académicas.
+- Sem alteração em notas, pautas, DEC, boletins, encerramento ou abertura de ano lectivo.
+- Sem alteração em pagamentos, multas, mensalidades ou regras financeiras.
+- Sem alterações destrutivas na base de dados.
+- Lógica de provisionamento, envio e reposição de senha preservada.
+- Versionamento alinhado: header do plugin, SIGE_VERSION e BUILD.json em 12.10.55.

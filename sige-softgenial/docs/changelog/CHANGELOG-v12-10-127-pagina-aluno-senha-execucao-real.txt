@@ -1,0 +1,44 @@
+SIGE SoftGenial v12.10.127 - Página do Aluno: Senha com Execução Real
+
+Base
+- Construído por cima da v12.10.126 - Página do Aluno: Senha sem Tela Branca.
+
+Problemas corrigidos
+1. A senha não alterava verdadeiramente.
+2. Depois de clicar em Guardar nova senha, o sistema voltava para a página inicial/resumo e não mostrava mensagem de sucesso.
+
+Causa real encontrada
+- A v12.10.126 moveu correctamente o processamento da senha para admin-post.php.
+- Porém, o bloqueio de backend em security-roles.php corria no admin_init antes do admin-post.php executar a action.
+- Como aluno/encarregado é redireccionado para a Página do Aluno, o sistema redireccionava antes de chegar ao handler:
+  admin_post_sige_aluno_portal_change_password
+- Resultado: o handler não executava; a senha não mudava; e o utilizador voltava para a Página do Aluno sem mensagem.
+
+Correção aplicada
+- security-roles.php passa a permitir explicitamente:
+  wp-admin/admin-post.php?action=sige_aluno_portal_change_password
+- Esta excepção acontece antes da regra que redirecciona aluno/encarregado para o portal.
+- Assim o handler executa de verdade, valida os dados, altera a senha e redirecciona para:
+  admin.php?page=sige-app&view=aluno_portal&aluno_id=...&secao=senha&pass_msg=ok
+- Em caso de erro, volta para a mesma secção com pass_msg=error e pass_error correspondente.
+
+Segurança mantida
+- A excepção é restrita apenas à action sige_aluno_portal_change_password.
+- Não abre acesso ao wp-admin.
+- Não permite editar dados do aluno.
+- Continua a alterar apenas a senha do utilizador autenticado.
+- Mantém nonce obrigatório.
+- Mantém validação da senha actual.
+- Mantém política de senha.
+- Mantém limite de 5 tentativas em 15 minutos.
+
+Mantido
+- Modo leitura da Página do Aluno.
+- Bloqueio de notas/boletins por dívida.
+- Validação de propriedade dos recibos.
+- Menu lateral do aluno.
+- Recibos filtráveis.
+- Redireccionamento correcto do portal antigo.
+- Sem alteração de base de dados académica/financeira.
+- Sem alteração de pagamentos.
+- Sem alteração de notas, Pauta, DEC, ACTA ou boletins.

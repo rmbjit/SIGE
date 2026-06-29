@@ -1,0 +1,21 @@
+SIGE SoftGenial v12.10.40 - Equipa e Professores: Gravação e Upload de Documentos
+
+Objectivo
+- Corrigir a gravação real dos dados bancários e documentos no formulário de Novo/Editar Colaborador.
+- Tornar os botões de upload de documentos claros e alinhados ao padrão visual aprovado.
+
+Alterações realizadas
+- Corrigida a leitura dos JSONs de dados bancários e documentos com wp_unslash antes do json_decode.
+- Adicionada sanitização campo a campo para banco, NIB/IBAN, M-Pesa e documentos.
+- Adicionado fallback por campos individuais para evitar perda de dados se o JSON vier inválido.
+- Sincronizado o telefone do colaborador no meta billing_phone.
+- Sincronizado o professor_id quando a ficha RH é criada/actualizada.
+- Melhorado o estado visual dos botões de documentos: Carregar / Alterar.
+- Adicionado feedback depois de escolher um documento: o utilizador deve clicar em Guardar para concluir.
+- Melhorada a compatibilidade com dados antigos eventualmente guardados com barras no JSON.
+
+Garantias
+- Sem alteração de fórmulas.
+- Sem alteração de mensalidades, multas, pagamentos, recibos, cobranças, estornos ou base de dados.
+- Sem alteração de notas, pautas, DEC, boletins ou actas.
+- Mantido o padrão visual aprovado do Painel Principal.

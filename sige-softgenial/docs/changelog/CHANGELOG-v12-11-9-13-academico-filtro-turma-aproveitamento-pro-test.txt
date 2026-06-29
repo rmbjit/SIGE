@@ -1,0 +1,13 @@
+SIGE SoftGenial v12.11.9.13 - Académico Filtro de Turma no Aproveitamento PRO (TEST)
+
+Alterações:
+- Acrescentado filtro por turma no módulo Aproveitamento do Aluno.
+- A selecção da turma mostra os alunos activos da turma no ano lectivo seleccionado.
+- O MAP oficial da turma pode ser gerado directamente a partir do filtro, sem depender de abrir previamente um aluno.
+- A pesquisa por nome/nº de processo passa a poder ser restringida à turma seleccionada.
+- Mantido o acesso ao aproveitamento individual a partir da lista da turma.
+
+Preservado:
+- Regra AF exclusiva da 3.ª classe.
+- MAP oficial individual e por turma já existente.
+- Fórmulas académicas, pauta, DEC, finanças, RH, transportes, WhatsApp e base de dados.

@@ -1,0 +1,40 @@
+SIGE SoftGenial v12.10.116 - Página do Aluno: Dívida e Modo Leitura
+
+Base
+- Construído por cima da v12.10.115 - Página do Aluno Integrada PRO.
+
+Resposta às garantias solicitadas
+1. Aluno com dívida não pode ver notas no portal
+- Se existir dívida financeira em aberto, a Página do Aluno não mostra:
+  - média estimada;
+  - notas por disciplina/trimestre;
+  - avaliações/boletins do Jardim;
+  - boletins/documentos académicos sensíveis;
+  - atalhos para Notas ou Jardim no contexto do portal.
+- A secção Académico/Jardim passa a mostrar uma mensagem clara:
+  "Consulta académica bloqueada por dívida".
+- O utilizador é encaminhado para a secção Financeiro para consultar a pendência.
+
+2. Aluno não edita nada
+- A Página do Aluno fica explicitamente em modo leitura.
+- Não foram criados formulários de edição.
+- Não existem campos editáveis ou acções POST para o aluno.
+- Foi adicionada defesa adicional que bloqueia submissão de formulários dentro desta view, caso no futuro algum elemento seja introduzido por engano.
+- Atalhos internos para módulos de staff ficam condicionados ao contexto de equipa autorizada.
+
+Staff interno
+- A equipa autorizada continua a trabalhar nos módulos próprios:
+  - Gestão de Alunos;
+  - Conta do Aluno;
+  - Notas;
+  - Jardim;
+  - Boletins/DEC.
+- A regra de bloqueio aplica-se à consulta no portal/página do aluno, não destrói nem altera os dados internos.
+
+Garantias
+- Sem alterar base de dados.
+- Sem alterar handlers.
+- Sem alterar regras de negócio.
+- Sem alterar pagamentos, mensalidades, multas ou recibos.
+- Sem alterar notas, Pauta, DEC, ACTA ou boletins.
+- Sem alterar Permission Engine.

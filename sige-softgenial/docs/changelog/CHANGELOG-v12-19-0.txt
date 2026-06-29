@@ -1,0 +1,27 @@
+SIGE SoftGenial v12.19.0 - Dashboard Executivo & Inteligencia Operacional por Perfil
+
+Escopo
+- Camada de inteligencia operacional por perfil no Painel Principal.
+- Leitura por perfil baseada em permissoes reais ja filtradas pela guarda existente.
+- Orientacao de prioridade, risco a evitar, regra segura, atalhos e areas operacionais visiveis.
+
+Alteracoes tecnicas
+- Novo include: includes/profile-dashboard-intelligence.php.
+- Novos assets: assets/profile-dashboard-intelligence-v12-19-0.css e assets/profile-dashboard-intelligence-v12-19-0.js.
+- Bootstrap principal carrega a camada v12.19.0 depois do mapa institucional e da orientacao operacional v12.18.0.
+- Gates novos para contrato, smoke, regressao sensivel e manifesto.
+
+Contratos protegidos
+- Sem escrita na base de dados.
+- Sem alteracao de schema.
+- Sem alteracao de permissoes reais.
+- Sem alteracao de formulas financeiras.
+- Sem alteracao de formulas academicas.
+- Sem alteracao de dashboard core, admin-shell, Alunos core, Portaria core ou ficheiros financeiros.
+
+Validacao local esperada
+- PHP lint integral.
+- Release gate verde.
+- Run gates verde.
+- ZIP integrity verde.
+- Validacao humana em staging obrigatoria para browser autenticado.

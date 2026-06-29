@@ -1,0 +1,56 @@
+DEPLOY - SIGE SoftGenial v12.12.27
+Fase 8 incremento 4: Retencao e Expurgo (so leitura)
+Data: 2026-06-22. Base: v12.12.26.
+
+================================================================
+RESUMO
+================================================================
+Novo ecra de governanca de dados, so de leitura (Privacidade e Dados >
+Retencao e Expurgo), que mostra um calendario de retencao declarado e conta,
+de forma agregada por escola, quantos registos ja excederam o prazo. Neste
+sistema nao ha expurgo por eliminacao em massa (as presencas derivam do registo
+de acessos; financeiro, academico e auditoria tem dever de retencao), pelo que
+o expurgo de um titular se faz pela anonimizacao ja existente (Apagamento), para
+a qual o ecra encaminha. Nova permissao privacidade.retencao_ver (so leitura).
+Sem nova superficie de accao e sem migracao de esquema.
+
+================================================================
+PASSOS DE INSTALACAO (Hostinger / File Manager)
+================================================================
+1. Fazer backup do plugin actual (pasta wp-content/plugins/sige-softgenial/).
+2. Desactivar NAO e necessario; a actualizacao e aditiva.
+3. Carregar o ZIP sige-softgenial-v12_12_27-retencao-expurgo.zip e extrair,
+   substituindo a pasta sige-softgenial/ (a pasta vem na raiz do ZIP).
+4. Abrir o painel de administracao do WordPress uma vez com um utilizador
+   administrador: a migracao de permissoes corre em admin_init e concede a nova
+   permissao a administracao e direccao (motor de permissoes passa a 12.12.27).
+5. Confirmar a versao no cabecalho: 12.12.27.
+
+================================================================
+VERIFICACAO POS-INSTALACAO
+================================================================
+- Menu: surge "Retencao e Expurgo" na seccao PRIVACIDADE E DADOS, visivel so a
+  administracao e direccao.
+- Abrir o ecra: confirmar o calendario de retencao e as contagens por categoria
+  (alem do prazo), e que o registo de acessos e a auditoria constam como Retido.
+- Confirmar que o ecra nao tem qualquer botao de eliminacao e que encaminha para
+  o Apagamento.
+- Confirmar que tesouraria, secretaria e docencia nao veem o menu (area
+  reservada).
+
+================================================================
+NOTAS DE GOVERNANCA
+================================================================
+- So leitura: sem nova superficie (manifesto e Kernel mantem-se em 199, enforce
+  33). A lista de views sobe de 59 para 60.
+- SCHEMA_VERSION inalterada (20260621.1). Calculo financeiro byte-identico.
+- O registo de acessos nao e expurgavel (fonte das presencas, derivadas ao vivo).
+- O calendario (prazos e bases legais) e classificacao por omissao a rever pela
+  instituicao enquanto responsavel pelo tratamento.
+
+================================================================
+ROLLBACK
+================================================================
+Repor a pasta sige-softgenial/ a partir do backup do passo 1. A migracao de
+permissoes e idempotente e nao destrutiva; nao remove dados. O ecra e so leitura,
+pelo que nao houve qualquer alteracao a dados.

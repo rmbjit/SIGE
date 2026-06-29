@@ -1,0 +1,14 @@
+DEPLOY v12.12.4 - Security Kernel Foundation
+
+Ambiente recomendado: staging primeiro.
+
+Passos:
+1. Fazer backup de ficheiros e base de dados.
+2. Instalar o ZIP em staging.
+3. Validar login e acesso ao painel.
+4. Validar Financeiro M-Pesa/e-Mola, despesas/comprovativo e Centro de Configuracao.
+5. Executar smoke funcional nos perfis Direccao, Financeiro, Secretaria e Admin TI.
+
+Rollback:
+- Reinstalar v12.12.3 se houver bloqueio operacional inesperado.
+- Nao ha alteracao de schema nesta versao.

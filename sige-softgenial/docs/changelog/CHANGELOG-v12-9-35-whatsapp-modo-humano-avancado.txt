@@ -1,0 +1,8 @@
+SIGE SoftGenial v12.9.35 - WhatsApp Modo Humano Avançado
+
+- Adiciona desbloqueio inteligente automático da fila WhatsApp.
+- Converte pequenas quantidades de mensagens bloqueadas para pendentes, apenas quando existe margem no limite diário.
+- Distribui as mensagens desbloqueadas em horários futuros, evitando picos.
+- Torna o lote por execução variável (2 a 4 mensagens), reduzindo padrão fixo.
+- Mantém Guardian/Recovery como autoridade final antes do envio.
+- Não altera fórmulas financeiras nem académicas.

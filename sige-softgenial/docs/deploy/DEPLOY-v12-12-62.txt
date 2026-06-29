@@ -1,0 +1,43 @@
+DEPLOY - SIGE SoftGenial v12.12.62
+Fase 4 (CSP e front-end seguro) - incremento 2
+switchTab e args com esc_js das vistas admin em data-sige-act
+Data: 2026-06-23
+
+NATUREZA DA ENTREGA
+- Pacote instalavel completo (pasta sige-softgenial na raiz do ZIP).
+- Preparacao para o CSP enforce do shell admin: converte o switchTab das abas e os
+  onclick com argumentos string (via esc_js) das vistas admin para o despachante
+  data-sige-act. Comportamento identico.
+- Nao toca em regras de calculo financeiro nem no ficheiro canonico finance-core.
+- Nao acrescenta nem altera nenhum cabecalho CSP.
+
+PRE-REQUISITOS
+- Sem alteracao de base de dados. Sem migracao. Sem alteracao de configuracao.
+- Sem novas dependencias externas (mantem-se 9 hosts).
+
+PASSOS
+1. Fazer copia de seguranca do plugin actual (pasta wp-content/plugins/sige-softgenial).
+2. Em alternativa recomendada, desactivar o plugin antes de substituir os ficheiros.
+3. Substituir a pasta sige-softgenial pela desta entrega (pacote completo).
+4. Reactivar o plugin, se tiver sido desactivado.
+5. Confirmar a versao 12.12.62 no cabecalho do plugin.
+
+VERIFICACAO POS-DEPLOY
+- Ficha do aluno (lista de alunos): as abas (Dados gerais, Encarregados, Saude e
+  emergencia, Arquivo digital) trocam ao clicar, com a aba activa realcada.
+- Turmas: alocar professores, ver alunos, apagar turma funcionam e recebem o nome
+  correcto da turma.
+- Lista de alunos: ver acesso e apagar aluno funcionam com o nome correcto.
+- Equipa: activar/desactivar e remover utilizador funcionam com o email/nome
+  correctos.
+- Extracto financeiro: anular pagamento abre com o valor correcto.
+- Planos: pagar abre com o nome, valor e numero correctos.
+
+NOTAS
+- Esta entrega nao activa nem altera nenhum cabecalho CSP. O enforce do shell admin
+  e um passo posterior, dependente da conversao dos onclick restantes (66, incluindo
+  os de codigo inline) e dos estilos inline (2051).
+- A catraca de onclick desceu de 79 para 66.
+
+REVERSAO
+- Repor a pasta a partir da copia de seguranca. Sem passos de base de dados.

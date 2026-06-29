@@ -1,0 +1,37 @@
+SIGE SoftGenial v12.11.9.136 - AUDITORIA DE DESIGN (notas)
+=========================================================
+
+Lançamento de notas (2545 linhas). Ecrã académico nuclear.
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 8 pesos, 850 (8x), 700 (8x), 800 (6x). Zero pesos inline
+  fora do <style> (verificado, lição da abertura).
+- RAIOS: 12 valores. SOMBRAS: 16. CORES: 105 hex.
+
+CORRECÇÃO (bloco <style> 1076-1289; JS 2296+ preservado)
+1. Hierarquia de 3 níveis: 8 pesos -> 500/600/700.
+2. Raios da escala: 12 -> 6. Sombras da escala: 16 -> 7.
+3. 198 cores migradas (CSS + corpo HTML). Inclui cabeçalhos de tabela de
+   notas (degradé azul por nível), campos de input de nota (.nota-input,
+   .at-input verde de exame), e estilos inline de painéis. Nota negativa
+   vermelha preservada. Tema dinâmico (--sg-theme-primary) preservado com
+   fallback migrado para token. Cores em JS preservadas. ZERO hex
+   restantes.
+
+PROVA VISUAL
+- notas-antes-depois.png: lançamento de notas. Nota negativa vermelha
+  preservada; título e nomes destacam-se, subtítulo recua. Campo de input
+  reconhecível.
+
+GATES
+- smoke-regression-pack: 256 -> 260 invariantes.
+- notas adicionado aos ecrãs auditados.
+- Baseline de mágicos: 5400 -> 5202 (-198).
+- Baseline de tipografia: 112 -> 98 (-14). Abaixo de 100!
+- 12 gates verdes.
+
+MARCO: 26 ecrãs auditados. Desde o início: mágicos 9925 -> 5202; pesos
+não-canónicos 665 -> 98.
+
+PRÓXIMO
+- jardim_relatorio (13 pesos), core-status (12), financeiro-devedores (12)...

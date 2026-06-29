@@ -1,0 +1,113 @@
+SIGE SoftGenial - Changelog detalhado
+Versao: 12.12.45
+Data: 2026-06-23
+Titulo: Fase 4 incr 1 - Self-host das bibliotecas e infra de enqueue
+Tipo: Incremento de funcionalidade (camada habilitadora)
+Base: 12.12.44
+Canal: validated-feature
+
+================================================================
+CONTEXTO
+================================================================
+Primeiro incremento da Fase 4 (CSP e front-end seguro), que fecha a Fase 10 do
+plano original. A Fase 4 e a maior divida de seguranca do navegador. Antes de impor
+o CSP e preciso construir a base: este incremento retira as bibliotecas dos CDN
+(self-host com SRI) e cria a infra de enqueue. Nao muda o comportamento dos ecrans.
+
+================================================================
+SELF-HOST DAS BIBLIOTECAS
+================================================================
+NOVO  assets/vendor/chartjs/chart.umd.js          (Chart.js 4.4.1, build UMD)
+NOVO  assets/vendor/xlsx/xlsx.full.min.js          (xlsx 0.18.5)
+NOVO  assets/vendor/exceljs/exceljs.min.js         (exceljs 4.3.0)
+NOVO  assets/vendor/sortable/Sortable.min.js       (Sortable 1.15.2)
+NOVO  assets/vendor/qrious/qrious.min.js           (qrious 4.0.2)
+NOVO  assets/vendor/filesaver/FileSaver.min.js     (FileSaver 2.0.5)
+NOVO  assets/vendor/html5qrcode/html5-qrcode.min.js (html5-qrcode 2.3.8)
+      As versoes sao as mesmas que vinham de CDN. Seis dos sete ficheiros sao
+      byte-identicos ao que o CDN servia (o SRI coincide com o anterior); o setimo,
+      Chart.js, e o mesmo 4.4.1 (build UMD), com SRI recalculado.
+
+EDIT  includes/sri-hashes.php
+      - Hash do Chart.js actualizado para o ficheiro local (os restantes seis
+        mantem-se, por serem byte-identicos).
+
+EDIT  includes/cdn-scripts.php
+      - sige_cdn_catalog passa a construir URLs a partir de SIGE_URL para
+        assets/vendor/..., sem literais https:// de CDN. sige_cdn_script continua a
+        emitir a tag com integrity (SRI) e crossorigin, agora com src local.
+
+EDIT  includes/portaria-camera-safe-page.php
+      - O fallback directo a unpkg passa a apontar para o ficheiro local.
+
+EDIT  sige-softgenial.php
+      - O fallback de sige_cdn_script (caso cdn-scripts.php falte) passa a local.
+      - Passa a carregar includes/assets-registry.php.
+
+================================================================
+INFRA DE ENQUEUE
+================================================================
+NOVO  includes/assets-registry.php
+      - sige_assets_libs: handle -> [ficheiro, versao, chave SRI] para as 7 libs.
+      - sige_assets_registar: regista os handles (wp_register_script, local) no
+        admin_enqueue_scripts (hook ja rastreado: nao acrescenta superficie).
+      - sige_enqueue_lib: enfileira uma biblioteca pelo handle (para as vagas
+        seguintes que vao trocar os blocos inline por enqueue).
+      - sige_assets_sri_para_handle e o filtro script_loader_tag (sige_assets_tag_sri)
+        injectam integrity e crossorigin nas tags dos nossos handles, sem duplicar.
+
+================================================================
+GOVERNANCA E DEPENDENCIAS
+================================================================
+EDIT  tools/governance-lib.php
+      - sige_gov_runtime_files passa a excluir /assets/vendor/ do scan, por o codigo
+        vendorizado ser first-party self-hosted e nao uma chamada externa nossa.
+      - Efeito: as dependencias externas descem de 11 para 9 (cdnjs e unpkg
+        removidos). Hosts restantes: api.z-api.io, fonts.googleapis.com, purl.org,
+        rmbjconsulting.com, schemas.openxmlformats.org, softgenial.edu.mz,
+        ui-avatars.com, wa.me, www.w3.org.
+      - A baseline EXTERNAL_DEPENDENCIES e o external_hosts_count do INVENTORY_SUMMARY
+        foram regenerados/acertados ao scan (9).
+
+================================================================
+QUALIDADE
+================================================================
+NOVO  tools/check-fase4-assets.php  (gate estatico: registador completo, catalogo
+      local, zero CDN, vendor presente, SRI completo, carregado no bootstrap)
+NOVO  tools/smoke-fase4-assets.php   (26 verificacoes em runtime: catalogo local,
+      tag com integrity, 7 handles, injeccao de SRI, ficheiros vendor)
+EDIT  tools/run-gates.php (corredor de 95 para 97)
+
+================================================================
+INVARIANTES PRESERVADAS
+================================================================
+- Nao toca em regras de calculo nem em ficheiros canonicos.
+- Superficie de accao: 199 itens (enforce 33; registo num hook ja rastreado).
+- Vistas: 60. Opcoes: 132. Dependencias externas: 9 (era 11).
+- Sem alteracao de esquema. Calculo academico e financeiro byte-identico.
+- Versao sincronizada nas cinco fontes. Zero travessoes. Ficheiros de codigo em LF.
+
+================================================================
+VALIDACAO
+================================================================
+- php tools/check-fase4-assets.php   -> OK
+- php tools/smoke-fase4-assets.php     -> OK (26 verificacoes)
+- php tools/check-governance-docs.php   -> OK (21 documentos v12.12.45)
+- php tools/smoke-release-gate.php        -> verde a partir de pasta limpa
+- gates de pagamentos, cofre e Fase 1     -> sem regressao
+- extractor de superficie / opcoes / hosts -> 199 / 132 / 9
+- php -l nos ficheiros tocados             -> limpo
+
+================================================================
+INSTALACAO E REVERSAO
+================================================================
+- Instalacao: backup, desactivar, substituir a pasta sige-softgenial, reactivar.
+- O ZIP fica maior (cerca de 2,7 MB) por trazer as bibliotecas locais; e o esperado
+  no self-host.
+- Reversao: reinstalar a versao anterior. Sem alteracao de esquema; reversao directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Incremento 2: migracao dos blocos inline (onclick, style, script) para enqueue,
+  por vagas, com gate a exigir que o inline remanescente so desca.

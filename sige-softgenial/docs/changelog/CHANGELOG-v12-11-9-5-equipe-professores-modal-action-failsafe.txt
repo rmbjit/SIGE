@@ -1,0 +1,20 @@
+SIGE SoftGenial v12.11.9.5 - Equipa e Professores Modal Action Failsafe PRO (TEST)
+
+Objectivo:
+- Corrigir regressão de UX no módulo &view=equipe em que botões críticos pareciam não responder ao clique.
+
+Causa identificada:
+- O CSS global do App Shell esconde .sige-modal por defeito com selector mais forte do que .sige-modal.active.
+- O módulo Equipa abria modais apenas adicionando a classe active, sem inline display:flex.
+- Resultado: Novo colaborador, Editar, Resetar senha, Remover e Desactivar podiam executar JS, mas o modal/confirm não ficava visível.
+
+Correcções:
+- Adicionado failsafe CSS específico para #box-equipa e #sige-rh-confirm.
+- Criadas funções sigeEquipeOpenModal() e sigeEquipeCloseModal() com inline display/opacity/visibility.
+- Confirm modal passou a usar o mesmo mecanismo robusto.
+- Funções críticas foram explicitamente expostas em window para compatibilidade com onclick inline.
+- Mantidos os hardenings anteriores: validação de escola, bloqueio de Admin TI, dados sensíveis fora do DOM e endpoints protegidos.
+
+Escopo:
+- Módulo Equipa e Professores apenas.
+- Sem alterações financeiras, académicas ou de regras de negócio críticas.

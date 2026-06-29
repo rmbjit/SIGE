@@ -1,0 +1,16 @@
+SIGE SoftGenial v12.9.69 - WhatsApp Destinatários Padrão
+
+Base: v12.9.68 - WhatsApp Operational Rules validado.
+
+Alterações cirúrgicas:
+- Nova configuração em Configuração Geral → Comunicação (API): “Destinatário padrão do WhatsApp”.
+- Opções: Pai + Mãe + Nº de Notificações + Contacto do Encarregado; Pai e Mãe; Apenas Pai; Apenas Mãe; Apenas WhatsApp para Notificações; Apenas Contacto do Encarregado; Primeiro disponível.
+- A função sige_encarregados_contactos() passa a respeitar esta política para WhatsApp.
+- A fila central sige_fin_queue_whatsapp() ganhou guard transversal: mesmo chamadas antigas/futuras são bloqueadas se tentarem enviar para número fora da política escolhida.
+- Deduplicação preservada para evitar mensagens duplicadas quando Pai/Mãe/Nº de Notificações são iguais.
+- Migração segura adiciona whatsapp_destinatarios_padrao em sige_config sem alterar regras financeiras ou académicas.
+
+Não alterado:
+- Fórmulas financeiras.
+- Regras académicas.
+- Cálculos de mensalidades, pagamentos, descontos, notas, pautas ou documentos.

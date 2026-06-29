@@ -1,0 +1,27 @@
+SIGE SoftGenial v12.10.99 - Jardim Saúde: Compliance Visual Integral
+
+Base
+- Construído por cima da v12.10.98 - Jardim Diário: Compliance Visual Integral.
+
+Objectivo
+- Aplicar o novo padrão visual Produto PRO ao módulo &view=jardim_saude.
+- Manter a intervenção exclusivamente visual, sem alterar handlers de gravação, regras de saúde, permissões, base de dados, notas ou pagamentos.
+
+Ajustes aplicados
+- Removido o cabeçalho genérico do App Shell para esta view, garantindo header único.
+- Hero antigo escuro substituído por hero claro no padrão Painel Principal / Dashboard V2 MJS-grade.
+- Sequência visual aplicada: ícone canónico, área Nutrição e Saúde, título Saúde do Jardim, subtítulo, chips de contexto e painel lateral de estado.
+- Adicionados KPIs de alunos, registos do dia, fichas com alerta médico e ocorrências recentes.
+- Filtros de turma/data redesenhados como cartão claro e responsivo.
+- Cartões de saúde/nutrição dos alunos harmonizados no padrão Produto PRO.
+- Campos, selects, checkboxes, textareas e botões harmonizados visualmente.
+- Coluna lateral de Fichas Médicas e Ocorrências Recentes redesenhada com cartões profissionais.
+- Responsividade revista para desktop, laptop 17", tablet e mobile.
+- Ícones canónicos adicionados sem depender de emojis como estrutura visual principal.
+
+Garantias
+- Sem alteração no handler de gravação sige_jardim_saude_salvar.
+- Sem alteração nos campos gravados de refeição, febre, temperatura, queda/acidente, medicamento ou ocorrência.
+- Sem alteração nas fichas médicas dos alunos.
+- Sem alteração em notas, Pauta, DEC, ACTA, boletins académicos principais ou pagamentos.
+- Sem alteração em Permission Engine, perfis, permissões ou base de dados.

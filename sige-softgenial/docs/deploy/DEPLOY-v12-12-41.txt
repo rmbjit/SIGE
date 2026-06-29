@@ -1,0 +1,66 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.41
+Data: 2026-06-22
+Titulo: Fase 3 - Reconciliacao de pagamentos digitais - reconciliacao viva
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+O sistema passa a poder confirmar as transaccoes de pagamento movel directamente
+contra o gateway (M-Pesa e e-Mola), uma vez por dia, para verificar se as
+transaccoes pendentes sao mesmo reais e bem-sucedidas. Apanha tres situacoes:
+1. Transaccoes que o gateway confirma (ficam marcadas como confirmadas).
+2. Transaccoes com valor diferente do que o gateway diz (divergencia de valor).
+3. Transaccoes que temos como recebidas mas que o gateway diz que falharam ou nao
+   existem (possivel webhook falso ou falhado).
+
+IMPORTANTE: e so verificacao. O sistema NAO apaga, NAO cria e NAO altera nenhum
+pagamento nem transaccao. Quando encontra uma divergencia, regista-a no registo de
+seguranca para a secretaria rever. A accao (conciliar ou rejeitar) continua a ser
+feita a mao, como ate agora.
+
+Seguranca da verificacao: o sistema e conservador. Se nao conseguir confirmar com
+certeza o estado de uma transaccao, marca-a como desconhecida (a rever) e NUNCA a
+acusa de falsa. Isto evita rejeitar por engano um pagamento valido.
+
+================================================================
+PRE-REQUISITOS PARA A VERIFICACAO CORRER
+================================================================
+- A verificacao diaria so corre se o M-Pesa ou o e-Mola estiverem configurados
+  (chaves e credenciais preenchidas). Se nenhum estiver configurado, a verificacao
+  nao faz nada (nao ha qualquer efeito).
+- O ajuste fino dos codigos de resposta do gateway (saber exactamente que codigos
+  significam falha) sera feito com base nos testes de sandbox das operadoras. Ate
+  la, a verificacao confirma os sucessos e marca o resto como a rever.
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+
+================================================================
+VERIFICACAO
+================================================================
+1. Confirme que o ecra de reconciliacao de pagamentos continua a funcionar
+   normalmente (as seccoes de divergencias e de possiveis duplicados).
+2. Se tiver um gateway configurado, ao fim de um dia (apos a tarefa diaria correr),
+   verifique o registo de seguranca: eventuais divergencias aparecem com o evento
+   reconciliacao_viva_divergencia.
+3. Confirme que nenhum pagamento foi alterado: a verificacao e so de leitura.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera dados
+nem esquema, pelo que a reversao e directa.
+
+================================================================
+A SEGUIR (FASE 3)
+================================================================
+- Resolucao de divergencias a partir do ecra (conciliar ou rejeitar), com
+  confirmacao por duas pessoas.
+- Ajuste dos codigos de falha do gateway com base no sandbox das operadoras.

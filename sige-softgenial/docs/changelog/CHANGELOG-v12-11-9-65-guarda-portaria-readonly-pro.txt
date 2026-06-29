@@ -1,0 +1,61 @@
+SIGE SoftGenial v12.11.9.65 - Guarda / Portaria Read-Only PRO
+Data: 2026-06-08
+
+OBJECTIVO
+- Criar uma camada operacional para o utilizador Guarda / Portaria.
+- Permitir como função principal a validação de crachás/QR Code no módulo Portaria Digital.
+- Permitir apenas consulta limitada de alunos/estudantes.
+- Bloquear qualquer poder de criação, edição, remoção, importação, exportação, documentos, financeiro ou configuração para este perfil.
+
+IMPLEMENTADO
+1) Novo perfil/role
+- Novo WP role: sige_guarda - "Guarda / Portaria".
+- Novo perfil da matriz SIGE: guarda - "Guarda / Portaria".
+- Permissões exactas do perfil: portaria.ver, portaria.validar_acesso, alunos.ver.
+- Compatibilidade com instalações existentes: role criado no init e permissões mínimas garantidas.
+
+2) Matriz de permissões
+- Novas permissões granulares do módulo Portaria:
+  - portaria.ver
+  - portaria.validar_acesso
+- Migração v12.11.9.65 fecha exactamente o perfil guarda, removendo permissões extras acidentais.
+- sige_can aplica allowlist rígida ao perfil guarda, bloqueando overrides fora do escopo.
+
+3) Portaria Digital
+- View Portaria protegida por portaria.ver/portaria.validar_acesso.
+- AJAX sige_validar_acesso exige portaria.validar_acesso.
+- Nonce próprio sige_portaria_acesso aceite pela verificação global.
+- Guarda é redireccionado para Portaria quando tenta abrir o Painel Principal sem permissão de dashboard.
+- Portaria aparece no menu lateral e na bottom nav conforme permissões.
+
+4) Alunos / Estudantes - modo consulta
+- Guarda pode abrir a lista de alunos.
+- Botões de registar, importar, editar e remover são ocultados/bloqueados.
+- Exportação Excel, cartões em lote, documentos, portal e WhatsApp são ocultados/bloqueados para Guarda.
+- Ficha 360 mantém dados operacionais básicos e redige dados sensíveis para Guarda.
+- Endpoints de exportação/importação/anulação/histórico de importação exigem permissões de gestão e/ou bloqueiam Guarda.
+
+5) Defesa no servidor
+- AJAX salvar aluno exige alunos.criar ou alunos.editar.
+- AJAX remover aluno exige alunos.apagar.
+- AJAX Portaria exige portaria.validar_acesso.
+- Helper AJAX respeita a matriz SIGE quando há perfil SIGE activo e não reabre acções por capabilities antigas.
+
+6) RH / Equipa / UI de permissões
+- Equipa/RH permite atribuir o perfil "Guarda / Portaria".
+- Cadastro de staff valida sige_guarda na allowlist de perfis permitidos.
+- UI de permissões apresenta o perfil guarda e fixa o seu escopo em Portaria + alunos.ver.
+
+BLINDAGEM PRESERVADA
+- Sem alteração de schema de base de dados.
+- Sem alteração em cálculos financeiros, pagamentos, mensalidades, multas, recibos ou dívida.
+- Sem alteração em notas, pautas, boletins, DEC, ACTA ou fórmulas académicas.
+- Sem alteração nas regras de matrícula e importação, excepto bloqueio de acesso para o perfil Guarda.
+- Sem alteração de dados existentes de alunos, professores ou encarregados.
+
+VALIDAÇÃO
+- PHP lint completo executado sobre 203 ficheiros PHP: sem erros de sintaxe.
+- node --check assets/mobile-tablet-ux.js: OK.
+- Smoke Guarda / Portaria readonly: 17/17 checks OK.
+- Smoke Guarda / Portaria principal: 35/35 checks OK.
+- Smoke Role Guarda / Portaria: 43/43 checks OK.

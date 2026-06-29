@@ -1,0 +1,51 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.160
+Data: 2026-06-14
+Ambito: CRITICO - link do recibo (pagina em branco) + humanizador
+
+SINTOMA
+-------
+O botao "Ver e descarregar o recibo" e o link em texto abriam uma pagina em
+branco (post normal do WordPress). O URL aparecia como
+  ?sigerecibo=REC-2026-000055&e=1&a=3&tk=...
+em vez de
+  ?sige_recibo=REC-2026-000055&...
+E o texto dizia "Se o secretariaao nao abrir" em vez de "Se o botao nao abrir".
+
+CAUSA RAIZ (humanizador de email)
+---------------------------------
+sige_notify_humanize_outbound_email_html corre depois da substituicao de
+variaveis e estava a corromper o conteudo:
+  1. fix_mz_concordance fazia str_replace(['__','_'],'') -> removia TODOS os
+     underscores. ?sige_recibo= virava ?sigerecibo=. O handler publico verifica
+     $_GET['sige_recibo'] (com underscore), nao disparava -> pagina em branco.
+  2. 'bot' => 'secretaria' (suavizar tom robotico) substituia a SUBSTRING 'bot'
+     -> 'botao' virava 'secretariaao'.
+
+CORRECCOES
+----------
+1. URLs protegidos: o humanizador de email extrai os http(s) para sentinelas
+   antes de qualquer transformacao e repoe-os intactos no fim. Blinda o link
+   contra esta e qualquer futura regra.
+2. Removida a remocao global de underscores. Mantem-se apenas a limpeza de
+   _enfase_ markdown isolada (com fronteiras que nao apanham URLs/IDs).
+3. Suavizacao robo/robot por palavra inteira (\b(rob[ôo]|robot)\b). Deixou de
+   incluir 'bot' isolado (ambiguo em portugues: botao, botar).
+4. Texto de reserva do link em UTF-8 literal (botao/nao/endereco) em vez de
+   entidades, para o '&' nao partir a palavra.
+
+VALIDACAO
+---------
+Simulacao com o cenario exacto do screenshot: sige_recibo intacto no href e no
+texto (2x), 'botao' preservado, 'robô' ainda suavizado, 0 corrupcao. php -l
+limpo; 15/15 gates.
+
+NOTA SOBRE O TOM (caloroso)
+--------------------------
+O texto seco que aparece ("Segue a confirmacao do recibo...") e o template que a
+escola tem GUARDADO na base de dados (sige_email_templates_config), nao o default
+caloroso da v158. Para a escola de teste passar a ver o default caloroso ja, basta
+limpar os dois templates guardados:
+  $cfg = get_option('sige_email_templates_config', []);
+  unset($cfg['recibo'], $cfg['confirmacao_pagamento']);
+  update_option('sige_email_templates_config', $cfg, false);
+A Central de Comunicacoes (a seguir) trara um editor com botao "repor default".

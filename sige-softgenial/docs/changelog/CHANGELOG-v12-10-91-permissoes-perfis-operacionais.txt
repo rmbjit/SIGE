@@ -1,0 +1,42 @@
+SIGE SoftGenial v12.10.91 - Permissões: Catálogo de Perfis Operacionais
+
+Objectivo
+- Simplificar a experiência do módulo &view=sige_permissoes.
+- Mostrar ao utilizador apenas perfis operacionais de backend, evitando perfis legados, duplicados, portal ou apoio sem fluxo administrativo real.
+- Manter compatibilidade histórica sem apagar dados sensíveis da base de dados.
+
+Perfis mantidos no catálogo operacional
+- Admin da Escola
+- Admin TI
+- Direcção Geral
+- Dir. Pedagógico
+- Gestor de RH
+- Professor
+- Educador
+- Secretaria Geral
+- Tesouraria
+- Assistente
+- Recepção
+
+Perfis removidos da experiência normal da UI
+- Director (legado/compatibilidade)
+- Secretaria (duplicado funcional)
+- Secretário (duplicado funcional)
+- Motorista (sem fluxo administrativo real nesta área)
+- Limpeza (perfil restritivo/apoio sem acesso administrativo)
+- Encarregado (portal, não backend staff)
+
+Ajustes aplicados
+- Lista lateral de perfis passa a exibir apenas perfis operacionais.
+- Dropdown de atribuição passa a permitir apenas perfis operacionais.
+- KPI passa a contar perfis operacionais.
+- Perfis antigos continuam preservados na base de dados para compatibilidade histórica.
+- Se algum utilizador já tiver um perfil antigo activo, ele aparece sinalizado como "fora do catálogo" e pode ser removido com segurança pela própria UI.
+- Alunos e encarregados continuam excluídos da lista de atribuição de backend.
+
+Garantias
+- Sem apagar perfis da base de dados.
+- Sem alterar Permission Engine.
+- Sem alterar permissões, guards, nonces, acções POST, auditoria ou segurança.
+- Sem alterar notas, ACTA, DEC, pautas, pauta final, boletins ou regras académicas.
+- Sem alterar pagamentos, multas, mensalidades ou base de dados financeira.

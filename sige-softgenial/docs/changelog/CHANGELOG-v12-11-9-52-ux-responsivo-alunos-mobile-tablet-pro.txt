@@ -1,0 +1,34 @@
+SIGE SoftGenial v12.11.9.52 - UX Responsivo Alunos Mobile/Tablet PRO
+
+Escopo:
+- Intervenção visual/UX no módulo Alunos e Matrículas.
+- Sem alteração de base de dados, regras académicas, regras financeiras, importação de alunos, anulação de lotes, Ficha 360º ou Gestão Avançada de Encarregados.
+
+Melhorias aplicadas:
+1. Filtros compactos em mobile:
+   - pesquisa fica sempre visível;
+   - botão Filtros abre/fecha turma, estado, pesquisar, limpar, cartões e Excel.
+
+2. Acções dos alunos mais intuitivas em tablet/mobile:
+   - menu deixa de depender apenas de ícones;
+   - cada acção passa a aparecer com texto em ecrãs menores.
+
+3. Modal de aluno em fluxo guiado no mobile:
+   - barra “Passo 1 de 4”;
+   - progresso visual;
+   - botões Anterior/Próximo;
+   - abas com roles ARIA e navegação por teclado.
+
+4. Ficha 360º optimizada para telemóvel:
+   - cards em acordeões em ecrãs pequenos;
+   - reduz scroll excessivo;
+   - mantém conteúdo completo e blindagem de privacidade.
+
+5. Normalização responsiva final:
+   - breakpoints principais consolidados para desktop/laptop/tablet/mobile;
+   - foco visível e melhor área táctil em botões.
+
+Validação:
+- PHP lint.
+- Smoke test estático da camada UX.
+- Integridade do ZIP final.

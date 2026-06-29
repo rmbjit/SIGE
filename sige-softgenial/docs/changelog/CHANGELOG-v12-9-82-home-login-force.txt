@@ -1,0 +1,29 @@
+SIGE SoftGenial v12.9.82 - Link Principal Força Login
+
+Base: v12.9.81 validada.
+
+Alteração aplicada:
+- O endereço principal da instalação da escola passa a redireccionar automaticamente para a página de login/SIGE.
+- A home pública do WordPress deixa de ser exibida no link principal da escola.
+- Se o utilizador já estiver autenticado, o link principal encaminha para o SIGE; se for encarregado/aluno, encaminha para o Portal do Aluno.
+
+Protecções:
+- A regra só actua no URL principal exacto da instalação e sem query string.
+- Não interfere com recibos públicos, REST API, cron, admin-ajax, documentos, impressões, portal do aluno ou páginas internas.
+- Existe escape técnico opcional para casos excepcionais:
+  define('SIGE_DISABLE_HOME_LOGIN_REDIRECT', true);
+
+Ficheiros alterados:
+- sige-softgenial.php
+- includes/security-roles.php
+- BUILD.json
+
+Sem alterações em:
+- Finanças
+- Pagamentos
+- Estornos
+- WhatsApp
+- Dashboard
+- Extractos
+- Lançamentos Excel
+- Base de dados

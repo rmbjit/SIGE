@@ -1,0 +1,21 @@
+SIGE SoftGenial v12.10.67 - Pautas: Compliance Visual Integral
+
+Escopo desta versão:
+- Harmonização visual do módulo &view=pautas com o padrão Produto PRO / Dashboard V2 MJS-grade.
+- Header único: ocultação do cabeçalho genérico superior do App Shell neste módulo.
+- Hero claro com sequência obrigatória: ícone canónico, área Académico, título Pautas e subtítulo operacional.
+- Botões Gerar Pauta, Exportar PDF e Exportar Excel com ícones canónicos, sem emojis decorativos.
+- Filtros, alerta de conta não vinculada, mensagens de estado, barra de contexto, tabela e legenda harmonizados.
+- Remoção de símbolos decorativos desnecessários nos cabeçalhos/legenda da pauta, mantendo a distinção visual entre disciplinas nucleares e auxiliares.
+- Saneamento técnico mínimo: removida duplicação textual acidental na query de disciplinas que podia quebrar a geração da pauta.
+
+Garantias de não regressão:
+- Não altera fórmulas de médias, MFD, MG, negativas, situação final ou escala qualitativa.
+- Não altera regras de progressão, transição, reprovação, fim de ciclo ou pauta final.
+- Não altera permissões, escopo do professor, lançamento de notas, aprovação, boletins, DEC ou base de dados.
+- Não altera endpoints/fluxos de exportação PDF e Excel.
+
+Validação técnica:
+- php -l executado em admin/academic/pautas-view.php.
+- php -l executado no ficheiro principal do plugin.
+- Versionamento alinhado entre header do plugin, SIGE_VERSION e BUILD.json.

@@ -1,0 +1,23 @@
+SIGE SoftGenial v12.10.85 - Estatísticas Demográficas: Compliance Visual Integral
+
+Objectivo
+- Redesenhar visualmente o módulo &view=estatisticas_demo com o mesmo rigor do Painel Principal / Dashboard V2 MJS-grade.
+- Manter a intervenção exclusivamente visual, sem alterar cálculos estatísticos, queries, exportações, gráficos, ACTA, DEC, pautas, notas ou regras académicas.
+
+Ajustes aplicados
+- Removido o cabeçalho genérico do App Shell para esta view, garantindo header único.
+- Hero antigo escuro substituído por hero claro no padrão Produto PRO.
+- Sequência visual obrigatória aplicada: ícone canónico, área Gestão Escolar, título, subtítulo, chips e painel lateral de estado.
+- Filtros de Ano Lectivo, Classe e Turno redesenhados como cartão claro e responsivo.
+- Área de acções Imprimir/Excel harmonizada com botões canónicos, hover, cursor e responsividade.
+- KPIs redesenhados no padrão dos cartões do Painel Principal, com ícones canónicos e hierarquia visual consistente.
+- Cards de gráficos harmonizados com cantos arredondados, sombras suaves e títulos limpos.
+- Tabelas estatísticas redesenhadas com cabeçalhos consistentes, scroll horizontal controlado, bordas suaves e melhor leitura.
+- Títulos das secções passam a usar ícones canónicos.
+- Legenda e estado vazio harmonizados no padrão Produto PRO.
+
+Garantias
+- Sem alteração nos cálculos de género, idade, sobreidade, ocupação, tendência de matrículas ou bairro.
+- Sem alteração em queries, filtros lógicos, exportação Excel, impressão ou gráficos.
+- Sem alteração em ACTA, DEC, pautas, pauta final, boletins, notas ou regras académicas.
+- Sem alteração em pagamentos, multas, mensalidades ou base de dados financeira.

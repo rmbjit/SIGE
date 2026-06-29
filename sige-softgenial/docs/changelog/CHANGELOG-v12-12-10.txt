@@ -1,0 +1,37 @@
+SIGE SoftGenial v12.12.10 - MFA de Operacao (Step-up)
+=====================================================
+
+Fase 4 (MFA critico), incremento 1. Base validada: v12.12.9.
+
+NOVO
+- includes/security-mfa-stepup.php: 12 primitivas sige_mfa_*; guard fail-closed
+  sige_mfa_require_step_up; endpoint admin_post:sige_mfa_confirm; aviso/formulario.
+- tools/check-mfa-stepup.php: gate (modulo, 12 primitivas, 10 pontos, regra de Kernel).
+- tools/smoke-mfa-stepup-v12-12-10.php: smoke (29 verificacoes; runtime fail-closed).
+- docs/governance/*-v12.12.10.md e docs/security/*-v12.12.10.(md|json).
+
+ALTERADO (codigo)
+- includes/fin-action-service.php: guard MFA nos 6 metodos (apos o guard de tenant).
+- includes/payments/emola-config.php, mpesa-config.php: guard MFA apos validacao de escola.
+- admin/finance/financeiro-extratos.php: guard MFA nos handlers de caixa (reabrir, fechar).
+- includes/security-kernel-rules.php: regra admin_post:sige_mfa_confirm (observe).
+
+ALTERADO (governacao)
+- sige-softgenial.php (Version, SIGE_VERSION, carregamento do modulo MFA).
+- tools/governance-lib.php (SIGE_GOV_VERSION = 12.12.10).
+- tools/inventory-surface.php (base_version 12.12.9).
+- tools/run-gates.php (gate e smoke ligados).
+- BUILD.json, CHANGELOG.md.
+
+COMPORTAMENTO
+- Desligado por defeito. Ligar: update_option('sige_mfa_stepup','on').
+- Emergencia: define('SIGE_MFA_STEPUP_OFF', true) no wp-config.php.
+- Perfis: option sige_mfa_stepup_roles (defeito sige_director, sige_admin_ti).
+- Janela de verificacao: SIGE_MFA_STEPUP_WINDOW (defeito 300s).
+- Anti-lockout: falha de SMTP permite a operacao nessa tentativa.
+- Sem migracao de base de dados. Calculo financeiro inalterado.
+
+QA
+- Rediagnostico adversarial: Zero P0/P1. Calculo byte-identico a v12.12.8.1.
+- Baselines de tenant congelados (138/139) e corrente 0. Zero em-dashes no codigo.
+- Todos os gates verdes (46) e lint limpo, confirmados a partir do ZIP extraido.

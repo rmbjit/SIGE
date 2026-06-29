@@ -1,0 +1,24 @@
+# CHANGELOG - v12.14.0 - Front-end Security & CSP Enforcement
+
+## Resumo
+Fase 10 implementada: o shell administrativo do SIGE passa de CSP apenas em `Report-Only` para CSP real em `Content-Security-Policy`, com `script-src`/`script-src-elem` baseados em `'self'` e nonce por pedido.
+
+## Alterações principais
+- Activado CSP enforcement no shell admin `page=sige-app`.
+- Criada função `sige_admin_shell_csp_policy()`.
+- Acrescentado helper `sige_csp_is_admin_shell_request()`.
+- Acrescentados filtros para nonce em scripts inline gerados pelo WordPress.
+- Reduzidos `onclick` inline de 45 para 17.
+- Adicionados helpers declarativos em `assets/sige-ui.js` para substituir padrões antigos de inline JS.
+- Convertidos botões/links críticos em Financeiro, Académico e HR para `data-sige-act`.
+- Removidas chamadas a Google Fonts no login e portal.
+- Gate `check-inline-frontend.php` actualizado para exigir enforcement, não Report-Only.
+- Criado smoke test específico `smoke-csp-enforcement-v12-14-0.php`.
+
+## Riscos residuais declarados
+- `script-src-attr 'unsafe-inline'` permanece temporariamente para handlers legados.
+- `style-src 'unsafe-inline'` permanece temporariamente para estilos inline legados.
+- Zero-inline absoluto fica para vaga posterior, por módulo.
+
+## Compatibilidade
+Sem alteração de base de dados. Sem alteração de permissões. Sem alteração de tenant isolation. Sem alteração de regras financeiras ou académicas.

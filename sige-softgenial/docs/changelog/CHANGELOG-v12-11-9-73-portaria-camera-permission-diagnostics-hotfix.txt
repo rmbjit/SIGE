@@ -1,0 +1,29 @@
+SIGE SoftGenial v12.11.9.73 - Portaria Camera Permission Diagnostics Hotfix
+Data: 2026-06-09
+
+Contexto
+- Em Microsoft Edge/desktop, ao tocar em “Permitir uso da câmara”, a Portaria podia mostrar “Permissão negada”, mas o cadeado do navegador não exibia a opção Câmara.
+- Isto indica que o navegador não chegou a criar uma permissão de site para câmara, ou que o bloqueio aconteceu a nível global/sistema/dispositivo antes do prompt de permissão ficar disponível.
+
+Correcções
+- O primeiro pedido de câmara agora usa getUserMedia({ video: true, audio: false }) para forçar o prompt genérico real quando possível.
+- A selecção de câmara traseira passa a acontecer depois da permissão/enumeração, evitando falha inicial em desktop/tablet sem câmara traseira.
+- Adicionado fallback para camerasFromProbe via enumerateDevices().
+- Adicionada escolha automática: câmara traseira se existir; caso contrário, primeira câmara disponível.
+- Adicionada segunda tentativa de arranque do Html5Qrcode com câmara alternativa.
+- Adicionado diagnóstico visível: ligação segura, estado da Permission API, número de câmaras detectadas, fase e erro técnico.
+- Mensagens de erro separadas para NotAllowedError, NotFoundError, NotReadableError, OverconstrainedError, SecurityError, NotSupportedError e LibraryMissing.
+- Quando “Câmara” não aparece no cadeado, a UX agora orienta para permissões globais do Edge/Chrome e permissões do sistema operativo.
+
+Preservação
+- Sem alterações de base de dados.
+- Sem alterações em pagamentos, mensalidades, multas, dívidas, recibos, notas, pautas, boletins, DEC, ACTA ou fórmulas académicas.
+- Sem alterações nas regras de Portaria, validação de crachá/QR ou permissões do Guarda.
+- O fallback manual por número de processo continua disponível.
+
+Validação
+- PHP lint completo: OK.
+- JS inline da Portaria: OK.
+- Smoke Portaria Camera Diagnostics v12.11.9.73: OK.
+- Smoke JS funcional de diagnóstico/fallback: OK.
+- Smoke Guarda/Portaria regressão: OK.

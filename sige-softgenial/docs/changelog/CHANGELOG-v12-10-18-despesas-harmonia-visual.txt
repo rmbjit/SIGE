@@ -1,0 +1,20 @@
+SIGE SoftGenial v12.10.18 - Despesas da Escola: Harmonia Visual
+
+Objectivo
+- Alinhar o módulo Despesas da Escola ao padrão visual aprovado do Painel Principal e dos módulos financeiros já validados.
+
+Alterações visuais e de experiência
+- Removida duplicação de cabeçalho nesta página.
+- Novo hero claro, amplo e harmonizado com o padrão do Painel Principal.
+- KPIs redesenhados para total das despesas, registos encontrados, despesas do mês e estado dos registos.
+- Filtros reorganizados com melhor largura, hierarquia e responsividade.
+- Tabela de despesas redesenhada com badges, valores, acções e comprovativo mais visíveis.
+- Modal de nova despesa ajustado ao padrão de App.
+- Aprovar e Anular passaram a usar pop-up real de confirmação, evitando confirmações nativas do navegador.
+- Layout mobile-friendly com rolagem horizontal controlada nas tabelas.
+
+Garantias
+- Sem alteração de fórmulas.
+- Sem alteração de mensalidades, multas, descontos, pagamentos, cobranças, recibos, estornos ou base de dados.
+- Sem alteração de notas, pautas, DEC, boletins ou actas.
+- Sem termos técnicos internos visíveis ao utilizador final.

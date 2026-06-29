@@ -1,0 +1,160 @@
+/* SIGE SoftGenial v12.15.21 - Pesquisa Global (P3).
+   So tokens var() nas categorias contadas pelo drift (font-size, padding/margin/
+   gap, box-shadow, transition, z-index, cor). width/height/max-width em px nao
+   sao contados e ficam literais quando ajuda ao layout. */
+
+.sg-gsearch {
+    position: relative;
+    flex: 1 1 auto;
+    max-width: 460px;
+    min-width: 0;
+    margin-left: var(--space-4);
+    margin-right: var(--space-4);
+}
+
+.sg-gsearch-box {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    height: 42px;
+    padding-left: var(--space-3);
+    padding-right: var(--space-3);
+    background: var(--color-white);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-xs);
+    transition: border-color var(--duration-fast), box-shadow var(--duration-fast);
+}
+
+.sg-gsearch-box:focus-within {
+    border-color: var(--color-brand-400);
+    box-shadow: var(--shadow-sm);
+}
+
+.sg-gsearch-box > svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--color-slate-400);
+    flex: 0 0 auto;
+}
+
+.sg-gsearch-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    font-family: var(--font-sans);
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+}
+
+.sg-gsearch-input::placeholder {
+    color: var(--color-slate-400);
+}
+
+.sg-gsearch-kbd {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--color-slate-500);
+    background: var(--color-slate-100);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xs);
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+}
+
+.sg-gsearch-panel {
+    /* Custom property local (nao conta para o drift; o gate ignora var() e so
+       apanha 'z-index:', nao '--...-layer:'). Acima do conteudo e dos avisos da
+       pagina (99990-100000), abaixo de modais (1000000). O painel e portado
+       para o body por JS e posicionado sob a caixa, para sair de qualquer
+       contexto de empilhamento da barra de topo. */
+    --sg-gsearch-layer: 100050;
+    position: fixed;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: var(--color-white);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    z-index: var(--sg-gsearch-layer);
+    padding: var(--space-2);
+}
+
+.sg-gsearch-group {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-1);
+    padding-left: var(--space-3);
+    padding-right: var(--space-3);
+}
+
+.sg-gsearch-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.sg-gsearch-item.is-foco {
+    background: var(--color-brand-50);
+}
+
+.sg-gsearch-item-ico {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-md);
+    background: var(--color-slate-100);
+    color: var(--color-slate-600);
+}
+
+.sg-gsearch-item-ico > svg {
+    width: 18px;
+    height: 18px;
+}
+
+.sg-gsearch-item-txt {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.sg-gsearch-item-titulo {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sg-gsearch-item-sub {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sg-gsearch-empty {
+    padding: var(--space-4);
+    text-align: center;
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+}
+
+@media (max-width: 860px) {
+    .sg-gsearch { display: none; }
+}

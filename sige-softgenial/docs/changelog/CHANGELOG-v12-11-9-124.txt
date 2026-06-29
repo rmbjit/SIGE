@@ -1,0 +1,36 @@
+SIGE SoftGenial v12.11.9.124 - AUDITORIA DE DESIGN (jardim_saude)
+================================================================
+
+Registo de saúde do jardim de infância (818 linhas). Informação médica
+de crianças - a codificação de estado de saúde é informação sensível.
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 8 pesos, 850 (12x), 700 (11x), 900 (7x).
+- RAIOS: 11 valores. SOMBRAS: 18. CORES: 109 hex.
+
+CORRECÇÃO (bloco <style> 117-486 + estilos inline; JS preservado)
+1. Hierarquia de 3 níveis: 8 pesos -> 500/600/700.
+2. Raios da escala: 11 -> 5. Sombras da escala: 18 -> 5.
+3. 158 cores migradas (CSS + zona HTML inline). A CODIFICAÇÃO DE ESTADO
+   DE SAÚDE (saudável verde, alerta/alergia vermelho, aviso laranja)
+   migrada para tokens semânticos preservando o significado clínico.
+   Verificado que não há classes médicas com cor própria fora desta
+   codificação. ZERO hex restantes.
+
+PROVA VISUAL
+- jardim-saude-antes-depois.png: cartões de saúde. Estado preservado
+  (saudável verde, alergia vermelho, borda colorida); nome domina,
+  detalhes recuam.
+
+GATES
+- smoke-regression-pack: 209 -> 212 invariantes.
+- jardim_saude adicionado aos ecrãs auditados.
+- Baseline de mágicos: 7175 -> 7017 (-158).
+- Baseline de tipografia: 312 -> 293 (-19).
+- 12 gates verdes.
+
+MARCO: 14 ecrãs auditados. Desde o início: mágicos 9925 -> 7017; pesos
+não-canónicos 665 -> 293.
+
+PRÓXIMO
+- jardim_diario (19 pesos), dashboard (18), pautas (18)...

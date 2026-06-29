@@ -1,0 +1,34 @@
+SIGE SoftGenial v12.11.9.143 - AUDITORIA DE DESIGN (aprovar_notas)
+=================================================================
+
+Aprovação de notas (617 linhas).
+
+DIAGNÓSTICO
+- TIPOGRAFIA: 7 pesos, 850 dominante (8x). Zero pesos inline fora do
+  <style> (verificado).
+- RAIOS: 8 valores. SOMBRAS: 10. CORES: 66 hex.
+
+CORRECÇÃO (bloco <style> 131-500; JS preservado)
+1. Hierarquia de 3 níveis: 7 pesos -> 500/600/700.
+2. Raios da escala: 8 -> 4. Sombras da escala: 10 -> 4.
+3. 74 cores migradas (CSS + 1 inline). Inclui semântica de ESTADO DE
+   APROVAÇÃO (.apn-kpi-pending laranja, .btn-rejeitar vermelho) migrada
+   para tokens semânticos preservando o significado. ZERO hex restantes.
+
+PROVA VISUAL
+- aprovar-notas-antes-depois.png: pautas para aprovar. Estado preservado
+  (pendente laranja, aprovada verde); disciplina domina, metadados recuam,
+  estado ênfase.
+
+GATES
+- smoke-regression-pack: 286 -> 290 invariantes.
+- aprovar_notas adicionado aos ecrãs auditados.
+- Baseline de mágicos: 4341 -> 4267 (-74).
+- Baseline de tipografia: 26 -> 15 (-11). Abaixo de 20!
+- 12 gates verdes.
+
+MARCO: 33 ecrãs auditados. Desde o início: mágicos 9925 -> 4267; pesos
+não-canónicos 665 -> 15.
+
+PRÓXIMO
+- a cauda final com <11 pesos não-canónicos.

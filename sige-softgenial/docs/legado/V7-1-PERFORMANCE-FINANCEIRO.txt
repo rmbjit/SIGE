@@ -1,0 +1,16 @@
+SIGE SoftGenial 12.9.9.2 - V7.1 Performance Financeiro
+
+Base: 12.9.9.1 cleanup v6 validado.
+
+Inclui:
+- Cache leve de serviços financeiros activos por escola durante a execução.
+- Página financeiro-pagamentos reutiliza serviços em memória em vez de repetir SELECTs.
+- Recálculo automático de lançamentos ao abrir a ficha do aluno passa a usar throttle de 6h para navegação normal.
+- Pagamentos/estornos/acções críticas continuam com recálculo forçado quando aplicável.
+- KPI engine passa a usar cache curto já existente (transients) para reduzir SUM/COUNT/GROUP BY repetidos no dashboard financeiro.
+- Versão actualizada para 12.9.9.2.
+
+Nota importante:
+- Nenhum rate limit foi introduzido nesta versão.
+- Lançamentos de mensalidades em massa NÃO foram limitados.
+- Sem mudanças visuais, sem alteração de regras financeiras e sem alteração de permissões.

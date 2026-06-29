@@ -1,0 +1,35 @@
+SIGE SoftGenial v12.10.101 - Jardim Boletim: Wide Layout Responsivo
+
+Base
+- Construído por cima da v12.10.100 - Jardim Boletim: Compliance Visual Integral.
+
+Objectivo
+- Corrigir a falta de largura útil e os cortes laterais no módulo &view=jardim_boletim.
+- Tornar o módulo realmente responsivo dentro do App Shell, especialmente em laptops de 17" e larguras intermédias.
+- Preservar o formato de impressão A4.
+
+Causa visual corrigida
+- A versão anterior usava largura baseada em 100vw no ecrã.
+- Dentro do App Shell, 100vw ignora a sidebar e a área real do conteúdo, o que causava corte à direita e comportamento pouco wide/responsivo.
+- Alguns grids tinham colunas auto rígidas, fazendo KPIs/botões extravasarem em telas intermédias.
+
+Ajustes aplicados
+- O screen shell do boletim passa a usar width:100% e max-width:none dentro da área real do módulo.
+- A view passa a forçar wide layout no App Shell:
+  - sg-app-page sem max-width;
+  - sg-app-content com padding lateral controlado;
+  - overflow-x bloqueado no nível correcto.
+- Hero ajustado para aproveitar melhor a largura útil sem cortar o painel lateral.
+- KPIs passam para grelha de 4 colunas em wide, 2 colunas em médio e 1 coluna em mobile.
+- Toolbar deixa de depender de colunas auto rígidas e passa a adaptar-se por breakpoint.
+- Estado vazio "Nenhum aluno encontrado" passa a ocupar a largura útil do módulo.
+- Pré-visualização A4 passa a usar width:min(210mm,100%) no ecrã, mantendo A4 real na impressão.
+- Breakpoints revistos para 1450px, 1280px, 980px e 760px.
+
+Garantias
+- Sem alterar função boletim_nivel().
+- Sem alterar leitura de critérios, respostas ou avaliações.
+- Sem alterar geração/impressão dos boletins.
+- Sem alteração nos dados da escola, alunos, encarregados ou comentários.
+- Sem alteração em notas, Pauta, DEC, ACTA, boletins académicos principais ou pagamentos.
+- Sem alteração em Permission Engine, perfis, permissões ou base de dados.

@@ -1,0 +1,10 @@
+v12.15.23 - Pesquisa Global completa: Planos e Despesas
+
+- Continuacao do P3 (pesquisa global). Mesma accao AJAX, mais entidades.
+- Novo grupo Planos de pagamento (sige_fin_pagamentos com prefixo PLN-, permissao financeiro.planos_ver, abre a view financeiro-planos).
+- Novo grupo Despesas (sige_fin_despesas por descricao/fornecedor/categoria, permissao financeiro.despesas_ver, abre a view financeiro-despesas).
+- Recibos deixa de incluir planos (Recibos = nao-PLN); planos tem grupo proprio. Corrige o caso de um PLN- aparecer como recibo.
+- A caixa de pesquisa aparece tambem a quem so tem permissao de despesas ou de planos.
+- So leitura, escola_id em todas as queries, $wpdb->prepare com o padrao PLN- como argumento (nunca % literal em prepare).
+- Sem alteracao de formulas, valores ou regras financeiras. Drift e gates inalterados.
+- Base: v12.15.22.

@@ -1,0 +1,59 @@
+CHANGELOG - SIGE SoftGenial v12.12.55
+Fase 4 (CSP e front-end seguro) - incremento 2
+Infraestrutura de nonce CSP e nonce nas tags script inline
+Data: 2026-06-23
+
+RESUMO
+Introducao da infraestrutura de nonce CSP e aplicacao do nonce as tags script
+inline das vistas administrativas, a caminho de poder impor o CSP (Content
+Security Policy). Sequencia as vagas de onclick (v12.12.46 a v12.12.54) e abre a
+frente dos blocos script. Acrescentar o nonce as tags e inocuo enquanto o
+cabecalho CSP nao for activado: os navegadores ignoram o nonce sem uma politica
+CSP, pelo que nao ha alteracao de comportamento.
+
+INFRAESTRUTURA DE NONCE (includes/core-helpers.php)
+- Carregado incondicionalmente no bootstrap (primeiro modulo da seccao de
+  carregamento), disponivel em todos os pedidos onde o plugin carrega, em admin
+  e frontend.
+- sige_csp_nonce: nonce unico por pedido, gerado uma so vez e reutilizado
+  durante o pedido (variavel estatica; base64 de bytes aleatorios; recurso a
+  wp_generate_password se random_bytes nao estiver disponivel).
+- sige_csp_script_attr: devolve o atributo nonce ja escapado (esc_attr) para uma
+  tag script inline. Uso: <script <?php echo sige_csp_script_attr(); ?>>.
+
+APLICACAO (55 tags)
+- 54 tags ao nivel do template (script seguido de quebra de linha) nas vistas
+  academicas, financeiras, de jardim, de sistema, de WhatsApp, de recursos
+  humanos e nos includes de contexto administrativo, incluindo o admin-shell.
+- 1 bloco de uma so linha no admin-shell que trata as etiquetas do menu lateral.
+
+EXCLUSOES POR DESENHO (abordagem propria nas proximas vagas)
+- Redireccionamentos construidos por echo (echo de uma tag script com
+  window.location): padrao proprio de concatenacao em string.
+- Paginas autonomas: modelos PDF de pauta e boletim, boletim do jardim, motor de
+  documentos, pagina segura da camara da portaria.
+- Portal publico, gerador de tags CDN e ficheiro canonico finance-core.
+- Pagina de login: pre-autenticacao, anterior ao carregamento do auxiliar.
+
+VERIFICADORES DE JAVASCRIPT EMBEBIDO
+- check-js-views e check-js-views-combined passaram a normalizar a tag com nonce
+  para a forma simples antes da extraccao, para que o node continue a validar a
+  sintaxe dos blocos sem tropecar no PHP do proprio tag. So na copia em memoria;
+  os ficheiros nao mudam. Ambos validam 66 blocos sem erro de sintaxe.
+
+CATRACA
+- check-inline-frontend: maximo de blocos script de 81 para 25 (sem folga).
+- Passa a exigir que a infraestrutura de nonce exista (sige_csp_nonce e
+  sige_csp_script_attr no core-helpers).
+- onclick mantem-se em 162; style mantem-se em 2051.
+
+INVARIANTES
+- Superficie de accao 199 (enforce 33), vistas 60, opcoes 132, dependencias
+  externas 9. Sem alteracao de esquema. Calculo financeiro byte-identico.
+- Corredor 99. Release gate verde a partir de pasta limpa.
+- Rediagnostico adversarial: Zero P0 e Zero P1.
+
+VERSAO
+- Cinco fontes sincronizadas em 12.12.55 (cabecalho do plugin, SIGE_VERSION,
+  BUILD.json, SIGE_GOV_VERSION, base da superficie de inventario).
+- Zero travessoes em todo o codigo, documentacao e changelog.

@@ -1,0 +1,17 @@
+SIGE SoftGenial v12.10.139 - UI PRO: Modais e HTML Oculto Blindados
+
+Base: v12.10.138 - Pagamentos PRO: Checkbox Isentar Multas Clicável
+
+Objectivo
+- Corrigir ocorrências em que elementos ocultos de interface, sobretudo modais, apareciam renderizados como HTML solto, com ícones SVG gigantes e botões sem formatação.
+
+Correções
+- Adicionado failsafe global para .sige-modal dentro do App Shell.
+- Modais passam a ficar ocultos por defeito e só aparecem quando o JavaScript os abre.
+- Normalização global de conteúdo de modais: backdrop, card, cabeçalho, corpo, rodapé, botões e SVGs.
+- Correção específica da Matriz Curricular: modais de clonagem e mensagens agora têm display:none inicial, aria-hidden e estilo aplicado mesmo estando fora do wrapper visual .sige-matriz-page.
+- Evita SVGs gigantes e HTML cru em páginas académicas/financeiras que renderizam modais fora do escopo CSS local.
+
+Escopo preservado
+- Não altera regras de pagamentos, mensalidades, multas, recibos, notas, pautas, DEC, boletins, WhatsApp ou base de dados.
+- Correção estritamente visual/UX e de compatibilidade do App Shell.

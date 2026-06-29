@@ -1,0 +1,11 @@
+SIGE v12.9.49 - Hub Billing UI + Notices PRO
+
+Base: v12.9.48 validada.
+
+Melhorias:
+- Corrige legibilidade global de avisos/notificações no SIGE app (evita base branca com letras brancas).
+- Substitui aviso WordPress simples de cobrança por banner premium, legível e coerente com o design do SIGE.
+- Mantém popup de cobrança com contador regressivo e suspensão automática.
+- Mantém SMTP, templates, fila de email, Reply-To, filtros financeiros e ponte Hub sem regressão.
+
+Versionamento alinhado em 12.9.49.

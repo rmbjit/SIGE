@@ -1,0 +1,29 @@
+SIGE SoftGenial v12.9.27 - Central de Cobranças: Inteligência de Cobrança
+
+Base validada:
+- v12.9.26.1 - Hotfix Selecção Central de Cobranças
+
+Alterações aplicadas:
+- Acrescentada coluna "Sugestão" na Central de Cobranças, sem alterar fórmulas financeiras.
+- Sugestões operacionais por aluno:
+  - Cobrança urgente para prioridade crítica.
+  - Contactar para prioridade alta.
+  - Aguardar para atraso leve/médio.
+  - Actualizar contacto para alunos sem telefone/e-mail operacional.
+- Acrescentado resumo operacional dinâmico da selecção:
+  - total seleccionado;
+  - dívida seleccionada;
+  - alunos sem contacto;
+  - casos críticos seleccionados;
+  - recomendação textual antes do envio.
+- Acrescentado botão "Lista de cobrança" para gerar uma lista limpa/imprimível com os alunos seleccionados; se nada estiver seleccionado, usa a lista filtrada actual.
+- Destaque visual leve para linhas críticas e manutenção do destaque de sem contacto.
+
+Garantias:
+- Não altera lançamentos.
+- Não altera pagamentos.
+- Não altera estornos.
+- Não altera fórmulas financeiras.
+- Não altera fórmulas académicas.
+- Não altera engine de WhatsApp/e-mail.
+- Incremento apenas em UI/JS e leitura operacional sobre dados existentes.

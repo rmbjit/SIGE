@@ -1,0 +1,48 @@
+SIGE SoftGenial - Guia de instalacao e verificacao
+Versao: 12.12.53
+Data: 2026-06-23
+Titulo: Fase 4 incr 2 - Onclick de navegacao e template JS para funcoes nomeadas
+
+================================================================
+O QUE MUDA NESTA VERSAO
+================================================================
+Mudanca interna, sem alterar a forma de trabalhar. Continuamos a preparar o reforco
+de seguranca do navegador (CSP), tirando das etiquetas as instrucoes de clique e
+ligando-as de outra forma, sem mudar o que cada botao faz.
+
+Nesta versao tratamos os cliques que abrem outra janela ou pagina (abrir o recibo numa
+janela, contactar por email) e alguns botoes de listas geradas no momento. O
+funcionamento e exactamente o mesmo. Nao ha qualquer alteracao visivel.
+
+================================================================
+INSTALACAO
+================================================================
+1. Faca uma copia de seguranca do plugin actual, como habitual.
+2. No WordPress, desactive o plugin SIGE SoftGenial.
+3. Substitua a pasta wp-content/plugins/sige-softgenial pelo conteudo deste ZIP
+   (a pasta sige-softgenial vem na raiz do ZIP).
+4. Reactive o plugin.
+
+================================================================
+VERIFICACAO
+================================================================
+1. Portal do aluno: clicar em "Baixar / imprimir recibo" ou no numero do recibo abre
+   o recibo numa janela nova, sem mudar a pagina onde esta.
+2. Aviso de cobranca (hub): o botao "Contactar SoftGenial" abre o email; os botoes de
+   adiar o aviso continuam a adiar.
+3. Disciplinas: remover um criterio recem-adicionado funciona.
+4. Matriz curricular: remover uma disciplina da matriz funciona.
+
+Tudo deve comportar-se exactamente como antes.
+
+================================================================
+REVERSAO
+================================================================
+Para reverter, reinstale a versao anterior do plugin. Esta versao nao altera o
+esquema da base de dados, pelo que a reversao e directa.
+
+================================================================
+A SEGUIR
+================================================================
+- Reescrever em codigo simples os ultimos cliques que usam bibliotecas, depois os
+  blocos de script, e por fim impor a politica de seguranca de conteudo (CSP).

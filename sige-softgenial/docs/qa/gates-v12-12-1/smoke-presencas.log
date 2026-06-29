@@ -1,0 +1,25 @@
+OK   Entrada antes do corte = Presente
+OK   Entrada exactamente no corte = Presente
+OK   Um segundo depois do corte = Atraso
+OK   Entrada tardia = Atraso
+OK   Sem entradas = Falta
+OK   Primeira entrada decide (07:10 entre leituras)
+OK   Primeira entrada 07:45 = Atraso mesmo com outras leituras
+OK   Justificação vence a falta
+OK   Presença manual vence a falta
+OK   Dispensa vence até a presença derivada
+OK   Excepção desconhecida é ignorada (cai na derivação)
+OK   Corte 08:00: entrada 07:45 = Presente
+OK   Corte 08:00: entrada 08:10 = Atraso
+OK   Junho/2026 tem 22 dias lectivos (seg-sex), obteve 22
+OK   Junho/2026 começa em segunda, dia 1
+OK   Sábado 6 e domingo 7 excluídos
+OK   Fevereiro/2024 (bissexto) inclui dia 29 (quinta-feira)
+OK   Contagens por estado correctas
+OK   Percentagem de presença 71.4 (dispensa fora do denominador), obteve 71.4
+OK   Só dispensas: percentagem 0 sem divisão por zero
+OK   Mês perfeito: 100%
+OK   Totais por dia: P/AT/PM contam, F/J/D não (2,1,2)
+OK   Turma vazia: totais a zero sem erro
+------------------------------------------------------------
+SMOKE PRESENÇAS OK - 23 verificações passaram.

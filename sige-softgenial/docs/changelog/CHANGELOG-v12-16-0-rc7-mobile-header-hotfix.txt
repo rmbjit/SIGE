@@ -1,0 +1,7 @@
+v12.16.0 RC7 - Mobile Header Hotfix
+
+- Corrigida a composicao do header mobile reportada em staging apos RC6.
+- Header mobile passa a usar grelha compacta de tres zonas: menu, marca e avatar.
+- Chip Ano Lectivo, pesquisa global e nome/cargo do utilizador ficam escondidos no header mobile para evitar aperto visual.
+- Correcao usa tokens do design system e nao introduz valores visuais literais.
+- Sem alteracao em financeiro, academico, permissao, schema, AJAX, REST ou rotas.

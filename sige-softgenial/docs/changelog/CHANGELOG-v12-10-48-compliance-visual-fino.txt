@@ -1,0 +1,26 @@
+SIGE SoftGenial v12.10.48 - Compliance Visual Fino
+
+Objectivo
+- Fechar a harmonização visual das páginas já melhoradas, mantendo o Painel Principal / Dashboard V2 MJS-grade como referência inegociável.
+
+Ajustes realizados
+- Removidos pontos decorativos dos heros harmonizados, incluindo os pontos verdes que quebravam a limpeza visual do padrão aprovado.
+- Neutralizado o segundo brilho radial verde dos cabeçalhos harmonizados, mantendo a composição mais limpa e alinhada ao padrão Produto PRO.
+- Substituídos ícones inline dos títulos/heros por ícones canónicos do sistema em páginas que ainda não seguiam o mesmo padrão do módulo Extractos e Caixa.
+- Reforçada a sequência visual: secção/título superior com ícone, título principal logo abaixo e texto explicativo em seguida.
+- Mantida a consistência de tipografia, cartões arredondados, espaçamento e aparência de aplicação profissional.
+
+Módulos ajustados directamente
+- Turmas
+- Matriz Curricular
+- Aproveitamento / Boletim
+- Lançar Mensalidades
+- Camada global de compliance visual do App Shell
+
+Garantias
+- Sem alteração de fórmulas.
+- Sem alteração de regras financeiras.
+- Sem alteração de mensalidades, multas, pagamentos, recibos, estornos ou base de dados.
+- Sem alteração de notas, pautas, DEC, boletins, actas ou documentos oficiais.
+- Sem termos técnicos internos adicionados à interface do utilizador final.
+- Intervenção visual conservadora, preparada para continuidade sem regressão.

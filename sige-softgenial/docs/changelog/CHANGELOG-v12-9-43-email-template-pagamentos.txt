@@ -1,0 +1,22 @@
+SIGE SoftGenial v12.9.43 - Integração de Templates/Fila no Registo de Pagamentos
+
+Base: v12.9.42 REBUILD validada.
+
+O que mudou:
+- O envio de recibo por e-mail no módulo Financeiro → Registar Pagamentos deixou de usar o modelo antigo hardcoded.
+- O evento de pagamento confirmado agora usa o template inteligente "recibo".
+- O envio entra na fila profissional de e-mail com prioridade alta.
+- Após enfileirar, o sistema tenta processar imediatamente uma pequena parte da fila para manter a experiência prática de envio rápido.
+- Foi preservado fallback seguro para wp_mail apenas se o motor de fila/templates não estiver disponível.
+
+Sem regressão esperada:
+- SMTP nativo continua igual.
+- Reply-To e From Name continuam herdados da configuração SMTP validada.
+- WhatsApp não foi alterado.
+- Lógica financeira de pagamento não foi alterada.
+
+Teste recomendado:
+1. Configurações Gerais → Comunicação → editar template "Recibo".
+2. Financeiro → Registar Pagamento → marcar notificação por e-mail.
+3. Confirmar que o e-mail recebido usa o texto do template novo.
+4. Confirmar que o Reply-To continua a responder para o endereço configurado da escola.

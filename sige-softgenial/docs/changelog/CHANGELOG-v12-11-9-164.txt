@@ -1,0 +1,47 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.164
+Data: 2026-06-14
+Ambito: Saude do e-mail na Central + Operacao WhatsApp (reposicionamento)
+
+A PERGUNTA QUE ORIGINOU ISTO
+----------------------------
+"Devia haver algo so para e-mail, como ha para o WhatsApp?"
+
+A RESPOSTA (ARQUITECTURA)
+-------------------------
+Uma vista separada so para e-mail NAO faz forte sentido. A operacao do WhatsApp
+e pesada e especifica (anti-banimento: saude do numero, quota, janela, webhook).
+O e-mail nao tem nada disso, e as suas pecas ja tem casa (SMTP na configuracao;
+modelos, fila e processamento na Central). Uma vista paralela ficaria artificial.
+A paridade certa e de VISIBILIDADE, nao de vistas: o e-mail ganha um painel de
+saude DENTRO da Central, que e a casa dele.
+
+(1) SEPARADOR "SAUDE DO E-MAIL" (na Central de Comunicacoes)
+------------------------------------------------------------
+  - Configuracao de envio (SMTP): activo/desligado, remetente (nome e e-mail)
+    bem a vista - o que torna obvia uma gralha como "nonreplay" -, servidor:porta.
+    Aviso quando o remetente esta vazio ou parece ter gralha. Atalho para a
+    configuracao SMTP.
+  - Saude da fila: pendentes, falhados, enviados, e a lista dos ultimos erros.
+  - Botoes: "Processar fila agora" e "Enviar e-mail de teste".
+  - Teste de SMTP real: endpoint sige_emc_smtp_test envia uma mensagem e, se
+    falhar, devolve o erro do servidor (diagnostico end-to-end).
+
+(2) "OPERACAO WHATSAPP" (era whatsapp_central)
+----------------------------------------------
+  - Renomeado no menu, nos metadados e no titulo da vista.
+  - Nota nova a apontar para a Central (vista cross-canal e historico).
+  - Continua a ser a consola de operacao especifica do WhatsApp: saude do numero,
+    quota, janela de envio, cron/forcar processamento, reconciliacao de pedidos
+    de recibo. NENHUMA dessas ferramentas foi tocada.
+  - A tabela da fila permanece la (operacionalmente coerente ao lado dos controlos
+    do canal). A vista cross-canal e a Central; a duplicacao da lista e aceitavel
+    especializacao, nao redundancia a remover a martelo.
+
+SEGURANCA E QUALIDADE
+---------------------
+  nonce + capability + escola_id em tudo. Prepared statements. UX no kit (sigeUi).
+  Tokens do design system. php -l limpo; 15/15 gates; 306 invariantes verdes.
+
+NAO TOCADO
+----------
+  Nenhuma regra financeira ou academica. Ferramentas WhatsApp intactas.

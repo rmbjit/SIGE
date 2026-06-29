@@ -1,0 +1,62 @@
+DEPLOY - SIGE SoftGenial v12.12.25
+Fase 8 incremento 3: Apagamento por anonimizacao (direito ao apagamento)
+Data: 2026-06-21. Base: v12.12.24.
+
+================================================================
+RESUMO
+================================================================
+Novo ecra de governanca de dados (Privacidade e Dados > Apagamento de Dados)
+que procura um aluno da escola activa, mostra a pre-visualizacao de impacto e
+executa o apagamento por anonimizacao: redige os campos pessoais identificaveis
+e preserva o numero de processo, os identificadores internos e todos os valores
+financeiros e academicos. A execucao e um endpoint admin_post governado no
+Security Kernel em modo enforce e risco critico, com confirmacao em dois passos
+por numero de processo, nonce, rate limit, isolamento por escola e auditoria
+antes e depois. Nova permissao privacidade.apagamento_executar (risco critico).
+Primeira operacao destrutiva do produto. Sem eliminacao de linhas e sem
+migracao de esquema.
+
+================================================================
+PASSOS DE INSTALACAO (Hostinger / File Manager)
+================================================================
+1. Fazer backup do plugin actual (pasta wp-content/plugins/sige-softgenial/).
+2. Desactivar NAO e necessario; a actualizacao e aditiva.
+3. Carregar o ZIP sige-softgenial-v12_12_25-apagamento-anonimizacao.zip e
+   extrair, substituindo a pasta sige-softgenial/ (a pasta vem na raiz do ZIP).
+4. Abrir o painel de administracao do WordPress uma vez com um utilizador
+   administrador: a migracao de permissoes corre em admin_init e concede a nova
+   permissao a administracao e direccao (motor de permissoes passa a 12.12.25).
+5. Confirmar a versao no rodape do plugin / cabecalho: 12.12.25.
+
+================================================================
+VERIFICACAO POS-INSTALACAO
+================================================================
+- Menu: surge "Apagamento de Dados" na seccao PRIVACIDADE E DADOS, visivel so a
+  administracao e direccao.
+- Abrir o ecra, procurar um aluno de teste, confirmar que a pre-visualizacao
+  lista os campos a redigir e o que e preservado.
+- Confirmar que a accao so executa apos escrever o numero de processo exacto;
+  um numero errado mostra aviso e nao altera nada.
+- Apos um apagamento de teste, confirmar no ecra que o aluno fica marcado como
+  anonimizado e que os valores financeiros do aluno se mantem inalterados.
+- Confirmar que tesouraria, secretaria e docencia nao veem o menu nem acedem ao
+  ecra (mensagem de area reservada).
+
+================================================================
+NOTAS DE SEGURANCA E GOVERNANCA
+================================================================
+- Operacao permanente e irreversivel por desenho. Nao ha desfazer; a salvaguarda
+  e a confirmacao em dois passos no servidor.
+- Apagamento por anonimizacao, nunca por eliminacao de linhas: preserva a
+  integridade financeira, academica e de auditoria e o dever de retencao.
+- Superficie de accao 198 -> 199; enforce 32 -> 33; manifesto e Kernel alinhados
+  (199 == 199). SCHEMA_VERSION inalterada (20260621.1).
+- Regras de calculo financeiro byte-identicas. Baselines de design sem regressao.
+- Cada apagamento fica registado na auditoria de permissoes (antes e depois).
+
+================================================================
+ROLLBACK
+================================================================
+Repor a pasta sige-softgenial/ a partir do backup do passo 1. A migracao de
+permissoes e idempotente e nao destrutiva; nao remove dados. Nota: os dados ja
+anonimizados nao sao recuperaveis (a anonimizacao e permanente por desenho).

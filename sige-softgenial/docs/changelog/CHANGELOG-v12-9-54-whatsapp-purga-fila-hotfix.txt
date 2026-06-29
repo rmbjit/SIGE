@@ -1,0 +1,99 @@
+SIGE SoftGenial v12.9.54 - WhatsApp Purga Fila / Hotfix de campo
+
+Base: v12.9.53 (whatsapp-conversacional-secretaria) - não chegou a deploy.
+
+Origem
+------
+Screenshot 04/05/2026 mostra mensagens com formato antigo a chegarem aos
+pais da Casa Colorida (Aviso de Pendências, asteriscos, emojis 📋 💰 🙏,
+footer SIM/NÃO/PARAR). Reli o código com o screenshot na mão e identifiquei
+quatro fugas que a v12.9.53 deixava abertas.
+
+Fugas fechadas
+--------------
+A. Mensagens já enfileiradas com texto antigo
+   - Antes: migração v2 só re-renderizava as últimas 72h.
+   - Agora: migração v3 percorre TODAS as mensagens 'pendente'/'forcar_envio'
+     dos tipos protegidos (fatura, recibo, cobranca, lembrete, alerta_*).
+     Sem limite de 72h. Limite de 20.000 itens.
+
+B. Templates de alertas internos (alertas-templates.php)
+   - Antes: pagamento_atraso, mensalidade_falta, cobranca_d_*  geravam
+     mensagens com "⚠️ *Pagamento em atraso*", "📋 *Mensalidade pendente*",
+     "🔔 *Lembrete*" e tom imperativo.
+   - Agora: sige_alertas_enviar_whatsapp_dual delega para sige_wpp_tpl_v2_render
+     ('cobranca') quando o renderer v2 está disponível. Tom secretária real,
+     mesmas variantes da v2.
+
+C. Fallback hard-coded em financeiro-devedores-view.php
+   - Antes: linha 100-105 montava texto literal "*Aviso de Pendências*" se
+     sige_wpp_render_finance_template não existisse.
+   - Agora: chama sige_wpp_tpl_v2_render directamente. Fallback de fallback
+     em prosa simples sem asteriscos.
+
+D. Footer "Para continuar a receber avisos da escola por WhatsApp..."
+   - Antes: persistido em wp_sige_config.msg_cobranca de configurações
+     antigas, viajava dentro do texto já renderizado nas mensagens em fila.
+   - Agora: sige_wpp_tpl_strip_footer_consent() percorre mensagens pendentes
+     e remove o footer mesmo que já esteja inline. wp_sige_config é limpo
+     pela migração principal.
+
+Defesa nova: guard final no processador da fila
+-----------------------------------------------
+Em cron-tasks.php, mesmo antes de chamar Z-API:
+  - sige_wpp_tpl_tem_padrao_legado() valida a mensagem
+  - Se detectar padrão antigo (Aviso de Pendências, asteriscos múltiplos,
+    emojis em header, footer SIM/NÃO/PARAR, "Solicitamos a regularização",
+    "Efectue o pagamento atempadamente"), CANCELA o item (status='cancelado')
+  - Regista log 'wpp_envio_legado_cancelado' com queue_id, aluno_id, tipo
+  - Linha de defesa última: mesmo que a migração não tenha apanhado, o
+    processador apanha pré-envio.
+
+Política de re-renderização (conservadora)
+------------------------------------------
+Para uma mensagem em fila com padrão legado, a migração:
+  1. Tenta extrair valor (PT-MZ ou US format) e detalhes (linhas com bullet)
+     do texto antigo.
+  2. SÓ regenera com v2 se EXTRAIR: valor > 0 E pelo menos uma linha de
+     detalhe coerente E aluno_row válido.
+  3. Senão, CANCELA o item (status='cancelado') com motivo registado em
+     guardian_meta. A escola pode reenviar manualmente com os dados certos.
+
+Razão: mensagem regenerada com "0,00 MT" ou "(sem detalhe registado)" parece
+um bug aos olhos do encarregado. Cancelar é mais seguro.
+
+SIGE_WPP_TPL_VERSION = '2026-05-04.v3-hotfix-purga-fila'
+
+Como verificar pós-deploy
+-------------------------
+1. Option:
+   SELECT option_value FROM wp_options
+   WHERE option_name = 'sige_wpp_tpl_version_aplicada';
+   → deve ser: 2026-05-04.v3-hotfix-purga-fila
+
+2. Log da migração:
+   SELECT dados FROM wp_sige_fin_logs
+   WHERE evento = 'wpp_template_v3_aplicado'
+   ORDER BY id DESC LIMIT 1;
+   → mostra: configs_limpas, mensagens_regen, mensagens_canceladas,
+            mensagens_footer_strip, mensagens_falhadas
+
+3. Mensagens canceladas pela migração:
+   SELECT id, aluno_id, tipo, erro, criado_em
+   FROM wp_sige_whatsapp_queue
+   WHERE status = 'cancelado'
+     AND erro LIKE '%v3 hotfix%'
+   ORDER BY id DESC;
+
+4. Mensagens canceladas pelo guard do processador:
+   SELECT dados FROM wp_sige_fin_logs
+   WHERE evento = 'wpp_envio_legado_cancelado'
+   ORDER BY id DESC LIMIT 20;
+
+Não alterado
+------------
+- Fórmulas financeiras e académicas (intactas).
+- Schema BD (nenhuma migração de schema).
+- Hub Billing, License Server, multi-tenancy.
+- Processador da fila (cron-tasks.php) - apenas adiciona guard pré-envio,
+  não altera lógica de retry/scheduling.

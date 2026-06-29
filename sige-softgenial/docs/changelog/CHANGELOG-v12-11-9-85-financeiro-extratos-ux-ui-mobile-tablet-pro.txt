@@ -1,0 +1,66 @@
+SIGE SoftGenial v12.11.9.85
+Financeiro > Extractos/Caixa UX/UI Mobile-Tablet PRO
+Data: 2026-06-10
+
+Resumo
+- Evolução incremental sobre o v12.11.9.84, focada exclusivamente na experiência do utilizador, hierarquia visual, legibilidade, mobile/tablet/laptop e acessibilidade do módulo Financeiro > Extractos/Caixa.
+- Não altera regras financeiras, permissões, cálculos de saldo, lógica de estorno, fecho/reabertura de caixa ou geração de Excel/recibos.
+
+Melhorias principais
+1. Filtros e exportação
+- O antigo toolbar diário foi substituído por um cartão de filtros dedicado.
+- Período, dia/mês/ano, ciclo e centro ficam visualmente organizados.
+- Chips de filtros activos mostram período, intervalo, ciclo, quantidade de movimentos e estado do caixa.
+- O botão de Excel permanece disponível, mas separado do acto crítico de caixa.
+
+2. Resumo operacional
+- Receitas, despesas e saldo passaram para um cartão próprio de conferência.
+- As despesas do dia aparecem num painel expansível, com descrição, categoria e total.
+- O saldo negativo recebe destaque visual de alerta sem alterar o cálculo.
+
+3. Fecho e reabertura de caixa
+- Fechar/reabrir caixa deixa de competir visualmente com filtros e exportação.
+- Acções críticas passam para um cartão próprio com estado claro: aberto, fechado ou reaberto.
+- O resumo de caixa fechado foi modernizado com totais por método, bruto, estornos, líquido, utilizador e horário.
+- Foi removido o banner antigo duplicado de caixa fechado.
+
+4. Pesquisa e histórico do aluno
+- Pesquisa de aluno redesenhada para uso táctil: campo maior, instrução clara, CTA explícito e resultados em cards.
+- Resultados mostram iniciais, nome, processo e acção “Abrir”.
+- Quando não há resultados, o módulo mostra uma mensagem útil, não apenas uma zona vazia.
+- O cartão do aluno seleccionado foi redesenhado com avatar por iniciais, entradas, estornos e saldo.
+
+5. Tabela de movimentos
+- Em desktop/laptop, mantém leitura tabular profissional.
+- Em mobile, a tabela transforma-se em cards por movimento, evitando scroll horizontal crítico.
+- Cada célula recebeu data-label contextual para leitura em cards: Data/Hora, Recibo, Aluno, Descrição, Método, Recebido por, Valor e Acções.
+- Botões de recibo e estorno ficam mais claros e táctil-friendly.
+
+6. Acções em massa
+- Barra de recibo unificado recebeu aria-live/aria-hidden e comportamento mais previsível.
+- Em mobile, a barra fica fixa no fundo com botões maiores.
+
+7. Acessibilidade e segurança visual
+- Modais de recibo unificado e caixa recebem role=dialog e aria-modal.
+- Ao abrir modais, o fundo bloqueia scroll para evitar cliques acidentais.
+- Estados vazios agora têm ícone, mensagem contextual e acções directas.
+- Incluído fallback para ambientes sem mbstring ao gerar iniciais dos alunos.
+
+Ficheiros alterados
+- admin/finance/financeiro-extratos.php
+- assets/style.css
+- sige-softgenial.php
+- BUILD.json
+
+Ficheiros adicionados
+- CHANGELOG-v12-11-9-85-financeiro-extratos-ux-ui-mobile-tablet-pro.txt
+- DEPLOY-v12-11-9-85-financeiro-extratos-ux-ui-mobile-tablet-pro.md
+- tools/smoke-financeiro-extratos-ux-ui-v12-11-9-85.php
+
+Validações executadas
+- php -l admin/finance/financeiro-extratos.php
+- php -l em todos os ficheiros PHP do plugin
+- tools/smoke-financeiro-extratos-ux-ui-v12-11-9-85.php
+
+Resultado
+- Build validada estaticamente como v12.11.9.85.

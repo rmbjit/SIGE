@@ -1,0 +1,50 @@
+DEPLOY - SIGE SoftGenial v12.12.57
+Fase 4 (CSP e front-end seguro) - incremento 2
+Nonce CSP nas paginas autonomas
+Data: 2026-06-23
+
+NATUREZA DA ENTREGA
+- Pacote instalavel completo (pasta sige-softgenial na raiz do ZIP).
+- Conclui a aplicacao do nonce por pedido a todas as tags script inline
+  alcancaveis, cobrindo as paginas autonomas. Inocuo: nestas paginas nao ha um
+  CSP que referencie o nonce e o CSP existente do motor de documentos mantem
+  unsafe-inline, pelo que nada e bloqueado. Nao altera o comportamento.
+- Nao toca em regras de calculo financeiro nem no ficheiro canonico finance-core.
+- Nao altera nenhum cabecalho de seguranca existente.
+
+PRE-REQUISITOS
+- Sem alteracao de base de dados. Sem migracao. Sem alteracao de configuracao.
+- Sem novas dependencias externas (mantem-se 9 hosts).
+
+PASSOS
+1. Fazer copia de seguranca do plugin actual (pasta wp-content/plugins/sige-softgenial).
+2. Em alternativa recomendada, desactivar o plugin antes de substituir os ficheiros.
+3. Substituir a pasta sige-softgenial pela desta entrega (pacote completo).
+4. Reactivar o plugin, se tiver sido desactivado.
+5. Confirmar a versao 12.12.57 no cabecalho do plugin.
+
+VERIFICACAO POS-DEPLOY
+- Gerar e imprimir uma pauta em PDF (modelo de pauta) e um boletim em PDF (modelo
+  de boletim e boletim do jardim) e confirmar que abrem, imprimem e que os botoes
+  de impressao funcionam como antes.
+- Abrir um documento do motor de documentos (por exemplo o historico financeiro
+  do aluno) e confirmar que o codigo QR continua a aparecer e que os botoes de
+  baixar/imprimir funcionam como antes.
+- Abrir a pagina segura da camara da portaria e confirmar que a leitura de crachas
+  continua a funcionar.
+- No HTML gerado destas paginas, confirmar que a tag script passou a incluir um
+  atributo nonce com um valor base64. O comportamento mantem-se.
+
+NOTAS
+- Esta entrega nao activa nem altera nenhum cabecalho CSP. O motor de documentos
+  mantem os seus tres cabecalhos Content-Security-Policy com unsafe-inline e a
+  camara mantem o seu Permissions-Policy.
+- O passo seguinte e o enforcement do CSP nestas paginas, que comeca por converter
+  os onclick inline (botoes de impressao) e so depois substitui ou acrescenta o
+  cabecalho CSP com nonce. Sera um incremento dedicado.
+- A catraca de blocos script inline desceu de 14 para 7. Os 7 restantes (portal
+  publico, finance-core canonico, pagina de login pre-autenticacao e popup
+  document.write) ficam para abordagem propria.
+
+REVERSAO
+- Repor a pasta a partir da copia de seguranca. Sem passos de base de dados.

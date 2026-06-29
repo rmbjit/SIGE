@@ -1,0 +1,22 @@
+SIGE SoftGenial v12.10.28 - Alunos e Matrículas: Harmonia Visual
+
+Objectivo
+- Alinhar o módulo Alunos e Matrículas ao padrão visual aprovado do Painel Principal.
+- Manter progressão visual sem regressões e sem alterações em fórmulas, notas, pautas, pagamentos, mensalidades ou base de dados.
+
+Alterações principais
+- Removida duplicação de cabeçalho no módulo Alunos.
+- Hero claro, amplo e consistente com o padrão de App validado.
+- Indicadores, filtros, cartões de aluno, badges e área de resultados harmonizados.
+- Acções dos cartões ficam sempre visíveis, evitando ícones invisíveis ou escondidos.
+- Modal de cadastro/edição de aluno refinado visualmente.
+- Confirmação de remoção de aluno passou para pop-up real.
+- Avisos importantes e confirmação de impressão de cartões usam pop-up real.
+- Layout mobile-friendly preservado e reforçado.
+
+Garantias
+- Sem alteração de fórmulas.
+- Sem alteração de mensalidades, multas, pagamentos, recibos, cobranças ou estornos.
+- Sem alteração de notas, pautas, DEC, boletins ou actas.
+- Sem migrações de base de dados.
+- Linguagem visível mantida limpa, sem anotações técnicas internas.

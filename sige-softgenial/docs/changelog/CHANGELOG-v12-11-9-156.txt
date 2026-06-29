@@ -1,0 +1,35 @@
+SIGE SoftGenial - CHANGELOG v12.11.9.156
+Data: 2026-06-14
+Ambito: Arnes visual - cobertura de contextos sem tokens (dev-only)
+
+PORQUE
+------
+A regressao do logotipo (v155) aconteceu na pagina de login, um contexto que o
+arnes nao cobria. Deviam estar la desde o inicio. Agora estao.
+
+NOVOS MODULOS NO ARNES (contexto anonimo, sem login)
+----------------------------------------------------
+  login         url=/wp-login.php?loggedout=true   waitSelector=#login
+                file=includes/login-page.php
+  portal_aluno  url=/portal/   waitSelector=.sp-wrap
+                file=includes/portal-logic.php   (ajustar url ao slug real)
+
+CAPACIDADES NOVAS DO ORQUESTRADOR (arnes.js)
+--------------------------------------------
+  - Modulos por URL propria (campo "url"), alem das vistas do admin-app ("view").
+  - Autenticacao por modulo (campo "auth": "admin" por omissao, ou "none").
+  - Dois contextos de browser: um autenticado no wp-admin, outro limpo (anonimo)
+    para as paginas de login/portal.
+  - waitSelector por modulo (espera o wrapper certo de cada contexto).
+  - require preguicoso: "list" e a ajuda funcionam sem npm install.
+
+EFEITO
+------
+A pagina de login e o portal entram na verificacao visual pixel a pixel. Um
+screenshot-diff destes dois teria apanhado a regressao da v150 automaticamente.
+Pode tambem correr verify-strip neles para limpar !important com prova de pixel.
+
+VALIDACAO
+---------
+  node --check arnes.js OK; config.example.json JSON valido; list mostra os 16
+  modulos com auth/url. Sem alteracao funcional do plugin.

@@ -1,0 +1,36 @@
+SIGE SoftGenial - DEPLOY v12.12.9
+Tenant Read Isolation & Resolver Hardening
+Base: v12.12.8.1
+
+PRE-REQUISITOS
+- Trabalhar sobre a v12.12.8.1 validada.
+- Sem migracao de base de dados. Nenhuma alteracao de schema.
+
+PASSOS
+1. Backup do plugin actual (pasta wp-content/plugins/sige-softgenial) e da base de dados.
+2. Desactivar o plugin (opcional; a actualizacao de ficheiros e in-place).
+3. Substituir os ficheiros do plugin pelo conteudo do ZIP v12.12.9.
+4. Reactivar/confirmar activo. Limpar cache de objecto/opcode se aplicavel.
+5. Validar: abrir um painel financeiro e um academico; confirmar que os dados da
+   escola correcta aparecem. Verificar o log de seguranca por eventos
+   "tenant_context_missing" (so devem surgir em contextos genuinamente ambiguos).
+
+MUDANCA DE COMPORTAMENTO (IMPORTANTE)
+- Site mono-escola cuja unica escola tenha id = 1: NENHUMA alteracao de comportamento.
+- Site mono-escola cuja unica escola tenha id DIFERENTE de 1: a resolucao de escola
+  passa a ser CORRECTA (antes o fallback assumia cegamente a escola 1, o que podia
+  devolver dados vazios ou da escola errada). Isto e uma CORRECCAO. Confirmar apos
+  o deploy que os ecrans mostram os dados da escola real.
+- Site multi-escola: ja resolvia para 0 (fail-closed) sem contexto; inalterado.
+- Override explicito continua suportado: define('SIGE_CURRENT_ESCOLA', <id>) no
+  wp-config.php forca a escola; define('SIGE_ALLOW_ESCOLA_FALLBACK', true) mantem o
+  modo relaxado. A meta sige_escola_id do utilizador continua a ter prioridade.
+
+ROLLBACK
+- Restaurar o ZIP da v12.12.8.1 (sige-softgenial-v12_12_8_1-tenant-write-isolation.zip).
+- Sem reversao de base de dados necessaria (nao houve migracao).
+
+NOTAS
+- Pagamentos M-Pesa/e-Mola: os webhooks resolvem a escola pelo payload; inalterado
+  na pratica, agora com fallback secundario fail-closed.
+- Nenhuma regra de calculo financeiro ou academico foi alterada.

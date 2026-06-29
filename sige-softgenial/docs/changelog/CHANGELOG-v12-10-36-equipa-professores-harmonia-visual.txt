@@ -1,0 +1,10 @@
+SIGE SoftGenial v12.10.36 - Equipa e Professores: Harmonia Visual
+
+- Alinha o módulo Equipa e Professores ao padrão visual aprovado do Painel Principal.
+- Remove duplicação de cabeçalho nesta página.
+- Cria hero amplo, claro e consistente com o Dashboard.
+- Harmoniza KPIs, filtros, pesquisa, tabela, badges, acções e modais.
+- Aplica as cores personalizadas da escola ao módulo.
+- Substitui confirmações nativas do navegador por pop-ups reais para activar/desactivar, remover e gerar senha.
+- Mantém o comportamento mobile-friendly.
+- Não altera fórmulas, pagamentos, mensalidades, notas, pautas, DEC, boletins, recibos ou base de dados.

@@ -1,0 +1,72 @@
+SIGE SoftGenial v12.10.131 - Dica do Dia: Cultura de Gestão Escolar
+
+Base
+- Construído por cima da v12.10.130 - Página do Aluno: Primeiro Acesso Mobile PRO.
+
+Objectivo
+- Criar a funcionalidade "Dica do dia", evitando o termo "mensagem".
+- Reforçar cultura de gestão escolar, organização, boas práticas e uso inteligente do SIGE.
+- Mostrar uma dica curta e útil no primeiro acesso diário de cada utilizador.
+
+Funcionalidades
+1. Dica do dia
+- Aparece no primeiro acesso diário ao SIGE.
+- Aparece uma vez por utilizador por dia.
+- Pode ser fechada com o botão "Entendi".
+- Ao fechar, grava no user_meta:
+  - sige_dica_do_dia_seen_date
+  - sige_dica_do_dia_seen_at
+  - sige_dica_do_dia_seen_version
+
+2. Banco local de dicas
+- Inclui 365 dicas locais no plugin.
+- Não depende da internet.
+- Não depende do blog SoftGenial.
+- Não consulta WordPress.org.
+- A rotação considera o dia do ano e o ano actual.
+
+3. Temas cobertos
+- Gestão escolar
+- Secretaria
+- Finanças
+- Notas
+- Pautas
+- Atendimento aos encarregados
+- Dados
+- Liderança escolar
+- Jardim de infância
+- Privacidade
+- Disciplina administrativa
+- Comunicação
+- Planeamento
+- Equipa
+- Tecnologia
+
+4. Experiência visual
+- Card/modal limpo, leve e responsivo.
+- Mobile-friendly.
+- Título "Dica do dia".
+- Botão "Entendi".
+- Sem pop-up agressivo, sem imagens pesadas e sem distracção excessiva.
+
+5. Segurança e operação
+- Usa AJAX com nonce para gravar que a dica foi vista.
+- Só aparece em page=sige-app.
+- Não aparece durante AJAX/REST.
+- Não aparece se o utilizador estiver em primeiro acesso obrigatório ou senha provisória.
+- Pode ser desligado por opção:
+  - sige_dica_do_dia_enabled = 0
+- Pode ser desligado por filtro:
+  - sige_dica_do_dia_enabled
+
+Mantido
+- Primeiro acesso mobile PRO da Página do Aluno.
+- Associação segura da conta do aluno/escola.
+- Reposição de senha pela secretaria.
+- Modo leitura.
+- Bloqueio de notas/boletins por dívida.
+- Menu lateral do aluno.
+- Recibos filtráveis.
+- Sem alteração de base de dados académica/financeira.
+- Sem alteração de pagamentos.
+- Sem alteração de notas, Pauta, DEC, ACTA ou boletins.
