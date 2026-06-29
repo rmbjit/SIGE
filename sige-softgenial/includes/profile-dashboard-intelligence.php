@@ -236,6 +236,10 @@ if (!function_exists('sige_profile_dashboard_context_v121900')) {
 }
 
 add_action('admin_enqueue_scripts', function (): void {
+    // v12.19.4 - Painel Principal simplificado: o bloco de coaching/estratégia
+    // por perfil deixa de ser injectado, para reduzir distracção e duplicação
+    // com os cartões do painel. Funções mantidas; apenas não se injecta a UI.
+    return;
     if (!function_exists('is_admin') || !is_admin()) { return; }
     if ((function_exists('sanitize_key') ? sanitize_key((string)($_GET['page'] ?? '')) : preg_replace('/[^a-z0-9_\-]/', '', strtolower((string)($_GET['page'] ?? '')))) !== 'sige-app') { return; }
     $context = sige_profile_dashboard_context_v121900();

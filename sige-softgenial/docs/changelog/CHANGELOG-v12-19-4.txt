@@ -1,0 +1,39 @@
+SIGE SoftGenial v12.19.4 - Painel Principal simplificado
+Data: 2026-06-29
+Tipo: modernizacao visual (Modulo 1 / Painel Principal), so apresentacao.
+
+OBJETIVO
+- Refazer o painel para algo simples, de facil uso e com menos distraccao.
+- Remover o que estava "demais" e corrigir os erros de acento na origem real.
+
+REMOVIDO (era redundante ou ruido)
+- Heroi extenso e ilustracao de escola desenhada a CSS.
+- Sub-titulo "Foco operacional para Gestao... configuracoes e saude" (texto
+  longo e sem acentos, vindo de institutional-product-map.php).
+- Faixa "Prioridades rapidas" (repetia KPIs/Alertas).
+- Grafico financeiro de barras com dados ficticios (induzia em erro).
+- "Resumo do Dia" (repetia KPIs).
+- "Checklist Operacional", "Fluxos Guiados", "Visao Operacional".
+- Painel de coaching/estrategia por perfil injectado por JS
+  (includes/profile-dashboard-intelligence.php: enqueue desactivado).
+
+MANTIDO (o essencial)
+- Heroi compacto (saudacao + estado rapido + 2 accoes).
+- KPIs: Alunos Activos, Docentes, Pagamentos Hoje, Divida Total.
+- Resumo Financeiro com numeros reais (Receitas, Lancado, Taxa).
+- Distribuicao por Classe (donut), Alertas de Conformidade, Acessos Rapidos.
+
+FRONTEIRA (nao tocado)
+- admin/system/dashboard-view.php: bloco de dados/consultas (linhas 1-296) e
+  bloco de cache mantidos byte a byte. So a apresentacao foi reescrita
+  (1051 -> 627 linhas).
+- Sem alteracao de logica, SQL, formulas, regras, name/id, permissoes, schema,
+  multi-tenant ou CSP.
+
+VALIDACAO
+- php -l: sem erros (dashboard-view.php e profile-dashboard-intelligence.php).
+- Bloco de dados (1-296) confirmado identico ao original.
+- Gate de design tokens: 1934 -> 1929 (nova baseline registada; progresso).
+- Fins de linha LF preservados.
+- LIVE-TEST: docs/qa/LIVE-TEST-painel-principal-v12.19.4.md
+- DEPLOY:    docs/deploy/DEPLOY-v12.19.4-painel-principal.md
