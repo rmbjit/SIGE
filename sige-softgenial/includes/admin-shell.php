@@ -1634,6 +1634,29 @@ add_action('admin_footer', function () {
             grid-template-columns:1fr!important;
         }
     }
+    /* v12.19.5 - Painel Principal simplificado: herói compacto e cartões coerentes.
+       Escopo SÓ ao dashboard (body.sige-view-dashboard) para não afectar os heróis
+       partilhados de Financeiro/Alunos/Turmas/RH, que mantêm o tema PRO. */
+    body.sige-admin-app.sige-view-dashboard .sg-dash-hero{
+        min-height:0!important;
+        padding:var(--space-5) var(--space-6)!important;
+        border-radius:var(--radius-lg)!important;
+        box-shadow:var(--shadow-sm)!important;
+    }
+    body.sige-admin-app.sige-view-dashboard .sg-dash-hero:before,
+    body.sige-admin-app.sige-view-dashboard .sg-dash-hero:after{
+        display:none!important;
+    }
+    body.sige-admin-app.sige-view-dashboard .sg-dash-hero .sg-hero-title{
+        font-size:var(--fs-xl)!important;
+        line-height:1.15!important;
+        font-weight:700!important;
+        letter-spacing:-.02em!important;
+    }
+    body.sige-admin-app.sige-view-dashboard .sg-dash-card{
+        border-radius:var(--radius-lg)!important;
+        box-shadow:var(--shadow-sm)!important;
+    }
     </style>
     <?php
 }, 999);

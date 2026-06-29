@@ -1,0 +1,37 @@
+SIGE SoftGenial v12.19.5 - Painel Principal: heroi compacto e cartoes coerentes
+Data: 2026-06-29
+Tipo: modernizacao visual (Modulo 1), so apresentacao.
+
+CONTEXTO
+- No v12.19.4 a view foi simplificada, mas o tema PRO em admin-shell.php
+  sobrepunha-se (com !important) ao CSS da view, pelo que o heroi nao ficava
+  compacto e os cartoes mantinham sombra pesada.
+
+MUDANCA (includes/admin-shell.php)
+- Bloco scoped a body.sige-admin-app.sige-view-dashboard, no fim do tema PRO:
+  - .sg-dash-hero: min-height 0, padding menor, sombra/raio leves.
+  - .sg-dash-hero :before/:after: brilhos decorativos escondidos.
+  - .sg-hero-title: tamanho reduzido (var(--fs-xl), peso 700).
+  - .sg-dash-card: sombra/raio harmonizados com os cartoes KPI.
+- Escopo so ao dashboard: Financeiro/Alunos/Turmas/RH mantem o tema PRO.
+- Versao sincronizada em 3 fontes.
+
+REVISAO DOS MENUS (so analise, nada aplicado)
+- Registada revisao critica da arrumacao da barra lateral em
+  docs/design-system/MODULO-1-painel-principal-v12.19.5-chrome-e-revisao-menus.md
+- Principais achados: Comunicacoes dentro de Tesouraria; Tesouraria
+  sobrecarregada; dupla navegacao (rail + menu); grupos de 1 item; grupos
+  academicos sobrepostos; "Aproveitamento" duplicado. Cores --ml-color sao
+  codigo morto (ja neutralizadas por style.css). Recomendacoes aguardam
+  confirmacao por tocarem no gating de permissoes.
+
+FRONTEIRA (nao tocado)
+- Sem alteracao de logica, SQL, formulas, regras, name/id, permissoes, schema,
+  multi-tenant ou CSP.
+
+VALIDACAO
+- php -l admin-shell.php: sem erros.
+- Gate de design tokens: 1929 (estavel).
+- Fins de linha LF preservados.
+- LIVE-TEST: docs/qa/LIVE-TEST-painel-principal-v12.19.5.md
+- DEPLOY:    docs/deploy/DEPLOY-v12.19.5-painel-heroi-compacto.md
