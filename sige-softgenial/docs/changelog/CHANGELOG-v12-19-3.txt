@@ -1,0 +1,28 @@
+SIGE SoftGenial v12.19.3 - Painel Principal: correccoes de apresentacao
+Data: 2026-06-29
+Tipo: modernizacao visual (Modulo 1 / Painel Principal), so apresentacao.
+
+CONTEXTO
+- O Painel Principal ja estava modernizado a alto nivel (roxo via tokens,
+  responsivo, graficos legendados, numeros K/M MT, estados vazios).
+- Este incremento aplica so as correccoes pontuais que faltavam.
+
+MUDANCAS (admin/system/dashboard-view.php)
+- Diacritico: "permissoes" -> "permissões" no sub-titulo do heroi.
+- Rotulo truncado: .sg-focus-copy small passa de nowrap+ellipsis para
+  quebra em 2 linhas (-webkit-line-clamp:2). Deixa de cortar
+  "documentos e encarregados".
+- Comentario de cabecalho desatualizado ("Navy/Amber") corrigido para
+  "tokens, marca roxa".
+- Versao sincronizada em 3 fontes (cabecalho, SIGE_VERSION, BUILD.json).
+
+FRONTEIRA (nao tocado)
+- Sem alteracao de logica, SQL, formulas, regras, name/id, hooks, permissoes,
+  schema, multi-tenant ou CSP. Sem onclick/inline novo.
+
+VALIDACAO
+- php -l: sem erros.
+- Gate de design tokens: 1934/1934 (sem regressao).
+- BUILD.json: JSON valido. Fins de linha LF preservados.
+- LIVE-TEST: docs/qa/LIVE-TEST-painel-principal-v12.19.3.md
+- DEPLOY:    docs/deploy/DEPLOY-v12.19.3-painel-principal.md

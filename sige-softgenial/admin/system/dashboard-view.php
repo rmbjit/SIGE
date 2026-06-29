@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) { exit; }
  * Ficheiro: admin/system/dashboard-view.php
  *
  * v2.1 - Abril 2026
- * - Paleta alinhada com Design System sg-* (Navy/Amber)
+ * - Paleta alinhada com o Design System (tokens sige-tokens.css, marca roxa)
  * - Removido @import Google Fonts duplicado (já carregado em style.css)
  * - Removido date_default_timezone_set() - usa wp_date()
  * - $eid usado consistentemente em todas as queries
@@ -465,7 +465,7 @@ $__sg_hero_subtitle = $__sg_can_financeiro
     ? 'Aqui está o que está a acontecer na escola hoje: indicadores principais, cobrança, conformidade e atalhos para as operações mais usadas.'
     : 'Aqui está o que está a acontecer na escola hoje: indicadores principais, conformidade e atalhos compatíveis com o seu perfil.';
 if ($__sg_operational_profile !== '' && $__sg_operational_focus !== '') {
-    $__sg_hero_subtitle = 'Foco operacional para ' . $__sg_operational_profile . ': ' . $__sg_operational_focus . '. Indicadores e atalhos abaixo respeitam as permissoes do seu perfil.';
+    $__sg_hero_subtitle = 'Foco operacional para ' . $__sg_operational_profile . ': ' . $__sg_operational_focus . '. Indicadores e atalhos abaixo respeitam as permissões do seu perfil.';
 }
 ?>
 
@@ -608,7 +608,7 @@ body.sige-admin-app .sg-dashboard-v2.sg-dashboard-mobile-pro button:focus-visibl
 .sg-focus-copy{position:relative;z-index:1;min-width:0;}
 .sg-focus-copy span{display:block;font-size:var(--fs-sm);font-weight:700;color:var(--color-slate-500);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .sg-focus-copy strong{display:block;font-size:var(--fs-xl);line-height:1;font-weight:700;letter-spacing:-.035em;color:var(--color-black);}
-.sg-focus-copy small{display:block;margin-top:6px;font-size:var(--fs-sm);line-height:1.35;font-weight:600;color:var(--color-slate-500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sg-focus-copy small{margin-top:6px;font-size:var(--fs-sm);line-height:1.35;font-weight:600;color:var(--color-slate-500);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;}
 .sg-focus-arrow{position:relative;z-index:1;width:30px;height:30px;border-radius:var(--radius-pill);display:flex;align-items:center;justify-content:center;background:var(--focus-soft,var(--color-brand-50));color:var(--focus-color,var(--sgv2-purple));font-size:var(--fs-lg);font-weight:700;}
 .sg-kpi-card{transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;}
 .sg-kpi-card:hover{transform:translateY(-1px);box-shadow:var(--shadow-md);border-color:rgba(90,63,214,.14);}
