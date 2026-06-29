@@ -1,0 +1,33 @@
+SIGE SoftGenial v12.19.7 - Comunicacao: gating estrito (corrige R3)
+Data: 2026-06-29
+Tipo: correccao de acesso (barra lateral), seguimento do v12.19.6.
+
+PROBLEMA (R3, identificado em auto-critica adversarial)
+- O item "Circulares" e a condicao do grupo COMUNICACAO usavam
+  sige_circular_pode_enviar(), que tem fallback por papel (director/
+  secretaria_geral) alem da permissao. A rota verifica so
+  comunicacao.circulares_enviar. Se a permissao fosse removida a esses papeis,
+  o menu mostrava mas a rota bloqueava (menu != rota).
+
+MUDANCA (includes/admin-shell.php)
+- Grupo COMUNICACAO agora gated 100% por comunicacao.* :
+  - condicao do grupo: can_any(central_ver, whatsapp_ver, circulares_enviar)
+  - Circulares: can_any(circulares_enviar)
+- Removido sige_circular_pode_enviar() do menu (0 usos).
+- Menu identico ao mapa de rota nos tres itens.
+
+EFEITO
+- Papeis-padrao (director/secretaria_geral) tem comunicacao.circulares_enviar
+  semeada (permissions-layer.php:977): continuam a ver Circulares. Sem mudanca
+  para o caso comum.
+- Desaparece o caso-limite menu!=rota quando a permissao e removida manualmente.
+
+FRONTEIRA
+- Sem alteracao de logica de negocio, SQL, formulas, schema, CSP nem nomes de
+  permissoes.
+
+VALIDACAO
+- php -l admin-shell.php: sem erros. Gate de tokens estavel.
+- Teste por perfil: ver docs/qa/LIVE-TEST-shell-comunicacao-v12.19.6.md
+  (continua valido; o grupo so aparece por comunicacao.*).
+- DEPLOY: docs/deploy/DEPLOY-v12.19.7-comunicacao-gating-estrito.md
