@@ -7,12 +7,13 @@
    ════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* Cores da marca (extraídas do design system existente) */
-  --sgk-primario: #0d1259;
-  --sgk-primario-escuro: #090d40;
-  --sgk-primario-claro: #eef0fb;
-  --sgk-acento: #f59e0b;
-  --sgk-ok: #16a34a;
+  /* Cores da marca: alinhadas a fonte da verdade (sige-tokens.css, marca roxa).
+     O kit refere os tokens canonicos em vez de cravar hex proprios. */
+  --sgk-primario: var(--brand);
+  --sgk-primario-escuro: var(--color-brand-700);
+  --sgk-primario-claro: var(--bg-brand-soft);
+  --sgk-acento: var(--color-warning-500);
+  --sgk-ok: var(--color-success-500);
   --sgk-ok-fundo: #ecfdf5;
   --sgk-ok-borda: #a7f3d0;
   --sgk-ok-texto: #065f46;
@@ -39,7 +40,7 @@
   --sgk-radius-s: 7px;
   --sgk-sombra: 0 2px 10px rgba(0, 0, 0, .06);
   --sgk-sombra-alta: 0 10px 30px rgba(0, 0, 0, .18);
-  --sgk-foco: 0 0 0 3px rgba(13, 18, 89, .25);
+  --sgk-foco: 0 0 0 3px rgba(124, 58, 237, .25);
 }
 
 /* ── Botões ────────────────────────────────────────────────────────────── */

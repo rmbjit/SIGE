@@ -1,0 +1,31 @@
+SIGE SoftGenial v12.19.2 - Fundacao: kit alinhado a marca roxa
+Data: 2026-06-29
+Tipo: modernizacao visual (Modulo 0 / Fundacao), so apresentacao.
+
+MUDANCA
+- assets/sige-ui.css: o kit .sgk- passa a referir os tokens canonicos de
+  sige-tokens.css em vez de cravar hex proprios:
+    --sgk-primario        #0d1259 -> var(--brand)            (roxo #7c3aed)
+    --sgk-primario-escuro #090d40 -> var(--color-brand-700)  (#4c10b2)
+    --sgk-primario-claro  #eef0fb -> var(--bg-brand-soft)    (#f6f1fe)
+    --sgk-acento          #f59e0b -> var(--color-warning-500)(match exacto)
+    --sgk-ok              #16a34a -> var(--color-success-500)(match exacto)
+    --sgk-foco            anel navy -> anel roxo rgba(124,58,237,.25)
+- Versao sincronizada em 3 fontes: cabecalho do plugin, SIGE_VERSION, BUILD.json.
+
+EFEITO VISIVEL
+- Botoes primarios, hover e anel de foco do kit passam de navy para roxo,
+  unificados com as views ja migradas para var(--brand).
+- Estados ok/erro/aviso/info: sem alteracao.
+
+FRONTEIRA (nao tocado)
+- Sem alteracao de logica, SQL, formulas financeiras ou regras academicas.
+- Sem alteracao de name/id de campos, hooks, permissoes, schema ou multi-tenant.
+- Sem onclick inline novo; CSP intacta.
+
+VALIDACAO
+- Gate de design tokens: 1934/1934 (sem regressao).
+- BUILD.json: JSON valido.
+- Fins de linha preservados (LF).
+- LIVE-TEST: docs/qa/LIVE-TEST-fundacao-v12.19.2.md
+- DEPLOY:    docs/deploy/DEPLOY-v12.19.2-fundacao-kit-roxo.md
