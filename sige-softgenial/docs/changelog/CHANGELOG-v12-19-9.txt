@@ -1,0 +1,36 @@
+SIGE SoftGenial v12.19.9 - Tesouraria em 3 grupos + gating por item (M3/M6)
+Data: 2026-06-29
+Tipo: arquitectura de informacao + correccao de acesso (barra lateral).
+
+M3 - Tesouraria (17 itens num so rotulo)
+- Dividida em 3 grupos: TESOURARIA (operacao diaria), FINANCAS RELATORIOS,
+  FINANCAS CONFIGURACAO.
+- T1 corrigido: cada item passa a ter a sua propria guarda de permissao, igual
+  ao $sige_view_permission_map. Antes, a maioria dos itens aparecia por can_any
+  do bloco, em desacordo com o guarda de rota (menu mostrava o que a rota
+  bloqueava). M-Pesa/Reconciliacao (sige_mpesa_pode_gerir) e Aprovacoes
+  (sige_fin_aprovacao_pode_aceder) mantem as suas funcoes-guarda.
+
+M6 - Grupos de um so item
+- PORTARIA (isolado) e Transporte fundidos num unico grupo OPERACAO ESCOLAR,
+  cada item com a sua condicao (feature flag + permissao).
+
+LIMPEZA
+- Removidos 3 valores --ml-color mortos (#10b981, #6366f1, #ffb300; ja
+  neutralizados por style.css). Nova baseline do gate: 1926.
+
+EFEITO POR PERFIL
+- Papeis com o conjunto financeiro completo: veem os mesmos itens, agora em 3
+  grupos arrumados.
+- Papeis de privilegio minimo: o menu passa a mostrar so o que a rota permite.
+
+FRONTEIRA
+- Sem alteracao de logica de negocio, SQL, formulas, schema, CSP nem nomes de
+  permissoes. So mudou a organizacao e a guarda de visibilidade de cada item.
+
+VALIDACAO
+- php -l admin-shell.php: sem erros. Gate: 1926 (nova baseline, progresso).
+- Cada view financeira aparece 1x no menu; PORTARIA isolado: 0; OPERACAO
+  ESCOLAR: 1.
+- LIVE-TEST: docs/qa/LIVE-TEST-tesouraria-nav-v12.19.9.md
+- DEPLOY:    docs/deploy/DEPLOY-v12.19.9-tesouraria-3-grupos.md
