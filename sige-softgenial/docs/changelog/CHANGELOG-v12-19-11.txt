@@ -1,0 +1,35 @@
+SIGE SoftGenial v12.19.11 - Financeiro reagrupado por dominio (4 grupos)
+Data: 2026-06-29
+Tipo: arquitectura de informacao (barra lateral), so apresentacao.
+
+CONTEXTO (critica adversarial)
+- O agrupamento do v12.19.9 seguia os blocos de permissao existentes e os nomes,
+  nao o que cada ecra faz. Apos ler cada ecra, varios itens estavam mal colocados
+  e o rotulo "FINANCAS CONFIGURACAO" misturava operacao com configuracao.
+
+MUDANCA (includes/admin-shell.php) - 4 grupos por dominio
+- TESOURARIA (caixa: entradas e saidas): Registar Pagamento, Pagamentos Moveis
+  [BETA], Extractos e Caixa (fecho de caixa), Central de Cobrancas, Despesas.
+- FATURACAO (cobrancas a alunos): Lancar Mensalidades, Lancamentos, Inscricoes e
+  Renovacoes, Planos de Pagamento.
+- RELATORIOS & CONTROLO: Painel Financeiro, Relatorio Mensal, Pagamentos/Turma,
+  Auditoria Financeira, Reconciliacao [BETA], Aprovacoes [BETA].
+- FINANCAS CONFIGURACAO: Precos e Servicos, Centros de Custo.
+
+Principais movimentos vs v12.19.9/10:
+- Painel Financeiro: Tesouraria -> Relatorios (e um dashboard executivo).
+- Extractos e Caixa: Relatorios -> Tesouraria (e fecho de caixa do dia).
+- Despesas: passou a Tesouraria (saidas de caixa).
+- Lancamentos/Mensalidades/Inscricoes: passam a Faturacao (operacao, nao config).
+- Reconciliacao e Aprovacoes: Tesouraria -> Relatorios & Controlo.
+
+FRONTEIRA
+- So apresentacao/IA. Cada item mantem a sua guarda de permissao (igual ao mapa
+  de rota). Selos BETA mantidos. Sem alteracao de logica, SQL, schema, CSP nem
+  nomes de permissoes.
+
+VALIDACAO
+- php -l admin-shell.php: sem erros. Gate de tokens estavel (1925).
+- Cada view financeira aparece 1x; 4 grupos presentes; 3 badges BETA.
+- LIVE-TEST: docs/qa/LIVE-TEST-financeiro-4-grupos-v12.19.11.md
+- DEPLOY:    docs/deploy/DEPLOY-v12.19.11-financeiro-4-grupos.md
