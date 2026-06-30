@@ -398,9 +398,9 @@ $sige_global_data['csp_nonce'] = function_exists('sige_csp_nonce') ? sige_csp_no
 // URL do registo de modelos (rede de segurança terciária: se por algum motivo o
 // inline não correr, o cliente tenta carregá-lo sob demanda). Aponta para a pasta
 // que existe no servidor (assets/views/, fallback assets/cracha/).
-$sige_cracha_asset_rel = (defined('SIGE_PATH') && is_file(SIGE_PATH . 'assets/cracha/sige-cracha-templates.js') && !is_file(SIGE_PATH . 'assets/views/sige-cracha-templates.js'))
-    ? 'assets/cracha/sige-cracha-templates.js'
-    : 'assets/views/sige-cracha-templates.js';
+$sige_cracha_asset_rel = (defined('SIGE_PATH') && !is_file(SIGE_PATH . 'assets/cracha/sige-cracha-templates.js') && is_file(SIGE_PATH . 'assets/views/sige-cracha-templates.js'))
+    ? 'assets/views/sige-cracha-templates.js'
+    : 'assets/cracha/sige-cracha-templates.js';
 $sige_global_data['cracha_asset'] = defined('SIGE_URL') ? (SIGE_URL . $sige_cracha_asset_rel . '?ver=' . (defined('SIGE_VERSION') ? SIGE_VERSION : '1')) : '';
 // Quem pode mudar o modelo de crachá da escola (mostra/oculta o botão).
 $sige_can_editar_cracha = (function_exists('sige_can') && sige_can('configuracoes.editar'))
@@ -734,7 +734,8 @@ function sigeQrDataUri(text){
 // procura na antiga assets/cracha/ para instalações manuais já feitas.
 $sige_cracha_tpl_file = '';
 if (defined('SIGE_PATH')) {
-    foreach (['assets/views/sige-cracha-templates.js', 'assets/cracha/sige-cracha-templates.js'] as $sige_cracha_rel) {
+    // assets/cracha/ é a localização validada; assets/views/ fica como tolerância.
+    foreach (['assets/cracha/sige-cracha-templates.js', 'assets/views/sige-cracha-templates.js'] as $sige_cracha_rel) {
         if (is_file(SIGE_PATH . $sige_cracha_rel)) { $sige_cracha_tpl_file = SIGE_PATH . $sige_cracha_rel; break; }
     }
 }

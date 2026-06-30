@@ -114,10 +114,13 @@
             var a = accentOf(ctx), a2 = shade(a, -22), soft = shade(a, 42);
             return styleOpen(ctx) + sheetCss(ctx)
                 + '.card{width:220px;height:350px;background:#ffffff;border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(15,23,42,.16);display:flex;flex-direction:column;align-items:center;box-sizing:border-box;position:relative}'
-                + '.head{width:100%;height:104px;background:linear-gradient(135deg,' + a + ',' + a2 + ');display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:12px;box-sizing:border-box}'
+                /* O cabecalho reserva padding inferior (46px) MAIOR que a sobreposicao
+                   da foto (40px), por isso a foto fica sempre ABAIXO do titulo, mesmo
+                   com o nome da escola em 2-3 linhas (corrige a foto a tapar o texto). */
+                + '.head{width:100%;min-height:84px;background:linear-gradient(135deg,' + a + ',' + a2 + ');display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:12px 8px 46px;box-sizing:border-box}'
                 + '.head .logo{height:30px;width:30px;border-radius:50%;background:#fff;padding:2px;object-fit:contain}'
                 + '.head .title{color:#fff;font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;text-align:center;margin-top:5px;line-height:1.2;padding:0 10px}'
-                + '.photo{width:84px;height:84px;border-radius:50%;border:4px solid #fff;background:' + soft + ';overflow:hidden;display:flex;align-items:center;justify-content:center;margin-top:-42px;box-shadow:0 4px 12px rgba(15,23,42,.18)}'
+                + '.photo{width:84px;height:84px;border-radius:50%;border:4px solid #fff;background:' + soft + ';overflow:hidden;display:flex;align-items:center;justify-content:center;margin-top:-40px;position:relative;z-index:2;box-shadow:0 4px 12px rgba(15,23,42,.18)}'
                 + '.photo img{width:100%;height:100%;object-fit:cover}'
                 + '.body{flex:1;width:100%;text-align:center;padding:10px 12px 8px;box-sizing:border-box}'
                 + '.name{font-size:13px;font-weight:800;color:#0f172a;line-height:1.15;max-height:31px;overflow:hidden}'
