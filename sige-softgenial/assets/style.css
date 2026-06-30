@@ -3234,7 +3234,7 @@ body.sige-view-financeiro-gerador .sg-app-page{padding-top:0!important;}
 .sg-generator-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:var(--space-4) 0;}
 .sg-generator-check{display:flex;align-items:flex-start;gap:var(--space-3);padding:15px 16px;border-radius:18px;background:var(--color-white);border:1px solid var(--color-slate-100);cursor:pointer;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease,background .16s ease;}
 .sg-generator-check:hover{transform:translateY(-1px);border-color:var(--color-info-100);box-shadow:0 14px 30px rgba(45,36,96,.06);background:var(--color-white);}
-.sg-generator-check input{margin-top:3px;accent-color:var(--color-brand-500);}
+.sg-generator-check input{margin-top:3px;width:18px;height:18px;flex:0 0 18px;accent-color:var(--color-brand-500);cursor:pointer;}
 .sg-generator-check span{display:block;color:var(--color-slate-700);font-size:var(--fs-sm);line-height:1.45;font-weight:650;}
 .sg-generator-check strong{display:block;color:var(--color-black);font-size:var(--fs-base);font-weight:950;margin-bottom:3px;}
 .sg-generator-check small{display:block;color:var(--color-slate-600);font-size:12px;line-height:1.45;font-weight:650;}

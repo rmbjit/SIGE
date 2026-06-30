@@ -155,10 +155,14 @@ body.sige-admin-app:is(
   .sige-view-mpesa,
   .sige-view-reconciliacao,
   .sige-view-aprovacoes
-) :where(input, select, textarea, .sige-input, .fc-input, .pl-input) {
+) :where(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), select, textarea, .sige-input, .fc-input, .pl-input) {
   min-height: 44px;
   border-radius: var(--sg-fin-core-field-radius);
 }
+/* v12.24.2 - checkbox/radio NAO sao campos de texto: sem o :not acima, o
+   min-height:44px esticava a checkbox nativa (~13px de largura) para 44px de
+   altura, criando o aspecto de "ovo"/pilula vertical. Excluidos aqui (raiz do
+   problema, partilhado por todos os ecrans financeiros). */
 
 body.sige-admin-app:is(
   .sige-view-financeiro-dashboard,

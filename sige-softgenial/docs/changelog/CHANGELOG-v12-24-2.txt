@@ -1,0 +1,45 @@
+SIGE SoftGenial v12.24.2 - Financeiro: checkboxes deixam de aparecer como "ovo"/pilula
+Data: 2026-06-30
+Tipo: correccao de apresentacao (raiz partilhada do design financeiro). Sem logica.
+
+PROBLEMA (reportado pelo utilizador)
+- No gerador, as caixas de seleccao (checkboxes dos cartoes: Pacote mensal,
+  Aplicar a todos, Enviar WhatsApp/E-mail, Gerar ano todo) apareciam como
+  "ovo"/pilula vertical e nao se percebia que eram clicaveis. A correccao
+  anterior (v12.24.1) so tratou os dropdowns - foi incompleta.
+
+CAUSA RAIZ
+- assets/views/financeiro-core-design-pro.css tinha:
+    ...:where(input, select, textarea, ...) { min-height:44px; border-radius:...; }
+  Esta regra apanhava TODOS os input, incluindo [type=checkbox]/[type=radio]
+  (sem exclusao). O min-height:44px esticava a checkbox nativa (~13px de largura)
+  para 44px de altura -> aspecto de pilula vertical. min-height vence height
+  mesmo com !important, por isso ate as checkboxes com height:18px ficavam pilula.
+  Afectava TODOS os ecrans financeiros na lista (gerador, config, planos,
+  despesas, auditoria, inscricoes, centros, pagamentos-turma, etc.).
+
+CORRECCAO (raiz, partilhada)
+- assets/views/financeiro-core-design-pro.css: excluir checkbox/radio/hidden do
+  :where -> :where(input:not([type=checkbox]):not([type=radio]):not([type=hidden]),
+  select, textarea, ...). As checkboxes voltam ao desenho nativo (com accent-color).
+  Corrige as checkboxes de TODOS os ecrans financeiros de uma vez.
+- assets/style.css: .sg-generator-check input passa a 18x18 explicito + cursor
+  pointer (checkbox clara e consistente nos cartoes do gerador).
+
+VARREDURA COMPLETA DO ECRA (todos os controlos)
+- 3 selects: seta + borda (v12.24.1) - OK.
+- input de mes (Periodo): borda clara + min-height (campo) - OK.
+- 5 checkboxes: agora quadrado 18px nativo com accent - OK.
+
+FRONTEIRA
+- So apresentacao/CSS. Sem logica, formulas, nonces, AJAX, name/id, permissoes
+  nem schema.
+
+VALIDACAO
+- BUILD.json valido. Gate de tokens 1907 (estavel).
+
+APRENDIZAGEM (PROTOCOLO)
+- Varredura COMPLETA de todos os controlos (nao so os do screenshot).
+- Regras que dimensionam campos (min-height/border-radius em input/:where)
+  TEM de excluir [type=checkbox]/[type=radio]/[type=hidden].
+- Corrigir na raiz/camada partilhada.
