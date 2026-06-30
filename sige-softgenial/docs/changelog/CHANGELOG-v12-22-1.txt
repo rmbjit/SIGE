@@ -1,0 +1,46 @@
+SIGE SoftGenial v12.22.1 - Alunos: ESC/fecho dos modais, botoes do heroi, popup acima do modal
+Data: 2026-06-30
+Tipo: correccao de apresentacao/comportamento (Modulo 3 - Alunos). Sem logica.
+
+PROBLEMAS (reportados pelo utilizador + reavaliacao critica)
+1. ESC no modal de Importacao nao fechava: o modal nao desaparecia e "caia atras
+   da barra lateral".
+2. Arrumacao dos botoes do heroi (2+1 com vazio a direita).
+
+CAUSAS
+1. O handler global de ESC chamava sempre fecharModal() (que so esconde o
+   #modal-aluno e remove a classe sige-aluno-modal-open). Com o modal de
+   Importacao (ou a Ficha 360) aberto, o ESC removia a classe que eleva o
+   conteudo (logo o modal caia atras da sidebar) mas NAO escondia esse modal.
+2. Com a ilustracao removida, ficaram padding-right/min-height (reservados para a
+   arte) e o .sige-hero-content como grelha de 2 colunas, deixando os botoes
+   confinados a ~60% da largura e um vazio a direita.
+
+CORRECCOES (admin/academic/alunos_lista.php, so apresentacao)
+1. ESC fecha o modal REALMENTE aberto: import -> fecharImportarAlunos,
+   360 -> fecharFichaAluno360, registo -> fecharModal.
+2. Clique fora (no fundo) passa a fechar tambem o #modal-aluno-360 e o
+   #modal-import-alunos (antes so o #modal-aluno).
+3. Heroi de uma coluna a toda a largura: .sige-hero-content block;
+   .sige-hero-text padding-right:0/min-height:0/width:100%; h1 sem max-width;
+   .sige-hero-actions flex-wrap a 100% (>820px) e empilhado a 1 coluna (<=820px).
+   Regra colocada no fim da folha para vencer as camadas anteriores.
+
+REAVALIACAO CRITICA - outros bugs corrigidos
+4. Popup de alerta/confirmacao nao fechava com ESC -> passa a fechar com ESC
+   (keydown.sigeAlunoPopup, removido ao fechar).
+5. Popup ficava ATRAS do modal: a confirmacao "Anular lote" e disparada de dentro
+   do modal de Importacao, mas o popup tinha z-index 120000 < 130000 do modal.
+   Popup sobe para 140000 (acima de todos os modais).
+
+FRONTEIRA
+- So apresentacao/comportamento de UI. Sem logica, SQL, nonces, AJAX, name/id,
+  permissoes nem schema. Contratos de desempenho/mobile e cartoes intactos.
+
+VALIDACAO
+- php -l: sem erros. BUILD.json valido. Gate de tokens 1911 (estavel).
+
+APRENDIZAGEM
+- PROTOCOLO: handlers de fecho (ESC/clique-fora) tem de visar o modal que esta
+  aberto, nao um fixo; e overlays sobrepostos (popup sobre modal) precisam de
+  ordem de z-index coerente.

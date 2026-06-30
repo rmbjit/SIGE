@@ -2422,7 +2422,7 @@ body.sige-admin-app.sige-view-alunos_lista .sg-app-page > .wrap.sige-alunos-page
 .sige-boletim-section{border:1px solid var(--color-ink-100);border-radius:var(--radius-xl);background:var(--color-white);}
 .sige-btn-modal{border-radius:var(--radius-lg);min-height:46px;}
 .sige-btn-submit{background:linear-gradient(135deg,var(--color-brand-500),var(--color-brand-700))!important;}
-.sige-alunos-popup{position:fixed;inset:0;z-index:120000;display:none;align-items:center;justify-content:center;padding:var(--space-5);}
+.sige-alunos-popup{position:fixed;inset:0;z-index:140000;display:none;align-items:center;justify-content:center;padding:var(--space-5);}
 .sige-alunos-popup.is-open{display:flex;}
 .sige-alunos-popup-backdrop{position:absolute;inset:0;background:rgba(15,23,42,.62);backdrop-filter:blur(9px);}
 .sige-alunos-popup-box{position:relative;width:min(520px,100%);background:var(--color-white);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);overflow:hidden;animation:modalSlideIn .22s ease;}
@@ -5807,6 +5807,19 @@ body.sige-admin-app.sige-view-alunos_lista .sige-actions-trigger[aria-expanded="
     }
 }
 
+/* v12.22.1 - Herói sem ilustração: faixa de uma coluna a toda a largura.
+   Anula os padding-right/min-height que reservavam espaço para a arte (já
+   removida) e garante que os botões de acção usam a largura toda (sem ficarem
+   2+1 com um vazio à direita). Colocado no fim para vencer as camadas anteriores. */
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero-content{display:block!important;}
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero-text{padding-right:0!important;max-width:none!important;min-height:0!important;width:100%!important;}
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero h1{max-width:none!important;}
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero-actions{display:flex!important;flex-wrap:wrap!important;gap:var(--space-3)!important;width:100%!important;}
+@media (max-width:820px){
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero-subtitle{max-width:none!important;}
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero-actions{display:grid!important;grid-template-columns:1fr!important;}
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-btn-hero{width:100%!important;}
+}
 </style>
 
 <div class="wrap sige-alunos-page">
@@ -7862,13 +7875,16 @@ function sigeAlunoOpenPopup(opts) {
             jQuery('body').removeClass('sige-modal-open');
             cancelBtn.off('click', onCancel); confirmBtn.off('click', onConfirm);
             jQuery('#sige-alunos-popup .sige-alunos-popup-backdrop').off('click', onCancel);
+            jQuery(document).off('keydown.sigeAlunoPopup', onKey);
             resolve(result);
         }
         function onCancel(){ close(false); }
         function onConfirm(){ close(true); }
+        function onKey(ev){ if (ev.key === 'Escape') { ev.preventDefault(); close(false); } }
         cancelBtn.on('click', onCancel);
         confirmBtn.on('click', onConfirm).focus();
         jQuery('#sige-alunos-popup .sige-alunos-popup-backdrop').on('click', onCancel);
+        jQuery(document).on('keydown.sigeAlunoPopup', onKey);
     });
 }
 function sigeAlunoAlert(message, title, type) {
@@ -8799,8 +8815,19 @@ jQuery(document).on('change', '#data_nascimento', sigeCalcularMensalidadeCreche)
 // ========================================
 // UX EXTRAS
 // ========================================
-jQuery(document).on('keydown', function(e){ if(e.key==='Escape') fecharModal(); });
+// ESC fecha o modal que estiver realmente aberto (antes fechava sempre o
+// #modal-aluno, deixando o de importacao/360 visivel mas a cair atras da sidebar
+// por perder a classe que eleva o conteudo).
+jQuery(document).on('keydown', function(e){
+    if (e.key !== 'Escape') return;
+    if (jQuery('#modal-import-alunos').is(':visible')) { fecharImportarAlunos(); return; }
+    if (jQuery('#modal-aluno-360').is(':visible')) { fecharFichaAluno360(); return; }
+    if (jQuery('#modal-aluno').is(':visible')) { fecharModal(); return; }
+});
+// Clique fora (no fundo) fecha o respectivo modal - coerente nos tres.
 jQuery('#modal-aluno').on('click', function(e){ if(e.target===this) fecharModal(); });
+jQuery('#modal-aluno-360').on('click', function(e){ if(e.target===this) fecharFichaAluno360(); });
+jQuery('#modal-import-alunos').on('click', function(e){ if(e.target===this) fecharImportarAlunos(); });
 </script>
 
 
