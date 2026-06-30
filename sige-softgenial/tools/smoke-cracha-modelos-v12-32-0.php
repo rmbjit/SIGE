@@ -52,7 +52,7 @@ _p($fails, strpos($n7['social']['facebook'], '<') === false, 'Rede social é san
 _p($fails, isset($n7['social']['website']) && $n7['social']['website'] === 'site.co.mz', 'Website preservado');
 
 // ── (2) PARIDADE PHP <-> JS ──────────────────────────────────────────────────
-$js = (string) @file_get_contents($root . '/assets/cracha/sige-cracha-templates.js');
+$js = (string) @file_get_contents($root . '/assets/views/sige-cracha-templates.js');
 preg_match_all('/\bT\.([a-z0-9_]+)\s*=\s*\{/', $js, $jm);
 $js_ids = array_values(array_unique($jm[1]));
 sort($js_ids);
@@ -76,7 +76,9 @@ $build = json_decode((string) @file_get_contents($root . '/BUILD.json'), true);
 _p($fails, strpos($boot, "require_once SIGE_PATH . 'includes/cracha-config.php'") !== false, 'Bootstrap carrega a camada de crachá');
 // v12.32.2: o registo é entregue INLINE pela view (à prova de falhas), não por enqueue HTTP.
 _p($fails, strpos($view, 'readfile($sige_cracha_tpl_file)') !== false, 'Registo entregue inline pela view (filesystem)');
-_p($fails, strpos($view, "SIGE_PATH . 'assets/cracha/sige-cracha-templates.js'") !== false, 'Registo inline lê a fonte única do filesystem');
+_p($fails, strpos($view, 'assets/views/sige-cracha-templates.js') !== false, 'Registo inline lê de assets/views/ (pasta que deploya de forma fiável)');
+_p($fails, is_file($root . '/assets/views/sige-cracha-templates.js'), 'Ficheiro do registo está em assets/views/ (sem depender de pasta nova)');
+_p($fails, !is_dir($root . '/assets/cracha'), 'Pasta nova assets/cracha/ deixou de ser necessária (lição CloudPanel)');
 _p($fails, strpos($view, 'data-sige-act="abrirModeloCracha"') !== false, 'Botão "Modelo de Crachá" presente');
 _p($fails, strpos($view, 'id="sige-cracha-modal"') !== false, 'Modal do seletor presente');
 _p($fails, strpos($view, '$sige_can_editar_cracha') !== false, 'Botão/modal são gated por permissão');

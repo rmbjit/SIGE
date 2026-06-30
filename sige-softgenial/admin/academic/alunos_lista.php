@@ -395,9 +395,13 @@ $sige_global_data['cracha'] = function_exists('sige_cracha_config_for_js')
     : ['config' => [], 'templates' => [], 'social' => []];
 // Nonce de CSP para o <style> da pré-visualização (iframe herda a CSP da página).
 $sige_global_data['csp_nonce'] = function_exists('sige_csp_nonce') ? sige_csp_nonce() : '';
-// URL do registo de modelos (rede de segurança: se o enqueue não chegar, o cliente
-// carrega-o sob demanda antes de pré-visualizar/imprimir).
-$sige_global_data['cracha_asset'] = defined('SIGE_URL') ? (SIGE_URL . 'assets/cracha/sige-cracha-templates.js?ver=' . (defined('SIGE_VERSION') ? SIGE_VERSION : '1')) : '';
+// URL do registo de modelos (rede de segurança terciária: se por algum motivo o
+// inline não correr, o cliente tenta carregá-lo sob demanda). Aponta para a pasta
+// que existe no servidor (assets/views/, fallback assets/cracha/).
+$sige_cracha_asset_rel = (defined('SIGE_PATH') && is_file(SIGE_PATH . 'assets/cracha/sige-cracha-templates.js') && !is_file(SIGE_PATH . 'assets/views/sige-cracha-templates.js'))
+    ? 'assets/cracha/sige-cracha-templates.js'
+    : 'assets/views/sige-cracha-templates.js';
+$sige_global_data['cracha_asset'] = defined('SIGE_URL') ? (SIGE_URL . $sige_cracha_asset_rel . '?ver=' . (defined('SIGE_VERSION') ? SIGE_VERSION : '1')) : '';
 // Quem pode mudar o modelo de crachá da escola (mostra/oculta o botão).
 $sige_can_editar_cracha = (function_exists('sige_can') && sige_can('configuracoes.editar'))
     || (function_exists('sige_is_real_wp_admin_user') && sige_is_real_wp_admin_user())
@@ -722,13 +726,19 @@ function sigeQrDataUri(text){
 </script>
 
 <?php
-// v12.32.2 - Registo de modelos do crachá entregue INLINE a partir do filesystem.
-// Entrega à prova de falhas: não depende de pedido HTTP/enqueue/CDN/cache (que
-// estava a falhar -> pré-visualização "indisponível" e impressão em fallback).
-// Fonte única continua a ser assets/cracha/sige-cracha-templates.js (aqui apenas
-// lido e embutido, com o nonce de CSP da página).
-$sige_cracha_tpl_file = defined('SIGE_PATH') ? SIGE_PATH . 'assets/cracha/sige-cracha-templates.js' : '';
-if ($sige_cracha_tpl_file && is_file($sige_cracha_tpl_file)) {
+// v12.32.3 - Registo de modelos do crachá entregue INLINE a partir do filesystem.
+// Entrega à prova de falhas: não depende de pedido HTTP/enqueue/CDN/cache.
+// LIÇÃO (CloudPanel e afins): pipelines de update podem NÃO criar pastas novas,
+// só substituir ficheiros em pastas existentes. Por isso o registo vive agora em
+// assets/views/ (pasta já existente e que deploya de forma fiável); mantém-se a
+// procura na antiga assets/cracha/ para instalações manuais já feitas.
+$sige_cracha_tpl_file = '';
+if (defined('SIGE_PATH')) {
+    foreach (['assets/views/sige-cracha-templates.js', 'assets/cracha/sige-cracha-templates.js'] as $sige_cracha_rel) {
+        if (is_file(SIGE_PATH . $sige_cracha_rel)) { $sige_cracha_tpl_file = SIGE_PATH . $sige_cracha_rel; break; }
+    }
+}
+if ($sige_cracha_tpl_file) {
     echo '<script ' . sige_csp_script_attr() . ">\n";
     readfile($sige_cracha_tpl_file);
     echo "\n</script>\n";
