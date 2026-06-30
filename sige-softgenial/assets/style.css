@@ -3083,6 +3083,13 @@ body.sige-view-financeiro-relatorio-mensal .sg-app-page{padding-top:0!important;
 .sg-modal-backdrop{display:none!important;position:fixed!important;inset:0!important;background:rgba(15,23,42,.60)!important;z-index:999999!important;align-items:center!important;justify-content:center!important;padding:var(--space-5)!important;}
 .sg-modal-backdrop.is-open,.sg-modal-backdrop[style*="flex"]{display:flex!important;}
 body.sg-modal-open{overflow:hidden!important;}
+/* v12.24.0 - Modal acima da barra lateral (view financeiro-gerador): .sg-app-content
+   e um contexto de empilhamento (z-index:1) abaixo da sidebar (z-index alto no
+   shell PRO), por isso o .sg-modal-backdrop, apesar do z-index 999999, fica preso
+   atras da barra lateral. Enquanto ha modal aberto, elevamos o conteudo. Scoped a
+   esta view; os outros ecrans financeiros com .sg-modal-backdrop tem o mesmo
+   padrao e podem receber a mesma correccao quando forem revistos. */
+body.sige-admin-app.sige-view-financeiro-gerador.sg-modal-open .sg-app-content{z-index:10090!important;}
 .sige-lanc-modal{background:var(--color-white)!important;border-radius:18px!important;width:100%!important;max-width:540px!important;max-height:88vh!important;overflow:hidden!important;box-shadow:0 26px 70px rgba(15,23,42,.24)!important;display:flex!important;flex-direction:column!important;position:relative!important;z-index:1000000!important;color:var(--color-ink-900)!important;}
 .sige-lanc-modal.sg-expense-modal-lg{max-width:760px!important;}
 .sige-lanc-modal-header{padding:20px 24px 14px!important;border-bottom:1px solid var(--color-slate-100)!important;background:linear-gradient(135deg,var(--color-white) 0%,var(--color-white) 100%)!important;border-radius:18px 18px 0 0!important;}

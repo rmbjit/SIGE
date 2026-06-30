@@ -1,0 +1,34 @@
+SIGE SoftGenial v12.24.0 - Financeiro Gerador: modal de confirmacao acima da barra lateral
+Data: 2026-06-30
+Tipo: apresentacao (Modulo 5 - view=financeiro-gerador). Sem logica financeira.
+
+CONTEXTO
+- Auditoria do ecra (Portao A) confirmou que ja estava em muito bom estado
+  (sistema financeiro PRO: ESC correcto, modal com scroll, sem :root, sem
+  handlers inline server-rendered, heroi funcional com painel de KPIs - NAO e
+  ilustracao, e patrimonio, nao se toca).
+
+UNICA DIVIDA CORRIGIDA
+- Empilhamento: .sg-modal-backdrop (z-index 999999) e .sige-lanc-modal (1000000)
+  vivem dentro de .sg-app-content (contexto z-index:1 abaixo da barra lateral),
+  por isso o modal ficava preso atras da sidebar. Sem elevacao para
+  body.sg-modal-open.
+- Correccao (assets/style.css), scoped a esta view:
+  body.sige-admin-app.sige-view-financeiro-gerador.sg-modal-open .sg-app-content{z-index:10090}
+  Resolve os modais de confirmacao e de sucesso do gerador.
+
+ACHADO PARTILHADO (NAO alterado, a confirmar)
+- O mesmo trap afecta outros ecrans financeiros com .sg-modal-backdrop (Centros,
+  Auditoria, Despesas, Lancamentos). A correccao definitiva seria GLOBAL (mesma
+  regra sem o selector de view). Mantida scoped ao gerador para respeitar a
+  validacao por ecra; pode ser promovida a global quando desejado.
+
+FRONTEIRA
+- So apresentacao (uma regra de z-index, scoped). Sem logica, SQL, formulas,
+  recibos, divida, descontos, nonces, AJAX, name/id, permissoes nem schema.
+
+VALIDACAO
+- BUILD.json valido. Gate de tokens estavel (regra sem hex/raio).
+- DEPLOY:   docs/deploy/DEPLOY-v12.24.0-financeiro-gerador.md
+- LIVE-TEST: docs/qa/LIVE-TEST-v12.24.0-financeiro-gerador.md
+- Portoes:  docs/design-system/MODULO-5-financeiro-gerador-A-D-v12.24.0.md
