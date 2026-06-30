@@ -247,20 +247,11 @@ foreach($staff as $s) {
     --sige-apoio: var(--color-brand-700);
     --sige-finance: var(--color-warning-500);
     
-    /* Shadows */
-    --shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
-    --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
-    --shadow-glow: 0 0 0 3px rgba(63, 81, 181, 0.15);
-    
-    /* Radii */
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 14px;
-    --radius-xl: 20px;
-    --radius-full: 9999px;
+    /* Sombras e raios: herdados do sistema de design (assets/sige-tokens.css).
+       Não redefinir aqui para não sombrear a fonte única de verdade nem
+       contaminar o resto da página (este :root é global na rota da Equipa).
+       --radius-full mapeia para o pill do sistema. */
+    --radius-full: var(--radius-pill);
     
     /* Transitions */
     --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
@@ -1448,30 +1439,18 @@ body.sige-admin-app.sige-view-equipe .sg-app-page > .wrap.sige-rh{margin:0!impor
 .sige-rh.sg-dashboard-v2{--sgv2-purple:var(--sg-theme-primary,var(--color-brand-500));--sgv2-purple-dark:var(--sg-theme-primary-800,var(--color-brand-700));--sgv2-purple-soft:var(--sg-theme-soft,var(--color-brand-50));--sgv2-ink:var(--color-ink-500);--sgv2-muted:var(--color-slate-500);--sgv2-line:var(--color-ink-100);--sgv2-bg:var(--color-ink-50);--sgv2-green:var(--color-success-700);--sgv2-red:var(--color-danger-500);--sgv2-amber:var(--color-warning-500);--sgv2-blue:var(--color-info-400);font-family:'Poppins','Inter','Segoe UI',system-ui,sans-serif;color:var(--sgv2-ink);}
 .sige-rh.sg-dashboard-v2 *{box-sizing:border-box;}
 .sige-rh .sg-dash-shell{display:flex;flex-direction:column;gap:var(--space-5);}
-.sige-rh .sg-dash-hero{position:relative;overflow:hidden;min-height:178px;border-radius:var(--radius-xl);background:linear-gradient(110deg,var(--color-white) 0%,var(--color-white) 46%,var(--sg-theme-soft,var(--color-brand-100)) 100%)!important;border:1px solid rgba(var(--sg-theme-primary-rgb,92,64,187),.12)!important;box-shadow:var(--shadow-lg);padding:var(--space-8) var(--space-8)!important;display:grid!important;grid-template-columns:minmax(0,1.04fr) minmax(340px,.96fr)!important;gap:var(--space-6)!important;align-items:center!important;margin:0!important;}
-.sige-rh .sg-dash-hero:before{content:"";position:absolute;inset:auto -80px -130px auto;width:420px;height:300px;background:radial-gradient(circle,rgba(var(--sg-theme-primary-rgb,109,93,252),.18),rgba(var(--sg-theme-primary-rgb,109,93,252),0) 67%);pointer-events:none;}
+.sige-rh .sg-dash-hero{position:relative;overflow:hidden;border-radius:var(--radius-xl);background:linear-gradient(110deg,var(--color-white) 0%,var(--color-white) 46%,var(--sg-theme-soft,var(--color-brand-100)) 100%)!important;border:1px solid rgba(var(--sg-theme-primary-rgb,92,64,187),.12)!important;box-shadow:var(--shadow-md);padding:var(--space-6) var(--space-8)!important;display:block!important;margin:0!important;}
 .sige-rh .sg-hero-kicker{font-size:var(--fs-sm)!important;font-weight:700!important;letter-spacing:.11em!important;text-transform:uppercase!important;color:var(--sg-theme-primary,var(--color-brand-500))!important;margin-bottom:10px!important;}
-.sige-rh .sg-hero-title{margin:0!important;font-size:var(--fs-3xl)!important;line-height:1.08!important;font-weight:700!important;letter-spacing:-.04em!important;color:var(--color-black)!important;font-family:'Poppins','Inter','Segoe UI',system-ui,sans-serif!important;}
-.sige-rh .sg-hero-subtitle{max-width:650px!important;margin:var(--space-3) 0 0!important;font-size:var(--fs-md)!important;line-height:1.65!important;color:var(--color-slate-700)!important;font-weight:500!important;}
-.sige-rh .sg-hero-actions{display:flex!important;flex-wrap:wrap!important;gap:var(--space-3)!important;margin-top:24px!important;}
+.sige-rh .sg-hero-title{margin:0!important;font-size:var(--fs-xl)!important;line-height:1.15!important;font-weight:700!important;letter-spacing:-.02em!important;color:var(--color-black)!important;font-family:'Poppins','Inter','Segoe UI',system-ui,sans-serif!important;}
+.sige-rh .sg-hero-subtitle{max-width:680px!important;margin:var(--space-2) 0 0!important;font-size:var(--fs-base)!important;line-height:1.55!important;color:var(--color-slate-700)!important;font-weight:500!important;}
+.sige-rh .sg-hero-actions{display:flex!important;flex-wrap:wrap!important;gap:var(--space-3)!important;margin-top:var(--space-4)!important;}
 .sige-rh .sg-v2-btn{min-height:46px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:var(--space-3)!important;border-radius:var(--radius-md)!important;padding:0 var(--space-6)!important;font-size:var(--fs-base)!important;font-weight:700!important;text-decoration:none!important;border:1px solid transparent!important;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease!important;background:var(--color-white)!important;color:var(--color-slate-900)!important;cursor:pointer!important;}
 .sige-rh .sg-v2-btn svg{width:18px;height:18px;stroke:currentColor;color:currentColor;fill:none;opacity:1;}
 .sige-rh .sg-v2-btn-primary{background:linear-gradient(135deg,var(--sg-theme-primary,var(--color-brand-400)),var(--sg-theme-primary-800,var(--color-brand-600)))!important;color:var(--color-white)!important;box-shadow:var(--shadow-md);}
 .sige-rh .sg-v2-btn-secondary{background:var(--color-white)!important;color:var(--color-ink-900)!important;border-color:var(--color-ink-100)!important;box-shadow:var(--shadow-sm);}
 .sige-rh .sg-v2-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-md);}
-.sige-rh .sg-hero-art{position:relative!important;min-height:148px!important;border-radius:var(--radius-xl)!important;background:linear-gradient(135deg,rgba(var(--sg-theme-primary-rgb,109,93,252),.08),rgba(var(--sg-theme-primary-rgb,109,93,252),.18))!important;overflow:hidden!important;}
-.sige-rh .sg-hero-school{position:absolute;right:62px;bottom:22px;width:230px;height:96px;color:var(--sg-theme-primary,var(--color-brand-300));opacity:.72;}
-.sige-rh .sg-school-roof{position:absolute;left:40px;top:8px;width:150px;height:55px;border-top:9px solid currentColor;border-left:9px solid currentColor;transform:skewX(-18deg);opacity:.85;}
-.sige-rh .sg-school-body{position:absolute;left:36px;bottom:0;width:158px;height:72px;border-radius:12px 14px 8px 8px;background:rgba(var(--sg-theme-primary-rgb,109,93,252),.28);box-shadow:inset 0 0 0 2px rgba(var(--sg-theme-primary-rgb,109,93,252),.18);}
-.sige-rh .sg-school-body:before{content:"";position:absolute;left:67px;bottom:0;width:28px;height:42px;border-radius:12px 14px 0 0;background:rgba(var(--sg-theme-primary-rgb,109,93,252),.42);}
-.sige-rh .sg-school-window{position:absolute;left:18px;top:18px;width:22px;height:18px;border-radius:var(--radius-xs);background:rgba(255,255,255,.54);box-shadow:var(--shadow-lg);}
-.sige-rh .sg-school-flag{position:absolute;left:118px;top:-20px;width:3px;height:42px;background:rgba(var(--sg-theme-primary-rgb,109,93,252),.72);}
-.sige-rh .sg-school-flag:after{content:"";position:absolute;left:3px;top:2px;width:34px;height:18px;border-radius:var(--radius-xs);background:rgba(var(--sg-theme-primary-rgb,109,93,252),.62);clip-path:polygon(0 0,100% 20%,0 100%);}
-.sige-rh .sg-hero-cloud,.sige-rh .sg-hero-tree,.sige-rh .sg-hero-dot{position:absolute;opacity:.55;}
-.sige-rh .sg-hero-cloud{width:86px;height:28px;border-radius:var(--radius-pill);background:rgba(255,255,255,.58);right:235px;top:30px;box-shadow:var(--shadow-xs);}
-.sige-rh .sg-hero-tree{right:24px;bottom:24px;width:54px;height:72px;border-radius:22px 38px 12px 12px;background:rgba(var(--sg-theme-primary-rgb,109,93,252),.28);}
-.sige-rh .sg-hero-tree:after{content:"";position:absolute;left:25px;bottom:-18px;width:4px;height:34px;border-radius:var(--radius-pill);background:rgba(var(--sg-theme-primary-rgb,109,93,252),.42);}
-.sige-rh .sg-hero-dot{width:90px;height:90px;border-radius:50%;background:rgba(var(--sg-theme-primary-rgb,109,93,252),.16);left:42px;bottom:24px;}
+/* Herói compacto (v12.21.0): faixa única, sem ilustração. Regras de arte
+   (.sg-hero-art/.sg-hero-*/.sg-school-*) removidas com o respectivo HTML. */
 .sige-rh .sg-kpi-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:var(--space-4)!important;margin:0!important;}
 .sige-rh .sg-kpi-card{position:relative!important;overflow:hidden!important;display:grid!important;grid-template-columns:auto minmax(0,1fr)!important;gap:var(--space-4)!important;align-items:center!important;min-height:104px!important;padding:var(--space-5) var(--space-5)!important;border-radius:var(--radius-xl)!important;background:var(--color-white)!important;border:1px solid rgba(28,32,54,.08)!important;box-shadow:var(--shadow-md);}
 .sige-rh .sg-kpi-card:after{content:"";position:absolute;right:-28px;top:-34px;width:92px;height:92px;border-radius:50%;background:var(--kpi-soft,var(--color-brand-50));z-index:0!important;pointer-events:none!important;opacity:.72!important;}
@@ -1490,7 +1469,6 @@ body.sige-admin-app.sige-view-equipe .sg-app-page > .wrap.sige-rh{margin:0!impor
 .sige-rh .sige-table-card{margin:0!important;}
 .sige-rh .sige-table thead{background:var(--color-slate-50)!important;}
 .sige-rh .sige-table tbody tr:hover{background:var(--color-white)!important;}
-@media (max-width:1500px){.sige-rh .sg-dash-hero{grid-template-columns:1fr!important}.sige-rh .sg-hero-art{display:none!important}}
 @media (max-width:1100px){.sige-rh .sg-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media (max-width:720px){.sige-rh .sg-dash-hero{padding:var(--space-6) var(--space-5)!important}.sige-rh .sg-hero-title{font-size:var(--fs-xl)!important}.sige-rh .sg-kpi-grid{grid-template-columns:1fr!important}.sige-rh .sg-hero-actions{display:grid!important;grid-template-columns:1fr!important}.sige-rh .sg-v2-btn{width:100%!important}.sige-rh .sige-toolbar{display:grid!important;grid-template-columns:1fr!important}.sige-rh .toolbar-filters{overflow:auto!important}}
 
@@ -1910,7 +1888,7 @@ body.sige-admin-app #sige-rh-confirm.sige-modal:not(.active)[aria-hidden="true"]
             <div class="sg-hero-copy">
                 <div class="sg-hero-kicker"><?php echo function_exists('sige_ui_icon') ? sige_ui_icon('users') : ''; ?> Recursos Humanos</div>
                 <h1 class="sg-hero-title">Equipa e Professores</h1>
-                <p class="sg-hero-subtitle">Gerencie colaboradores, docentes, contratos, contactos e documentos da equipa escolar com a mesma experiência simples e organizada do painel principal.</p>
+                <p class="sg-hero-subtitle">Colaboradores, docentes, contratos e documentos da equipa escolar num só lugar.</p>
                 <?php if ($can_manage_equipe): ?>
                 <div class="sg-hero-actions">
                     <button data-sige-act="novoFuncionario" data-sige-noargs class="sg-v2-btn sg-v2-btn-primary">
@@ -1933,16 +1911,6 @@ body.sige-admin-app #sige-rh-confirm.sige-modal:not(.active)[aria-hidden="true"]
                     <?php endif; ?>
                 </div>
                 <?php endif; ?>
-            </div>
-            <div class="sg-hero-art" aria-hidden="true">
-                <div class="sg-hero-dot"></div>
-                <div class="sg-hero-cloud"></div>
-                <div class="sg-hero-tree"></div>
-                <div class="sg-hero-school">
-                    <div class="sg-school-roof"></div>
-                    <div class="sg-school-flag"></div>
-                    <div class="sg-school-body"><div class="sg-school-window"></div></div>
-                </div>
             </div>
         </section>
     <!-- ========================================
@@ -2282,7 +2250,7 @@ body.sige-admin-app #sige-rh-confirm.sige-modal:not(.active)[aria-hidden="true"]
             </button>
         </div>
         
-        <form id="form-staff" onsubmit="guardarStaff(event)">
+        <form id="form-staff" data-sige-on-submit="guardarStaff(event)">
             <input type="hidden" name="staff_id" id="staff_id">
             
             <div class="modal-body">

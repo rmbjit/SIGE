@@ -1,0 +1,32 @@
+SIGE SoftGenial v12.21.0 - Equipa: heroi compacto, tokens limpos, form sem inline
+Data: 2026-06-30
+Tipo: apresentacao (Modulo 2 - Equipa e Professores). Sem logica.
+
+MUDANCAS (admin/hr/equipe-view.php)
+1. Tokens: o <style> da view deixou de redefinir tokens globais. Removidas as
+   redefinicoes locais de --shadow-xs/sm/md/lg e --radius-sm/md/lg/xl (passam a
+   herdar de assets/sige-tokens.css). --shadow-xl e --shadow-glow eram 0-uso e
+   foram removidos. --radius-full passa a var(--radius-pill). Isto elimina a
+   fuga: um :root num <style> inline e global na rota e contaminava o shell.
+2. Heroi compactado ao nivel do Painel Principal: faixa unica (display:block),
+   sem min-height, padding var(--space-6)/var(--space-8), box-shadow
+   var(--shadow-md), titulo var(--fs-xl), sem brilho :before. Removidas todas as
+   regras de arte (.sg-hero-art/.sg-hero-*/.sg-school-*) e o HTML respectivo;
+   subtitulo encurtado; media query de 2 colunas (obsoleta) removida.
+3. CSP: o formulario do modal deixou de usar onsubmit inline. Passa a
+   data-sige-on-submit="guardarStaff(event)", hidratado por assets/sige-ui.js
+   (resolverAcao + parseArg); guardarStaff continua a chamar preventDefault.
+   Comportamento de gravacao identico, sem handler inline na origem.
+
+FRONTEIRA
+- Sem alteracao de logica, SQL, $wpdb, nonces, endpoints AJAX, formulas,
+  name/id de campos, permissoes nem schema. Multi-inquilino intacto.
+- Crachas imprimiveis (window.open) inalterados (documentos autonomos).
+
+VALIDACAO
+- php -l equipe-view.php: sem erros. BUILD.json valido.
+- Gate de tokens: 1914 (baixou de 1917; baseline reposta para 1914).
+- 0 handlers inline on*= na view.
+- DEPLOY:   docs/deploy/DEPLOY-v12.21.0-equipa-heroi-tokens.md
+- LIVE-TEST: docs/qa/LIVE-TEST-v12.21.0-equipa.md
+- Portoes:  docs/design-system/MODULO-2-equipa-C-D-v12.21.0.md
