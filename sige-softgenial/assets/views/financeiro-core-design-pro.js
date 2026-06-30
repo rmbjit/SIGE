@@ -2,16 +2,33 @@
  * v12.15.12: marcador visual/UX (sem observador de mutacoes, sem portal/move-DOM,
  *   sem interceptar submissao/clique financeiro, sem execucao dinamica).
  * v12.25.0: Pagamentos - seccoes colapsaveis + modal acima da barra lateral.
- * v12.26.0: Config (Precos e Servicos) - seccoes colapsaveis (pagina mais curta)
- *   + modal acima da barra lateral. So visual; nao toca em valores/formulas, nao
- *   intercepta submissao/cliques financeiros nem move nos do formulario.
+ * v12.26.0: Config (Precos e Servicos) - seccoes colapsaveis + modal.
+ * v12.29.0: lembra o estado (aberto/fechado) das seccoes na sessao, para nao
+ *   reabrir tudo apos gravar/recarregar. So visual; nao toca em valores/formulas,
+ *   nao intercepta submissao/cliques financeiros nem move nos do formulario.
  */
 (function () {
   'use strict';
   if (!document || !document.body) return;
-  document.body.setAttribute('data-sige-financeiro-core-design', '12.26.0');
+  document.body.setAttribute('data-sige-financeiro-core-design', '12.29.0');
 
   var body = document.body;
+
+  // Persistencia segura do estado das seccoes (sessionStorage; pode falhar em
+  // modo privado, por isso try/catch). null = sem registo.
+  function lerEstado(key) {
+    if (!key) return null;
+    try { var v = window.sessionStorage.getItem(key); return v === null ? null : (v === '1'); }
+    catch (e) { return null; }
+  }
+  function guardarEstado(key, aberto) {
+    if (!key) return;
+    try { window.sessionStorage.setItem(key, aberto ? '1' : '0'); } catch (e) {}
+  }
+  function chaveSeccao(prefixo, header) {
+    var t = (header.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+    return 'sigeCol:' + prefixo + ':' + t;
+  }
 
   // Eleva o conteudo acima da barra lateral enquanto ha modal visivel (so leitura
   // do estado; nunca intercepta o fluxo financeiro). Usado em pagamentos.
@@ -21,8 +38,8 @@
   }
 
   // Torna um cartao colapsavel: cabecalho clicavel + seta; nao colapsa quando se
-  // clica num controlo dentro do cabecalho. Acessivel por teclado.
-  function tornarColapsavel(card, headerSel, bodySel, headClass, cardCollapsedClass, chevClass, aberto) {
+  // clica num controlo dentro do cabecalho. Acessivel por teclado. Lembra o estado.
+  function tornarColapsavel(card, headerSel, bodySel, headClass, cardCollapsedClass, chevClass, aberto, prefixo) {
     var header = card.querySelector(headerSel);
     var content = card.querySelector(bodySel);
     if (!header || !content || header.getAttribute('data-sige-collapsible') === '1') return;
@@ -36,18 +53,21 @@
     chev.setAttribute('aria-hidden', 'true');
     header.appendChild(chev);
 
-    function definir(open) {
+    var key = prefixo ? chaveSeccao(prefixo, header) : '';
+    function definir(open, persistir) {
       card.classList.toggle(cardCollapsedClass, !open);
       content.style.display = open ? '' : 'none';
       header.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (persistir) guardarEstado(key, open);
     }
-    definir(aberto);
+    var lembrado = lerEstado(key);
+    definir(lembrado === null ? aberto : lembrado, false);
     header.addEventListener('click', function (e) {
       if (e.target.closest('a,button,input,select,label,textarea')) return;
-      definir(card.classList.contains(cardCollapsedClass));
+      definir(card.classList.contains(cardCollapsedClass), true);
     });
     header.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); definir(card.classList.contains(cardCollapsedClass)); }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); definir(card.classList.contains(cardCollapsedClass), true); }
     });
   }
 
@@ -63,7 +83,7 @@
       document.querySelectorAll('.sg-paypro-operation-card').forEach(function (card, idx) {
         // Dividas Actuais aberta; restantes fechadas; abre se ja houver seleccao.
         var aberto = idx === 0 || !!card.querySelector('input:checked');
-        tornarColapsavel(card, '.sige-card-header', '.sige-card-body', 'sg-paypro-collapse-head', 'sg-paypro-collapsed', 'sg-paypro-collapse-chev', aberto);
+        tornarColapsavel(card, '.sige-card-header', '.sige-card-body', 'sg-paypro-collapse-head', 'sg-paypro-collapsed', 'sg-paypro-collapse-chev', aberto, 'pag');
       });
     }
 
@@ -75,7 +95,7 @@
       document.querySelectorAll('.sg-fincfg-wrap .fc-card').forEach(function (card) {
         if (card.closest('.sg-fincfg-service-modal, .sg-fincfg-modal')) return;
         var aberto = card.classList.contains('sg-fincfg-services-list');
-        tornarColapsavel(card, '.fc-card-header', '.fc-card-body', 'sg-fincfg-collapse-head', 'sg-fincfg-collapsed', 'sg-fincfg-collapse-chev', aberto);
+        tornarColapsavel(card, '.fc-card-header', '.fc-card-body', 'sg-fincfg-collapse-head', 'sg-fincfg-collapsed', 'sg-fincfg-collapse-chev', aberto, 'cfg');
       });
     }
   }

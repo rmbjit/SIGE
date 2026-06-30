@@ -1,0 +1,36 @@
+SIGE SoftGenial v12.29.0 - Financeiro: scroll dos modais + empilhamento global + lembrar seccoes
+Data: 2026-06-30
+Tipo: apresentacao/UX (financeiro, transversal). Sem logica nem formulas.
+
+"SIGA PARA TODOS" - resolucao
+1. SCROLL DOS MODAIS (reportado: "dentro dos modais nao ha scroll") - CORRIGIDO
+   Causa raiz (bug classico de flexbox): corpos de modal com flex:1 + overflow
+   mas SEM min-height:0 nao encolhem abaixo do conteudo, transbordam o cartao
+   (max-height + overflow:hidden) e ficam cortados -> sem scroll. Corrigido em:
+   - .sige-lanc-modal-body (modais .sg-modal-backdrop: gerador, centros, despesas,
+     planos, etc.): + min-height:0.
+   - .sg-inspro-modal-body (inscricoes): + flex:1 1 auto; min-height:0.
+   - body.sige-admin-app .sige-modal-content (modal generico): passa a coluna flex
+     e .sige-modal-body ganha flex:1 1 auto; min-height:0.
+   Resultado: o corpo do modal rola; cabecalho/rodape ficam fixos.
+2. EMPILHAMENTO GLOBAL - os modais financeiros deixam de ficar atras da barra
+   lateral em TODOS os ecrans (nao so gerador/config/pagamentos). Regra unica:
+   body.sg-modal-open / .sg-inspro-modal-open / .sg-fincfg-service-modal-open /
+   .sg-fincfg-modal-open .sg-app-content{z-index:10090}. Substitui a regra
+   per-view do gerador.
+3. D) LEMBRAR SECCOES (sessionStorage): em Pagamentos e Config, o estado
+   aberto/fechado de cada seccao e lembrado na sessao -> apos gravar/recarregar
+   nao reabre tudo. Falha em silencio se sessionStorage indisponivel.
+4. E) HEROI DO CONFIG: verificado - JA renderiza CLARO (a regra partilhada
+   .sg-fincfg-wrap .fc-hero, !important, sobrepoe a definicao escura da view, que
+   e codigo morto). Consistente com os outros herois financeiros. Sem alteracao.
+
+FRONTEIRA
+- So CSS + JS visual (assets partilhados). Sem alterar formulas, SQL, nonces,
+  name/id, permissoes nem schema. Nenhum ficheiro PHP financeiro tocado nesta
+  versao.
+
+VALIDACAO
+- node --check ao JS: OK. Gate de tokens estavel. php/versoes sincronizadas.
+- DEPLOY:   docs/deploy/DEPLOY-v12.29.0-fin-modal-scroll.md
+- LIVE-TEST: docs/qa/LIVE-TEST-v12.29.0-fin-modal-scroll.md

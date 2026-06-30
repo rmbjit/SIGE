@@ -3083,18 +3083,22 @@ body.sige-view-financeiro-relatorio-mensal .sg-app-page{padding-top:0!important;
 .sg-modal-backdrop{display:none!important;position:fixed!important;inset:0!important;background:rgba(15,23,42,.60)!important;z-index:999999!important;align-items:center!important;justify-content:center!important;padding:var(--space-5)!important;}
 .sg-modal-backdrop.is-open,.sg-modal-backdrop[style*="flex"]{display:flex!important;}
 body.sg-modal-open{overflow:hidden!important;}
-/* v12.24.0 - Modal acima da barra lateral (view financeiro-gerador): .sg-app-content
-   e um contexto de empilhamento (z-index:1) abaixo da sidebar (z-index alto no
-   shell PRO), por isso o .sg-modal-backdrop, apesar do z-index 999999, fica preso
-   atras da barra lateral. Enquanto ha modal aberto, elevamos o conteudo. Scoped a
-   esta view; os outros ecrans financeiros com .sg-modal-backdrop tem o mesmo
-   padrao e podem receber a mesma correccao quando forem revistos. */
-body.sige-admin-app.sige-view-financeiro-gerador.sg-modal-open .sg-app-content{z-index:10090!important;}
+/* v12.29.0 - Modais acima da barra lateral, GLOBAL para o financeiro:
+   .sg-app-content e um contexto de empilhamento (z-index:1) abaixo da sidebar
+   (z-index alto no shell PRO); um modal filho do conteudo, por mais alto que seja
+   o z-index, fica preso atras da barra lateral. Enquanto ha um modal financeiro
+   aberto (qualquer das classes abaixo), elevamos o conteudo. Cobre todos os ecrans
+   financeiros (gerador, centros, despesas, auditoria, planos, inscricoes, config,
+   mpesa, reconciliacao, aprovacoes). */
+body.sige-admin-app.sg-modal-open .sg-app-content,
+body.sige-admin-app.sg-inspro-modal-open .sg-app-content,
+body.sige-admin-app.sg-fincfg-service-modal-open .sg-app-content,
+body.sige-admin-app.sg-fincfg-modal-open .sg-app-content{z-index:10090!important;}
 .sige-lanc-modal{background:var(--color-white)!important;border-radius:18px!important;width:100%!important;max-width:540px!important;max-height:88vh!important;overflow:hidden!important;box-shadow:0 26px 70px rgba(15,23,42,.24)!important;display:flex!important;flex-direction:column!important;position:relative!important;z-index:1000000!important;color:var(--color-ink-900)!important;}
 .sige-lanc-modal.sg-expense-modal-lg{max-width:760px!important;}
 .sige-lanc-modal-header{padding:20px 24px 14px!important;border-bottom:1px solid var(--color-slate-100)!important;background:linear-gradient(135deg,var(--color-white) 0%,var(--color-white) 100%)!important;border-radius:18px 18px 0 0!important;}
 .sige-lanc-modal-title{margin:0!important;font-size:18px!important;font-weight:900!important;letter-spacing:-.03em!important;color:var(--color-black)!important;}
-.sige-lanc-modal-body{padding:22px 24px!important;flex:1!important;overflow-y:auto!important;color:var(--color-slate-800)!important;}
+.sige-lanc-modal-body{padding:22px 24px!important;flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;color:var(--color-slate-800)!important;}
 .sige-lanc-modal-footer{padding:var(--space-4) var(--space-6) var(--space-5)!important;border-top:1px solid var(--color-ink-50)!important;display:flex!important;justify-content:flex-end!important;gap:10px!important;background:var(--color-white)!important;border-radius:0 0 18px 18px!important;}
 @media (max-width:1320px){.sg-expense-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.sg-expense-filterbar .sg-filters-row{grid-template-columns:repeat(3,minmax(0,1fr));}}
 @media (max-width:760px){.sg-expense-card{padding:var(--space-4);border-radius:var(--radius-xl);}.sg-expense-kpi-grid{grid-template-columns:1fr;}.sg-expense-filterbar .sg-filters-row{grid-template-columns:1fr;}.sg-expense-filterbar .sg-filters-actions{flex-direction:column;align-items:stretch;}.sg-expense-filterbar .sg-finpro-btn{width:100%;}.sg-expense-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}.sg-expense-table-wrap:after{content:'Deslize para ver mais';display:block;padding:8px 12px 10px;color:var(--color-ink-400);font-size:var(--fs-xs);font-weight:750;text-align:right;background:var(--color-white);}.sg-expense-actions{min-width:220px;}.sg-expense-form-grid{grid-template-columns:1fr;gap:0;}.sg-expense-confirm-box{grid-template-columns:1fr;}.sige-lanc-modal{max-width:100%!important;border-radius:14px!important;}.sige-lanc-modal-footer{flex-direction:column-reverse!important;}.sige-lanc-modal-footer .sg-btn{width:100%;}}
@@ -3486,7 +3490,7 @@ html.sg-inspro-modal-open,body.sg-inspro-modal-open{overflow:hidden!important;}
 .sg-inspro-modal-icon svg{width:21px!important;height:21px!important;stroke:currentColor!important;fill:none!important;opacity:1!important;}
 .sg-inspro-modal-head span:not(.sg-inspro-modal-icon){display:block!important;margin-bottom:5px!important;color:var(--color-brand-400)!important;font-size:var(--fs-xs)!important;font-weight:900!important;text-transform:uppercase!important;letter-spacing:.11em!important;}
 .sg-inspro-modal-head h2{margin:0!important;color:var(--color-black)!important;font-size:22px!important;line-height:1.1!important;font-weight:950!important;letter-spacing:-.04em!important;}
-.sg-inspro-modal-body{padding:22px 24px!important;overflow:auto!important;color:var(--color-slate-800)!important;}
+.sg-inspro-modal-body{padding:22px 24px!important;flex:1 1 auto!important;min-height:0!important;overflow:auto!important;-webkit-overflow-scrolling:touch!important;color:var(--color-slate-800)!important;}
 .sg-inspro-modal-body p{margin:0 0 14px!important;color:var(--color-slate-700)!important;font-size:var(--fs-base)!important;line-height:1.62!important;font-weight:650!important;}
 .sg-inspro-confirm-list{display:grid!important;gap:10px!important;}
 .sg-inspro-confirm-list div{padding:13px 14px!important;border-radius:var(--radius-lg)!important;background:var(--color-slate-50)!important;border:1px solid var(--color-slate-100)!important;}
@@ -4277,6 +4281,8 @@ body.sige-admin-app .sige-modal-content{
     box-shadow:0 36px 110px rgba(19,23,54,.28);
     overflow:hidden;
     box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
     font-family:var(--sg-theme-font-family,'Plus Jakarta Sans','Inter','Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,sans-serif);
 }
 body.sige-admin-app .sige-modal-header{
@@ -4321,7 +4327,7 @@ body.sige-admin-app .sige-modal-header h3 svg{
     color:var(--sg-theme-primary,var(--color-brand-500));
     box-sizing:border-box;
 }
-body.sige-admin-app .sige-modal-body{padding:24px 26px;overflow:auto;}
+body.sige-admin-app .sige-modal-body{padding:24px 26px;flex:1 1 auto;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch;}
 body.sige-admin-app .sige-modal-footer{
     display:flex;
     align-items:center;
