@@ -1,0 +1,32 @@
+SIGE SoftGenial v12.29.1 - Config: scroll do modal de servico (hotfix)
+Data: 2026-06-30
+Tipo: correccao de apresentacao (view=financeiro-config). Sem logica.
+
+PROBLEMA (reportado com captura)
+- O modal "Editar/Adicionar Servico" continuava a NAO rolar: o conteudo (a partir
+  de "Categoria SNE"/"Multa especifica") ficava cortado em baixo.
+
+CAUSA (diferente da v12.29.0)
+- Este modal reutiliza a classe .fc-card como cartao. A regra partilhada
+  .sg-fincfg-wrap .fc-card{overflow:hidden!important} (especificidade 0,2,0) vencia
+  o .sg-fincfg-service-form-card{overflow:auto!important} (0,1,0) -> o cartao ficava
+  overflow:hidden e cortava o formulario, sem scroll. (A v12.29.0 corrigiu os
+  modais .sige-lanc-modal, que sao outra classe.)
+
+CORRECCAO (admin/finance/financeiro-config.php, so CSS da view)
+- Igualada a especificidade: .sg-fincfg-wrap .sg-fincfg-service-form-card (0,2,0,
+  e a regra inline da view vem depois -> vence). Cartao passa a coluna flex
+  (overflow:hidden) e o CORPO (.fc-card-body) rola: flex:1 1 auto; min-height:0;
+  overflow-y:auto. Cabecalho fica fixo (flex:0 0 auto; ja era sticky).
+
+VERIFICACAO DE ABRANGENCIA
+- O modal de servico do config e o UNICO modal financeiro baseado em .fc-card; a
+  regra-armadilha (.sg-fincfg-wrap .fc-card{overflow:hidden}) e exclusiva do config.
+  Os restantes modais financeiros (.sige-lanc-modal, .sg-inspro, genericos) foram
+  cobertos na v12.29.0.
+
+FRONTEIRA
+- So CSS da view. Sem alterar formulas, SQL, nonces, name/id, permissoes nem schema.
+
+VALIDACAO
+- php -l OK. Gate de tokens estavel.

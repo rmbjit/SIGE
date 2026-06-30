@@ -813,14 +813,22 @@ $categorias_recomendadas = [
     width:min(980px,96vw)!important;
     margin:auto 0!important;
 }
-.sg-fincfg-service-form-card{
+/* v12.29.1 - Scroll do modal de servico: o .sg-fincfg-wrap .fc-card (style.css)
+   tem overflow:hidden!important e, por ser mais especifico, vencia o overflow do
+   cartao -> nao rolava. Igualamos a especificidade (.sg-fincfg-wrap ...) e usamos
+   coluna flex: cabecalho fixo, CORPO rola (flex:1;min-height:0;overflow:auto). */
+.sg-fincfg-wrap .sg-fincfg-service-form-card{
     width:100%!important;
     max-height:calc(100vh - 56px)!important;
-    overflow:auto!important;
+    overflow:hidden!important;
+    display:flex!important;
+    flex-direction:column!important;
     border-radius:var(--radius-xl)!important;
     box-shadow:var(--shadow-lg);
     border:1px solid rgba(255,255,255,.55)!important;
 }
+.sg-fincfg-wrap .sg-fincfg-service-form-card > .fc-card-header{flex:0 0 auto!important;}
+.sg-fincfg-wrap .sg-fincfg-service-form-card > .fc-card-body{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;}
 .sg-fincfg-service-modal-head{
     position:sticky!important;
     top:0!important;
