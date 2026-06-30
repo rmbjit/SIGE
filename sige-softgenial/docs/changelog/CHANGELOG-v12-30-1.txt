@@ -1,0 +1,68 @@
+SIGE SoftGenial v12.30.1 - Equipa: paridade definitiva com Permissoes (perfil SIGE actual)
+Data: 2026-06-30
+Tipo: correccao definitiva de listagem/cargo/KPIs (view=equipe / admin/hr/equipe-view.php).
+
+REPORTE (com capturas)
+- Mesmo apos a v12.30.0, a Equipa continuava a mostrar SO 1 colaborador
+  (Edilson Talhado, Admin TI), enquanto a pagina de Permissoes e Perfis mostrava
+  2: Edilson (Admin TI) e "Guarda - SoftGenial" com PERFIL SIGE ACTUAL = Professor.
+  Pedido: nada de paliativos - correccao definitiva.
+
+CAUSA-RAIZ (encontrada por comparacao directa de criterios)
+- A coluna "PERFIL SIGE ACTUAL" da pagina de Permissoes (permissions-ui.php,
+  $user_role_rows) lista um colaborador usando SO `ur.ativo = 1` (atribuicao
+  activa), SEM olhar para `r.ativo` (flag global do papel).
+- A Equipa (v12.30.0) unia sige_user_roles com a condicao adicional `r.ativo = 1`.
+  Um colaborador com ATRIBUICAO activa a um papel cujo flag global r.ativo nao
+  estava a 1 aparecia em Permissoes mas DESAPARECIA da Equipa. Era exactamente o
+  caso do segundo colaborador.
+
+CORRECCAO DEFINITIVA (admin/hr/equipe-view.php)
+1) Criterio unico, igual ao de Permissoes:
+   A fonte (B) deixa de filtrar por r.ativo. Passa a usar EXACTAMENTE:
+       WHERE ur.escola_id = %d AND ur.ativo = 1
+         AND r.slug NOT IN ('aluno','encarregado')   -- portal nao e equipa
+   Assim, tudo o que Permissoes mostra como tendo perfil SIGE nesta escola
+   aparece tambem na Equipa. As duas listas coincidem por construcao.
+2) Cargo e KPIs pelo PERFIL SIGE ACTUAL (nao pelo papel WP legado):
+   Antes, o cargo e a categorizacao liam o papel WordPress (ex.: sige_guarda),
+   pelo que um colaborador com papel WP "guarda" mas perfil actual "professor"
+   apareceria como Guarda e contaria em Apoio. Agora um mapa user_id -> perfil
+   actual (via sige_permissions_role_to_wp_role) define o "papel efectivo"
+   ($sige_rh_eff_role), usado no rotulo do cargo, na classe de filtro e na
+   contagem de KPIs (Docentes/Admin/Apoio). Resultado consistente com Permissoes.
+
+MANTIDO (da v12.30.0)
+- Uniao com (A) staff WP scoped por escola (meta sige_escola_id).
+- Fallback de migracao por email em sige_professores.
+- SUPER admin / administrador WP real NUNCA aparece (sige_is_real_wp_admin_user);
+  sige_admin_ti permanece (e perfil SIGE, nao admin WP nativo).
+- Cracha continua a usar verificacao por capacidade (user_can) - paridade com o
+  gate permissoes-aditiva e correcto porque a capacidade reflecte o perfil actual.
+
+PORQUE NAO E PALIATIVO
+- A correccao alinha a Equipa ao MESMO criterio canonico que ja define o "perfil
+  SIGE actual" na pagina de Permissoes (ur.ativo=1). Nao e um ajuste pontual:
+  e a unica fonte de verdade, agora partilhada conceptualmente pelas duas paginas.
+- Acompanha um teste novo, tools/smoke-rh-equipe-lista-completa-v12-30-1.php, que
+  e FUNCIONAL (reproduz o cenario das capturas e prova o conjunto correcto, os
+  KPIs e a causa do bug) e de SALVAGUARDA de codigo-fonte (fixa os invariantes:
+  fonte (B) sem r.ativo, uniao das fontes, exclusao do super admin, cargo/KPI por
+  perfil actual, cracha por capacidade).
+
+NOTA SOBRE FICHEIRO PROTEGIDO
+- includes/permissions-layer.php (onde vive sige_permissions_role_to_wp_role e
+  sige_permissions_tables) e protegido por hash no gate de baseline e NAO foi
+  alterado: a Equipa apenas consome esses helpers.
+
+FRONTEIRA DE SEGURANCA
+- Sem alterar formulas financeiras/academicas, schema, nonces, endpoints AJAX,
+  name/id nem permissoes reais. Tudo tenant-scoped por escola.
+
+VALIDACAO
+- php -l admin/hr/equipe-view.php -> No syntax errors detected.
+- Gate check-permissoes-aditiva -> OK (invariante de slug e cracha por capacidade).
+- Gate check-typography -> OK.
+- Gate check-design-tokens -> 1906/1906 (sem regressao).
+- Smoke smoke-rh-equipe-lista-completa-v12-30-1 -> OK (23 verificacoes).
+- BUILD.json valido.

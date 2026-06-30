@@ -98,18 +98,24 @@ $__staff_ids_meta = array_map('intval', (array) get_users(array(
     'fields'     => 'ID',
 )));
 
-// (B) Utilizadores com PERFIL SIGE activo nesta escola (tabela sige_user_roles).
-//     Mesma fonte usada pela pagina de Permissoes e Perfis -> as listas coincidem.
+// (B) Utilizadores com PERFIL SIGE actual nesta escola (tabela sige_user_roles).
+//     CRITERIO UNICO E DEFINITIVO: tem de ser EXACTAMENTE o mesmo que define a
+//     coluna "PERFIL SIGE ACTUAL" na pagina de Permissoes e Perfis, ou as duas
+//     listas divergem. Essa coluna (permissions-ui.php, $user_role_rows) usa
+//     SO `ur.ativo = 1` - sem `r.ativo = 1`. Um colaborador pode ter uma
+//     ATRIBUICAO activa (ur.ativo=1) a um papel cujo flag global r.ativo nao
+//     esteja a 1; nesse caso aparecia em Permissoes mas desaparecia da Equipa.
+//     Por isso NAO filtramos por r.ativo aqui: contam todas as atribuicoes
+//     activas. So se excluem os papeis de PORTAL (aluno/encarregado), que tem
+//     fluxo proprio e nao sao equipa.
 $__staff_ids_sige = [];
 $__perm_t = function_exists('sige_permissions_tables') ? sige_permissions_tables() : [];
 if (!empty($__perm_t['user_roles']) && !empty($__perm_t['roles']) && $escola_id > 0) {
-    // Exclui papeis de PORTAL (aluno/encarregado), que nao sao equipa: tem fluxo
-    // proprio. Assim a Equipa lista so STAFF com perfil SIGE, sem alunos/encarregados.
     $__staff_ids_sige = array_map('intval', (array) $wpdb->get_col($wpdb->prepare(
         "SELECT DISTINCT ur.user_id
            FROM {$__perm_t['user_roles']} ur
            INNER JOIN {$__perm_t['roles']} r ON r.id = ur.role_id
-          WHERE ur.escola_id = %d AND ur.ativo = 1 AND r.ativo = 1
+          WHERE ur.escola_id = %d AND ur.ativo = 1
             AND r.slug NOT IN ('aluno', 'encarregado')",
         $escola_id
     )));
@@ -197,6 +203,40 @@ $total_inactivos = 0;
 $roles_docentes = ['sige_professor', 'sige_educador', 'sige_pedagogico'];
 $roles_apoio = ['sige_motorista', 'sige_limpeza', 'sige_recepcao', 'sige_guarda'];
 
+// v12.30.1 - Perfil SIGE ACTUAL por colaborador (mesma fonte da pagina de
+// Permissoes e Perfis). E a fonte de verdade do cargo e da categorizacao: um
+// colaborador pode ter um papel WP legado (ex.: sige_guarda) diferente do perfil
+// SIGE atribuido agora (ex.: professor). Antes, o cargo e os KPIs liam o papel
+// WP -> mostravam cargo errado e contavam na categoria errada. Aqui traduzimos o
+// slug do perfil actual (tabela sige_roles, sem prefixo) para o slug WP usado
+// pelos rotulos/categorias. ASC na chave -> fica a atribuicao mais recente.
+$__perfil_sige_wp = []; // user_id => slug estilo WP (sige_*) do perfil SIGE actual
+if (!empty($__perm_t['user_roles']) && !empty($__perm_t['roles']) && $escola_id > 0 && function_exists('sige_permissions_role_to_wp_role')) {
+    $__perfil_rows = $wpdb->get_results($wpdb->prepare(
+        "SELECT ur.user_id, r.slug
+           FROM {$__perm_t['user_roles']} ur
+           INNER JOIN {$__perm_t['roles']} r ON r.id = ur.role_id
+          WHERE ur.escola_id = %d AND ur.ativo = 1
+            AND r.slug NOT IN ('aluno', 'encarregado')
+          ORDER BY ur.id ASC",
+        $escola_id
+    ));
+    foreach ((array) $__perfil_rows as $__pr) {
+        $__wp_slug = sige_permissions_role_to_wp_role((string) $__pr->slug);
+        if ($__wp_slug !== '') {
+            $__perfil_sige_wp[(int) $__pr->user_id] = $__wp_slug;
+        }
+    }
+}
+// Papel efectivo do colaborador = perfil SIGE actual; recurso ao papel WP legado.
+$sige_rh_eff_role = function ($s) use ($__perfil_sige_wp) {
+    if (isset($__perfil_sige_wp[(int) $s->ID])) {
+        return $__perfil_sige_wp[(int) $s->ID];
+    }
+    $wp = reset($s->roles);
+    return $wp ?: '';
+};
+
 // [PERF] Preload all professores data in 1 query (eliminates N+1 in both loops)
 $_profs_raw = $wpdb->get_results($wpdb->prepare(
     "SELECT * FROM {$wpdb->prefix}sige_professores WHERE escola_id = %d ORDER BY id ASC",
@@ -210,9 +250,10 @@ foreach ($_profs_raw as $_pr) {
 }
 
 foreach($staff as $s) {
-    if(array_intersect($s->roles, $roles_docentes)) {
+    $__eff_role = $sige_rh_eff_role($s); // perfil SIGE actual (ou papel WP legado)
+    if(in_array($__eff_role, $roles_docentes, true)) {
         $total_docentes++;
-    } elseif(array_intersect($s->roles, $roles_apoio)) {
+    } elseif(in_array($__eff_role, $roles_apoio, true)) {
         $total_apoio++;
     } else {
         $total_administrativos++;
@@ -2062,16 +2103,18 @@ body.sige-admin-app #sige-rh-confirm.sige-modal:not(.active)[aria-hidden="true"]
             </thead>
             <tbody>
                 <?php if($staff): ?>
-                    <?php foreach($staff as $s): 
-                        $role_slug = reset($s->roles);
+                    <?php foreach($staff as $s):
+                        // Cargo segue o perfil SIGE actual (consistente com Permissoes);
+                        // recurso ao papel WP legado e, por fim, a capability gravada.
+                        $role_slug = $sige_rh_eff_role($s);
                         if (!$role_slug) {
                             $caps = get_user_meta($s->ID, $wpdb->prefix . 'capabilities', true);
                             $role_slug = is_array($caps) ? (string)array_key_first($caps) : '';
                         }
-                        
+
                         $_roles_doc = ['sige_professor','sige_educador','sige_pedagogico'];
                         $_roles_apoio = ['sige_motorista','sige_limpeza','sige_recepcao','sige_guarda'];
-                        $filter_class = array_intersect($s->roles, $_roles_doc) ? 'prof' : (array_intersect($s->roles, $_roles_apoio) ? 'apoio' : 'admin');
+                        $filter_class = in_array($role_slug, $_roles_doc, true) ? 'prof' : (in_array($role_slug, $_roles_apoio, true) ? 'apoio' : 'admin');
                         
                         // [PERF] Use preloaded map instead of per-row query
                         $prof_meta_id = (int)get_user_meta($s->ID, 'sige_professor_id', true);
