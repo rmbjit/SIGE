@@ -377,3 +377,21 @@ body.sige-admin-app:is(
     overflow: auto;
   }
 }
+
+/* ===========================================================================
+   v12.25.0 - Pagamentos: seccoes colapsaveis + modal acima da barra lateral.
+   So apresentacao; o comportamento esta em financeiro-core-design-pro.js.
+   =========================================================================== */
+/* Modal de sucesso/operacao acima da sidebar (mesmo trap de empilhamento). */
+body.sige-admin-app.sige-view-financeiro-pagamentos.sige-paypro-modal-open .sg-app-content,
+body.sige-admin-app.sige-view-financeiro-pagamentos.sgk-modal-open .sg-app-content{ z-index: 10090 !important; }
+
+/* Cabecalho de seccao clicavel (Dividas / Adiantar / Outros). */
+body.sige-view-financeiro-pagamentos .sg-paypro-collapse-head{ cursor: pointer; user-select: none; position: relative; padding-right: 46px; border-radius: var(--radius-md); transition: background-color .15s ease; }
+body.sige-view-financeiro-pagamentos .sg-paypro-collapse-head:hover{ background-color: var(--color-slate-50); }
+body.sige-view-financeiro-pagamentos .sg-paypro-collapse-head:focus-visible{ outline: 2px solid var(--color-brand-300); outline-offset: 2px; }
+/* Seta (desenhada com tokens; sem hex/dataURI). Aberta = aponta para cima. */
+body.sige-view-financeiro-pagamentos .sg-paypro-collapse-chev{ position: absolute; right: 18px; top: 50%; width: 11px; height: 11px; border-right: 2px solid var(--color-slate-500); border-bottom: 2px solid var(--color-slate-500); transform: translateY(-70%) rotate(225deg); transition: transform .18s ease; pointer-events: none; }
+body.sige-view-financeiro-pagamentos .sg-paypro-operation-card.sg-paypro-collapsed .sg-paypro-collapse-chev{ transform: translateY(-30%) rotate(45deg); }
+/* Quando colapsada, a seccao fica compacta (so o cabecalho). */
+body.sige-view-financeiro-pagamentos .sg-paypro-operation-card.sg-paypro-collapsed{ margin-bottom: 12px !important; }

@@ -1,0 +1,44 @@
+SIGE SoftGenial v12.25.0 - Pagamentos: seccoes colapsaveis + modal acima da sidebar
+Data: 2026-06-30
+Tipo: apresentacao/UX (view=financeiro-pagamentos). Sem logica nem formulas.
+
+CONTEXTO
+- financeiro-pagamentos.php e ficheiro financeiro HASH-PROTEGIDO. Pedido: nao
+  mexer nas formulas, so na estruturacao visual; a pagina estava muito longa.
+- Por isso NAO editei o PHP da view. Todo o enriquecimento foi feito nos assets
+  partilhados do financeiro (financeiro-core-design-pro.js/.css), ja carregados
+  em pagamentos via includes/ui-kit.php.
+
+MELHORIAS (so visual)
+1. Seccoes colapsaveis: as 3 seccoes (.sg-paypro-operation-card) - "1. Dividas
+   Actuais", "2. Adiantar Meses Futuros" (12 meses), "3. Outros Servicos" - ganham
+   cabecalho clicavel com seta. Dividas abre por defeito; Adiantar e Outros
+   comecam FECHADAS -> a pagina fica muito mais curta e facil de navegar. O
+   utilizador expande so o que precisa.
+   - Defensivo: seccao com algum input ja marcado abre automaticamente.
+   - Acessivel (role=button, tabindex, Enter/Espaco); ignora cliques em controlos
+     dentro do cabecalho.
+   - NAO intercepta submissao/cliques de pagamento nem move nos; os inputs
+     colapsados continuam no DOM e a submeter; recalcularTotal() le-os na mesma.
+     Zero impacto em valores.
+2. Modal acima da barra lateral: os modais de sucesso (.sige-modal) ficavam presos
+   atras da sidebar (contexto de .sg-app-content). Passa a elevar-se o conteudo
+   enquanto ha modal visivel (classe sige-paypro-modal-open / sgk-modal-open).
+
+AUDITORIA (Portao A)
+- :root usa namespace --sige-* (nao sombreia tokens globais).
+- 3 handlers inline (onchange/oninput) chamam recalcularTotal(): server-rendered,
+  convertidos pela camada CSP e funcionais. DEIXADOS (risco no formulario de
+  pagamento sem ganho).
+- checkboxes "ovo": ja corrigidas na raiz em v12.24.2.
+
+FRONTEIRA
+- financeiro-pagamentos.php byte-a-byte INTACTO (git + gate de baseline). Sem
+  logica, formulas, SQL, nonces, AJAX, name/id, permissoes nem schema.
+
+VALIDACAO
+- node --check ao JS: OK. BUILD.json valido. Gate de tokens 1907 (estavel).
+  Gate de baseline: so os 2 desvios pre-existentes (dashboard, admin-shell);
+  pagamentos NAO aparece (intacto).
+- DEPLOY:   docs/deploy/DEPLOY-v12.25.0-pagamentos.md
+- LIVE-TEST: docs/qa/LIVE-TEST-v12.25.0-pagamentos.md
