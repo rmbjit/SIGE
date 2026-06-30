@@ -1,0 +1,44 @@
+SIGE SoftGenial v12.32.1 - Crachá modelos (HOTFIX): pré-visualização/impressão com estilos + sucesso claro
+Data: 2026-06-30
+Tipo: correcção (view=alunos_lista). Reverificação adversarial dos 3 bugs reportados.
+
+BUGS REPORTADOS (com captura)
+1. Pré-visualização não mostrava nada.
+2. Imprimir crachá saía "plain branco sem qualquer css".
+3. Gravar o modelo não mostrava uma mensagem de sucesso clara.
+
+DIAGNÓSTICO (reproduzido com Chromium/Playwright sob CSP real)
+- O registo de modelos (assets/cracha/sige-cracha-templates.js) está correcto e
+  renderiza com nonce, confirmado em laboratório.
+- Causa provável em produção: o asset não chegava a window.SigeCrachaTemplates
+  (timing de enqueue/cache). Resultado:
+    * pré-visualização caía no guard -> iframe vazio;
+    * impressão caía no cartão de FALLBACK (simples) -> parecia "sem css".
+
+CORRECÇÕES (admin/academic/alunos_lista.php)
+1) AUTO-CURA do registo: sigeEnsureCrachaTemplates() garante o registo antes de
+   pré-visualizar/imprimir; se faltar, carrega o asset sob demanda (URL em
+   sigeGlobal.cracha_asset). Se mesmo assim falhar, mostra mensagem clara em vez
+   de ecrã vazio. (Verificado sob CSP estrita: o asset é injectado e renderiza.)
+2) NONCE VIVO: sigeLiveNonce() lê o nonce de uma tag já aceite pela CSP (propriedade
+   .nonce), garantindo correspondência exacta com a política em vigor; aplicado no
+   <style> da pré-visualização e da impressão.
+3) PRÉ-VISUALIZAÇÃO via iframe.contentWindow.document.write (mais fiável que srcdoc
+   sob CSP estrita; srcdoc fica de recurso).
+4) IMPRESSÃO: abre o pop-up, garante o registo e só então escreve o documento
+   (mantém a espera pelas imagens e o tratamento de pop-up bloqueado).
+5) GRAVAÇÃO com SUCESSO CLARO: além da mensagem no rodapé, mostra agora um toast
+   ("O modelo X foi guardado e passa a ser usado nos crachás de toda a escola"),
+   fecha o modal a seguir; erros também em toast.
+
+VERIFICAÇÃO
+- Playwright (Chromium pré-instalado) sob CSP real: auto-cura -> pré-visualização
+  renderizada e ESTILIZADA (cartão 220px, cabeçalho em degradê). Confirma a
+  correcção dos bugs 1 e 2.
+- php -l OK; gates typography/permissoes-aditiva OK; design-tokens 1879 (sem
+  regressão). Smoke smoke-cracha-modelos actualizado (auto-cura, nonce vivo,
+  contentDocument, toast de sucesso) OK.
+
+FRONTEIRA
+- Sem alterar a camada de config, schema, permissões, fórmulas nem ficheiros
+  protegidos por hash. Apenas robustez de cliente/JS no ecrã Alunos.

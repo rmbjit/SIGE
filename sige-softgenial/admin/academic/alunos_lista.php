@@ -395,6 +395,9 @@ $sige_global_data['cracha'] = function_exists('sige_cracha_config_for_js')
     : ['config' => [], 'templates' => [], 'social' => []];
 // Nonce de CSP para o <style> da pré-visualização (iframe herda a CSP da página).
 $sige_global_data['csp_nonce'] = function_exists('sige_csp_nonce') ? sige_csp_nonce() : '';
+// URL do registo de modelos (rede de segurança: se o enqueue não chegar, o cliente
+// carrega-o sob demanda antes de pré-visualizar/imprimir).
+$sige_global_data['cracha_asset'] = defined('SIGE_URL') ? (SIGE_URL . 'assets/cracha/sige-cracha-templates.js?ver=' . (defined('SIGE_VERSION') ? SIGE_VERSION : '1')) : '';
 // Quem pode mudar o modelo de crachá da escola (mostra/oculta o botão).
 $sige_can_editar_cracha = (function_exists('sige_can') && sige_can('configuracoes.editar'))
     || (function_exists('sige_is_real_wp_admin_user') && sige_is_real_wp_admin_user())
@@ -8757,6 +8760,38 @@ function imprimirDeclaracao(data) {
 // Contexto de render do crachá: dados da escola + modelo escolhido pela escola
 // (template/cor/redes) vindos de sigeGlobal.cracha. O mesmo contexto alimenta a
 // pré-visualização e a impressão, garantindo consistência.
+// Nonce de CSP VIVO: lido directamente de uma tag já aceite pela política, o que
+// garante correspondência exacta com a CSP em vigor (a propriedade .nonce mantém-se
+// acessível por JS mesmo depois de o atributo ser ocultado pelo browser).
+function sigeLiveNonce() {
+    try {
+        var e = document.querySelector('script[nonce]') || document.querySelector('style[nonce]');
+        if (e && e.nonce) { return e.nonce; }
+    } catch (x) {}
+    return (sigeGlobal && sigeGlobal.csp_nonce) ? sigeGlobal.csp_nonce : '';
+}
+
+// Rede de segurança: garante que o registo de modelos está disponível. Se o
+// enqueue não chegou (timing/cache), carrega o asset sob demanda antes de
+// pré-visualizar/imprimir. cb(true|false).
+function sigeEnsureCrachaTemplates(cb) {
+    if (window.SigeCrachaTemplates) { cb(true); return; }
+    var url = (sigeGlobal && sigeGlobal.cracha_asset) ? sigeGlobal.cracha_asset : '';
+    if (!url) { cb(false); return; }
+    if (window.__sigeCrachaLoading) {
+        var iv = setInterval(function () { if (window.SigeCrachaTemplates) { clearInterval(iv); cb(true); } }, 80);
+        setTimeout(function () { clearInterval(iv); cb(!!window.SigeCrachaTemplates); }, 4000);
+        return;
+    }
+    window.__sigeCrachaLoading = true;
+    var s = document.createElement('script');
+    s.src = url;
+    var n = sigeLiveNonce(); if (n) { s.setAttribute('nonce', n); }
+    s.onload = function () { cb(!!window.SigeCrachaTemplates); };
+    s.onerror = function () { window.__sigeCrachaLoading = false; cb(false); };
+    document.head.appendChild(s);
+}
+
 function sigeCardCtx() {
     var cr = (sigeGlobal && sigeGlobal.cracha && sigeGlobal.cracha.config) ? sigeGlobal.cracha.config : {};
     return {
@@ -8767,7 +8802,7 @@ function sigeCardCtx() {
         accent: cr.accent || '#7c3aed',
         showSocial: !!cr.show_social,
         social: cr.social || {},
-        nonce: (sigeGlobal && sigeGlobal.csp_nonce) ? sigeGlobal.csp_nonce : ''
+        nonce: sigeLiveNonce()
     };
 }
 
@@ -8845,13 +8880,21 @@ async function printBatchCards() {
     if (!(await sigeAlunoConfirmAsync('Vai imprimir ' + visibleStudents.length + ' cartões.\n\nRecomenda-se seleccionar uma turma de cada vez para evitar impressão desnecessária.', 'Imprimir cartões de aluno', 'Imprimir cartões', 'warning'))) return;
 
     var w = window.open('', '', 'width=900,height=800');
-    sigePrintCardsWindow(w, sigeCardsDocument(visibleStudents, sigeCardCtx(), true));
+    if (!w) { sigeAlunoAlert('O navegador bloqueou a janela de impressão. Permita pop-ups e tente novamente.', 'Pop-up bloqueado', 'warning'); return; }
+    try { w.document.write('<!doctype html><meta charset="utf-8"><title>A preparar…</title><body style="font:14px sans-serif;padding:20px">A preparar os crachás…</body>'); } catch (e) {}
+    sigeEnsureCrachaTemplates(function () {
+        sigePrintCardsWindow(w, sigeCardsDocument(visibleStudents, sigeCardCtx(), true));
+    });
 }
 
 function printSingleCard(a) {
     if (!window.sigeAlunosCanDocuments) { sigeAlunoAlert('O seu perfil não tem permissão para imprimir cartões.', 'Permissão negada', 'warning'); return; }
     var w = window.open('', '', 'width=350,height=500');
-    sigePrintCardsWindow(w, sigeCardsDocument([a || {}], sigeCardCtx(), false));
+    if (!w) { sigeAlunoAlert('O navegador bloqueou a janela de impressão. Permita pop-ups e tente novamente.', 'Pop-up bloqueado', 'warning'); return; }
+    try { w.document.write('<!doctype html><meta charset="utf-8"><title>A preparar…</title><body style="font:14px sans-serif;padding:20px">A preparar o crachá…</body>'); } catch (e) {}
+    sigeEnsureCrachaTemplates(function () {
+        sigePrintCardsWindow(w, sigeCardsDocument([a || {}], sigeCardCtx(), false));
+    });
 }
 
 // ========================================
@@ -8873,12 +8916,27 @@ function printSingleCard(a) {
             anoLectivo: (sigeGlobal && sigeGlobal.ano_lectivo) ? sigeGlobal.ano_lectivo : '2026',
             template: estado.template, accent: estado.accent, showSocial: estado.show_social,
             social: estado.social, batch: false,
-            nonce: (sigeGlobal && sigeGlobal.csp_nonce) ? sigeGlobal.csp_nonce : ''
+            nonce: (typeof sigeLiveNonce === 'function') ? sigeLiveNonce() : ((sigeGlobal && sigeGlobal.csp_nonce) || '')
         };
     }
+    function escreverNaFrame(doc) {
+        if (!frame) { return; }
+        // contentDocument.write é mais fiável que srcdoc sob CSP estrita; srcdoc fica de recurso.
+        try { var d = frame.contentWindow.document; d.open(); d.write(doc); d.close(); }
+        catch (e) { try { frame.srcdoc = doc; } catch (e2) {} }
+    }
     function renderPreview() {
-        if (!frame || !window.SigeCrachaTemplates) { return; }
-        frame.srcdoc = window.SigeCrachaTemplates.buildDocument([SAMPLE], ctxAtual());
+        if (!frame) { return; }
+        sigeEnsureCrachaTemplates(function (ok) {
+            if (!ok || !window.SigeCrachaTemplates) {
+                escreverNaFrame('<!doctype html><meta charset="utf-8"><body style="font:13px sans-serif;color:slategray;display:flex;align-items:center;justify-content:center;height:100%;text-align:center;padding:16px">Pré-visualização indisponível. Verifique a ligação e tente reabrir.</body>');
+                return;
+            }
+            var doc;
+            try { doc = window.SigeCrachaTemplates.buildDocument([SAMPLE], ctxAtual()); }
+            catch (e) { return; }
+            escreverNaFrame(doc);
+        });
     }
     function marcarTemplate() {
         Array.prototype.forEach.call(document.querySelectorAll('#sige-cracha-templates .sige-cracha-tpl'), function (n) {
@@ -8983,11 +9041,20 @@ function printSingleCard(a) {
                 estado.template = r.data.config.template; estado.accent = r.data.config.accent;
                 estado.show_social = !!r.data.config.show_social; estado.social = r.data.config.social || estado.social;
                 marcarTemplate(); renderPreview();
-                msg('Modelo guardado para toda a escola.', false);
+                msg('Modelo guardado.', false);
+                // Mensagem de sucesso CLARA (toast) + fecha o modal a seguir.
+                var nomeModelo = (cfg().templates && cfg().templates[estado.template] && cfg().templates[estado.template].nome) ? cfg().templates[estado.template].nome : estado.template;
+                sigeAlunoAlert('O modelo "' + nomeModelo + '" foi guardado e passa a ser usado nos crachás de toda a escola.', 'Modelo de crachá guardado', 'success');
+                setTimeout(function () { window.fecharModeloCracha(); }, 900);
             } else {
-                msg((r && r.data && (r.data.msg || r.data)) ? (r.data.msg || r.data) : 'Não foi possível guardar.', true);
+                var em = (r && r.data && (r.data.msg || r.data)) ? (r.data.msg || r.data) : 'Não foi possível guardar.';
+                msg(em, true);
+                sigeAlunoAlert(String(em), 'Não foi possível guardar', 'error');
             }
-        }).fail(function () { msg('Falha de ligação ao guardar. Tente novamente.', true); })
+        }).fail(function () {
+            msg('Falha de ligação ao guardar. Tente novamente.', true);
+            sigeAlunoAlert('Falha de ligação ao guardar o modelo. Verifique a internet e tente novamente.', 'Erro de ligação', 'error');
+        })
             .always(function () { if (btn) { btn.removeAttribute('disabled'); } });
     };
     document.addEventListener('keydown', function (ev) {

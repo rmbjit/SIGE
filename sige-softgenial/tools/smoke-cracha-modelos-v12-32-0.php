@@ -82,6 +82,12 @@ _p($fails, strpos($view, 'window.SigeCrachaTemplates.buildDocument') !== false, 
 _p($fails, strpos($view, 'function sigeCardsDocumentFallback') !== false, 'Existe fallback de impressão degradado');
 _p($fails, strpos($view, 'sigeGlobal.cracha.config = r.data.config') !== false, 'Gravar actualiza o modelo usado na impressão');
 _p($fails, strpos($view, 'sigePrintCardsWindow') !== false && strpos($view, "addEventListener('load'") !== false, 'Impressão robusta (espera imagens) preservada da v12.31.0');
+// Hotfix v12.32.1: robustez da pré-visualização/impressão e sucesso claro.
+_p($fails, strpos($view, 'function sigeEnsureCrachaTemplates') !== false, 'Auto-cura: carrega o registo sob demanda se faltar');
+_p($fails, strpos($view, 'function sigeLiveNonce') !== false && strpos($view, '.nonce') !== false, 'Usa o nonce vivo da CSP (correspondência garantida)');
+_p($fails, strpos($view, 'contentWindow.document') !== false && strpos($view, 'd.write(doc)') !== false, 'Pré-visualização escreve via contentDocument (mais fiável que srcdoc)');
+_p($fails, strpos($view, 'cracha_asset') !== false, 'URL do asset exposta para a auto-cura');
+_p($fails, strpos($view, "sigeAlunoAlert('O modelo") !== false || strpos($view, 'Modelo de crachá guardado') !== false, 'Gravação mostra toast de sucesso claro');
 
 // ── Versões sincronizadas (sem fixar número; o literal é validado pelo gate de baseline) ──
 preg_match('/Version:\s*([0-9.]+)/', $boot, $vh);
