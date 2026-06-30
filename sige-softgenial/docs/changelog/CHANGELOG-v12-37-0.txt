@@ -1,0 +1,50 @@
+SIGE SoftGenial v12.37.0 - RH (passo 4): imprimir/exportar (PDF) a Ficha do Colaborador
+Data: 2026-06-30
+Tipo: nova funcionalidade (view=equipe). Só leitura. Sem schema, sem novo endpoint.
+
+PORQUÊ
+- Fecha o ciclo da Ficha do Colaborador: além de consultar, agora é possível
+  IMPRIMIR e EXPORTAR (PDF) a ficha — o documento clássico de RH.
+
+O QUE FAZ
+- Botão "Imprimir / Exportar (PDF)" no rodapé do modal da Ficha.
+- Gera um DOCUMENTO AUTÓNOMO A4: cabeçalho (escola + título), identidade
+  (foto, estado, vínculo), banner do estado do contrato, secções
+  (Identificação & contacto / Vínculo & carreira / Remuneração / Documentos
+  com "Presente | Em falta") e rodapé (data de geração + "Confidencial - uso
+  interno").
+- "Exportar" = imprimir para PDF pelo diálogo do navegador (Guardar como PDF).
+
+ENGENHARIA (limpa, sem remendos)
+- O documento é autónomo (não carrega o CSS da app). Para NÃO introduzir cores
+  mágicas no .php e respeitar o TEMA/cor da escola:
+    * lê os VALORES dos tokens já computados na página viva (getComputedStyle)
+      e injecta-os no :root do documento;
+    * o CSS do documento usa apenas var(--token) (cores E raios) - zero
+      literais no código-fonte. O gate de tokens mantém-se em 1857.
+- Reutiliza utilitários existentes: sgRhPrintWindow (abre a janela, espera as
+  imagens e imprime) e sgRhLiveNonce (nonce de CSP vivo no <style>).
+- O nome da escola passou a estar disponível em JS (sigeEquipeAjax.escola).
+- Os dados vêm do registo seguro já carregado na Ficha (sgFichaUltima);
+  nada sensível adicional fica no DOM da lista.
+
+NOTA DE DEPLOY
+- Sem ficheiros novos no plugin. Só altera admin/hr/equipe-view.php (+ versão
+  em sige-softgenial.php / BUILD.json). O smoke novo vive em tools/.
+
+VALIDAÇÃO
+- php -l (view) OK; node --check (bloco JS da ficha) OK.
+- Gates: design-tokens 1857 (sem regressão), baseline-preservation OK,
+  typography OK.
+- Novo smoke tools/smoke-ficha-imprimir-v12-37-0.php (ligação + ausência de
+  cores mágicas no construtor + tokens por getComputedStyle).
+- Documento verificado (Chromium): A4 com cabeçalho/escola, banner de contrato,
+  4 secções e rodapé; tokens resolvidos (cor da escola).
+
+FRONTEIRA
+- Sem alterar fórmulas, schema, permissões reais nem ficheiros protegidos.
+
+PRÓXIMOS PASSOS (roadmap RH)
+- Férias/Ausências e Assiduidade (precisam tabelas novas) e processamento de
+  salário (sensível, financeiro) - cada um com desenho de schema, riscos e
+  aprovação antes de mexer.

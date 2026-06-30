@@ -3000,6 +3000,10 @@ body.sige-admin-app #box-ficha.sige-modal:not(.active)[aria-hidden="true"]{
         </div>
         <div class="modal-footer">
             <button type="button" class="btn-modal btn-cancel" data-sige-act="fecharFicha" data-sige-noargs>Fechar</button>
+            <button type="button" class="btn-modal btn-submit" data-sige-act="imprimirFicha" data-sige-noargs>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                Imprimir / Exportar (PDF)
+            </button>
         </div>
     </div>
 </div>
@@ -3033,6 +3037,7 @@ window.sigeEquipeAjax = Object.assign({}, window.sigeEquipeAjax || {}, {
     ajaxurl: '<?php echo esc_url(admin_url("admin-ajax.php")); ?>',
     avatarUrl: '<?php echo defined("SIGE_URL") ? esc_url(SIGE_URL . "assets/img/avatar-default.svg") : ""; ?>',
     moeda: '<?php echo function_exists("sige_moeda") ? esc_js(sige_moeda()) : "MT"; ?>',
+    escola: '<?php echo isset($escola->nome_escola) ? esc_js($escola->nome_escola) : ""; ?>',
     // Modelo de crachá da equipa (config + catálogo) e nonce/asset para o seletor.
     cracha: <?php echo wp_json_encode(function_exists('sige_cracha_staff_config_for_js') ? sige_cracha_staff_config_for_js() : ['config' => [], 'templates' => [], 'social' => []]); ?>,
     csp_nonce: '<?php echo function_exists("sige_csp_nonce") ? esc_js(sige_csp_nonce()) : ""; ?>',
@@ -4053,16 +4058,105 @@ function verFichaColaborador(data) {
     var modal = document.getElementById('box-ficha');
     var box = document.getElementById('ficha-conteudo');
     if (!modal || !box) return;
+    sgFichaUltima = null;
     box.innerHTML = '<div class="sg-ficha-loading">A carregar ficha segura…</div>';
     sigeEquipeOpenModal(modal);
     jQuery.post(sigeEquipeAjax.ajaxurl, { action: 'sige_get_staff_secure', id: data.id, _sige_nonce: sigeEquipeAjax.nonce }, function (res) {
-        if (res && res.success) { box.innerHTML = sgFichaRender(res.data || {}, data); }
+        if (res && res.success) { sgFichaUltima = { d: res.data || {}, blob: data }; box.innerHTML = sgFichaRender(res.data || {}, data); }
         else { box.innerHTML = '<div class="sg-ficha-loading">' + sgFichaEsc((res && res.data) || 'Não foi possível carregar a ficha.') + '</div>'; }
     }).fail(function () {
         box.innerHTML = '<div class="sg-ficha-loading">' + sgFichaEsc(sigeEquipeAjaxFailMessage(arguments[0], 'Erro de comunicação ao carregar a ficha.')) + '</div>';
     });
 }
-function fecharFicha() { sigeEquipeCloseModal(document.getElementById('box-ficha')); }
+function fecharFicha() { sgFichaUltima = null; sigeEquipeCloseModal(document.getElementById('box-ficha')); }
+
+// [v12.37.0] Impressão / exportação (PDF) da ficha. Documento autónomo: lê os
+// VALORES dos tokens já computados na página (respeita o tema da escola) e
+// injecta-os no :root do documento - sem cores mágicas no .php e sem depender
+// de HTTP para carregar CSS. Reutiliza sgRhPrintWindow (espera imagens + print).
+var sgFichaUltima = null;
+function sgFichaTokenVars() {
+    var cs = getComputedStyle(document.documentElement);
+    var nomes = [
+        '--color-white', '--color-black', '--color-ink-50', '--color-ink-100', '--color-ink-200',
+        '--color-slate-400', '--color-slate-500', '--color-slate-600', '--color-slate-700', '--color-slate-800',
+        '--color-brand-50', '--color-brand-500', '--color-brand-600', '--color-brand-700',
+        '--color-success-50', '--color-success-500', '--color-success-700',
+        '--color-warning-50', '--color-warning-500', '--color-warning-700',
+        '--color-danger-50', '--color-danger-500', '--color-danger-700',
+        '--sg-theme-primary', '--sg-theme-primary-800', '--sg-theme-soft',
+        '--radius-md', '--radius-lg', '--radius-pill'
+    ];
+    var out = '';
+    nomes.forEach(function (n) { var v = cs.getPropertyValue(n); if (v && v.trim()) out += n + ':' + v.trim() + ';'; });
+    return out;
+}
+function sgFichaPRow(k, v) { var e = (v == null || String(v).trim() === ''); return '<div class="row"><span class="k">' + sgFichaEsc(k) + '</span><span class="v">' + (e ? '—' : sgFichaEsc(v)) + '</span></div>'; }
+function sgFichaBuildPrintDoc(d, blob) {
+    d = d || {}; blob = blob || {};
+    var nome = d.nome || blob.nome || 'Colaborador';
+    var foto = d.foto_perfil || (window.sigeEquipeAjax && sigeEquipeAjax.avatarUrl) || '';
+    var escola = (window.sigeEquipeAjax && sigeEquipeAjax.escola) || '';
+    var activo = parseInt(d.status_ativo != null ? d.status_ativo : 1, 10) !== 0;
+    var banco = d.banco || {}; var docs = d.docs || {};
+    var total = (parseFloat(d.salario_base) || 0) + (parseFloat(d.subsidio) || 0);
+    var ct = sgFichaContrato(d.fim_contrato);
+    var docTxt = function (k) { return (docs[k] && String(docs[k]).trim() !== '') ? 'Presente' : 'Em falta'; };
+    var hoje = new Date();
+    var dataGer = hoje.toLocaleDateString('pt-PT') + ' ' + hoje.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+    var n = sgRhLiveNonce(); var natt = n ? ' nonce="' + sgFichaEsc(n) + '"' : '';
+
+    var alertHtml = '';
+    if (ct) { alertHtml = '<div class="alert ' + ct.estado + '">Contrato ' + sgFichaEsc(ct.frase) + ' (termina ' + sgFichaEsc(sgFichaDateBR(d.fim_contrato)) + ').</div>'; }
+
+    var html = '<!doctype html><html lang="pt"><head><meta charset="utf-8"><title>Ficha - ' + sgFichaEsc(nome) + '</title>';
+    html += '<style' + natt + '>';
+    html += ':root{' + sgFichaTokenVars() + '}';
+    html += '*{box-sizing:border-box}'
+        + 'body{font-family:"Segoe UI",Arial,sans-serif;color:var(--color-slate-800);margin:0;padding:32px;background:var(--color-white);}'
+        + '.doc{max-width:760px;margin:0 auto;}'
+        + '.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;border-bottom:3px solid var(--sg-theme-primary,var(--color-brand-600));padding-bottom:14px;margin-bottom:18px;}'
+        + '.hd .t{font-size:21px;font-weight:800;color:var(--color-black);letter-spacing:-.02em;}'
+        + '.hd .s{font-size:11px;color:var(--color-slate-500);margin-top:4px;}'
+        + '.hd .esc{font-size:13px;font-weight:700;color:var(--sg-theme-primary,var(--color-brand-700));text-align:right;max-width:240px;}'
+        + '.person{display:flex;gap:16px;align-items:center;margin-bottom:16px;}'
+        + '.person img{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--color-ink-100);}'
+        + '.person .nm{font-size:18px;font-weight:800;color:var(--color-black);}'
+        + '.person .meta{font-size:12px;color:var(--color-slate-500);margin-top:3px;}'
+        + '.badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 9px;border-radius:var(--radius-pill);background:var(--color-ink-50);color:var(--color-slate-700);margin-right:6px;}'
+        + '.badge.on{background:var(--color-success-50);color:var(--color-success-700);}'
+        + '.alert{padding:8px 12px;border-radius:var(--radius-lg);font-size:12px;font-weight:600;margin-bottom:16px;}'
+        + '.alert.ok{background:var(--color-success-50);color:var(--color-success-700);}'
+        + '.alert.aviso{background:var(--color-warning-50);color:var(--color-warning-700);}'
+        + '.alert.critico,.alert.expirado{background:var(--color-danger-50);color:var(--color-danger-700);}'
+        + '.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}'
+        + '.sec{border:1px solid var(--color-ink-100);border-radius:var(--radius-lg);padding:11px 14px;break-inside:avoid;}'
+        + '.sec h3{margin:0 0 7px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--color-slate-500);}'
+        + '.row{display:flex;justify-content:space-between;gap:12px;padding:4px 0;border-bottom:1px solid var(--color-ink-50);font-size:12px;}'
+        + '.row:last-child{border-bottom:0;}.row .k{color:var(--color-slate-500);}.row .v{font-weight:600;color:var(--color-slate-800);text-align:right;}'
+        + '.ft{margin-top:22px;padding-top:10px;border-top:1px solid var(--color-ink-100);font-size:10px;color:var(--color-slate-400);display:flex;justify-content:space-between;}'
+        + '@media print{body{padding:0;}@page{margin:15mm;}}';
+    html += '</style></head><body><div class="doc">';
+    html += '<div class="hd"><div><div class="t">Ficha do Colaborador</div><div class="s">Documento interno de Recursos Humanos</div></div><div class="esc">' + sgFichaEsc(escola) + '</div></div>';
+    html += '<div class="person"><img src="' + sgFichaEsc(foto) + '" alt=""><div><div class="nm">' + sgFichaEsc(nome) + '</div><div class="meta"><span class="badge ' + (activo ? 'on' : '') + '">' + (activo ? 'Activo' : 'Inactivo') + '</span><span class="badge">' + sgFichaEsc(sgFichaTipoLabel(d.tipo_contrato)) + '</span></div></div></div>';
+    html += alertHtml;
+    html += '<div class="grid">';
+    html += '<div class="sec"><h3>Identificação &amp; contacto</h3>' + sgFichaPRow('E-mail', d.email || blob.email) + sgFichaPRow('Telemóvel', d.tel) + sgFichaPRow('NUIT', d.nuit) + sgFichaPRow('Formação académica', d.formacao) + '</div>';
+    html += '<div class="sec"><h3>Vínculo &amp; carreira</h3>' + sgFichaPRow('Tipo de vínculo', sgFichaTipoLabel(d.tipo_contrato)) + sgFichaPRow('Regime de trabalho', sgFichaPretty(d.regime_trabalho)) + sgFichaPRow('Nível de carreira', sgFichaPretty(d.nivel_carreira)) + sgFichaPRow('Data de admissão', sgFichaDateBR(d.data_admissao)) + sgFichaPRow('Antiguidade', sgFichaAntiguidade(d.data_admissao)) + sgFichaPRow('Fim de contrato', sgFichaDateBR(d.fim_contrato) || (String(d.tipo_contrato || '') === 'efectivo' ? 'Sem termo' : '')) + '</div>';
+    html += '<div class="sec"><h3>Remuneração</h3>' + sgFichaPRow('Salário base', sgFichaMoney(d.salario_base)) + sgFichaPRow('Subsídios', sgFichaMoney(d.subsidio)) + sgFichaPRow('Total mensal', sgFichaMoney(total)) + sgFichaPRow('Banco', banco.banco_nome) + sgFichaPRow('NIB', banco.nib) + sgFichaPRow('M-Pesa', banco.mpesa) + '</div>';
+    html += '<div class="sec"><h3>Documentos</h3>' + sgFichaPRow('BI', docTxt('doc_bi')) + sgFichaPRow('CV', docTxt('doc_cv')) + sgFichaPRow('Certificado', docTxt('doc_cert')) + '</div>';
+    html += '</div>';
+    html += '<div class="ft"><span>Gerado em ' + sgFichaEsc(dataGer) + '</span><span>Confidencial — uso interno</span></div>';
+    html += '</div></body></html>';
+    return html;
+}
+function imprimirFicha() {
+    if (!sgFichaUltima) { showToast('Aguarde', 'A ficha ainda está a carregar.', 'info'); return; }
+    var w = window.open('', '', 'width=820,height=900');
+    if (!w) { showToast('Pop-up bloqueado', 'Permita pop-ups para imprimir/exportar a ficha.', 'warning'); return; }
+    try { w.document.write('<!doctype html><meta charset="utf-8"><title>A preparar…</title><body style="font:14px sans-serif;padding:20px">A preparar a ficha…</body>'); } catch (e) {}
+    sgRhPrintWindow(w, sgFichaBuildPrintDoc(sgFichaUltima.d, sgFichaUltima.blob));
+}
 
 // [v12.35.0] Abas RH (Equipa / Relatórios). Troca de painel sem recarregar,
 // CSP-safe (despachada por data-sige-act). Sincroniza estado ARIA.
@@ -4102,6 +4196,7 @@ Object.assign(window, {
     sgRhSwitchTab,
     verFichaColaborador,
     fecharFicha,
+    imprimirFicha,
     uploadFoto,
     uploadDoc
 });
