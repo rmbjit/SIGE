@@ -1655,11 +1655,11 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
    ======================================== */
 .sige-rh .btn-action.btn-ficha{background:var(--sg-theme-soft,var(--color-brand-50));color:var(--sg-theme-primary,var(--color-brand-600));}
 .sige-rh .btn-action.btn-ficha:hover{background:var(--sg-theme-primary,var(--color-brand-500));color:var(--color-white);}
-#box-ficha .modal-content{max-width:760px!important;}
-#box-ficha .modal-body{padding:0!important;}
+#box-ficha .modal-content{width:min(760px,calc(100vw - 44px))!important;max-width:760px!important;max-height:92vh!important;border-radius:var(--radius-xl)!important;border:1px solid rgba(255,255,255,.86)!important;background:var(--color-white)!important;box-shadow:var(--shadow-lg);overflow:hidden!important;display:flex!important;flex-direction:column!important;}
+#box-ficha .modal-body{padding:0!important;flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;}
 .sg-ficha{display:flex;flex-direction:column;}
-/* Cabeçalho de identidade */
-.sg-ficha-head{display:flex;align-items:center;gap:var(--space-4);padding:var(--space-6);background:linear-gradient(120deg,var(--sg-theme-soft,var(--color-brand-50)),var(--color-white));border-bottom:1px solid var(--color-ink-100);}
+/* Cabeçalho de identidade (fundo neutro: a cor já vem do cabeçalho padrão do modal) */
+.sg-ficha-head{display:flex;align-items:center;gap:var(--space-4);padding:var(--space-5) var(--space-6);background:var(--color-white);border-bottom:1px solid var(--color-ink-100);}
 .sg-ficha-photo{width:72px;height:72px;flex:0 0 auto;border-radius:var(--radius-pill);object-fit:cover;border:3px solid var(--color-white);box-shadow:var(--shadow-md);background:var(--color-ink-100);}
 .sg-ficha-idwrap{min-width:0;flex:1 1 auto;}
 .sg-ficha-name{font-size:var(--fs-lg);font-weight:700;letter-spacing:-.02em;color:var(--color-black);margin:0;}
@@ -1708,7 +1708,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 /* ========================================
    RH - Modal de Colaborador V2 alinhado ao Painel Principal
    ======================================== */
-#box-equipa.sige-modal{
+#box-equipa.sige-modal,
+#box-ficha.sige-modal{
     background:rgba(18,22,40,.54)!important;
     backdrop-filter:blur(14px)!important;
     -webkit-backdrop-filter:blur(14px)!important;
@@ -1732,6 +1733,7 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 }
 /* Cabecalho e separadores nao encolhem; o corpo e que absorve o overflow. */
 #box-equipa .modal-header,
+#box-ficha .modal-header,
 #box-equipa .modal-tabs{flex:0 0 auto!important;}
 /* O formulario ocupa o espaco restante e delega o scroll ao corpo. */
 #box-equipa #form-staff{
@@ -1741,7 +1743,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     min-height:0!important;
     overflow:hidden!important;
 }
-#box-equipa .modal-header{
+#box-equipa .modal-header,
+#box-ficha .modal-header{
     position:relative!important;
     overflow:hidden!important;
     min-height:124px!important;
@@ -1750,7 +1753,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     color:var(--color-black)!important;
     border-bottom:1px solid rgba(30,34,60,.06)!important;
 }
-#box-equipa .modal-header:after{
+#box-equipa .modal-header:after,
+#box-ficha .modal-header:after{
     content:'';
     position:absolute;
     right:-110px;
@@ -1761,7 +1765,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     background:rgba(var(--sg-theme-primary-rgb,90,63,214),.10);
     pointer-events:none;
 }
-#box-equipa .sg-rh-modal-title-wrap{
+#box-equipa .sg-rh-modal-title-wrap,
+#box-ficha .sg-rh-modal-title-wrap{
     position:relative;
     z-index:1;
     display:flex;
@@ -1769,7 +1774,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     gap:var(--space-5);
     min-width:0;
 }
-#box-equipa .sg-rh-modal-icon{
+#box-equipa .sg-rh-modal-icon,
+#box-ficha .sg-rh-modal-icon{
     width:58px;
     height:58px;
     border-radius:var(--radius-lg);
@@ -1781,8 +1787,10 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     background:var(--sg-theme-primary-50,var(--color-brand-50));
     box-shadow:var(--shadow-sm);
 }
-#box-equipa .sg-rh-modal-icon svg{width:26px;height:26px;stroke:currentColor;}
-#box-equipa .modal-header h3{
+#box-equipa .sg-rh-modal-icon svg,
+#box-ficha .sg-rh-modal-icon svg{width:26px;height:26px;stroke:currentColor;}
+#box-equipa .modal-header h3,
+#box-ficha .modal-header h3{
     margin:0 0 var(--space-2)!important;
     color:var(--color-black)!important;
     font-family:var(--font-display,'Plus Jakarta Sans',system-ui,sans-serif)!important;
@@ -1791,7 +1799,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     font-weight:700!important;
     letter-spacing:-.045em!important;
 }
-#box-equipa .modal-header p{
+#box-equipa .modal-header p,
+#box-ficha .modal-header p{
     margin:0!important;
     max-width:620px;
     color:var(--color-slate-600)!important;
@@ -1799,7 +1808,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     line-height:1.55!important;
     font-weight:600!important;
 }
-#box-equipa .modal-close{
+#box-equipa .modal-close,
+#box-ficha .modal-close{
     position:relative!important;
     z-index:2!important;
     width:46px!important;
@@ -1810,7 +1820,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     border:1px solid rgba(30,34,60,.08)!important;
     box-shadow:var(--shadow-md);
 }
-#box-equipa .modal-close:hover{
+#box-equipa .modal-close:hover,
+#box-ficha .modal-close:hover{
     background:var(--sg-theme-primary-50,var(--color-brand-50))!important;
     color:var(--sg-theme-primary,var(--color-brand-500))!important;
     transform:none!important;
@@ -2090,14 +2101,17 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 body.sige-admin-app #box-equipa.sige-modal.active,
 body.sige-admin-app #box-equipa.sige-modal[aria-hidden="false"],
 body.sige-admin-app #sige-rh-confirm.sige-modal.active,
-body.sige-admin-app #sige-rh-confirm.sige-modal[aria-hidden="false"]{
+body.sige-admin-app #sige-rh-confirm.sige-modal[aria-hidden="false"],
+body.sige-admin-app #box-ficha.sige-modal.active,
+body.sige-admin-app #box-ficha.sige-modal[aria-hidden="false"]{
     display:flex!important;
     opacity:1!important;
     visibility:visible!important;
     pointer-events:auto!important;
 }
 body.sige-admin-app #box-equipa.sige-modal:not(.active)[aria-hidden="true"],
-body.sige-admin-app #sige-rh-confirm.sige-modal:not(.active)[aria-hidden="true"]{
+body.sige-admin-app #sige-rh-confirm.sige-modal:not(.active)[aria-hidden="true"],
+body.sige-admin-app #box-ficha.sige-modal:not(.active)[aria-hidden="true"]{
     display:none!important;
     opacity:0!important;
     visibility:hidden!important;
@@ -3914,11 +3928,20 @@ async function exportarFolhaSalario() {
 // CLOSE MODAL ON ESC / CLICK OUTSIDE
 // ========================================
 document.addEventListener('keydown', e => {
-    if(e.key === 'Escape') fecharForm();
+    if (e.key !== 'Escape') return;
+    // Fecha o modal aberto mais relevante (a ficha tem prioridade se estiver aberta).
+    var ficha = document.getElementById('box-ficha');
+    if (ficha && ficha.classList.contains('active')) { fecharFicha(); return; }
+    fecharForm();
 });
 document.getElementById('box-equipa').addEventListener('click', e => {
     if(e.target.id === 'box-equipa') fecharForm();
 });
+// [v12.36.1] Fechar a ficha ao clicar fora (mesmo padrão dos outros modais).
+(function () {
+    var ficha = document.getElementById('box-ficha');
+    if (ficha) { ficha.addEventListener('click', function (e) { if (e.target === ficha) fecharFicha(); }); }
+})();
 
 // v12.11.9.5 - Failsafe: tornar funções explicitamente globais para onclick inline e fluxos do App Shell.
 // ========================================
@@ -4030,8 +4053,6 @@ function verFichaColaborador(data) {
     var modal = document.getElementById('box-ficha');
     var box = document.getElementById('ficha-conteudo');
     if (!modal || !box) return;
-    var t = document.getElementById('ficha-title');
-    if (t) t.textContent = 'Ficha de ' + (data.nome || 'colaborador');
     box.innerHTML = '<div class="sg-ficha-loading">A carregar ficha segura…</div>';
     sigeEquipeOpenModal(modal);
     jQuery.post(sigeEquipeAjax.ajaxurl, { action: 'sige_get_staff_secure', id: data.id, _sige_nonce: sigeEquipeAjax.nonce }, function (res) {

@@ -1,0 +1,51 @@
+SIGE SoftGenial v12.36.1 - Ficha: ESC + design padrão; reconciliação da baseline
+Data: 2026-06-30
+Tipo: correcção/UX + governança. Sem schema, sem novo endpoint.
+
+PEDIDO
+- "Corrija a dívida existente e garanta também que os pop-ups da ficha fechem
+  com o ESC bem como usem o design padrão do sistema."
+
+O QUE MUDA
+1) DÍVIDA DE BASELINE (corrigida)
+   - O gate tools/check-v12-16-2-baseline-preservation.php tinha os hashes de
+     admin/system/dashboard-view.php e includes/admin-shell.php congelados no
+     estado de v12.19.1. Esses ficheiros foram alterados de forma LEGÍTIMA e
+     revista em v12.20.0 (navegação) e v12.29.2 (KPIs do painel em auto-fit).
+   - Os hashes foram reconciliados para o estado actual já commitado e validado
+     (com comentário a registar o porquê). Os restantes protegidos
+     (finance/permissões/security-kernel) mantêm-se. O gate volta a verde.
+
+2) ESC (e clique fora) fecham a Ficha
+   - O handler global de teclado passa a fechar o modal da Ficha (com prioridade
+     quando está aberto) e adicionou-se o fecho ao clicar fora, como nos
+     restantes modais.
+
+3) DESIGN PADRÃO DO SISTEMA na Ficha
+   - O modal #box-ficha passou a partilhar o chrome dos modais padrão:
+     * a mesma regra "failsafe" de exibição do App Shell (que só cobria
+       #box-equipa/#sige-rh-confirm) — sem isto o modal podia nem aparecer;
+     * o mesmo cabeçalho (gradiente + ícone + título), botão de fecho, overlay
+       com blur e conteúdo com raio/sombra/scroll.
+   - A "identity head" da ficha deixou de ter gradiente próprio (a cor vem do
+     cabeçalho padrão) e o título do cabeçalho ficou genérico ("Ficha do
+     colaborador"); o nome da pessoa aparece só na identity head (sem duplicar).
+
+ENGENHARIA
+- O design padrão é PARTILHADO por extensão dos selectores existentes
+  (#box-equipa, ... , #box-ficha) — sem duplicar regras (DRY). 100% tokens.
+
+VALIDAÇÃO
+- php -l (view + gate) OK.
+- Gates: baseline-preservation OK (verde), design-tokens 1857 (sem regressão),
+  typography OK.
+- Novo smoke tools/smoke-ficha-esc-design-v12-36-1.php (ESC + design + baseline,
+  incl. verificação de que os ficheiros no disco batem com os hashes novos).
+- Smokes anteriores (ficha/relatórios/alertas) sem regressão.
+- Render verificado (Chromium): cabeçalho padrão com gradiente/ícone, identity
+  head neutra, secções e completude.
+
+FRONTEIRA
+- Sem alterar fórmulas, schema, permissões reais nem ficheiros financeiros.
+  A reconciliação da baseline apenas actualiza os hashes esperados para o
+  estado já existente (não altera os ficheiros protegidos).
