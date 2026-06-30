@@ -3,7 +3,7 @@
  * Plugin Name: SIGE SoftGenial - Gestão Escolar Moçambique
  * Plugin URI: https://softgenial.edu.mz
  * Description: Software de Gestão Integrado para Escolas (SaaS Ready). Versão Modularizada.
- * Version: 12.33.1
+ * Version: 12.34.0
  * Author: RMBJ Consultoria
  * Author URI: https://rmbjconsulting.com
  * Text Domain: sige-softgenial
@@ -29,7 +29,7 @@ if (function_exists('date_default_timezone_set')) {
 // ============================================================================
 define('SIGE_PATH', plugin_dir_path(__FILE__));
 define('SIGE_URL', plugin_dir_url(__FILE__));
-define('SIGE_VERSION', '12.33.1');
+define('SIGE_VERSION', '12.34.0');
 define('SIGE_HUB_VERSION', '1.1.1');
 
 
@@ -190,6 +190,12 @@ if (file_exists(SIGE_PATH . 'includes/sige-staff-roster.php')) {
 // Depende de sige_get_escola_id; sem schema, so WP options por escola.
 if (file_exists(SIGE_PATH . 'includes/cracha-config.php')) {
     require_once SIGE_PATH . 'includes/cracha-config.php';
+}
+
+// [v12.34.0] Recursos Humanos - alertas (contratos a expirar). So leitura de
+// campos existentes (sige_professores); sem schema nem writes.
+if (file_exists(SIGE_PATH . 'includes/rh-alertas.php')) {
+    require_once SIGE_PATH . 'includes/rh-alertas.php';
 }
 
 // [v12.9.6] Page Guard Helper - guarda centralizada baseada na matriz SIGE.

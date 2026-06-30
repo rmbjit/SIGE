@@ -1,0 +1,49 @@
+SIGE SoftGenial v12.34.0 - RH (passo 1): alertas de contratos a expirar
+Data: 2026-06-30
+Tipo: nova funcionalidade (view=equipe). Só leitura. Sem schema, sem cálculo.
+
+PORQUÊ
+- Primeiro passo da evolução do módulo de Recursos Humanos. O campo de fim de
+  contrato já existia mas ninguém avisava. Agora o painel da Equipa mostra quem
+  está a expirar.
+
+O QUE FAZ
+- Secção "Alertas de Contrato" entre os KPIs e a tabela da Equipa:
+    * Resumo: nº de expirados, críticos (faltam <=30 dias) e a expirar (<=90 dias).
+    * Lista dos 8 mais urgentes (expirados primeiro), com nome, tipo de vínculo,
+      data de término e uma frase clara ("expirou há N dias" / "faltam N dias").
+    * Estado "tudo em dia" quando não há contratos a expirar.
+
+ENGENHARIA (limpa, sem remendos)
+- NOVO includes/rh-alertas.php (lógica isolada e testável):
+    * sige_rh_evaluate_contract_alerts(rows, hoje, opts) - FUNÇÃO PURA que
+      classifica (expirado/critico/aviso), ignora colaboradores inactivos e datas
+      vazias (0000-00-00) e ordena pelo mais urgente.
+    * sige_rh_contract_alerts(escola) - consulta + alimenta a função pura.
+    * limiares configuráveis por filtro (sige_rh_contract_alert_thresholds);
+      helpers de rótulo (tipo de vínculo) e de frase (dias).
+  So leitura de sige_professores (fim_contrato/tipo_contrato/status_ativo).
+  Sem writes, sem schema, tenant-scoped.
+- Carregado no bootstrap (sige-softgenial.php).
+- admin/hr/equipe-view.php: a secção reutiliza as linhas $_profs_raw JÁ
+  carregadas (sem 2.ª query). Construída 100% com o design system (tokens
+  --color-*/--space-*/--radius-*/--shadow-*; zero cores mágicas).
+
+NOTA DE DEPLOY
+- Esta entrega inclui 1 FICHEIRO NOVO: includes/rh-alertas.php (numa pasta já
+  existente). Confirme que foi para o servidor (no seu pipeline, ficheiros novos
+  podem precisar de atenção).
+
+VALIDAÇÃO
+- php -l (include + view + bootstrap) OK.
+- Gates: design-tokens (sem regressão), typography OK.
+- Novo smoke tools/smoke-rh-alertas-v12-34-0.php: funcional (classificação,
+  ordenação, limiares, exclusões) + ligação. OK.
+
+FRONTEIRA
+- Sem alterar fórmulas, schema, permissões reais nem ficheiros protegidos.
+
+PRÓXIMOS PASSOS (roadmap RH)
+- Dashboard/relatórios de RH; ficha completa do colaborador (precisa schema);
+  férias/ausências e assiduidade (precisam tabelas); processamento de salário
+  (sensível, financeiro) - cada um com os seus gates e aprovação.

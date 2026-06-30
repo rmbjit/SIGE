@@ -1538,6 +1538,36 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 .sige-rh.sg-dashboard-v2 .sg-kpi-note{max-width:100%!important;white-space:normal!important;}
 @media (min-width:1101px) and (max-width:1380px){.sige-rh .sg-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 
+/* ── Alertas de contrato (RH) ─ só tokens do design system ───────────────── */
+.sige-rh .sg-rh-alertas{margin:var(--space-5) 0 0;background:var(--color-white);border:1px solid var(--color-ink-100);border-radius:var(--radius-xl);box-shadow:var(--shadow-md);padding:var(--space-5) var(--space-6);}
+.sige-rh .sg-rh-alertas.has-alerts{border-left:4px solid var(--color-warning-500);}
+.sige-rh .sg-rh-alertas-head{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-4);flex-wrap:wrap;}
+.sige-rh .sg-rh-alertas-title{display:flex;align-items:center;gap:var(--space-3);}
+.sige-rh .sg-rh-alertas-ic{width:40px;height:40px;border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;background:var(--color-warning-100);color:var(--color-warning-700);flex:0 0 auto;}
+.sige-rh .sg-rh-alertas-ic svg{width:20px;height:20px;}
+.sige-rh .sg-rh-alertas-title h2{margin:0;font-size:var(--fs-md);font-weight:700;color:var(--color-black);}
+.sige-rh .sg-rh-alertas-title p{margin:2px 0 0;font-size:var(--fs-sm);color:var(--color-slate-600);}
+.sige-rh .sg-rh-alertas-chips{display:flex;gap:var(--space-2);flex-wrap:wrap;align-items:center;}
+.sige-rh .sg-rh-chip{font-size:var(--fs-sm);font-weight:700;padding:4px 12px;border-radius:var(--radius-pill);}
+.sige-rh .sg-rh-chip.is-exp{background:var(--color-danger-50);color:var(--color-danger-700);}
+.sige-rh .sg-rh-chip.is-crit{background:var(--color-warning-100);color:var(--color-warning-700);}
+.sige-rh .sg-rh-chip.is-warn{background:var(--color-slate-100);color:var(--color-slate-600);}
+.sige-rh .sg-rh-alertas-ok{display:flex;align-items:center;gap:var(--space-2);margin-top:var(--space-3);font-size:var(--fs-sm);font-weight:600;color:var(--color-success-700);}
+.sige-rh .sg-rh-alertas-ok svg{width:18px;height:18px;}
+.sige-rh .sg-rh-alertas-list{list-style:none;margin:var(--space-4) 0 0;padding:0;display:grid;gap:var(--space-2);}
+.sige-rh .sg-rh-alert{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border:1px solid var(--color-ink-100);border-radius:var(--radius-md);background:var(--color-slate-50);}
+.sige-rh .sg-rh-alert-dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto;background:var(--color-slate-400);}
+.sige-rh .sg-rh-alert.is-expirado .sg-rh-alert-dot{background:var(--color-danger-500);}
+.sige-rh .sg-rh-alert.is-critico .sg-rh-alert-dot{background:var(--color-warning-500);}
+.sige-rh .sg-rh-alert-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;}
+.sige-rh .sg-rh-alert-nome{font-size:var(--fs-base);font-weight:600;color:var(--color-ink-700);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sige-rh .sg-rh-alert-meta{font-size:var(--fs-sm);color:var(--color-slate-500);}
+.sige-rh .sg-rh-alert-badge{flex:0 0 auto;font-size:var(--fs-sm);font-weight:700;padding:3px 10px;border-radius:var(--radius-pill);background:var(--color-slate-100);color:var(--color-slate-600);}
+.sige-rh .sg-rh-alert.is-expirado .sg-rh-alert-badge{background:var(--color-danger-50);color:var(--color-danger-700);}
+.sige-rh .sg-rh-alert.is-critico .sg-rh-alert-badge{background:var(--color-warning-100);color:var(--color-warning-700);}
+.sige-rh .sg-rh-alertas-more{margin-top:var(--space-3);font-size:var(--fs-sm);color:var(--color-slate-500);}
+@media (max-width:720px){.sige-rh .sg-rh-alertas-head{flex-direction:column;}.sige-rh .sg-rh-alert{flex-wrap:wrap;}}
+
 
 
 /* ========================================
@@ -2031,6 +2061,62 @@ body.sige-admin-app #sige-rh-confirm.sige-modal:not(.active)[aria-hidden="true"]
                 <div><div class="sg-kpi-label">Efectivos / Contratos</div><div class="sg-kpi-value"><?php echo $efectivos; ?> / <?php echo $contratos; ?></div><div class="sg-kpi-note">Contratos em acompanhamento</div></div>
             </article>
         </section>
+
+    <!-- ========================================
+         ALERTAS DE CONTRATO (RH) - só leitura de fim_contrato/tipo/estado
+         ======================================== -->
+    <?php
+    $sige_rh_alertas = function_exists('sige_rh_evaluate_contract_alerts')
+        ? sige_rh_evaluate_contract_alerts((array) $_profs_raw, function_exists('wp_date') ? wp_date('Y-m-d') : date('Y-m-d'))
+        : ['items' => [], 'counts' => ['total' => 0, 'expirado' => 0, 'critico' => 0, 'aviso' => 0], 'thresholds' => ['critico' => 30, 'aviso' => 90]];
+    $sige_rh_al_c  = $sige_rh_alertas['counts'];
+    $sige_rh_al_th = $sige_rh_alertas['thresholds'];
+    ?>
+    <section class="sg-rh-alertas <?php echo $sige_rh_al_c['total'] > 0 ? 'has-alerts' : 'is-clear'; ?>" aria-label="Alertas de contrato">
+        <div class="sg-rh-alertas-head">
+            <div class="sg-rh-alertas-title">
+                <span class="sg-rh-alertas-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+                <div>
+                    <h2>Alertas de Contrato</h2>
+                    <p>Contratos a terminar nos próximos <?php echo (int) $sige_rh_al_th['aviso']; ?> dias.</p>
+                </div>
+            </div>
+            <?php if ($sige_rh_al_c['total'] > 0): ?>
+            <div class="sg-rh-alertas-chips">
+                <?php if ($sige_rh_al_c['expirado'] > 0): ?><span class="sg-rh-chip is-exp"><?php echo (int) $sige_rh_al_c['expirado']; ?> expirado<?php echo $sige_rh_al_c['expirado'] === 1 ? '' : 's'; ?></span><?php endif; ?>
+                <?php if ($sige_rh_al_c['critico'] > 0): ?><span class="sg-rh-chip is-crit"><?php echo (int) $sige_rh_al_c['critico']; ?> crítico<?php echo $sige_rh_al_c['critico'] === 1 ? '' : 's'; ?></span><?php endif; ?>
+                <?php if ($sige_rh_al_c['aviso'] > 0): ?><span class="sg-rh-chip is-warn"><?php echo (int) $sige_rh_al_c['aviso']; ?> a expirar</span><?php endif; ?>
+            </div>
+            <?php endif; ?>
+        </div>
+        <?php if ($sige_rh_al_c['total'] === 0): ?>
+        <div class="sg-rh-alertas-ok">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            Sem contratos a expirar nos próximos <?php echo (int) $sige_rh_al_th['aviso']; ?> dias.
+        </div>
+        <?php else:
+            $sige_rh_al_shown = array_slice($sige_rh_alertas['items'], 0, 8);
+        ?>
+        <ul class="sg-rh-alertas-list">
+            <?php foreach ($sige_rh_al_shown as $al):
+                $al_fim_fmt = function_exists('wp_date') ? wp_date('d/m/Y', strtotime($al['fim_contrato'])) : date('d/m/Y', strtotime($al['fim_contrato']));
+            ?>
+            <li class="sg-rh-alert is-<?php echo esc_attr($al['estado']); ?>">
+                <span class="sg-rh-alert-dot" aria-hidden="true"></span>
+                <div class="sg-rh-alert-main">
+                    <span class="sg-rh-alert-nome"><?php echo esc_html($al['nome'] !== '' ? $al['nome'] : 'Colaborador'); ?></span>
+                    <span class="sg-rh-alert-meta"><?php echo esc_html(sige_rh_contract_label($al['tipo_contrato'])); ?> &middot; termina <?php echo esc_html($al_fim_fmt); ?></span>
+                </div>
+                <span class="sg-rh-alert-badge"><?php echo esc_html(sige_rh_contract_alert_phrase((int) $al['dias'])); ?></span>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+        <?php if (count($sige_rh_alertas['items']) > count($sige_rh_al_shown)): ?>
+        <div class="sg-rh-alertas-more">+ <?php echo (int) (count($sige_rh_alertas['items']) - count($sige_rh_al_shown)); ?> outro(s) contrato(s) a expirar</div>
+        <?php endif; ?>
+        <?php endif; ?>
+    </section>
+
     <!-- ========================================
          TOOLBAR
          ======================================== -->
