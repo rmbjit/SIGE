@@ -74,7 +74,9 @@ $view  = (string) @file_get_contents($root . '/admin/academic/alunos_lista.php')
 $build = json_decode((string) @file_get_contents($root . '/BUILD.json'), true);
 
 _p($fails, strpos($boot, "require_once SIGE_PATH . 'includes/cracha-config.php'") !== false, 'Bootstrap carrega a camada de crachá');
-_p($fails, strpos($uikit, "'sige-cracha-templates'") !== false, 'ui-kit enfileira o registo de modelos no ecrã Alunos');
+// v12.32.2: o registo é entregue INLINE pela view (à prova de falhas), não por enqueue HTTP.
+_p($fails, strpos($view, 'readfile($sige_cracha_tpl_file)') !== false, 'Registo entregue inline pela view (filesystem)');
+_p($fails, strpos($view, "SIGE_PATH . 'assets/cracha/sige-cracha-templates.js'") !== false, 'Registo inline lê a fonte única do filesystem');
 _p($fails, strpos($view, 'data-sige-act="abrirModeloCracha"') !== false, 'Botão "Modelo de Crachá" presente');
 _p($fails, strpos($view, 'id="sige-cracha-modal"') !== false, 'Modal do seletor presente');
 _p($fails, strpos($view, '$sige_can_editar_cracha') !== false, 'Botão/modal são gated por permissão');

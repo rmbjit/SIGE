@@ -1,0 +1,40 @@
+SIGE SoftGenial v12.32.2 - Crachá modelos (HOTFIX 2): registo entregue INLINE
+Data: 2026-06-30
+Tipo: correcção definitiva (view=alunos_lista).
+
+SINTOMA (confirmado por captura em produção)
+- Pré-visualização: "Pré-visualização indisponível. Verifique a ligação...".
+- Impressão: cartão simples (fallback), sem o modelo escolhido.
+
+CAUSA-RAIZ
+- O ficheiro do registo de modelos (assets/cracha/sige-cracha-templates.js) NÃO
+  estava a ser servido por HTTP no ambiente do utilizador (404/enqueue/cache).
+  Como o enqueue E a auto-cura (injecção de <script src>) dependem ambos do
+  pedido HTTP, window.SigeCrachaTemplates nunca ficava disponível -> a
+  pré-visualização caía na mensagem de indisponível e a impressão no fallback.
+  (Em laboratório, sob CSP real, o registo renderiza bem - logo o problema era a
+  ENTREGA do ficheiro, não o seu conteúdo.)
+
+CORRECÇÃO DEFINITIVA
+- O registo passa a ser EMBUTIDO INLINE pela própria view, lido do FILESYSTEM:
+      readfile(SIGE_PATH . 'assets/cracha/sige-cracha-templates.js')
+  dentro de um <script> com o nonce de CSP da página. Sem qualquer pedido HTTP:
+  imune a 404, CDN, cache e regras de servidor. A fonte única continua a ser o
+  mesmo ficheiro .js (o gate de tokens não varre .js; o readfile não coloca hex
+  no .php).
+- Removido o enqueue por HTTP em includes/ui-kit.php (passou a ser desnecessário
+  e gerava o 404).
+- Mantidas as melhorias da 12.32.1 como reforço: nonce vivo (sigeLiveNonce),
+  pré-visualização via iframe.contentWindow.document.write, e toast de sucesso
+  claro na gravação.
+
+VERIFICAÇÃO
+- Chromium (Playwright) sob CSP real, com o registo INLINE (como na nova entrega):
+  window.SigeCrachaTemplates definido; pré-visualização renderizada e ESTILIZADA
+  (cartão 220px, cabeçalho em degradê, nome correcto). A impressão usa o mesmo
+  registo -> sai estilizada no modelo escolhido.
+- php -l OK; gates typography/design-tokens (1879) OK; smoke actualizado OK.
+
+FRONTEIRA
+- Só entrega/cliente. Sem alterar a camada de config, schema, permissões,
+  fórmulas nem ficheiros protegidos por hash.

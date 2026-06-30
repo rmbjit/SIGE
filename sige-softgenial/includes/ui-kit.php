@@ -140,20 +140,9 @@ add_action('admin_enqueue_scripts', function ($hook) {
         }
     }
 
-    // Registo de modelos de crachá do estudante (pre-visualizacao + impressao).
-    // So no ecrã de Alunos, onde os crachás sao escolhidos e impressos.
-    if ($sige_view === 'alunos_lista') {
-        $cracha_js = SIGE_PATH . 'assets/cracha/sige-cracha-templates.js';
-        if (is_file($cracha_js)) {
-            wp_enqueue_script(
-                'sige-cracha-templates',
-                SIGE_URL . 'assets/cracha/sige-cracha-templates.js',
-                [],
-                SIGE_VERSION . '.' . filemtime($cracha_js),
-                true
-            );
-        }
-    }
+    // Nota: o registo de modelos de crachá é entregue INLINE pela própria view
+    // (admin/academic/alunos_lista.php, lido do filesystem com o nonce de CSP),
+    // por ser à prova de falhas de HTTP/CDN/cache. Não se enfileira aqui.
 
     if ($financeiro_core_active) {
         $financeiro_js = SIGE_PATH . 'assets/views/financeiro-core-design-pro.js';

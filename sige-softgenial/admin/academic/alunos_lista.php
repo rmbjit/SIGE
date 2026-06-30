@@ -721,6 +721,20 @@ function sigeQrDataUri(text){
 }
 </script>
 
+<?php
+// v12.32.2 - Registo de modelos do crachá entregue INLINE a partir do filesystem.
+// Entrega à prova de falhas: não depende de pedido HTTP/enqueue/CDN/cache (que
+// estava a falhar -> pré-visualização "indisponível" e impressão em fallback).
+// Fonte única continua a ser assets/cracha/sige-cracha-templates.js (aqui apenas
+// lido e embutido, com o nonce de CSP da página).
+$sige_cracha_tpl_file = defined('SIGE_PATH') ? SIGE_PATH . 'assets/cracha/sige-cracha-templates.js' : '';
+if ($sige_cracha_tpl_file && is_file($sige_cracha_tpl_file)) {
+    echo '<script ' . sige_csp_script_attr() . ">\n";
+    readfile($sige_cracha_tpl_file);
+    echo "\n</script>\n";
+}
+?>
+
 <style>
 /* ========================================
    SIGE ALUNOS - Design System v2.1
