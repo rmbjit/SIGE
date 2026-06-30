@@ -75,49 +75,81 @@ if (!function_exists('sige_hr_role_label')) {
         return $role_slug !== '' ? ucfirst(str_replace('sige_', '', $role_slug)) : 'Sem perfil activo';
     }
 }
-$args = array(
-    'role__in' => [
-        'sige_admin_ti', 'sige_director', 'sige_secretaria_geral', 
-        'sige_assistente', 'sige_financeiro', 'sige_professor',
-        'sige_educador', 'sige_motorista', 'sige_limpeza',
-        'sige_secretario', 'sige_gestor_rh', 'sige_pedagogico', 'sige_recepcao', 'sige_guarda'
-    ],
-    'meta_key' => 'sige_escola_id',
+// v12.30.0 - Fonte de verdade completa da equipa (corrige equipa invisivel + KPIs).
+// Antes a lista usava SO get_users(role__in + meta sige_escola_id): quem tinha um
+// PERFIL SIGE atribuido nesta escola (tabela sige_user_roles) mas sem a role WP ou
+// sem a meta de escola ficava INVISIVEL na Equipa, embora aparecesse em Permissoes
+// e Perfis. Como os KPIs iteram sobre $staff, ficavam tambem subcontados.
+// Correccao: unir as duas fontes (A) staff WP scoped por escola e (B) perfil SIGE
+// activo nesta escola (mesma fonte da pagina de Permissoes). O SUPER admin /
+// administrador WP real NUNCA entra: so aparecem quem tem perfil SIGE.
+$staff_role_slugs = [
+    'sige_admin_ti', 'sige_director', 'sige_secretaria_geral',
+    'sige_assistente', 'sige_financeiro', 'sige_professor',
+    'sige_educador', 'sige_motorista', 'sige_limpeza',
+    'sige_secretario', 'sige_gestor_rh', 'sige_pedagogico', 'sige_recepcao', 'sige_guarda'
+];
+
+// (A) Utilizadores WP com role de staff, scoped a escola pela meta sige_escola_id.
+$__staff_ids_meta = array_map('intval', (array) get_users(array(
+    'role__in'   => $staff_role_slugs,
+    'meta_key'   => 'sige_escola_id',
     'meta_value' => $escola_id,
-    'orderby' => 'display_name',
-    'order' => 'ASC'
-);
-$staff = get_users($args);
-// Fallback: se não houver resultados com meta (migração), buscar todos e filtrar
-// pela tabela sige_professores (garante compatibilidade com dados existentes)
-if (empty($staff)) {
+    'fields'     => 'ID',
+)));
+
+// (B) Utilizadores com PERFIL SIGE activo nesta escola (tabela sige_user_roles).
+//     Mesma fonte usada pela pagina de Permissoes e Perfis -> as listas coincidem.
+$__staff_ids_sige = [];
+$__perm_t = function_exists('sige_permissions_tables') ? sige_permissions_tables() : [];
+if (!empty($__perm_t['user_roles']) && !empty($__perm_t['roles']) && $escola_id > 0) {
+    // Exclui papeis de PORTAL (aluno/encarregado), que nao sao equipa: tem fluxo
+    // proprio. Assim a Equipa lista so STAFF com perfil SIGE, sem alunos/encarregados.
+    $__staff_ids_sige = array_map('intval', (array) $wpdb->get_col($wpdb->prepare(
+        "SELECT DISTINCT ur.user_id
+           FROM {$__perm_t['user_roles']} ur
+           INNER JOIN {$__perm_t['roles']} r ON r.id = ur.role_id
+          WHERE ur.escola_id = %d AND ur.ativo = 1 AND r.ativo = 1
+            AND r.slug NOT IN ('aluno', 'encarregado')",
+        $escola_id
+    )));
+}
+
+$__staff_ids = array_values(array_unique(array_filter(array_merge($__staff_ids_meta, $__staff_ids_sige))));
+
+// Fallback de migracao: se nada foi encontrado por (A)/(B), recuperar por email na
+// tabela sige_professores (compatibilidade com dados antigos) e fixar a meta de escola.
+if (empty($__staff_ids)) {
     $emails_escola = $wpdb->get_col($wpdb->prepare(
         "SELECT email FROM {$wpdb->prefix}sige_professores WHERE escola_id = %d",
         $escola_id
     ));
     if (!empty($emails_escola)) {
-        $args_fallback = array(
-            'role__in' => [
-                'sige_admin_ti', 'sige_director', 'sige_secretaria_geral', 
-                'sige_assistente', 'sige_financeiro', 'sige_professor',
-                'sige_educador', 'sige_motorista', 'sige_limpeza',
-                'sige_secretario', 'sige_gestor_rh', 'sige_pedagogico', 'sige_recepcao', 'sige_guarda'
-            ],
-            'search' => '',
-            'include' => [],
-            'orderby' => 'display_name',
-            'order' => 'ASC'
-        );
-        $all_staff = get_users($args_fallback);
-        $staff = array_filter($all_staff, function($u) use ($emails_escola) {
-            return in_array($u->user_email, $emails_escola);
-        });
-        // Migrar meta para esses users (one-time fix)
-        foreach ($staff as $s) {
-            update_user_meta($s->ID, 'sige_escola_id', $escola_id);
+        $emails_escola = array_map('strtolower', (array) $emails_escola);
+        $all_staff = get_users(array('role__in' => $staff_role_slugs, 'fields' => ['ID', 'user_email']));
+        foreach ($all_staff as $u) {
+            if (in_array(strtolower((string) $u->user_email), $emails_escola, true)) {
+                update_user_meta((int) $u->ID, 'sige_escola_id', $escola_id); // migrar meta (one-time)
+                $__staff_ids[] = (int) $u->ID;
+            }
         }
-        $staff = array_values($staff);
+        $__staff_ids = array_values(array_unique($__staff_ids));
     }
+}
+
+// Carregar objectos WP_User completos (render e KPIs precisam de ->roles, etc.).
+$staff = !empty($__staff_ids) ? get_users(array(
+    'include' => $__staff_ids,
+    'orderby' => 'display_name',
+    'order'   => 'ASC',
+)) : [];
+
+// SEGURANCA/REQUISITO: o SUPER admin / administrador WP real nunca aparece na
+// equipa - so perfis SIGE. (sige_admin_ti continua, pois e perfil SIGE, nao admin WP.)
+if (function_exists('sige_is_real_wp_admin_user')) {
+    $staff = array_values(array_filter((array) $staff, function ($u) {
+        return !sige_is_real_wp_admin_user((int) $u->ID);
+    }));
 }
 // v12.11.9.8 - remoção RH é soft delete: ocultar utilizadores removidos sem apagar histórico.
 $staff = array_values(array_filter((array)$staff, function($u) {

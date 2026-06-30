@@ -1,0 +1,59 @@
+SIGE SoftGenial v12.30.0 - Equipa: lista completa + KPIs correctos + sem SUPER admin
+Data: 2026-06-30
+Tipo: correccao de listagem/KPIs (view=equipe / admin/hr/equipe-view.php).
+
+PROBLEMA (reportado)
+- Parte da equipa ficava INVISIVEL na lista de Equipa, embora aparecesse na
+  pagina de Permissoes e Perfis.
+- Os KPIs (Total Colaboradores, Docentes, Admin, Apoio, Folha, Activos/Inactivos)
+  ficavam subcontados, porque dependem da mesma lista.
+- O SUPER admin (administrador WordPress real) podia aparecer na lista de Equipa.
+  Requisito: na Equipa so devem aparecer quem tem PERFIL SIGE.
+
+CAUSA
+- A lista era construida APENAS com:
+      get_users(role__in = roles WP de staff, meta sige_escola_id = escola)
+  Quem tinha um perfil SIGE atribuido nesta escola atraves da tabela de
+  permissoes (sige_user_roles) mas SEM a role WP correspondente, ou sem a meta
+  sige_escola_id preenchida, nao entrava na lista. A pagina de Permissoes, essa,
+  ja unia as duas fontes - por isso a equipa aparecia la mas nao aqui.
+- Como todos os KPIs sao calculados a iterar sobre $staff, a contagem herdava
+  a mesma omissao.
+
+CORRECCAO (admin/hr/equipe-view.php, so carregamento de $staff)
+- A lista passa a ser a UNIAO de duas fontes (deduplicada por ID de utilizador):
+    (A) Staff WP scoped a escola:
+        get_users(role__in = staff, meta sige_escola_id = escola, fields=ID)
+    (B) Perfil SIGE activo nesta escola (mesma fonte da pagina de Permissoes):
+        SELECT DISTINCT ur.user_id
+          FROM {prefix}sige_user_roles ur
+          JOIN {prefix}sige_roles r ON r.id = ur.role_id
+         WHERE ur.escola_id = %d AND ur.ativo = 1 AND r.ativo = 1
+           AND r.slug NOT IN ('aluno','encarregado')   -- portal, nao e equipa
+- A uniao e carregada com get_users(include=IDs) devolvendo objectos WP_User
+  completos (o render e os KPIs precisam de ->roles, ->display_name, etc.).
+- Mantido o fallback de migracao por email em sige_professores para quando AMBAS
+  as fontes vem vazias (compatibilidade com dados antigos; fixa a meta de escola).
+
+SUPER ADMIN NUNCA NA EQUIPA
+- Filtro final remove sempre o administrador WordPress real / super admin:
+      sige_is_real_wp_admin_user($u->ID)
+  Assim a Equipa lista apenas perfis SIGE. NOTA: sige_admin_ti PERMANECE - e um
+  perfil SIGE (Admin TI), nao o administrador WP nativo.
+
+EFEITO NOS KPIs
+- Todos os KPIs derivam de $staff; ao completar a lista, as contagens passam a
+  reflectir toda a equipa com perfil SIGE (e sem o super admin). Sem nova query.
+
+FRONTEIRA DE SEGURANCA
+- Sem alterar formulas financeiras/academicas, schema, nonces, endpoints AJAX,
+  name/id nem permissoes reais. As fontes (meta + sige_user_roles) sao
+  tenant-scoped por escola - sem fuga entre escolas. Papeis de portal
+  (aluno/encarregado) ficam de fora da Equipa.
+
+VALIDACAO
+- php -l admin/hr/equipe-view.php -> No syntax errors detected.
+- Gate check-permissoes-aditiva -> OK.
+- Gate check-typography -> OK.
+- Gate check-design-tokens -> 1906/1906 (sem regressao).
+- BUILD.json valido (json_decode OK).
