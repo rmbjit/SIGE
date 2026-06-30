@@ -1378,7 +1378,7 @@ $nomes_meses = ['','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho'
                 O valor mensal continua a vir das rotas de transporte de cada aluno. Aqui a escola decide se esse valor recebe multa e descontos, tal como acontece com os restantes serviços.
             </p>
         </div>
-        <a class="fc-btn fc-btn-ghost fc-btn-sm" href="?page=sige-app&view=financeiro-config&edit=<?php echo (int)$transport_srv_cfg->id; ?>">Editar serviço completo</a>
+        <a class="fc-btn fc-btn-ghost fc-btn-sm sg-fincfg-edit-servico" href="?page=sige-app&view=financeiro-config&edit=<?php echo (int)$transport_srv_cfg->id; ?>" data-sg-fincfg-edit="<?php echo esc_attr(wp_json_encode($transport_srv_cfg)); ?>">Editar serviço completo</a>
     </div>
     <div class="fc-card-body">
         <form method="post" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;align-items:end;">
@@ -1733,7 +1733,7 @@ $nomes_meses = ['','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho'
                             <td style="color:var(--color-success-500);font-weight:600;"><?php echo number_format((float)$s->valor, 2); ?> <?php echo esc_html(sige_moeda()); ?></td>
                             <td style="font-size:0.8rem;">Dia <?php echo (int)($s->dia_vencimento ?? 10); ?></td>
                             <td class="sige-u-nowrap">
-                                <a class="fc-btn fc-btn-ghost fc-btn-sm" href="?page=sige-app&view=financeiro-config&edit=<?php echo (int)$s->id; ?>">Editar</a>
+                                <a class="fc-btn fc-btn-ghost fc-btn-sm sg-fincfg-edit-servico" href="?page=sige-app&view=financeiro-config&edit=<?php echo (int)$s->id; ?>" data-sg-fincfg-edit="<?php echo esc_attr(wp_json_encode($s)); ?>">Editar</a>
                                 <a class="fc-btn fc-btn-sm sg-fincfg-danger-link" href="<?php echo esc_url($del_url); ?>" data-sg-fincfg-confirm="Remover este serviço?" data-sg-fincfg-confirm-detail="Confirme apenas se pretende remover ou desactivar este serviço de forma segura.">Eliminar</a>
                             </td>
                         </tr>
@@ -1791,8 +1791,51 @@ document.addEventListener('DOMContentLoaded', function(){
         serviceModal.setAttribute('aria-hidden','true');
         document.body.classList.remove('sg-fincfg-service-modal-open');
     }
+    // [v12.27.0] Editar servico/preco como POP-UP no cliente (sem recarregar a
+    // pagina para abrir nem para fechar). O href ?edit=ID fica como recurso
+    // sem-JS. A gravacao continua a ser submissao normal do formulario.
+    var servicoForm = serviceModal.querySelector('form');
+    var servicoTitle = document.getElementById('sgFincfgServicoTitle');
+    function setServicoTitulo(texto){
+        if (!servicoTitle) return;
+        var last = servicoTitle.lastChild; // mantem o icone; troca so o texto
+        if (last && last.nodeType === 3) { last.textContent = ' ' + texto; }
+        else { servicoTitle.appendChild(document.createTextNode(' ' + texto)); }
+    }
+    function preencherServico(data){
+        if (!servicoForm || !data) return;
+        // Popula por NOME do campo (== coluna da BD; a linha vem de SELECT *), por
+        // isso nenhum campo fica por preencher (sem risco de perder dados ao gravar).
+        Object.keys(data).forEach(function(key){
+            var field = servicoForm.querySelector('[name="'+key+'"]');
+            if (!field) return;
+            if (field.type === 'checkbox') { field.checked = (String(data[key]) === '1' || data[key] === true); }
+            else { field.value = (data[key] === null || data[key] === undefined) ? '' : data[key]; }
+        });
+    }
+    function abrirNovoServico(){
+        if (servicoForm) servicoForm.reset();
+        setServicoTitulo('Adicionar Serviço');
+        openServiceModal();
+    }
+    function abrirEdicaoServico(data){
+        if (servicoForm) servicoForm.reset(); // limpa para os defaults antes de preencher
+        preencherServico(data);
+        setServicoTitulo('Editar Serviço');
+        openServiceModal();
+    }
     document.querySelectorAll('#sgFincfgOpenServicoModal,[data-sg-fincfg-servico-open]').forEach(function(btn){
-        btn.addEventListener('click', function(e){ e.preventDefault(); openServiceModal(); });
+        btn.addEventListener('click', function(e){ e.preventDefault(); abrirNovoServico(); });
+    });
+    document.querySelectorAll('.sg-fincfg-edit-servico').forEach(function(btn){
+        btn.addEventListener('click', function(e){
+            var raw = btn.getAttribute('data-sg-fincfg-edit');
+            if (!raw) return; // sem dados -> deixa o href (sem-JS) tratar
+            var data;
+            try { data = JSON.parse(raw); } catch(err){ return; } // falha -> fallback href
+            e.preventDefault();
+            abrirEdicaoServico(data);
+        });
     });
     document.querySelectorAll('[data-sg-fincfg-servico-close]').forEach(function(btn){
         btn.addEventListener('click', function(e){ e.preventDefault(); closeServiceModal(); });

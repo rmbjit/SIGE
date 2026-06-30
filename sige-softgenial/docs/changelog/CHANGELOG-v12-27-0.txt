@@ -1,0 +1,34 @@
+SIGE SoftGenial v12.27.0 - Config: editar servico/preco como pop-up no cliente
+Data: 2026-06-30
+Tipo: UX/comportamento (view=financeiro-config). Sem alterar formulas nem a
+gravacao no servidor.
+
+PROBLEMA (reportado pelo utilizador)
+- "Adicionar Servico" ja abria como pop-up no cliente, mas "Editar" recarregava a
+  pagina (?edit=ID) para abrir o modal preenchido, e recarregava OUTRA VEZ ao
+  fechar. O utilizador quer um pop-up simples: abrir e fechar sem processar; so a
+  gravacao e que submete.
+
+CORRECCAO (admin/finance/financeiro-config.php)
+- Os botoes "Editar" passam a abrir o modal NO CLIENTE (sem reload), preenchidos
+  com os dados da linha. O href ?edit=ID fica como recurso sem-JS (fallback).
+- Preenchimento seguro: a linha vem de SELECT *, e o formulario e populado por
+  NOME do campo (== coluna da BD), por isso NENHUM campo fica por preencher - sem
+  risco de perder dados ao gravar. Inclui os 12 campos + 5 checkboxes de regras.
+- Antes de preencher faz form.reset() (limpa para defaults); "Adicionar Servico"
+  tambem faz reset (estado limpo). O titulo alterna "Editar/Adicionar Servico"
+  mantendo o icone.
+- Fechar ja era do lado do cliente quando nao se estava em modo ?edit do servidor,
+  por isso deixa de recarregar. A GRAVACAO continua a ser submissao normal do
+  formulario (POST) - igual ao "Adicionar".
+
+FRONTEIRA
+- So comportamento de UI + markup (data-attr nos botoes de editar). Sem alterar
+  formulas, SQL de gravacao, nonces, name/id dos campos, permissoes nem schema. A
+  logica de save no servidor e a mesma (le os mesmos campos do formulario).
+- financeiro-config.php NAO e hash-protegido (confirmado no gate de baseline).
+
+VALIDACAO
+- php -l OK. node --check ao bloco de JS do modal: OK. Gate de tokens estavel.
+- DEPLOY:   docs/deploy/DEPLOY-v12.27.0-config-editar-popup.md
+- LIVE-TEST: docs/qa/LIVE-TEST-v12.27.0-config-editar-popup.md
