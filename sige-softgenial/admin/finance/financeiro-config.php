@@ -1292,8 +1292,10 @@ $periodos_actual = function_exists('sige_fin_periodos_get') ? sige_fin_periodos_
 $nomes_meses = ['','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 ?>
 <div id="fc-periodos" class="fc-card sg-fincfg-periodos" style="margin-bottom:32px;">
-    <div class="fc-card-body">
+    <div class="fc-card-header">
         <h3 style="color:var(--color-info-900);">Gestão de Períodos - Ano <?php echo esc_html($periodos_ano); ?></h3>
+    </div>
+    <div class="fc-card-body">
         <p style="font-size:0.85rem;color:var(--color-slate-500);margin-bottom:16px;">
             Feche períodos para bloquear a geração de lançamentos e pagamentos em meses específicos.
             Meses fechados impedem cobrança a nível da escola inteira.

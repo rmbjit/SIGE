@@ -1,0 +1,37 @@
+SIGE SoftGenial v12.28.0 - Config: afordancia dos campos + Periodos colapsavel
+Data: 2026-06-30
+Tipo: apresentacao/UX (view=financeiro-config). Sem logica nem formulas.
+
+CONTEXTO
+- A pedido: "o que mais agrega valor neste ecra". Avancei A + C. (O B - scroll do
+  modal de servico - JA estava correcto: .sg-fincfg-service-form-card tem
+  max-height + overflow:auto e o cabecalho e position:sticky; nada a fazer.)
+
+A) AFORDANCIA DOS CAMPOS (mesmo problema dos "ovos" do gerador)
+- .sg-fincfg-wrap .fc-input/.fc-select/select: borda mais nitida (1.5px ink-200,
+  era 1px ink-100), raio var(--radius-md) (era 14px solto), background-color (em
+  vez do shorthand). Hover realca a borda.
+- Selects ganham SETA de dropdown (appearance:none + chevron, igual ao gerador) e
+  cursor pointer; hover com borda brand-300 + fundo brand-50. Inputs de data
+  mantem o seletor nativo (excluidos do chevron). Abrange os ~36 controlos do
+  formulario de servico e os filtros.
+
+C) "GESTAO DE PERIODOS" COLAPSAVEL
+- A seccao nao tinha cabecalho proprio (titulo dentro do corpo), por isso nao era
+  colapsavel. Adicionado .fc-card-header com o titulo -> agora colapsa como as
+  restantes regras (comeca fechada; "Lista de Servicos" mantem-se aberta). Pagina
+  ainda mais curta.
+
+B) SCROLL DO MODAL DE SERVICO - JA CORRECTO (sem alteracao)
+- Verificado: o cartao do formulario ja rola (max-height + overflow:auto) e o
+  cabecalho fica fixo (position:sticky). Nao se inventou trabalho.
+
+FRONTEIRA
+- So apresentacao (CSS) + uma reestruturacao minima de marcacao (cabecalho da
+  seccao Periodos). Sem alterar formulas, SQL, nonces, name/id, permissoes nem
+  schema. config.php nao e hash-protegido.
+
+VALIDACAO
+- php -l OK. Gate de tokens 1906 (baixou; baseline reposta - raio passou a token).
+- DEPLOY:   docs/deploy/DEPLOY-v12.28.0-config-afordancia.md
+- LIVE-TEST: docs/qa/LIVE-TEST-v12.28.0-config-afordancia.md
