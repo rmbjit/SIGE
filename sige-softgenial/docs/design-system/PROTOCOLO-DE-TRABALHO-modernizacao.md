@@ -18,6 +18,7 @@ Frase que rege tudo: **sempre progresso, nunca regressão. Verificar, não assum
 | Corrigi "permissoes" na view, mas o texto vinha de `institutional-product-map.php` | Seguir o texto **até à fonte**, não ao primeiro sítio onde aparece |
 | Tratei navegação de Comunicações como "só apresentação"; afinal toca permissões | Se toca gating/permissões, **é lógica**: confirmar e testar, não assumir |
 | Revi o ecrã Equipa e disse "os modais funcionam" sem ver que o modal saía **tapado pela barra lateral**. Causa: `.sg-app-content` é um contexto de empilhamento (`position:relative;z-index:1`) abaixo da sidebar; um modal filho do conteúdo nunca sobe acima dela, por maior que seja o seu `z-index` | "Funciona" inclui **aparecer inteiro e por cima da moldura** (sidebar/topbar). Validar sempre overlays/modais/dropdowns contra o **contexto de empilhamento dos pais**, não só contra o `z-index` próprio. Quando há captura de ecrã, **olhar mesmo para ela** |
+| Corrigi o modal para aparecer por cima, mas ele **não rolava** e cortava os campos de baixo (corpo com `overflow-y:auto` sem altura limitada; rodapé `position:sticky` sem contentor a rolar) | Corrigir a **aparição** não chega: validar o **funcionamento completo** (rolar até ao fim, rodapé sempre visível, submeter, fechar, teclado/Enter, foco). Um modal precisa de **coluna flex** (cabeçalho/separadores fixos, corpo `flex:1;min-height:0;overflow:auto`, rodapé fixo); `overflow:auto` sem altura limitada **não rola** |
 
 ---
 
@@ -93,6 +94,10 @@ Assumir que há erros. Reler o que se entregou e procurar activamente:
   modal depende de um ancestral (ex.: `.sige-rh .field-group`), **portar partiria
   o estilo** - nesse caso elevar o conteúdo é mais seguro.
 - Menu que mostra links que a rota bloqueia (ou vice-versa).
+- **Funcionamento completo de cada componente interactivo**, não só a aparência:
+  um modal abre, **rola até ao último campo**, mostra o rodapé, submete, valida,
+  fecha (X, Cancelar, ESC, clique fora), responde ao teclado/Enter e gere o foco.
+  Testar com conteúdo alto (ecrã baixo / muitos campos) para forçar o scroll.
 - Estados restritos (perfis com poucas permissões) e ecrãs vazios.
 - Mobile/tablet, não só desktop.
 

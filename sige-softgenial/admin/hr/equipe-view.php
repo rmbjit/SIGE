@@ -1509,6 +1509,21 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     box-shadow:var(--shadow-lg);
     overflow:hidden!important;
     transform:translateY(16px) scale(.985);
+    /* Coluna flex: cabecalho + separadores fixos, corpo rola, rodape fixo.
+       Sem isto o conteudo passava de 92vh e ficava cortado (sem scroll). */
+    display:flex!important;
+    flex-direction:column!important;
+}
+/* Cabecalho e separadores nao encolhem; o corpo e que absorve o overflow. */
+#box-equipa .modal-header,
+#box-equipa .modal-tabs{flex:0 0 auto!important;}
+/* O formulario ocupa o espaco restante e delega o scroll ao corpo. */
+#box-equipa #form-staff{
+    display:flex!important;
+    flex-direction:column!important;
+    flex:1 1 auto!important;
+    min-height:0!important;
+    overflow:hidden!important;
 }
 #box-equipa .modal-header{
     position:relative!important;
@@ -1634,7 +1649,10 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 #box-equipa .modal-body{
     background:linear-gradient(180deg,var(--color-white) 0%,var(--color-slate-50) 100%)!important;
     padding:var(--space-6) var(--space-8)!important;
+    flex:1 1 auto!important;
+    min-height:0!important;
     overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;
 }
 #box-equipa .tab-content.active{
     display:block!important;
@@ -1778,8 +1796,7 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     border-radius:var(--radius-xl)!important;
 }
 #box-equipa .modal-footer{
-    position:sticky!important;
-    bottom:0!important;
+    flex:0 0 auto!important;
     z-index:3!important;
     padding:var(--space-5) var(--space-8)!important;
     background:rgba(255,255,255,.94)!important;

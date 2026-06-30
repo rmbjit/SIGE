@@ -1,0 +1,41 @@
+SIGE SoftGenial v12.21.2 - Equipa: modal com scroll (corpo rola, rodape fixo)
+Data: 2026-06-30
+Tipo: correccao de apresentacao (layout do modal). Sem logica.
+
+PROBLEMA (reportado pelo utilizador)
+- O modal ja aparecia por cima da barra lateral (v12.21.1), mas NAO rolava: em
+  ecrans baixos ou com muitos campos, os campos de baixo ficavam cortados e o
+  rodape (Guardar/Cancelar) podia ficar inacessivel.
+
+CAUSA
+- .sg-rh-staff-modal tinha max-height:92vh e overflow:hidden, mas nao era um
+  contentor flex; o corpo (.modal-body) tinha overflow-y:auto SEM altura
+  limitada, por isso nao gerava scroll - apenas transbordava e era cortado. O
+  rodape usava position:sticky sem nenhum ancestral a rolar.
+
+CORRECCAO (admin/hr/equipe-view.php, so apresentacao)
+- .sg-rh-staff-modal passa a coluna flex (display:flex;flex-direction:column),
+  mantendo max-height:92vh.
+- Cabecalho e separadores: flex:0 0 auto (nao encolhem).
+- #form-staff: coluna flex, flex:1 1 auto, min-height:0, overflow:hidden (ocupa o
+  espaco restante e delega o scroll ao corpo).
+- .modal-body: flex:1 1 auto, min-height:0, overflow-y:auto (+ -webkit-overflow-
+  scrolling:touch). Agora rola ate ao ultimo campo.
+- .modal-footer: flex:0 0 auto (fica sempre visivel no fundo; removido o
+  position:sticky que ja nao era necessario).
+
+RESULTADO
+- Cabecalho e separadores fixos no topo, corpo rola, rodape sempre visivel. O
+  modal de confirmacao (#sige-rh-confirm) ja rolava (max-height:90vh) e nao mudou.
+
+FRONTEIRA
+- So apresentacao/layout. Sem logica, SQL, nonces, AJAX, name/id, permissoes nem
+  schema. Regras scoped a #box-equipa.
+
+APRENDIZAGEM
+- PROTOCOLO: nova licao (corrigir a aparicao nao chega - validar funcionamento
+  completo: rolar, rodape, submeter, fechar, teclado, foco) e novo ponto de
+  auto-revisao sobre testar componentes interactivos com conteudo alto.
+
+VALIDACAO
+- php -l equipe-view.php: sem erros. BUILD.json valido. Gate de tokens 1914.
