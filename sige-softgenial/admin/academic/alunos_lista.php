@@ -5807,18 +5807,23 @@ body.sige-admin-app.sige-view-alunos_lista .sige-actions-trigger[aria-expanded="
     }
 }
 
-/* v12.22.1 - Herói sem ilustração: faixa de uma coluna a toda a largura.
+/* v12.22.2 - Herói sem ilustração: faixa de uma coluna a toda a largura.
    Anula os padding-right/min-height que reservavam espaço para a arte (já
-   removida) e garante que os botões de acção usam a largura toda (sem ficarem
-   2+1 com um vazio à direita). Colocado no fim para vencer as camadas anteriores. */
+   removida). Os botões ficam numa LINHA em portáteis (o constrangimento real é
+   a largura do conteúdo = janela menos a barra lateral ~286px, não a janela):
+   por isso são compactos e NÃO quebram (nada de 2+1 nem dependência de zoom).
+   Só empilham em ecrã estreito (telemóvel/tablet pequeno). Colocado no fim para
+   vencer as camadas anteriores. */
 body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero-content{display:block!important;}
 body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero-text{padding-right:0!important;max-width:none!important;min-height:0!important;width:100%!important;}
 body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero h1{max-width:none!important;}
-body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero-actions{display:flex!important;flex-wrap:wrap!important;gap:var(--space-3)!important;width:100%!important;}
-@media (max-width:820px){
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero-actions{display:flex!important;flex-wrap:nowrap!important;gap:var(--space-2)!important;width:100%!important;}
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-btn-hero{flex:0 1 auto!important;min-width:0!important;padding:0 var(--space-3)!important;gap:var(--space-2)!important;font-size:var(--fs-sm)!important;white-space:nowrap!important;}
+body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-btn-hero svg{flex:0 0 auto!important;width:16px!important;height:16px!important;}
+@media (max-width:720px){
     body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero-subtitle{max-width:none!important;}
-    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero-actions{display:grid!important;grid-template-columns:1fr!important;}
-    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-btn-hero{width:100%!important;}
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-hero-actions{display:grid!important;grid-template-columns:1fr!important;flex-wrap:wrap!important;}
+    body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-btn-hero{width:100%!important;font-size:var(--fs-base)!important;white-space:normal!important;}
 }
 </style>
 

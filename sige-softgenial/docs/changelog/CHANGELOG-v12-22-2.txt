@@ -1,0 +1,37 @@
+SIGE SoftGenial v12.22.2 - Alunos: botoes do heroi numa linha em portateis
+Data: 2026-06-30
+Tipo: correccao de apresentacao (responsividade do heroi). Sem logica.
+
+PROBLEMA (reportado pelo utilizador, portatil HP ProBook 17")
+- Os 3 botoes do heroi (Registar Aluno / Importar Lista / Imprimir Cartoes) so
+  ficavam numa linha depois de fazer zoom out uma vez; ao zoom normal quebravam
+  (2+1).
+
+CAUSA
+- A media query anterior decidia "linha vs empilhado" pela largura da JANELA
+  (820px), mas o constrangimento real e a largura do CONTEUDO = janela menos a
+  barra lateral (~286px) menos paddings. Em portateis, a janela e > 820px (logo
+  aplicava a regra de "linha em flex-wrap"), mas o conteudo ficava estreito e os
+  botoes, ao tamanho natural, nao cabiam todos -> quebravam 2+1. Um zoom out
+  alargava o viewport CSS o suficiente para caberem.
+
+CORRECCAO (admin/academic/alunos_lista.php, so apresentacao)
+- Botoes compactos e a NAO quebrar: .sige-hero-actions flex-wrap:nowrap;
+  .sige-btn-hero flex:0 1 auto; min-width:0; padding 0 var(--space-3);
+  font-size var(--fs-sm); white-space:nowrap; icone 16px. Assim os 3 cabem numa
+  linha na largura de conteudo de um portatil (com a barra lateral visivel),
+  sem depender do zoom.
+- So empilham (1 coluna, largura total, fonte normal) em ecra estreito
+  (<=720px), para telemovel/tablet pequeno.
+
+FRONTEIRA
+- So apresentacao/CSS do heroi. Sem logica, SQL, nonces, AJAX, name/id,
+  permissoes nem schema.
+
+VALIDACAO
+- php -l: sem erros. BUILD.json valido. Gate de tokens 1911 (estavel).
+
+APRENDIZAGEM
+- PROTOCOLO: responsividade neste shell deve considerar a largura do CONTEUDO
+  (janela menos a barra lateral), nao so a largura da janela; e validar em
+  larguras de portatil reais, nao so desktop largo.
