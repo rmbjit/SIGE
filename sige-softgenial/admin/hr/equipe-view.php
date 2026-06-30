@@ -227,19 +227,27 @@ foreach ($_profs_raw as $_pr) {
     $_profs_by_id[(int)$_pr->id] = $_pr;
 }
 
+// [v12.35.0] Registos normalizados para os Relatórios de RH. Construídos a partir
+// da MESMA fonte das KPIs e da lista (staff + ficha de RH), pelo que os números
+// reconciliam. A agregação fica numa função pura (includes/rh-relatorios.php).
+$sige_rh_people = [];
 foreach($staff as $s) {
     $__eff_role = $sige_rh_eff_role($s); // perfil SIGE actual (ou papel WP legado)
     if(in_array($__eff_role, $roles_docentes, true)) {
         $total_docentes++;
+        $__cat = 'docente';
     } elseif(in_array($__eff_role, $roles_apoio, true)) {
         $total_apoio++;
+        $__cat = 'apoio';
     } else {
         $total_administrativos++;
+        $__cat = 'administrativo';
     }
-    
+
     $prof_meta_id = (int)get_user_meta($s->ID, 'sige_professor_id', true);
     $rh = ($prof_meta_id > 0 && isset($_profs_by_id[$prof_meta_id])) ? $_profs_by_id[$prof_meta_id] : ($_profs_map[strtolower($s->user_email)] ?? null);
-    
+
+    $__ativo = true;
     if($rh) {
         $custo_salarial_mensal += (floatval($rh->salario_base) + floatval($rh->subsidio));
         if($rh->tipo_contrato === 'efectivo') {
@@ -249,12 +257,28 @@ foreach($staff as $s) {
         }
         if(isset($rh->status_ativo) && !(int)$rh->status_ativo) {
             $total_inactivos++;
+            $__ativo = false;
         } else {
             $total_activos++;
         }
     } else {
         $total_activos++;
     }
+
+    $sige_rh_people[] = [
+        'categoria'      => $__cat,
+        'tem_ficha'      => (bool) $rh,
+        'ativo'          => $__ativo,
+        'tipo_contrato'  => $rh ? (string) $rh->tipo_contrato : '',
+        'nivel_carreira' => $rh ? (string) ($rh->nivel_carreira ?? '') : '',
+        'regime_trabalho'=> $rh ? (string) ($rh->regime_trabalho ?? '') : '',
+        'data_admissao'  => $rh ? (string) ($rh->data_admissao ?? '') : '',
+        'salario'        => $rh ? (floatval($rh->salario_base) + floatval($rh->subsidio)) : 0.0,
+        'nuit'           => $rh ? (string) ($rh->nuit ?? '') : '',
+        'telemovel'      => $rh ? (string) ($rh->telemovel ?? '') : '',
+        'email'          => (string) $s->user_email,
+        'foto'           => $rh ? (trim((string) ($rh->foto_perfil ?? '')) !== '') : false,
+    ];
 }
 ?>
 <style>
@@ -1568,6 +1592,64 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 .sige-rh .sg-rh-alertas-more{margin-top:var(--space-3);font-size:var(--fs-sm);color:var(--color-slate-500);}
 @media (max-width:720px){.sige-rh .sg-rh-alertas-head{flex-direction:column;}.sige-rh .sg-rh-alert{flex-wrap:wrap;}}
 
+/* ========================================
+   ABAS RH (Equipa / Relatórios) - v12.35.0
+   ======================================== */
+.sige-rh .sg-rh-tabs{display:flex;gap:var(--space-1);align-items:flex-end;border-bottom:1px solid var(--color-ink-100);margin:0;padding:0 var(--space-1);}
+.sige-rh .sg-rh-tab{appearance:none;border:0;background:transparent;cursor:pointer;display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-3) var(--space-4);font-family:inherit;font-size:var(--fs-base);font-weight:600;color:var(--color-slate-500);border-bottom:2px solid transparent;margin-bottom:-1px;border-radius:var(--radius-md) var(--radius-md) 0 0;transition:color .15s ease,border-color .15s ease,background .15s ease;}
+.sige-rh .sg-rh-tab:hover{color:var(--color-slate-700);background:var(--color-ink-50);}
+.sige-rh .sg-rh-tab .sg-rh-tab-ic{width:18px;height:18px;flex:0 0 auto;}
+.sige-rh .sg-rh-tab .sg-rh-tab-ic svg{width:18px;height:18px;display:block;}
+.sige-rh .sg-rh-tab.is-active{color:var(--sg-theme-primary,var(--color-brand-600));border-bottom-color:var(--sg-theme-primary,var(--color-brand-600));}
+.sige-rh .sg-rh-tab-count{font-size:var(--fs-xs);font-weight:700;line-height:1;padding:2px 7px;border-radius:var(--radius-pill);background:var(--color-ink-100);color:var(--color-slate-600);}
+.sige-rh .sg-rh-tab.is-active .sg-rh-tab-count{background:var(--sg-theme-soft,var(--color-brand-50));color:var(--sg-theme-primary,var(--color-brand-700));}
+.sige-rh .sg-rh-tabpanel{display:flex;flex-direction:column;gap:var(--space-5);}
+.sige-rh .sg-rh-tabpanel[hidden]{display:none!important;}
+
+/* ----- Painel de Relatórios ----- */
+.sige-rh .sg-rh-rep-intro{display:flex;align-items:flex-start;gap:var(--space-3);}
+.sige-rh .sg-rh-rep-intro .sg-rh-rep-ic{width:40px;height:40px;flex:0 0 auto;border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;background:var(--sg-theme-soft,var(--color-brand-50));color:var(--sg-theme-primary,var(--color-brand-600));}
+.sige-rh .sg-rh-rep-intro .sg-rh-rep-ic svg{width:22px;height:22px;}
+.sige-rh .sg-rh-rep-intro h2{margin:0;font-size:var(--fs-lg);font-weight:700;letter-spacing:-.02em;color:var(--color-black);}
+.sige-rh .sg-rh-rep-intro p{margin:2px 0 0;font-size:var(--fs-sm);color:var(--color-slate-500);}
+.sige-rh .sg-rh-rep-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-4);}
+.sige-rh .sg-rh-rep-stat{background:var(--color-white);border:1px solid rgba(28,32,54,.08);border-radius:var(--radius-xl);box-shadow:var(--shadow-md);padding:var(--space-5);display:flex;flex-direction:column;gap:6px;}
+.sige-rh .sg-rh-rep-stat .v{font-size:var(--fs-2xl);font-weight:700;line-height:1;letter-spacing:-.03em;color:var(--color-black);}
+.sige-rh .sg-rh-rep-stat .l{font-size:var(--fs-sm);font-weight:600;color:var(--color-slate-600);}
+.sige-rh .sg-rh-rep-stat .n{font-size:var(--fs-xs);color:var(--color-slate-500);}
+.sige-rh .sg-rh-rep-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4);}
+.sige-rh .sg-rh-rep-card{background:var(--color-white);border:1px solid rgba(30,34,60,.08);border-radius:var(--radius-xl);box-shadow:var(--shadow-md);padding:var(--space-5) var(--space-6);min-width:0;}
+.sige-rh .sg-rh-rep-card.is-wide{grid-column:1 / -1;}
+.sige-rh .sg-rh-rep-card h3{display:flex;align-items:center;gap:var(--space-2);margin:0 0 var(--space-4);font-size:var(--fs-base);font-weight:700;color:var(--color-black);}
+.sige-rh .sg-rh-rep-card h3 svg{width:18px;height:18px;color:var(--color-slate-400);flex:0 0 auto;}
+.sige-rh .sg-rh-rep-empty{font-size:var(--fs-sm);color:var(--color-slate-400);padding:var(--space-3) 0;}
+/* Barras horizontais */
+.sige-rh .sg-rh-bars{display:flex;flex-direction:column;gap:var(--space-3);}
+.sige-rh .sg-rh-bar-row{display:grid;grid-template-columns:minmax(120px,38%) 1fr auto;align-items:center;gap:var(--space-3);}
+.sige-rh .sg-rh-bar-label{font-size:var(--fs-sm);font-weight:600;color:var(--color-slate-700);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sige-rh .sg-rh-bar-track{position:relative;height:10px;border-radius:var(--radius-pill);background:var(--color-ink-100);overflow:hidden;}
+.sige-rh .sg-rh-bar-fill{position:absolute;inset:0 auto 0 0;height:100%;border-radius:var(--radius-pill);background:var(--bar,var(--sg-theme-primary,var(--color-brand-500)));min-width:3px;transition:width .4s ease;}
+.sige-rh .sg-rh-bar-val{font-size:var(--fs-sm);font-weight:700;color:var(--color-slate-800);min-width:62px;text-align:right;}
+.sige-rh .sg-rh-bar-val small{font-weight:600;color:var(--color-slate-400);}
+/* Admissões por ano (colunas) */
+.sige-rh .sg-rh-cols{display:flex;align-items:flex-end;gap:var(--space-3);height:140px;padding-top:var(--space-2);}
+.sige-rh .sg-rh-col{flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%;min-width:0;}
+.sige-rh .sg-rh-col-val{font-size:var(--fs-sm);font-weight:700;color:var(--color-slate-700);}
+.sige-rh .sg-rh-col-bar{width:100%;max-width:46px;border-radius:var(--radius-md) var(--radius-md) 0 0;background:linear-gradient(180deg,var(--sg-theme-primary,var(--color-brand-500)),var(--sg-theme-primary-800,var(--color-brand-700)));min-height:4px;transition:height .4s ease;}
+.sige-rh .sg-rh-col-year{font-size:var(--fs-xs);color:var(--color-slate-500);font-weight:600;}
+/* Qualidade de dados */
+.sige-rh .sg-rh-qual{display:flex;flex-direction:column;gap:var(--space-4);}
+.sige-rh .sg-rh-qual-row{display:grid;grid-template-columns:minmax(120px,30%) 1fr auto;align-items:center;gap:var(--space-3);}
+.sige-rh .sg-rh-qual-label{font-size:var(--fs-sm);font-weight:600;color:var(--color-slate-700);}
+.sige-rh .sg-rh-qual-track{position:relative;height:8px;border-radius:var(--radius-pill);background:var(--color-ink-100);overflow:hidden;}
+.sige-rh .sg-rh-qual-fill{position:absolute;inset:0 auto 0 0;height:100%;border-radius:var(--radius-pill);background:var(--color-success-500);transition:width .4s ease;}
+.sige-rh .sg-rh-qual-fill.is-warn{background:var(--color-warning-500);}
+.sige-rh .sg-rh-qual-fill.is-bad{background:var(--color-danger-500);}
+.sige-rh .sg-rh-qual-val{font-size:var(--fs-sm);font-weight:700;color:var(--color-slate-800);min-width:96px;text-align:right;}
+.sige-rh .sg-rh-qual-val small{font-weight:600;color:var(--color-slate-400);}
+@media (max-width:1100px){.sige-rh .sg-rh-rep-stats{grid-template-columns:repeat(2,minmax(0,1fr));}.sige-rh .sg-rh-rep-grid{grid-template-columns:1fr;}}
+@media (max-width:720px){.sige-rh .sg-rh-rep-stats{grid-template-columns:1fr;}.sige-rh .sg-rh-bar-row,.sige-rh .sg-rh-qual-row{grid-template-columns:1fr auto;}.sige-rh .sg-rh-bar-track,.sige-rh .sg-rh-qual-track{grid-column:1 / -1;order:3;}.sige-rh .sg-rh-tab{padding:var(--space-3) var(--space-3);font-size:var(--fs-sm);}}
+
 
 
 /* ========================================
@@ -2025,6 +2107,23 @@ body.sige-admin-app #sige-rh-confirm.sige-modal:not(.active)[aria-hidden="true"]
             </div>
         </section>
     <!-- ========================================
+         ABAS RH: Equipa (gestão) / Relatórios (análise) - v12.35.0
+         ======================================== -->
+        <div class="sg-rh-tabs" role="tablist" aria-label="Secções de Recursos Humanos">
+            <button type="button" class="sg-rh-tab is-active" id="sg-rh-tabbtn-equipa" role="tab" aria-selected="true" aria-controls="sg-rh-panel-equipa" data-sige-act="sgRhSwitchTab" data-sige-args='["equipa"]'>
+                <span class="sg-rh-tab-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                Equipa
+                <span class="sg-rh-tab-count"><?php echo (int) $total_funcionarios; ?></span>
+            </button>
+            <button type="button" class="sg-rh-tab" id="sg-rh-tabbtn-relatorios" role="tab" aria-selected="false" aria-controls="sg-rh-panel-relatorios" data-sige-act="sgRhSwitchTab" data-sige-args='["relatorios"]'>
+                <span class="sg-rh-tab-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+                Relatórios
+            </button>
+        </div>
+
+    <!-- ===== PAINEL: EQUIPA (gestão operacional) ===== -->
+    <div class="sg-rh-tabpanel is-active" id="sg-rh-panel-equipa" role="tabpanel" aria-labelledby="sg-rh-tabbtn-equipa" data-rh-panel="equipa">
+    <!-- ========================================
          INDICADORES - padrão Painel Principal
          ======================================== -->
         <section class="sg-kpi-grid" aria-label="Indicadores de equipa e professores">
@@ -2378,6 +2477,161 @@ body.sige-admin-app #sige-rh-confirm.sige-modal:not(.active)[aria-hidden="true"]
         <?php endif; ?>
     </section>
     <?php endif; ?>
+    </div><!-- /#sg-rh-panel-equipa -->
+
+    <!-- ========================================
+         PAINEL: RELATÓRIOS (análise de RH) - só leitura/agregação
+         ======================================== -->
+    <div class="sg-rh-tabpanel" id="sg-rh-panel-relatorios" role="tabpanel" aria-labelledby="sg-rh-tabbtn-relatorios" data-rh-panel="relatorios" hidden>
+    <?php
+    $REL = function_exists('sige_rh_build_reports')
+        ? sige_rh_build_reports($sige_rh_people, ['today' => function_exists('wp_date') ? wp_date('Y-m-d') : date('Y-m-d')])
+        : null;
+    if ($REL):
+        $rel_ativos = (int) $REL['ativos'];
+        $rel_moeda  = function_exists('sige_moeda') ? sige_moeda() : 'MT';
+        // Barra horizontal reutilizável (largura relativa ao máximo; % sobre activos).
+        $rel_bar = function (string $label, int $count, int $max, string $barvar = '') use ($rel_ativos) {
+            $w   = $max > 0 ? max(3, (int) round($count / $max * 100)) : 3;
+            $pct = $rel_ativos > 0 ? (int) round($count / $rel_ativos * 100) : 0;
+            $style = 'width:' . $w . '%' . ($barvar !== '' ? ';--bar:' . $barvar : '');
+            echo '<div class="sg-rh-bar-row">';
+            echo '<span class="sg-rh-bar-label">' . esc_html($label) . '</span>';
+            echo '<span class="sg-rh-bar-track"><span class="sg-rh-bar-fill" style="' . esc_attr($style) . '"></span></span>';
+            echo '<span class="sg-rh-bar-val">' . (int) $count . ' <small>' . $pct . '%</small></span>';
+            echo '</div>';
+        };
+        // Listas de distribuição.
+        $cat_max = max(1, max(array_map(fn($x) => (int) $x['count'], $REL['categoria'])));
+        $vin_max = max(1, max(array_map(fn($x) => (int) $x['count'], $REL['vinculo'])));
+        $cat_cores = ['docente' => 'var(--color-success-500)', 'administrativo' => 'var(--sg-theme-primary,var(--color-brand-500))', 'apoio' => 'var(--color-info-400)'];
+        $vin_cores = ['efectivo' => 'var(--color-success-500)', 'contrato' => 'var(--color-warning-500)', 'estagio' => 'var(--color-info-400)', '' => 'var(--color-slate-400)'];
+        $vin_efe = (int) $REL['vinculo'][0]['count'];
+        $vin_prazo = (int) $REL['vinculo'][1]['count'];
+    ?>
+        <div class="sg-rh-rep-intro">
+            <span class="sg-rh-rep-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></span>
+            <div>
+                <h2>Relatórios de RH</h2>
+                <p>Análise da equipa activa (<?php echo (int) $rel_ativos; ?> colaborador<?php echo $rel_ativos === 1 ? '' : 'es'; ?><?php echo $REL['inativos'] > 0 ? ' · ' . (int) $REL['inativos'] . ' inactivo' . ($REL['inativos'] === 1 ? '' : 's') : ''; ?>). Reconcilia com as KPIs e a lista da Equipa.</p>
+            </div>
+        </div>
+
+        <div class="sg-rh-rep-stats">
+            <div class="sg-rh-rep-stat">
+                <span class="v"><?php echo (int) $rel_ativos; ?></span>
+                <span class="l">Colaboradores activos</span>
+                <span class="n"><?php echo (int) $REL['inativos']; ?> inactivo(s) fora da análise</span>
+            </div>
+            <div class="sg-rh-rep-stat">
+                <span class="v"><?php echo number_format((float) $REL['antiguidade_media'], 1, ',', '.'); ?> <small data-sige-style="font-size:var(--fs-sm);color:var(--color-slate-400)">anos</small></span>
+                <span class="l">Antiguidade média</span>
+                <span class="n">Com base na data de admissão</span>
+            </div>
+            <div class="sg-rh-rep-stat">
+                <span class="v"><?php echo (int) $vin_efe; ?> <small data-sige-style="font-size:var(--fs-sm);color:var(--color-slate-400)"><?php echo sige_rh_pct($vin_efe, $rel_ativos); ?>%</small></span>
+                <span class="l">Efectivos (quadro)</span>
+                <span class="n">Vínculo permanente</span>
+            </div>
+            <div class="sg-rh-rep-stat">
+                <span class="v"><?php echo (int) $vin_prazo; ?> <small data-sige-style="font-size:var(--fs-sm);color:var(--color-slate-400)"><?php echo sige_rh_pct($vin_prazo, $rel_ativos); ?>%</small></span>
+                <span class="l">Contratos a prazo</span>
+                <span class="n">Requerem acompanhamento</span>
+            </div>
+        </div>
+
+        <div class="sg-rh-rep-grid">
+            <!-- Categoria -->
+            <div class="sg-rh-rep-card">
+                <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg> Por categoria</h3>
+                <div class="sg-rh-bars">
+                    <?php foreach ($REL['categoria'] as $c) { $rel_bar($c['label'], (int) $c['count'], $cat_max, $cat_cores[$c['slug']] ?? ''); } ?>
+                </div>
+            </div>
+            <!-- Vínculo -->
+            <div class="sg-rh-rep-card">
+                <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg> Por vínculo contratual</h3>
+                <div class="sg-rh-bars">
+                    <?php foreach ($REL['vinculo'] as $v) { $rel_bar($v['label'], (int) $v['count'], $vin_max, $vin_cores[$v['slug']] ?? ''); } ?>
+                </div>
+            </div>
+            <!-- Regime de trabalho -->
+            <div class="sg-rh-rep-card">
+                <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Por regime de trabalho</h3>
+                <?php if (!empty($REL['regime'])) { $reg_max = max(1, max(array_map(fn($x) => (int) $x['count'], $REL['regime']))); ?>
+                <div class="sg-rh-bars">
+                    <?php foreach (array_slice($REL['regime'], 0, 6) as $r) { $rel_bar($r['label'], (int) $r['count'], $reg_max); } ?>
+                </div>
+                <?php } else { ?><div class="sg-rh-rep-empty">Sem regime de trabalho registado.</div><?php } ?>
+            </div>
+            <!-- Nível de carreira -->
+            <div class="sg-rh-rep-card">
+                <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Por nível de carreira</h3>
+                <?php if (!empty($REL['carreira'])) { $car_max = max(1, max(array_map(fn($x) => (int) $x['count'], $REL['carreira']))); ?>
+                <div class="sg-rh-bars">
+                    <?php foreach (array_slice($REL['carreira'], 0, 6) as $c) { $rel_bar($c['label'], (int) $c['count'], $car_max); } ?>
+                </div>
+                <?php } else { ?><div class="sg-rh-rep-empty">Sem nível de carreira registado.</div><?php } ?>
+            </div>
+            <!-- Admissões por ano -->
+            <div class="sg-rh-rep-card is-wide">
+                <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Admissões por ano</h3>
+                <?php if (!empty($REL['admissoes'])) { $adm_max = max(1, max(array_map('intval', $REL['admissoes']))); ?>
+                <div class="sg-rh-cols">
+                    <?php foreach ($REL['admissoes'] as $ano => $n) { $h = max(4, (int) round($n / $adm_max * 100)); ?>
+                    <div class="sg-rh-col">
+                        <span class="sg-rh-col-val"><?php echo (int) $n; ?></span>
+                        <span class="sg-rh-col-bar" style="height:<?php echo (int) $h; ?>%"></span>
+                        <span class="sg-rh-col-year"><?php echo esc_html((string) $ano); ?></span>
+                    </div>
+                    <?php } ?>
+                </div>
+                <?php } else { ?><div class="sg-rh-rep-empty">Sem datas de admissão registadas.</div><?php } ?>
+            </div>
+            <?php if ($can_manage_equipe): ?>
+            <!-- Massa salarial (sensível: só gestão) -->
+            <div class="sg-rh-rep-card">
+                <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Massa salarial mensal</h3>
+                <div class="sg-rh-bars">
+                    <div class="sg-rh-bar-row"><span class="sg-rh-bar-label">Total / mês</span><span class="sg-rh-bar-val" data-sige-style="min-width:auto;text-align:left"><strong><?php echo number_format((float) $REL['salario']['massa'], 0, ',', '.'); ?></strong> <small><?php echo esc_html($rel_moeda); ?></small></span></div>
+                    <div class="sg-rh-bar-row"><span class="sg-rh-bar-label">Média por colaborador</span><span class="sg-rh-bar-val" data-sige-style="min-width:auto;text-align:left"><strong><?php echo number_format((float) $REL['salario']['media'], 0, ',', '.'); ?></strong> <small><?php echo esc_html($rel_moeda); ?></small></span></div>
+                    <div class="sg-rh-bar-row"><span class="sg-rh-bar-label">Com salário definido</span><span class="sg-rh-bar-val" data-sige-style="min-width:auto;text-align:left"><strong><?php echo (int) $REL['salario']['com_valor']; ?></strong> <small>de <?php echo (int) $rel_ativos; ?></small></span></div>
+                </div>
+            </div>
+            <?php endif; ?>
+            <!-- Qualidade dos dados -->
+            <div class="sg-rh-rep-card is-wide">
+                <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Qualidade e completude dos dados</h3>
+                <div class="sg-rh-qual">
+                    <?php
+                    $qual_labels = [
+                        'ficha'     => 'Ficha de RH preenchida',
+                        'nuit'      => 'NUIT',
+                        'telemovel' => 'Telemóvel',
+                        'email'     => 'E-mail',
+                        'foto'      => 'Fotografia',
+                        'admissao'  => 'Data de admissão',
+                    ];
+                    foreach ($qual_labels as $qk => $qlabel):
+                        $ok = (int) ($REL['qualidade'][$qk]['ok'] ?? 0);
+                        $falta = (int) ($REL['qualidade'][$qk]['falta'] ?? 0);
+                        $den = $ok + $falta;
+                        $pct = sige_rh_pct($ok, $den);
+                        $cls = $pct >= 80 ? '' : ($pct >= 50 ? ' is-warn' : ' is-bad');
+                    ?>
+                    <div class="sg-rh-qual-row">
+                        <span class="sg-rh-qual-label"><?php echo esc_html($qlabel); ?></span>
+                        <span class="sg-rh-qual-track"><span class="sg-rh-qual-fill<?php echo $cls; ?>" style="width:<?php echo (int) $pct; ?>%"></span></span>
+                        <span class="sg-rh-qual-val"><?php echo $pct; ?>% <small><?php echo (int) $ok; ?>/<?php echo (int) $den; ?></small></span>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    <?php else: ?>
+        <div class="sg-rh-rep-empty">Relatórios indisponíveis (módulo de RH não carregado).</div>
+    <?php endif; ?>
+    </div><!-- /#sg-rh-panel-relatorios -->
     </div>
 </div>
 <!-- ========================================
@@ -3581,6 +3835,26 @@ document.getElementById('box-equipa').addEventListener('click', e => {
 });
 
 // v12.11.9.5 - Failsafe: tornar funções explicitamente globais para onclick inline e fluxos do App Shell.
+// [v12.35.0] Abas RH (Equipa / Relatórios). Troca de painel sem recarregar,
+// CSP-safe (despachada por data-sige-act). Sincroniza estado ARIA.
+function sgRhSwitchTab(tab) {
+    var wrap = document.querySelector('.sige-rh');
+    if (!wrap) return;
+    var target = String(tab || 'equipa');
+    var panels = wrap.querySelectorAll('[data-rh-panel]');
+    Array.prototype.forEach.call(panels, function (p) {
+        var on = p.getAttribute('data-rh-panel') === target;
+        p.hidden = !on;
+        p.classList.toggle('is-active', on);
+    });
+    var tabs = wrap.querySelectorAll('.sg-rh-tab');
+    Array.prototype.forEach.call(tabs, function (b) {
+        var on = b.getAttribute('aria-controls') === 'sg-rh-panel-' + target;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+}
+
 Object.assign(window, {
     novoFuncionario,
     fecharForm,
@@ -3596,6 +3870,7 @@ Object.assign(window, {
     limparPesquisa,
     mostrarArquivoRh,
     activarTab,
+    sgRhSwitchTab,
     uploadFoto,
     uploadDoc
 });

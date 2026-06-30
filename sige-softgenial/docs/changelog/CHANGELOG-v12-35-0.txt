@@ -1,0 +1,68 @@
+SIGE SoftGenial v12.35.0 - RH (passo 2): aba de Relatórios na Equipa
+Data: 2026-06-30
+Tipo: nova funcionalidade (view=equipe). Só leitura/agregação. Sem schema.
+
+PORQUÊ
+- Segundo passo da evolução do módulo de Recursos Humanos. Os dados de RH já
+  existiam mas não havia uma leitura analítica da equipa. Agora o painel da
+  Equipa tem duas abas: "Equipa" (gestão) e "Relatórios" (análise).
+
+O QUE FAZ
+- Aba "Relatórios" com:
+    * Indicadores: colaboradores activos, antiguidade média, % efectivos,
+      contratos a prazo.
+    * Distribuições (barras): por categoria, por vínculo, por regime de
+      trabalho e por nível de carreira.
+    * Admissões por ano (colunas, últimos 6 anos).
+    * Massa salarial mensal (total / média / cobertura) - só para gestão.
+    * Qualidade e completude dos dados (ficha, NUIT, telemóvel, e-mail,
+      fotografia, data de admissão), com limiares de cor.
+- A troca de aba não recarrega a página (sgRhSwitchTab, CSP-safe, com ARIA).
+
+ENGENHARIA (limpa, sem remendos)
+- NOVO includes/rh-relatorios.php (lógica isolada e testável):
+    * sige_rh_build_reports(people, opts) - FUNÇÃO PURA que agrega registos já
+      normalizados pela view. As distribuições contam só activos; inactivos são
+      contados à parte; a massa salarial cobre activos com valor > 0.
+    * helpers sige_rh_categoria_label / sige_rh_pretty_label / sige_rh_pct.
+- Carregado no bootstrap (sige-softgenial.php).
+- admin/hr/equipe-view.php:
+    * o loop de staff existente passa a montar também $sige_rh_people
+      (mesma fonte das KPIs/lista -> os números RECONCILIAM); sem 2.ª query.
+    * o conteúdo passa a ter duas abas; o painel de Relatórios é construído
+      100% com o design system (tokens; barras/colunas com larguras inline
+      hidratadas por data-sige-style; zero cores mágicas).
+- DECISÃO DE ARQUITECTURA: a funcionalidade vive DENTRO da view já roteada
+  (view=equipe), e não numa view nova. Assim NÃO se toca em
+  includes/admin-shell.php (ficheiro protegido por hash), evitando alterar o
+  mapa de rotas/permissões/menu.
+
+NOTA DE DEPLOY
+- Esta entrega inclui 1 FICHEIRO NOVO: includes/rh-relatorios.php (numa pasta
+  já existente). Confirme que foi para o servidor (no seu pipeline, ficheiros
+  novos podem precisar de atenção).
+
+VALIDAÇÃO
+- php -l (include + view + bootstrap) OK.
+- Gates: design-tokens (1857, sem regressão), typography OK.
+- Novo smoke tools/smoke-rh-relatorios-v12-35-0.php: agregação (categoria,
+  vínculo, regime, carreira, admissões, antiguidade, salário, qualidade) +
+  ligação. OK.
+- Render verificado (Chromium): barras/colunas com dimensão, troca de aba
+  funcional.
+
+NOTA (dívida pré-existente, NÃO causada por esta versão)
+- O gate tools/check-v12-16-2-baseline-preservation.php acusa hashes
+  desactualizados em admin/system/dashboard-view.php e includes/admin-shell.php.
+  Estes ficheiros foram alterados de forma legítima em versões anteriores
+  (v12.20.0, v12.29.2) sem reconciliar os hashes do gate (fixados em v12.19.1).
+  Esta versão NÃO toca nesses ficheiros. Reconciliação a fazer como passo
+  próprio e aprovado.
+
+FRONTEIRA
+- Sem alterar fórmulas, schema, permissões reais nem ficheiros protegidos.
+
+PRÓXIMOS PASSOS (roadmap RH)
+- Ficha completa do colaborador (precisa schema); férias/ausências e
+  assiduidade (precisam tabelas); processamento de salário (sensível,
+  financeiro) - cada um com os seus gates e aprovação.
