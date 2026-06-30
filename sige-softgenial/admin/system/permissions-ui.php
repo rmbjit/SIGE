@@ -561,19 +561,15 @@ $__staff_wp_users = get_users([
     'number' => 500,
 ]);
 $__staff_ids = array_map(static function($u) { return (int)$u->ID; }, (array)$__staff_wp_users);
-$__active_sige_ids = [];
-if (!empty($t['user_roles']) && !empty($t['roles']) && $escola_id > 0) {
-    $__active_sige_ids = $wpdb->get_col($wpdb->prepare(
-        "SELECT DISTINCT ur.user_id
-           FROM {$t['user_roles']} ur
-           INNER JOIN {$t['roles']} r ON r.id = ur.role_id
-          WHERE ur.escola_id = %d
-            AND ur.ativo = 1
-            AND r.ativo = 1",
-        $escola_id
-    ));
-    $__active_sige_ids = array_map('intval', (array)$__active_sige_ids);
-}
+// [v12.30.2] Fonte de verdade UNICA, partilhada com a Equipa
+// (includes/sige-staff-roster.php): ur.ativo=1, SEM r.ativo, excluindo papeis de
+// portal (aluno/encarregado). Antes esta pagina usava uma copia local com
+// `r.ativo = 1`, que divergia tanto da coluna "PERFIL SIGE ACTUAL" abaixo (que ja
+// usa so ur.ativo) como da Equipa. A consolidacao elimina a divergencia de
+// criterio de raiz e alinha esta lista com a sua propria coluna de perfil actual.
+$__active_sige_ids = function_exists('sige_staff_active_profile_user_ids')
+    ? sige_staff_active_profile_user_ids((int) $escola_id)
+    : [];
 $__all_staff_ids = array_values(array_unique(array_filter(array_merge($__staff_ids, $__active_sige_ids))));
 $users = !empty($__all_staff_ids) ? get_users([
     'include' => $__all_staff_ids,

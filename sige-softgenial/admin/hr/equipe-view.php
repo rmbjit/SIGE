@@ -98,28 +98,15 @@ $__staff_ids_meta = array_map('intval', (array) get_users(array(
     'fields'     => 'ID',
 )));
 
-// (B) Utilizadores com PERFIL SIGE actual nesta escola (tabela sige_user_roles).
-//     CRITERIO UNICO E DEFINITIVO: tem de ser EXACTAMENTE o mesmo que define a
-//     coluna "PERFIL SIGE ACTUAL" na pagina de Permissoes e Perfis, ou as duas
-//     listas divergem. Essa coluna (permissions-ui.php, $user_role_rows) usa
-//     SO `ur.ativo = 1` - sem `r.ativo = 1`. Um colaborador pode ter uma
-//     ATRIBUICAO activa (ur.ativo=1) a um papel cujo flag global r.ativo nao
-//     esteja a 1; nesse caso aparecia em Permissoes mas desaparecia da Equipa.
-//     Por isso NAO filtramos por r.ativo aqui: contam todas as atribuicoes
-//     activas. So se excluem os papeis de PORTAL (aluno/encarregado), que tem
-//     fluxo proprio e nao sao equipa.
-$__staff_ids_sige = [];
-$__perm_t = function_exists('sige_permissions_tables') ? sige_permissions_tables() : [];
-if (!empty($__perm_t['user_roles']) && !empty($__perm_t['roles']) && $escola_id > 0) {
-    $__staff_ids_sige = array_map('intval', (array) $wpdb->get_col($wpdb->prepare(
-        "SELECT DISTINCT ur.user_id
-           FROM {$__perm_t['user_roles']} ur
-           INNER JOIN {$__perm_t['roles']} r ON r.id = ur.role_id
-          WHERE ur.escola_id = %d AND ur.ativo = 1
-            AND r.slug NOT IN ('aluno', 'encarregado')",
-        $escola_id
-    )));
-}
+// (B) Utilizadores com PERFIL SIGE actual nesta escola.
+//     FONTE DE VERDADE UNICA: includes/sige-staff-roster.php, partilhada com a
+//     pagina de Permissoes e Perfis. As duas paginas usam EXACTAMENTE o mesmo
+//     criterio (ur.ativo=1, sem r.ativo, excluindo portal), por isso as listas
+//     nunca divergem. Foi a divergencia deste criterio que antes deixava parte
+//     da equipa invisivel na Equipa apesar de aparecer em Permissoes.
+$__staff_ids_sige = function_exists('sige_staff_active_profile_user_ids')
+    ? sige_staff_active_profile_user_ids((int) $escola_id)
+    : [];
 
 $__staff_ids = array_values(array_unique(array_filter(array_merge($__staff_ids_meta, $__staff_ids_sige))));
 
@@ -210,21 +197,12 @@ $roles_apoio = ['sige_motorista', 'sige_limpeza', 'sige_recepcao', 'sige_guarda'
 // WP -> mostravam cargo errado e contavam na categoria errada. Aqui traduzimos o
 // slug do perfil actual (tabela sige_roles, sem prefixo) para o slug WP usado
 // pelos rotulos/categorias. ASC na chave -> fica a atribuicao mais recente.
+// Mapa user_id => papel WP do perfil SIGE actual, vindo da MESMA fonte unica.
 $__perfil_sige_wp = []; // user_id => slug estilo WP (sige_*) do perfil SIGE actual
-if (!empty($__perm_t['user_roles']) && !empty($__perm_t['roles']) && $escola_id > 0 && function_exists('sige_permissions_role_to_wp_role')) {
-    $__perfil_rows = $wpdb->get_results($wpdb->prepare(
-        "SELECT ur.user_id, r.slug
-           FROM {$__perm_t['user_roles']} ur
-           INNER JOIN {$__perm_t['roles']} r ON r.id = ur.role_id
-          WHERE ur.escola_id = %d AND ur.ativo = 1
-            AND r.slug NOT IN ('aluno', 'encarregado')
-          ORDER BY ur.id ASC",
-        $escola_id
-    ));
-    foreach ((array) $__perfil_rows as $__pr) {
-        $__wp_slug = sige_permissions_role_to_wp_role((string) $__pr->slug);
-        if ($__wp_slug !== '') {
-            $__perfil_sige_wp[(int) $__pr->user_id] = $__wp_slug;
+if (function_exists('sige_staff_active_profile_map')) {
+    foreach (sige_staff_active_profile_map((int) $escola_id) as $__uid => $__perfil) {
+        if (!empty($__perfil['wp'])) {
+            $__perfil_sige_wp[(int) $__uid] = $__perfil['wp'];
         }
     }
 }

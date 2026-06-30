@@ -1,0 +1,73 @@
+SIGE SoftGenial v12.30.2 - Consolidacao: fonte de verdade UNICA do staff com perfil SIGE
+Data: 2026-06-30
+Tipo: refactor de sustentabilidade (sem alterar o comportamento da Equipa).
+Aprovado pelo utilizador: consolidar AMBAS as paginas (Equipa + Permissoes).
+
+PORQUE
+- O criterio "quem tem perfil SIGE actual nesta escola" estava DUPLICADO em
+  admin/hr/equipe-view.php (Equipa) e admin/system/permissions-ui.php (Permissoes
+  e Perfis). As duas copias divergiram (uma filtrava por r.ativo, a outra nao) e
+  foi essa divergencia a causa-raiz do bug "parte da equipa fica invisivel".
+- Corrigir o sintoma sem remover a duplicacao deixaria a porta aberta a novas
+  divergencias. Esta versao remove a classe inteira de bugs "as duas listas nao
+  batem certo", centralizando o criterio num so sitio.
+
+O QUE MUDA
+1) NOVO includes/sige-staff-roster.php (fonte de verdade unica, so leitura):
+   - sige_staff_active_profile_user_ids($escola_id): IDs com perfil SIGE actual.
+   - sige_staff_active_profile_map($escola_id): user_id => {slug, nome, wp} do
+     perfil actual (atribuicao mais recente vence).
+   - sige_staff_portal_role_slugs(): ['aluno','encarregado'] (centralizado).
+   CRITERIO CANONICO: ur.ativo = 1, SEM r.ativo, excluindo papeis de portal.
+   (E o mesmo criterio que ja alimentava a coluna "PERFIL SIGE ACTUAL".)
+2) sige-softgenial.php: carrega o roster logo apos a permission engine.
+3) admin/hr/equipe-view.php: deixa de ter query inline; consome as duas funcoes
+   (lista + mapa de cargo/KPI). Comportamento identico ao da v12.30.1.
+4) admin/system/permissions-ui.php: $__active_sige_ids passa a consumir a MESMA
+   funcao. Removida a copia local com "AND r.ativo = 1".
+
+EFEITO EM PERMISSOES (mudanca de comportamento - aprovada)
+- A lista de Permissoes fica CONSISTENTE com a sua propria coluna "PERFIL SIGE
+  ACTUAL" (que ja usava so ur.ativo) e com a Equipa: passa a incluir tambem quem
+  tem uma atribuicao activa a um papel cujo flag global r.ativo nao esteja a 1.
+- Alunos/encarregados deixam de poder entrar nesta lista por esta fonte (alinhado
+  com a intencao 12.9.7 da pagina: a lista e so de staff).
+- Risco avaliado: BAIXO. A pagina ja unia utilizadores WP de staff; a coluna de
+  perfil actual ja seguia este criterio. E um alinhamento/endurecimento, nao uma
+  expansao de permissoes (nenhuma capacidade nova; so quem aparece na lista de
+  gestao). Coberto por smoke.
+
+FICHEIRO PROTEGIDO - NAO TOCADO
+- includes/permissions-layer.php (protegido por hash no gate de baseline) NAO foi
+  alterado. A fonte unica apenas CONSOME os seus helpers (sige_permissions_tables,
+  sige_permissions_role_to_wp_role). Os 7 hashes protegidos ficam intactos.
+
+OUTRAS OCORRENCIAS DE ur.ativo/r.ativo - PORQUE NAO ENTRAM
+- includes/security-user-integrity.php: sweep de seguranca cross-escola de perfis
+  PRIVILEGIADOS (sem escola, so privilegiados) - concern diferente.
+- includes/permissions-layer.php (1176/1720): resolucao do papel de UM utilizador
+  - concern diferente e ja canonico.
+  Consolidar estes seria over-reach; ficam como estao, por desenho.
+
+TESTES
+- NOVO tools/smoke-rh-equipe-roster-consolidado-v12-30-2.php:
+  (1) funcional (cenario das capturas + causa do bug),
+  (2) execucao REAL das funcoes partilhadas com $wpdb simulado (dedup/intval,
+      mapa "mais recente vence", traducao para papel WP, tenant safety),
+  (3) arquitectura (ambas as paginas consomem a fonte unica; ninguem mantem copia
+      com AND r.ativo). 30 verificacoes.
+- Removido tools/smoke-rh-equipe-lista-completa-v12-30-1.php (testava a
+  arquitectura antiga, com a query inline que deixou de existir).
+
+FRONTEIRA
+- Sem alterar formulas, schema, nonces, endpoints AJAX, name/id. Tudo
+  tenant-scoped. A Equipa mantem: exclusao do super admin, cargo/KPI por perfil
+  actual, cracha por capacidade, fallback por email.
+
+VALIDACAO
+- php -l: equipe-view.php, permissions-ui.php, sige-staff-roster.php,
+  sige-softgenial.php -> todos OK.
+- Gates: check-permissoes-aditiva OK, check-typography OK,
+  check-design-tokens 1906/1906 OK.
+- Smoke roster consolidado: 30/30 OK.
+- BUILD.json valido.
