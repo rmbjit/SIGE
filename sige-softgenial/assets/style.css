@@ -3221,9 +3221,15 @@ body.sige-view-financeiro-gerador .sg-app-page{padding-top:0!important;}
 .sg-generator-span-2{grid-column:span 2;}
 .sg-generator-field{display:flex;flex-direction:column;gap:7px;min-width:0;}
 .sg-generator-field label{color:var(--color-slate-600);font-size:var(--fs-xs);font-weight:900;text-transform:uppercase;letter-spacing:.06em;}
-.sg-generator-field .sg-input{width:100%;min-height:46px;border:1px solid var(--color-ink-100);border-radius:14px;background:var(--color-white);color:var(--color-black);padding:0 13px;font-size:var(--fs-sm);font-weight:750;outline:0;box-shadow:0 8px 18px rgba(45,36,96,.035);}
-.sg-generator-field select.sg-input{padding-right:34px;}
-.sg-generator-field .sg-input:focus{border-color:var(--color-brand-200);box-shadow:0 0 0 4px rgba(109,93,252,.10);}
+/* v12.24.1 - Campos do gerador com afordancia clara (pareciam "ovos" sem destaque):
+   borda mais visivel + raio do sistema + seta de dropdown nos selects + estado
+   hover, para se perceber que sao caixas clicaveis. background-color (nao o
+   shorthand) para nao apagar a seta dos selects. Scoped ao gerador. */
+.sg-generator-field .sg-input{width:100%;min-height:46px;border:1.5px solid var(--color-ink-200);border-radius:var(--radius-md);background-color:var(--color-white);color:var(--color-black);padding:0 13px;font-size:var(--fs-sm);font-weight:750;outline:0;box-shadow:0 8px 18px rgba(45,36,96,.035);transition:border-color .15s ease,box-shadow .15s ease,background-color .15s ease;}
+.sg-generator-field .sg-input:hover{border-color:var(--color-ink-300);}
+.sg-generator-field select.sg-input{padding-right:40px;cursor:pointer;appearance:none;-webkit-appearance:none;-moz-appearance:none;background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.6' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 14px center;background-size:18px 18px;}
+.sg-generator-field select.sg-input:hover{border-color:var(--color-brand-300);background-color:var(--color-brand-50);}
+.sg-generator-field .sg-input:focus{border-color:var(--color-brand-400);box-shadow:0 0 0 4px rgba(109,93,252,.14);}
 .sg-generator-field small{color:var(--color-slate-500);font-size:12px;line-height:1.45;font-weight:650;}
 .sg-generator-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:var(--space-4) 0;}
 .sg-generator-check{display:flex;align-items:flex-start;gap:var(--space-3);padding:15px 16px;border-radius:18px;background:var(--color-white);border:1px solid var(--color-slate-100);cursor:pointer;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease,background .16s ease;}

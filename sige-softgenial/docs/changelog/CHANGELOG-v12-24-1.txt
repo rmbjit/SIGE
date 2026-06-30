@@ -1,0 +1,30 @@
+SIGE SoftGenial v12.24.1 - Financeiro Gerador: campos com afordancia clara
+Data: 2026-06-30
+Tipo: apresentacao (view=financeiro-gerador). Sem logica.
+
+PROBLEMA (reportado pelo utilizador)
+- Os campos do formulario (Servico base, Periodo, Turma alvo, Aluno especifico)
+  pareciam "ovos": muito arredondados, borda fraca e sem seta -> nao se percebia
+  que eram caixas clicaveis (selects).
+
+CAUSA
+- .sg-generator-field .sg-input tinha borda 1px muito clara (ink-100), raio 14px e
+  usava o shorthand "background" (que apagaria qualquer seta). Os selects nao
+  tinham seta de dropdown (faltava a classe/estilo .sg-select e o appearance:none).
+
+CORRECCAO (assets/style.css, scoped ao gerador)
+- Borda mais visivel: 1.5px var(--color-ink-200); hover var(--color-ink-300).
+- Raio do sistema var(--radius-md) (em vez de 14px solto) - menos "ovo".
+- background-color (em vez do shorthand) para nao apagar a seta.
+- Selects: appearance:none + seta de dropdown (mesma do sistema), cursor:pointer,
+  padding-right para a seta; hover com borda brand-300 e fundo brand-50 (sinal
+  claro de "clicavel").
+- Focus mais visivel: borda brand-400 + halo.
+
+FRONTEIRA
+- So apresentacao (CSS scoped a .sg-generator-field). Sem logica, formulas,
+  nonces, AJAX, name/id, permissoes nem schema.
+
+VALIDACAO
+- BUILD.json valido. Gate de tokens 1907 (baixou; baseline reposta) - o raio
+  passou a token e a seta usa %23 (nao conta como hex magico).
