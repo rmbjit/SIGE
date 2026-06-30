@@ -1,0 +1,53 @@
+SIGE SoftGenial v12.33.0 - Modelos de crachá para a EQUIPA (Professores/Funcionários)
+Data: 2026-06-30
+Tipo: nova funcionalidade de apresentação (view=equipe). Sem schema, sem cálculo.
+
+O QUE A ESCOLA GANHA
+- Os crachás da EQUIPA passam a ter selecção de modelo por escola (como os
+  estudantes), mas com um CONJUNTO PRÓPRIO de 4 modelos para diferenciar:
+    * Corporate - cabeçalho sólido, foto destacada, faixa de equipa.
+    * Lanyard   - estilo crachá de fita/evento, com furo no topo.
+    * Executive - escuro e elegante, com linha de destaque fina.
+    * Slate     - faixa lateral e visual técnico moderno.
+- Cor de destaque e redes sociais (Instagram/Facebook/Website) opcionais.
+- Pré-visualização ao vivo; a escolha vale para toda a escola e é usada na
+  impressão individual e em lote.
+- Diferenças face ao crachá do estudante: cartão 240x384 (vs 220x350), foco no
+  CARGO, SEM código QR (a equipa não é validada na portaria), faixa "Equipa".
+
+ONDE
+- Equipa (RH) -> barra de acções -> botão "Modelo de Crachá" (visível a quem gere
+  a equipa: Direcção / Gestor RH / Admin TI).
+
+ENGENHARIA (reaproveita o motor do estudante, SEM pasta nova)
+1) assets/cracha/sige-cracha-templates.js passa a expor TAMBÉM
+   window.SigeCrachaStaffTemplates (mesmo ficheiro, helpers partilhados).
+   - socialRow ganhou parâmetro wrapClass (reutilização com estilos distintos).
+   - nomeOf aceita 'nome_completo' (estudante) e 'nome' (equipa).
+2) includes/cracha-config.php ganhou a camada de equipa: sige_cracha_staff_*
+   (ids/meta/defaults/get/save/for_js), validação pelo núcleo genérico
+   partilhado (sige_cracha_normalize_generic), armazenamento em option própria
+   sige_cracha_staff_config_{escola} (sem schema) e AJAX
+   sige_save_cracha_staff_config (nonce global + permissão rh.equipe_gerir).
+3) admin/hr/equipe-view.php:
+   - Registo entregue INLINE por readfile (mesma técnica à prova de falhas de
+     HTTP/CDN/cache do estudante; lê assets/cracha/, com assets/views/ de recurso).
+   - gerarCracha e imprimirLote refeitos para delegar no registo, com espera de
+     imagens, tratamento de pop-up bloqueado e fallback degradado.
+   - Botão "Modelo de Crachá" (gated por can_manage_equipe) + modal com selector,
+     cor, redes e pré-visualização ao vivo (iframe contentDocument + nonce vivo)
+     + toast de sucesso claro.
+
+VERIFICAÇÃO
+- Chromium (Playwright): os 4 modelos de equipa renderizam 240x384, sem overlap
+  foto/título (mesmo com nome de escola longo) e com nome/cargo correctos. Um bug
+  de campo (nomeOf só lia nome_completo -> nome da equipa vazio) foi apanhado por
+  esta verificação e corrigido.
+- php -l (registo JS, config, equipe-view) OK; gates typography/permissoes-aditiva
+  OK; design-tokens 1857 (baixou com a remoção do CSS antigo do crachá de staff;
+  baseline reposta). Smoke smoke-cracha-modelos actualizado (paridade PHP<->JS de
+  equipa, config, ligação) OK.
+
+FRONTEIRA
+- Sem alterar fórmulas, schema, permissões reais nem ficheiros protegidos por
+  hash. Tenant-scoped por escola. Sem pasta nova (usa assets/cracha/ já existente).

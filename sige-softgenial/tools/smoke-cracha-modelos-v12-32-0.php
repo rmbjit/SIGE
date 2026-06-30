@@ -22,6 +22,9 @@ if (!defined('ABSPATH')) define('ABSPATH', __DIR__);
 if (!function_exists('sanitize_key')) { function sanitize_key($k) { return strtolower(preg_replace('/[^a-z0-9_\-]/i', '', (string)$k)); } }
 if (!function_exists('sanitize_text_field')) { function sanitize_text_field($s) { return trim(preg_replace('/\s+/', ' ', strip_tags((string)$s))); } }
 if (!function_exists('add_action')) { function add_action() { return true; } }
+if (!function_exists('get_option')) { function get_option($k, $d = false) { return $d; } }
+if (!function_exists('update_option')) { function update_option() { return true; } }
+if (!function_exists('sige_get_escola_id')) { function sige_get_escola_id() { return 0; } }
 
 require_once $root . '/includes/cracha-config.php';
 
@@ -93,6 +96,30 @@ _p($fails, strpos($view, 'function sigeLiveNonce') !== false && strpos($view, '.
 _p($fails, strpos($view, 'contentWindow.document') !== false && strpos($view, 'd.write(doc)') !== false, 'Pré-visualização escreve via contentDocument (mais fiável que srcdoc)');
 _p($fails, strpos($view, 'cracha_asset') !== false, 'URL do asset exposta para a auto-cura');
 _p($fails, strpos($view, "sigeAlunoAlert('O modelo") !== false || strpos($view, 'Modelo de crachá guardado') !== false, 'Gravação mostra toast de sucesso claro');
+
+// ── (4) EQUIPA (Professores/Funcionários) - conjunto de modelos próprio ──────
+$equipe = (string) @file_get_contents($root . '/admin/hr/equipe-view.php');
+// Funcional: validação da config de equipa.
+_p($fails, function_exists('sige_cracha_staff_template_ids') && sige_cracha_staff_template_ids() === ['corporate', 'lanyard', 'executive', 'slate'], 'Lista canónica de modelos de equipa');
+$sn1 = sige_cracha_staff_config_get(0); // escola 0 -> defaults
+_p($fails, $sn1['template'] === 'corporate', 'Default de equipa = corporate');
+$sn2 = function_exists('sige_cracha_normalize_generic') ? sige_cracha_normalize_generic(['template' => 'aurora'], sige_cracha_staff_template_ids(), sige_cracha_staff_config_defaults()) : [];
+_p($fails, ($sn2['template'] ?? '') === 'corporate', 'Modelo de estudante (aurora) não é válido em equipa -> cai para corporate');
+// Paridade PHP<->JS dos ids de equipa.
+preg_match_all('/\bS\.([a-z0-9_]+)\s*=\s*\{/', $js, $sm);
+$js_staff = array_values(array_unique($sm[1])); sort($js_staff);
+$php_staff = sige_cracha_staff_template_ids(); sort($php_staff);
+_p($fails, $js_staff === $php_staff, 'Ids de equipa JS == PHP (' . implode(',', $js_staff) . ' vs ' . implode(',', $php_staff) . ')');
+_p($fails, strpos($js, 'window.SigeCrachaStaffTemplates') !== false, 'Registo JS expõe SigeCrachaStaffTemplates (conjunto de equipa)');
+_p($fails, strpos($js, 'function cargoOf(') !== false, 'Modelos de equipa usam o cargo');
+_p($fails, $js_staff !== $php_ids, 'Conjunto de equipa é DIFERENTE do de estudante (diferenciação)');
+// Ligação na view de Equipa.
+_p($fails, strpos($equipe, 'readfile($sige_cracha_tpl_file)') !== false, 'Equipa entrega o registo inline (filesystem)');
+_p($fails, strpos($equipe, 'data-sige-act="abrirModeloCrachaStaff"') !== false, 'Botão "Modelo de Crachá" na Equipa');
+_p($fails, strpos($equipe, 'id="sige-cracha-staff-modal"') !== false, 'Modal do seletor de equipa presente');
+_p($fails, strpos($equipe, 'SigeCrachaStaffTemplates.buildDocument') !== false, 'Impressão da equipa delega no registo (com fallback)');
+_p($fails, strpos($equipe, "action', 'sige_save_cracha_staff_config'") !== false, 'Gravação da equipa usa a AJAX própria');
+_p($fails, strpos($equipe, 'sige_cracha_staff_config_for_js') !== false, 'Config de equipa exposta ao cliente');
 
 // ── Versões sincronizadas (sem fixar número; o literal é validado pelo gate de baseline) ──
 preg_match('/Version:\s*([0-9.]+)/', $boot, $vh);

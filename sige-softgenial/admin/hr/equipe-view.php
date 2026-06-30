@@ -1974,6 +1974,12 @@ body.sige-admin-app #sige-rh-confirm.sige-modal:not(.active)[aria-hidden="true"]
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
                         Crachás
                     </button>
+                    <?php if (!empty($can_manage_equipe)): ?>
+                    <button data-sige-act="abrirModeloCrachaStaff" data-sige-noargs class="sg-v2-btn sg-v2-btn-secondary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 2a10 10 0 1 0 0 20 1.5 1.5 0 0 0 1.06-2.56A1.5 1.5 0 0 1 14 17.5a1.5 1.5 0 0 1 1.5-1.5H17a5 5 0 0 0 5-5 9 9 0 0 0-10-9z"/></svg>
+                        Modelo de Crachá
+                    </button>
+                    <?php endif; ?>
                     <button data-sige-act="exportarFolhaSalario" data-sige-noargs class="sg-v2-btn sg-v2-btn-secondary">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                         Folha salarial
@@ -2560,6 +2566,21 @@ body.sige-admin-app #sige-rh-confirm.sige-modal:not(.active)[aria-hidden="true"]
 
 <!-- ExcelJS para exportação -->
 <?php echo sige_cdn_script("exceljs"); ?>
+<?php
+// Registo de modelos de crachá entregue INLINE a partir do filesystem (à prova
+// de falhas de HTTP). Mesmo ficheiro do estudante; expõe SigeCrachaStaffTemplates.
+$sige_cracha_tpl_file = '';
+if (defined('SIGE_PATH')) {
+    foreach (['assets/cracha/sige-cracha-templates.js', 'assets/views/sige-cracha-templates.js'] as $sige_cracha_rel) {
+        if (is_file(SIGE_PATH . $sige_cracha_rel)) { $sige_cracha_tpl_file = SIGE_PATH . $sige_cracha_rel; break; }
+    }
+}
+if ($sige_cracha_tpl_file) {
+    echo '<script ' . sige_csp_script_attr() . ">\n";
+    readfile($sige_cracha_tpl_file);
+    echo "\n</script>\n";
+}
+?>
 <script <?php echo sige_csp_script_attr(); ?>>
 // ========================================
 // AJAX CONFIG - Nonce e URL
@@ -2571,7 +2592,11 @@ window.sigeEquipeAjax = Object.assign({}, window.sigeEquipeAjax || {}, {
     nonce: '<?php echo esc_js(wp_create_nonce("sige_equipe_action")); ?>',
     ajaxurl: '<?php echo esc_url(admin_url("admin-ajax.php")); ?>',
     avatarUrl: '<?php echo defined("SIGE_URL") ? esc_url(SIGE_URL . "assets/img/avatar-default.svg") : ""; ?>',
-    moeda: '<?php echo function_exists("sige_moeda") ? esc_js(sige_moeda()) : "MT"; ?>'
+    moeda: '<?php echo function_exists("sige_moeda") ? esc_js(sige_moeda()) : "MT"; ?>',
+    // Modelo de crachá da equipa (config + catálogo) e nonce/asset para o seletor.
+    cracha: <?php echo wp_json_encode(function_exists('sige_cracha_staff_config_for_js') ? sige_cracha_staff_config_for_js() : ['config' => [], 'templates' => [], 'social' => []]); ?>,
+    csp_nonce: '<?php echo function_exists("sige_csp_nonce") ? esc_js(sige_csp_nonce()) : ""; ?>',
+    cracha_asset: '<?php echo defined("SIGE_URL") ? esc_js(SIGE_URL . ((defined("SIGE_PATH") && !is_file(SIGE_PATH . "assets/cracha/sige-cracha-templates.js") && is_file(SIGE_PATH . "assets/views/sige-cracha-templates.js")) ? "assets/views/" : "assets/cracha/") . "sige-cracha-templates.js?ver=" . (defined("SIGE_VERSION") ? SIGE_VERSION : "1")) : ""; ?>'
 });
 // ========================================
 // TOAST NOTIFICATIONS
@@ -3167,392 +3192,101 @@ function sgRhSafeUrl(value, fallback) {
 // ========================================
 // GERAR CRACHÁ INDIVIDUAL
 // ========================================
-function gerarCracha(data) {
-    if(!data.foto || data.foto === '') {
-        data.foto = sigeEquipeAjax.avatarUrl;
+// ========================================
+// CRACHÁ DA EQUIPA - usa o registo de modelos (SigeCrachaStaffTemplates),
+// partilhado com a pré-visualização do seletor. Conjunto de modelos próprio.
+// ========================================
+function sgRhLiveNonce() {
+    try { var e = document.querySelector('script[nonce]') || document.querySelector('style[nonce]'); if (e && e.nonce) return e.nonce; } catch (x) {}
+    return (window.sigeEquipeAjax && sigeEquipeAjax.csp_nonce) ? sigeEquipeAjax.csp_nonce : '';
+}
+function sgRhEnsureTemplates(cb) {
+    if (window.SigeCrachaStaffTemplates) { cb(true); return; }
+    var url = (window.sigeEquipeAjax && sigeEquipeAjax.cracha_asset) ? sigeEquipeAjax.cracha_asset : '';
+    if (!url) { cb(false); return; }
+    if (window.__sigeCrachaLoading) {
+        var iv = setInterval(function () { if (window.SigeCrachaStaffTemplates) { clearInterval(iv); cb(true); } }, 80);
+        setTimeout(function () { clearInterval(iv); cb(!!window.SigeCrachaStaffTemplates); }, 4000);
+        return;
     }
-    const crachaNome = sgRhEsc(data.nome || '');
-    const crachaCargo = sgRhEsc(data.cargo || 'STAFF');
-    const crachaEscola = sgRhEsc(data.escola || '');
-    const crachaNuit = sgRhEsc(data.nuit || '---');
-    const crachaValidade = sgRhEsc(data.validade || '---');
-    const crachaFoto = sgRhSafeUrl(data.foto, sigeEquipeAjax.avatarUrl);
-    const crachaLogo = sgRhSafeUrl(data.logo, sigeEquipeAjax.avatarUrl);
-    
+    window.__sigeCrachaLoading = true;
+    var s = document.createElement('script'); s.src = url; var n = sgRhLiveNonce(); if (n) s.setAttribute('nonce', n);
+    s.onload = function () { cb(!!window.SigeCrachaStaffTemplates); };
+    s.onerror = function () { window.__sigeCrachaLoading = false; cb(false); };
+    document.head.appendChild(s);
+}
+function sgRhCrachaCtx(data) {
+    var cfg = (window.sigeEquipeAjax && sigeEquipeAjax.cracha && sigeEquipeAjax.cracha.config) ? sigeEquipeAjax.cracha.config : {};
+    return {
+        escolaNome: (data && data.escola) ? data.escola : '',
+        logoUrl: sgRhSafeUrl((data && data.logo) || '', sigeEquipeAjax.avatarUrl),
+        template: cfg.template || 'corporate',
+        accent: cfg.accent || '#1e3a8a',
+        showSocial: !!cfg.show_social,
+        social: cfg.social || {},
+        batch: false,
+        nonce: sgRhLiveNonce()
+    };
+}
+function sgRhCrachaItem(data) {
+    if (!data) data = {};
+    return {
+        nome: data.nome || '',
+        cargo: data.cargo || 'Funcionário',
+        validade: data.validade || '---',
+        foto: sgRhSafeUrl(data.foto || '', sigeEquipeAjax.avatarUrl)
+    };
+}
+function sgRhPrintWindow(w, html) {
+    if (!w) { showToast('Pop-up bloqueado', 'Permita pop-ups para imprimir crachás.', 'warning'); return; }
+    try { w.document.open(); w.document.write(html); w.document.close(); }
+    catch (e) { showToast('Erro', 'Não foi possível preparar a impressão.', 'error'); return; }
+    var printed = false; function go() { if (printed) return; printed = true; try { w.focus(); w.print(); } catch (e) {} }
+    var imgs = []; try { imgs = Array.prototype.slice.call(w.document.images || []); } catch (e) {}
+    var pend = imgs.filter(function (im) { return !im.complete; });
+    if (!pend.length) { setTimeout(go, 200); return; }
+    var left = pend.length;
+    pend.forEach(function (im) { im.addEventListener('load', function () { if (--left <= 0) go(); }); im.addEventListener('error', function () { if (--left <= 0) go(); }); });
+    setTimeout(go, 6000);
+}
+function sgRhFallbackDoc(list, ctx) {
+    var n = ctx && ctx.nonce ? ' nonce="' + sgRhEsc(ctx.nonce) + '"' : '';
+    var body = '';
+    for (var i = 0; i < list.length; i++) { var a = list[i] || {}; body += '<div class="c"><div class="hd">' + sgRhEsc(ctx.escolaNome || '') + '</div><div class="nm">' + sgRhEsc(a.nome || '') + '</div><div class="mt">' + sgRhEsc(a.cargo || 'Funcionário') + '</div><div class="vl">Válido até: ' + sgRhEsc(a.validade || '---') + '</div></div>'; }
+    return '<!doctype html><html><head><meta charset="utf-8"><title>Crachá</title><style' + n + '>body{font-family:Segoe UI,Arial,sans-serif;margin:0;padding:14px;display:flex;flex-wrap:wrap;gap:14px;color:#475569}.c{width:240px;height:384px;border:1px solid #cbd5e1;border-radius:14px;padding:18px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;text-align:center}.hd{font-size:9px;font-weight:700;text-transform:uppercase}.nm{margin-top:90px;font-size:15px;font-weight:800;color:#0f172a}.mt{margin-top:8px;font-size:11px}.vl{margin-top:auto;font-size:10px}</style></head><body>' + body + '</body></html>';
+}
+function sgRhBuildStaffDoc(list, ctx) {
+    if (window.SigeCrachaStaffTemplates && typeof window.SigeCrachaStaffTemplates.buildDocument === 'function') { return window.SigeCrachaStaffTemplates.buildDocument(list, ctx); }
+    return sgRhFallbackDoc(list, ctx);
+}
+
+function gerarCracha(data) {
+    if (!data) data = {};
+    var ctx = sgRhCrachaCtx(data); ctx.batch = false;
+    var item = sgRhCrachaItem(data);
     var w = window.open('', '', 'width=400,height=650');
-    var html = `
-    <html>
-    <head>
-        <title>Crachá - ${crachaNome}</title>
-        <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { 
-                font-family: 'Arial', sans-serif; 
-                background: #f0f0f0; 
-                display: flex; 
-                justify-content: center; 
-                align-items: center; 
-                min-height: 100vh; 
-                padding: 20px;
-            }
-            .cracha { 
-                width: 320px; 
-                height: 500px; 
-                background: white; 
-                border-radius: 16px; 
-                box-shadow: 0 8px 24px rgba(0,0,0,0.15); 
-                overflow: hidden; 
-                position: relative; 
-                border: 2px solid #e0e0e0;
-            }
-            .header { 
-                background: linear-gradient(135deg, #1a237e 0%, #3f51b5 100%);
-                height: 140px; 
-                padding: 20px; 
-                color: white; 
-                display: flex; 
-                flex-direction: column; 
-                align-items: center; 
-                justify-content: center;
-                position: relative;
-            }
-            .logo { 
-                width: 60px; 
-                height: 60px; 
-                background: white; 
-                border-radius: 50%; 
-                object-fit: contain; 
-                padding: 4px; 
-                margin-bottom: 8px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            }
-            .escola-nome { 
-                font-size: 11px; 
-                font-weight: 700; 
-                line-height: 1.3; 
-                text-transform: uppercase; 
-                text-align: center;
-                letter-spacing: 0.5px;
-            }
-            .photo-container { 
-                margin-top: -40px; 
-                display: flex; 
-                justify-content: center; 
-                z-index: 2;
-                position: relative;
-            }
-            .photo { 
-                width: 140px; 
-                height: 140px; 
-                border-radius: 50%; 
-                border: 6px solid white; 
-                object-fit: cover; 
-                background: #eee; 
-                box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-            }
-            .name { 
-                font-size: 22px; 
-                font-weight: 800; 
-                color: #1a237e; 
-                margin: 20px 0 8px; 
-                padding: 0 20px; 
-                line-height: 1.2; 
-                text-align: center;
-            }
-            .role { 
-                font-size: 13px; 
-                font-weight: 700; 
-                color: white;
-                background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);
-                display: inline-block; 
-                padding: 8px 24px; 
-                border-radius: 25px; 
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                box-shadow: 0 4px 8px rgba(46, 125, 50, 0.3);
-            }
-            .info { 
-                margin-top: 30px; 
-                padding: 0 20px;
-                text-align: center;
-            }
-            .info-row {
-                background: #f8f9fa;
-                padding: 12px 16px;
-                border-radius: 8px;
-                margin-bottom: 10px;
-                border-left: 4px solid #1a237e;
-            }
-            .info-label {
-                font-size: 10px;
-                font-weight: 700;
-                color: #666;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-                margin-bottom: 4px;
-            }
-            .info-value {
-                font-size: 14px;
-                font-weight: 700;
-                color: #333;
-            }
-            .footer { 
-                position: absolute; 
-                bottom: 0; 
-                width: 100%; 
-                height: 30px; 
-                background: linear-gradient(135deg, #1a237e 0%, #3f51b5 100%);
-            }
-            @media print { 
-                body { 
-                    background: white; 
-                    padding: 0;
-                } 
-                .cracha { 
-                    box-shadow: none; 
-                    border: 2px solid #ccc; 
-                    margin: 0 auto;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="cracha">
-            <div class="header">
-                <img src="${crachaLogo}" class="logo" alt="Logo">
-                <div class="escola-nome">${crachaEscola}</div>
-            </div>
-            <div class="photo-container">
-                <img src="${crachaFoto}" class="photo" alt="Foto">
-            </div>
-            <div class="sg-text-center">
-                <div class="name">${crachaNome}</div>
-                <div class="role">${crachaCargo}</div>
-            </div>
-            <div class="info">
-                <div class="info-row">
-                    <div class="info-label">Válido até</div>
-                    <div class="info-value">${crachaValidade}</div>
-                </div>
-            </div>
-            <div class="footer"></div>
-        </div>
-        <script <?php echo sige_csp_script_attr(); ?>>
-            window.onload = function() {
-                setTimeout(function() {
-                    window.print();
-                }, 500);
-            };
-        <\/script>
-    </body>
-    </html>`;
-    
-    w.document.write(html);
-    w.document.close();
+    if (!w) { showToast('Pop-up bloqueado', 'Permita pop-ups para imprimir crachás.', 'warning'); return; }
+    try { w.document.write('<!doctype html><meta charset="utf-8"><title>A preparar…</title><body style="font:14px sans-serif;padding:20px">A preparar o crachá…</body>'); } catch (e) {}
+    sgRhEnsureTemplates(function () { sgRhPrintWindow(w, sgRhBuildStaffDoc([item], ctx)); });
 }
 // ========================================
 // IMPRESSÃO EM LOTE
 // ========================================
 function imprimirLote() {
     var rows = document.querySelectorAll("#tabela-staff tbody tr.staff-row");
-    var crachasHTML = '';
-    var count = 0;
-    
+    var items = [], ctx = null;
     for (var i = 0; i < rows.length; i++) {
-        if(rows[i].style.display !== 'none') {
+        if (rows[i].style.display !== 'none') {
             var raw = rows[i].getAttribute('data-cracha');
-            if(raw) {
-                var data = JSON.parse(raw);
-                if(!data.foto || data.foto === '') {
-                    data.foto = sigeEquipeAjax.avatarUrl;
-                }
-                const itemNome = sgRhEsc(data.nome || '');
-                const itemCargo = sgRhEsc(data.cargo || 'STAFF');
-                const itemEscola = sgRhEsc(data.escola || '');
-                const itemNuit = sgRhEsc(data.nuit || '---');
-                const itemValidade = sgRhEsc(data.validade || '---');
-                const itemFoto = sgRhSafeUrl(data.foto, sigeEquipeAjax.avatarUrl);
-                const itemLogo = sgRhSafeUrl(data.logo, sigeEquipeAjax.avatarUrl);
-                
-                crachasHTML += `
-                <div class="cracha-item">
-                    <div class="cracha">
-                        <div class="header">
-                            <img src="${itemLogo}" class="logo" alt="Logo">
-                            <div class="escola-nome">${itemEscola}</div>
-                        </div>
-                        <div class="photo-container">
-                            <img src="${itemFoto}" class="photo" alt="Foto">
-                        </div>
-                        <div class="sg-text-center">
-                            <div class="name">${itemNome}</div>
-                            <div class="role">${itemCargo}</div>
-                        </div>
-                        <div class="info">
-                            <div class="info-row">
-                                <div class="info-label">Válido até</div>
-                                <div class="info-value">${itemValidade}</div>
-                            </div>
-                        </div>
-                        <div class="footer"></div>
-                    </div>
-                </div>`;
-                count++;
-            }
+            if (raw) { var data; try { data = JSON.parse(raw); } catch (e) { continue; } if (!ctx) ctx = sgRhCrachaCtx(data); items.push(sgRhCrachaItem(data)); }
         }
     }
-    
-    if(count === 0) {
-        showToast('Atenção', 'Nenhum funcionário visível para impressão', 'warning');
-        return;
-    }
-    
+    if (items.length === 0) { showToast('Atenção', 'Nenhum funcionário visível para impressão', 'warning'); return; }
+    ctx.batch = true;
     var w = window.open('', '', 'width=1000,height=800');
-    var html = `
-    <html>
-    <head>
-        <title>Crachás em Lote - ${count} funcionários</title>
-        <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { 
-                font-family: 'Arial', sans-serif; 
-                background: white; 
-                padding: 20px;
-            }
-            .grid { 
-                display: grid; 
-                grid-template-columns: repeat(3, 1fr); 
-                gap: 20px;
-                margin-bottom: 20px;
-            }
-            .cracha-item { 
-                page-break-inside: avoid; 
-                display: flex; 
-                justify-content: center;
-            }
-            .cracha { 
-                width: 280px; 
-                height: 440px; 
-                border: 2px solid #ccc; 
-                border-radius: 12px; 
-                overflow: hidden; 
-                position: relative;
-                background: white;
-            }
-            .header { 
-                background: linear-gradient(135deg, #1a237e 0%, #3f51b5 100%);
-                height: 110px; 
-                padding: 15px; 
-                color: white; 
-                display: flex; 
-                flex-direction: column; 
-                align-items: center;
-            }
-            .logo { 
-                width: 45px; 
-                height: 45px; 
-                background: white; 
-                border-radius: 50%; 
-                object-fit: contain; 
-                padding: 3px;
-                margin-bottom: 5px;
-            }
-            .escola-nome { 
-                font-size: 9px; 
-                font-weight: 700; 
-                text-transform: uppercase; 
-                text-align: center;
-                line-height: 1.2;
-            }
-            .photo-container { 
-                margin-top: -30px; 
-                display: flex; 
-                justify-content: center;
-            }
-            .photo { 
-                width: 110px; 
-                height: 110px; 
-                border-radius: 50%; 
-                border: 5px solid white; 
-                object-fit: cover; 
-                background: #eee;
-            }
-            .name { 
-                font-size: 17px; 
-                font-weight: 800; 
-                color: #1a237e; 
-                margin: 15px 0 6px; 
-                padding: 0 10px; 
-                line-height: 1.1; 
-                text-align: center;
-            }
-            .role { 
-                font-size: 11px; 
-                font-weight: 700; 
-                color: white;
-                background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);
-                display: inline-block; 
-                padding: 6px 16px; 
-                border-radius: 20px;
-                text-transform: uppercase;
-            }
-            .info { 
-                margin-top: 20px; 
-                padding: 0 15px;
-                text-align: center;
-            }
-            .info-row {
-                background: #f8f9fa;
-                padding: 8px 12px;
-                border-radius: 6px;
-                margin-bottom: 8px;
-                border-left: 3px solid #1a237e;
-            }
-            .info-label {
-                font-size: 8px;
-                font-weight: 700;
-                color: #666;
-                text-transform: uppercase;
-                margin-bottom: 2px;
-            }
-            .info-value {
-                font-size: 12px;
-                font-weight: 700;
-                color: #333;
-            }
-            .footer { 
-                position: absolute; 
-                bottom: 0; 
-                width: 100%; 
-                height: 20px; 
-                background: linear-gradient(135deg, #1a237e 0%, #3f51b5 100%);
-            }
-            @media print { 
-                body { padding: 10px; }
-                .grid { 
-                    grid-template-columns: repeat(3, 1fr); 
-                    gap: 15px;
-                }
-                .cracha { border: 1px solid #999; }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="grid">${crachasHTML}</div>
-        <script <?php echo sige_csp_script_attr(); ?>>
-            window.onload = function() {
-                setTimeout(function() {
-                    window.print();
-                }, 500);
-            };
-        <\/script>
-    </body>
-    </html>`;
-    
-    w.document.write(html);
-    w.document.close();
-    
-    showToast('Impressão', count + ' crachás preparados', 'info');
+    if (!w) { showToast('Pop-up bloqueado', 'Permita pop-ups para imprimir crachás.', 'warning'); return; }
+    try { w.document.write('<!doctype html><meta charset="utf-8"><title>A preparar…</title><body style="font:14px sans-serif;padding:20px">A preparar ' + items.length + ' crachás…</body>'); } catch (e) {}
+    sgRhEnsureTemplates(function () { sgRhPrintWindow(w, sgRhBuildStaffDoc(items, ctx)); showToast('Impressão', items.length + ' crachás preparados', 'info'); });
 }
 // ========================================
 // EXPORTAR FOLHA SALARIAL
@@ -3790,3 +3524,157 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script>
+<?php if (!empty($can_manage_equipe)): ?>
+<style>
+/* Modelo de Crachá da Equipa - estilos só com tokens (sem cores/raios mágicos). */
+.sige-cracha-modal{position:fixed;inset:0;z-index:140000;display:none;align-items:center;justify-content:center;padding:var(--space-4);}
+.sige-cracha-modal.is-open{display:flex;}
+.sige-cracha-backdrop{position:absolute;inset:0;background:rgba(15,23,42,.55);}
+.sige-cracha-dialog{position:relative;background:var(--color-white);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);width:min(940px,96vw);max-height:92vh;display:flex;flex-direction:column;overflow:hidden;}
+.sige-cracha-head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);padding:var(--space-5) var(--space-6);border-bottom:1px solid var(--color-ink-100);}
+.sige-cracha-head h2{margin:0;font-size:var(--fs-lg);font-weight:700;color:var(--color-ink-700);}
+.sige-cracha-x{background:none;border:none;font-size:26px;line-height:1;cursor:pointer;color:var(--color-slate-500);padding:0 var(--space-2);}
+.sige-cracha-x:hover{color:var(--color-ink-700);}
+.sige-cracha-body{padding:var(--space-6);overflow-y:auto;min-height:0;}
+.sige-cracha-grid{display:grid;grid-template-columns:1fr 300px;gap:var(--space-6);align-items:start;}
+.sige-cracha-label{margin:0 0 var(--space-3);font-size:var(--fs-sm);font-weight:700;color:var(--color-slate-600);text-transform:uppercase;letter-spacing:.4px;}
+.sige-cracha-templates{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);margin-bottom:var(--space-5);}
+.sige-cracha-tpl{border:1.5px solid var(--color-ink-100);border-radius:var(--radius-md);padding:var(--space-4);cursor:pointer;transition:border-color .15s ease,background .15s ease;}
+.sige-cracha-tpl:hover{border-color:var(--color-brand-300);}
+.sige-cracha-tpl.is-active{border-color:var(--color-brand-500);background:var(--color-brand-50);}
+.sige-cracha-tpl-nome{font-weight:700;color:var(--color-ink-700);font-size:var(--fs-base);}
+.sige-cracha-tpl-desc{font-size:var(--fs-sm);color:var(--color-slate-500);margin-top:var(--space-1);line-height:1.35;}
+.sige-cracha-accent{display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-5);}
+.sige-cracha-accent input[type=color]{width:48px;height:38px;border:1px solid var(--color-ink-200);border-radius:var(--radius-md);background:var(--color-white);cursor:pointer;padding:2px;}
+.sige-cracha-accent input[type=text]{flex:1;height:38px;border:1.5px solid var(--color-ink-200);border-radius:var(--radius-md);padding:0 var(--space-3);font-family:'Courier New',monospace;color:var(--color-ink-700);}
+.sige-cracha-toggle{display:flex;align-items:center;gap:var(--space-3);font-size:var(--fs-base);color:var(--color-ink-700);cursor:pointer;margin-bottom:var(--space-4);}
+.sige-cracha-toggle input{width:18px;height:18px;cursor:pointer;}
+.sige-cracha-social{display:grid;gap:var(--space-3);}
+.sige-cracha-social.is-hidden{display:none;}
+.sige-cracha-social input{height:38px;border:1.5px solid var(--color-ink-200);border-radius:var(--radius-md);padding:0 var(--space-3);color:var(--color-ink-700);font-size:var(--fs-base);}
+.sige-cracha-social input:focus,.sige-cracha-accent input:focus{outline:none;border-color:var(--color-brand-400);}
+.sige-cracha-preview-wrap{position:sticky;top:0;}
+.sige-cracha-frame{width:100%;height:410px;border:1px solid var(--color-ink-100);border-radius:var(--radius-lg);background:var(--color-slate-50);}
+.sige-cracha-foot{display:flex;align-items:center;justify-content:flex-end;gap:var(--space-3);padding:var(--space-4) var(--space-6);border-top:1px solid var(--color-ink-100);}
+.sige-cracha-msg{margin-right:auto;font-size:var(--fs-sm);color:var(--color-success-700);font-weight:600;}
+.sige-cracha-msg.is-error{color:var(--color-danger-500);}
+.sige-cracha-btn-cancel,.sige-cracha-btn-save{height:42px;padding:0 var(--space-6);border-radius:var(--radius-md);font-weight:700;font-size:var(--fs-base);cursor:pointer;border:1.5px solid transparent;}
+.sige-cracha-btn-cancel{background:var(--color-white);border-color:var(--color-ink-200);color:var(--color-ink-700);}
+.sige-cracha-btn-cancel:hover{border-color:var(--color-slate-300);}
+.sige-cracha-btn-save{background:var(--color-brand-500);color:var(--color-white);}
+.sige-cracha-btn-save:hover{background:var(--color-brand-600);}
+.sige-cracha-btn-save[disabled]{opacity:.6;cursor:default;}
+@media(max-width:760px){.sige-cracha-grid{grid-template-columns:1fr;}.sige-cracha-templates{grid-template-columns:1fr;}.sige-cracha-preview-wrap{position:static;}.sige-cracha-frame{height:380px;}}
+</style>
+<div id="sige-cracha-staff-modal" class="sige-cracha-modal" aria-hidden="true">
+    <div class="sige-cracha-backdrop" data-sige-act="fecharModeloCrachaStaff" data-sige-noargs></div>
+    <div class="sige-cracha-dialog" role="dialog" aria-modal="true" aria-labelledby="sige-cracha-staff-title">
+        <div class="sige-cracha-head">
+            <h2 id="sige-cracha-staff-title">Modelo de Crachá da Equipa</h2>
+            <button type="button" class="sige-cracha-x" data-sige-act="fecharModeloCrachaStaff" data-sige-noargs aria-label="Fechar">&times;</button>
+        </div>
+        <div class="sige-cracha-body">
+            <div class="sige-cracha-grid">
+                <div class="sige-cracha-controls">
+                    <p class="sige-cracha-label">Modelo</p>
+                    <div class="sige-cracha-templates" id="sige-cracha-staff-templates"></div>
+                    <p class="sige-cracha-label">Cor de destaque</p>
+                    <div class="sige-cracha-accent">
+                        <input type="color" id="sige-cracha-staff-accent" value="#1e3a8a" aria-label="Cor de destaque">
+                        <input type="text" id="sige-cracha-staff-accent-hex" maxlength="7" placeholder="#1e3a8a" aria-label="Cor de destaque (hex)">
+                    </div>
+                    <label class="sige-cracha-toggle">
+                        <input type="checkbox" id="sige-cracha-staff-show-social"> Mostrar redes sociais no crachá
+                    </label>
+                    <div class="sige-cracha-social is-hidden" id="sige-cracha-staff-social">
+                        <input type="text" id="sige-cracha-staff-ig" placeholder="Instagram (ex.: @minhaescola)" maxlength="80">
+                        <input type="text" id="sige-cracha-staff-fb" placeholder="Facebook (ex.: /minhaescola)" maxlength="80">
+                        <input type="text" id="sige-cracha-staff-web" placeholder="Website (ex.: minhaescola.co.mz)" maxlength="80">
+                    </div>
+                </div>
+                <div class="sige-cracha-preview-wrap">
+                    <p class="sige-cracha-label">Pré-visualização</p>
+                    <iframe id="sige-cracha-staff-frame" class="sige-cracha-frame" title="Pré-visualização do crachá"></iframe>
+                </div>
+            </div>
+        </div>
+        <div class="sige-cracha-foot">
+            <span class="sige-cracha-msg" id="sige-cracha-staff-msg" aria-live="polite"></span>
+            <button type="button" class="sige-cracha-btn-cancel" data-sige-act="fecharModeloCrachaStaff" data-sige-noargs>Cancelar</button>
+            <button type="button" class="sige-cracha-btn-save" id="sige-cracha-staff-save" data-sige-act="guardarModeloCrachaStaff" data-sige-noargs>Guardar modelo</button>
+        </div>
+    </div>
+</div>
+<script <?php echo sige_csp_script_attr(); ?>>
+(function () {
+    var SAMPLE = { nome: 'João Mausse', cargo: 'Professor', validade: '31/12/<?php echo (int)($escola->ano_lectivo ?: wp_date("Y")); ?>', foto: '' };
+    var ESCOLA = <?php echo json_encode($escola->nome_escola ?: 'ESCOLA'); ?>;
+    var LOGO = <?php echo json_encode($logo_final ?: ''); ?>;
+    function cfg() { return (window.sigeEquipeAjax && sigeEquipeAjax.cracha) ? sigeEquipeAjax.cracha : { config: {}, templates: {}, social: [] }; }
+    function el(id) { return document.getElementById(id); }
+    var modal = null, frame = null, estado = null, inited = false;
+    function ctxAtual() {
+        return { escolaNome: ESCOLA, logoUrl: LOGO || sigeEquipeAjax.avatarUrl, template: estado.template, accent: estado.accent, showSocial: estado.show_social, social: estado.social, batch: false, nonce: (typeof sgRhLiveNonce === 'function') ? sgRhLiveNonce() : '' };
+    }
+    function escreverNaFrame(doc) { if (!frame) return; try { var d = frame.contentWindow.document; d.open(); d.write(doc); d.close(); } catch (e) { try { frame.srcdoc = doc; } catch (e2) {} } }
+    function renderPreview() {
+        if (!frame) return;
+        sgRhEnsureTemplates(function (ok) {
+            if (!ok || !window.SigeCrachaStaffTemplates) { escreverNaFrame('<!doctype html><meta charset="utf-8"><body style="font:13px sans-serif;color:slategray;display:flex;align-items:center;justify-content:center;height:100%;text-align:center;padding:16px">Pré-visualização indisponível. Verifique a ligação e tente reabrir.</body>'); return; }
+            var doc; try { doc = window.SigeCrachaStaffTemplates.buildDocument([SAMPLE], ctxAtual()); } catch (e) { return; }
+            escreverNaFrame(doc);
+        });
+    }
+    function marcar() { Array.prototype.forEach.call(document.querySelectorAll('#sige-cracha-staff-templates .sige-cracha-tpl'), function (n) { n.classList.toggle('is-active', n.getAttribute('data-tpl') === estado.template); }); }
+    function renderOptions() {
+        var wrap = el('sige-cracha-staff-templates'); if (!wrap) return;
+        var metas = cfg().templates || {}, html = '';
+        Object.keys(metas).forEach(function (id) { var m = metas[id] || {}, a = (id === estado.template) ? ' is-active' : ''; html += '<div class="sige-cracha-tpl' + a + '" data-tpl="' + sigeEquipeEscapeHtml(id) + '" role="button" tabindex="0"><div class="sige-cracha-tpl-nome">' + sigeEquipeEscapeHtml(m.nome || id) + '</div><div class="sige-cracha-tpl-desc">' + sigeEquipeEscapeHtml(m.descricao || '') + '</div></div>'; });
+        wrap.innerHTML = html;
+        Array.prototype.forEach.call(wrap.querySelectorAll('.sige-cracha-tpl'), function (node) { function pick() { estado.template = node.getAttribute('data-tpl'); marcar(); renderPreview(); } node.addEventListener('click', pick); node.addEventListener('keydown', function (ev) { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); pick(); } }); });
+    }
+    function syncSocial() { var box = el('sige-cracha-staff-social'); if (box) box.classList.toggle('is-hidden', !estado.show_social); }
+    function msg(t, e) { var m = el('sige-cracha-staff-msg'); if (!m) return; m.textContent = t || ''; m.classList.toggle('is-error', !!e); }
+    function lerForm() { estado.show_social = el('sige-cracha-staff-show-social').checked; estado.social = { instagram: el('sige-cracha-staff-ig').value || '', facebook: el('sige-cracha-staff-fb').value || '', website: el('sige-cracha-staff-web').value || '' }; }
+    function init() {
+        if (inited) return; modal = el('sige-cracha-staff-modal'); frame = el('sige-cracha-staff-frame'); if (!modal) return; inited = true;
+        var c = cfg().config || {};
+        estado = { template: c.template || 'corporate', accent: c.accent || '#1e3a8a', show_social: !!c.show_social, social: { instagram: (c.social && c.social.instagram) || '', facebook: (c.social && c.social.facebook) || '', website: (c.social && c.social.website) || '' } };
+        el('sige-cracha-staff-accent').value = estado.accent; el('sige-cracha-staff-accent-hex').value = estado.accent;
+        el('sige-cracha-staff-show-social').checked = estado.show_social;
+        el('sige-cracha-staff-ig').value = estado.social.instagram; el('sige-cracha-staff-fb').value = estado.social.facebook; el('sige-cracha-staff-web').value = estado.social.website;
+        renderOptions(); syncSocial();
+        el('sige-cracha-staff-accent').addEventListener('input', function () { estado.accent = this.value; el('sige-cracha-staff-accent-hex').value = this.value; renderPreview(); });
+        el('sige-cracha-staff-accent-hex').addEventListener('input', function () { var v = String(this.value || '').trim(); if (/^#?[0-9a-fA-F]{6}$/.test(v)) { if (v[0] !== '#') v = '#' + v; estado.accent = v; el('sige-cracha-staff-accent').value = v; renderPreview(); } });
+        el('sige-cracha-staff-show-social').addEventListener('change', function () { estado.show_social = this.checked; syncSocial(); renderPreview(); });
+        var map = { ig: 'instagram', fb: 'facebook', web: 'website' };
+        ['ig', 'fb', 'web'].forEach(function (k) { el('sige-cracha-staff-' + k).addEventListener('input', function () { estado.social[map[k]] = this.value; renderPreview(); }); });
+    }
+    window.abrirModeloCrachaStaff = function () { init(); if (!modal) { showToast('Indisponível', 'Seletor de modelo indisponível.', 'error'); return; } msg('', false); modal.classList.add('is-open'); modal.setAttribute('aria-hidden', 'false'); document.body.classList.add('sige-rh-modal-open'); renderPreview(); };
+    window.fecharModeloCrachaStaff = function () { if (!modal) return; modal.classList.remove('is-open'); modal.setAttribute('aria-hidden', 'true'); document.body.classList.remove('sige-rh-modal-open'); };
+    window.guardarModeloCrachaStaff = function () {
+        init(); if (!modal) return; lerForm();
+        var btn = el('sige-cracha-staff-save'); if (btn) btn.setAttribute('disabled', 'disabled');
+        msg('A guardar...', false);
+        var fd = new FormData();
+        fd.append('action', 'sige_save_cracha_staff_config'); fd.append('_sige_nonce', sigeEquipeAjax.nonce);
+        fd.append('template', estado.template); fd.append('accent', estado.accent); fd.append('show_social', estado.show_social ? '1' : '0');
+        fd.append('social_instagram', estado.social.instagram); fd.append('social_facebook', estado.social.facebook); fd.append('social_website', estado.social.website);
+        fetch(sigeEquipeAjax.ajaxurl, { method: 'POST', credentials: 'same-origin', body: fd }).then(function (r) { return r.json(); }).then(function (r) {
+            if (r && r.success && r.data && r.data.config) {
+                sigeEquipeAjax.cracha.config = r.data.config;
+                estado.template = r.data.config.template; estado.accent = r.data.config.accent; estado.show_social = !!r.data.config.show_social; estado.social = r.data.config.social || estado.social;
+                marcar(); renderPreview(); msg('Guardado.', false);
+                var nm = (cfg().templates && cfg().templates[estado.template] && cfg().templates[estado.template].nome) ? cfg().templates[estado.template].nome : estado.template;
+                showToast('Modelo guardado', 'O modelo "' + nm + '" passa a ser usado nos crachás da equipa.', 'success');
+                setTimeout(window.fecharModeloCrachaStaff, 900);
+            } else {
+                var em = (r && r.data && (r.data.msg || r.data)) ? (r.data.msg || r.data) : 'Não foi possível guardar.';
+                msg(em, true); showToast('Não foi possível guardar', String(em), 'error');
+            }
+        }).catch(function () { msg('Falha de ligação.', true); showToast('Erro de ligação', 'Verifique a internet e tente novamente.', 'error'); }).then(function () { if (btn) btn.removeAttribute('disabled'); });
+    };
+    document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape' && modal && modal.classList.contains('is-open')) window.fecharModeloCrachaStaff(); });
+})();
+</script>
+<?php endif; ?>

@@ -53,7 +53,8 @@
     }
 
     function processoOf(a) { return (a && a.numero_processo) ? String(a.numero_processo) : ''; }
-    function nomeOf(a) { return (a && a.nome_completo) ? String(a.nome_completo) : ''; }
+    // Estudante usa 'nome_completo'; equipa usa 'nome'. Aceita ambos.
+    function nomeOf(a) { var v = a && (a.nome_completo || a.nome); return v ? String(v) : ''; }
     function turmaOf(a) {
         return (a && a.classe && a.turma_nome) ? (esc(a.classe) + ' - ' + esc(a.turma_nome)) : 'S/ Turma';
     }
@@ -69,7 +70,9 @@
     }
 
     // Ícones sociais (SVG inline). Devolve '' quando nada para mostrar.
-    function socialRow(ctx) {
+    // wrapClass permite reutilizar o mesmo construtor com estilos distintos
+    // (estudante usa 'social'; equipa usa 'ssocial').
+    function socialRow(ctx, wrapClass) {
         if (!ctx || !ctx.showSocial || !ctx.social) { return ''; }
         var s = ctx.social, items = [];
         function ico(path) {
@@ -85,7 +88,7 @@
             items.push('<span class="soc"><span class="soc-i">' + ico('<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 0 20a15.3 15.3 0 0 1 0-20"/>') + '</span>' + esc(s.website) + '</span>');
         }
         if (!items.length) { return ''; }
-        return '<div class="social">' + items.join('') + '</div>';
+        return '<div class="' + (wrapClass || 'social') + '">' + items.join('') + '</div>';
     }
 
     function styleOpen(ctx) {
@@ -279,4 +282,148 @@
     }
 
     window.SigeCrachaTemplates = { resolve: resolve, buildDocument: buildDocument, list: list, ids: function () { return Object.keys(T); } };
+
+    // =====================================================================
+    // CRACHÁS DE EQUIPA (Professores/Funcionários) - conjunto DISTINTO do
+    // dos estudantes (cartão 240x384, foco no cargo, faixa "EQUIPA", sem QR).
+    // =====================================================================
+    function cargoOf(a) { return (a && a.cargo) ? String(a.cargo) : 'Funcionário'; }
+    function validadeOf(a) { return (a && a.validade) ? String(a.validade) : '---'; }
+
+    var S = {};
+
+    // CORPORATE - cabeçalho sólido, foto quadrada, rodapé de faixa.
+    S.corporate = {
+        meta: { id: 'corporate', nome: 'Corporate', descricao: 'Cabeçalho sólido e visual corporativo, foto destacada.' },
+        css: function (ctx) {
+            var a = accentOf(ctx), a2 = shade(a, -18), soft = shade(a, 44);
+            return styleOpen(ctx) + sheetCss(ctx)
+                + '.card{width:240px;height:384px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 10px 28px rgba(15,23,42,.16);display:flex;flex-direction:column;align-items:center;box-sizing:border-box}'
+                + '.shead{width:100%;background:' + a + ';color:#fff;display:flex;align-items:center;gap:8px;padding:12px 14px;box-sizing:border-box}'
+                + '.shead img{height:30px;width:30px;border-radius:7px;background:#fff;padding:2px;object-fit:contain}'
+                + '.shead .t{font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;line-height:1.2}'
+                + '.sphoto{width:104px;height:104px;border-radius:14px;border:4px solid #fff;background:' + soft + ';overflow:hidden;display:flex;align-items:center;justify-content:center;margin-top:16px;box-shadow:0 4px 12px rgba(15,23,42,.18)}'
+                + '.sphoto img{width:100%;height:100%;object-fit:cover}.sphoto .ph{color:' + a2 + '}'
+                + '.sbody{flex:1;width:100%;text-align:center;padding:12px 14px;box-sizing:border-box}'
+                + '.sname{font-size:15px;font-weight:800;color:#0f172a;line-height:1.15}'
+                + '.scargo{display:inline-block;margin-top:7px;background:' + soft + ';color:' + a2 + ';font-size:9px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:4px 14px;border-radius:999px}'
+                + '.sval{margin-top:12px;font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.5px}.sval strong{display:block;color:#0f172a;font-size:12px;margin-top:2px;letter-spacing:0}'
+                + '.ssocial{display:flex;flex-wrap:wrap;gap:4px 8px;justify-content:center;margin-top:10px}.ssocial .soc{display:inline-flex;align-items:center;gap:3px;font-size:8px;font-weight:600;color:' + a2 + ';white-space:nowrap}.ssocial .soc-i{color:' + a + '}'
+                + '.sfoot{width:100%;background:' + a + ';color:#fff;text-align:center;font-size:8px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:7px}'
+                + '</style>';
+        },
+        card: function (a, ctx) {
+            return '<div class="card-container"><div class="card">'
+                + '<div class="shead"><img src="' + esc(ctx.logoUrl) + '" alt=""><div class="t">' + esc(ctx.escolaNome) + '</div></div>'
+                + '<div class="sphoto">' + photoTag(a) + '</div>'
+                + '<div class="sbody"><div class="sname">' + esc(nomeOf(a)) + '</div><div class="scargo">' + esc(cargoOf(a)) + '</div>'
+                + '<div class="sval">Válido até<strong>' + esc(validadeOf(a)) + '</strong></div>' + socialRow(ctx, 'ssocial') + '</div>'
+                + '<div class="sfoot">Equipa</div></div></div>';
+        }
+    };
+
+    // LANYARD - entalhe de fita no topo, faixa em degradê, foto circular.
+    S.lanyard = {
+        meta: { id: 'lanyard', nome: 'Lanyard', descricao: 'Estilo crachá de fita/evento, com furo no topo.' },
+        css: function (ctx) {
+            var a = accentOf(ctx), a2 = shade(a, -22), soft = shade(a, 44);
+            return styleOpen(ctx) + sheetCss(ctx)
+                + '.card{width:240px;height:384px;background:#ffffff;border-radius:18px;overflow:hidden;box-shadow:0 10px 28px rgba(15,23,42,.16);display:flex;flex-direction:column;align-items:center;box-sizing:border-box;position:relative}'
+                + '.slot{width:54px;height:8px;border-radius:999px;background:rgba(255,255,255,.85);margin:8px auto 0;position:absolute;left:50%;transform:translateX(-50%);top:9px;z-index:3}'
+                + '.shead{width:100%;background:linear-gradient(135deg,' + a + ',' + a2 + ');color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:22px 10px 46px;box-sizing:border-box}'
+                + '.shead img{height:30px;width:30px;border-radius:50%;background:#fff;padding:2px;object-fit:contain}'
+                + '.shead .t{font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;text-align:center;margin-top:5px;line-height:1.2;padding:0 8px}'
+                + '.sphoto{width:96px;height:96px;border-radius:50%;border:4px solid #fff;background:' + soft + ';overflow:hidden;display:flex;align-items:center;justify-content:center;margin-top:-42px;position:relative;z-index:2;box-shadow:0 4px 12px rgba(15,23,42,.18)}'
+                + '.sphoto img{width:100%;height:100%;object-fit:cover}.sphoto .ph{color:' + a2 + '}'
+                + '.sbody{flex:1;width:100%;text-align:center;padding:10px 14px;box-sizing:border-box}'
+                + '.sname{font-size:15px;font-weight:800;color:#0f172a;line-height:1.15}'
+                + '.scargo{display:inline-block;margin-top:7px;background:' + a + ';color:#fff;font-size:9px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:4px 14px;border-radius:999px}'
+                + '.sval{margin-top:12px;font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.5px}.sval strong{display:block;color:' + a2 + ';font-size:12px;margin-top:2px;letter-spacing:0}'
+                + '.ssocial{display:flex;flex-wrap:wrap;gap:4px 8px;justify-content:center;margin-top:10px}.ssocial .soc{display:inline-flex;align-items:center;gap:3px;font-size:8px;font-weight:600;color:' + a2 + ';white-space:nowrap}.ssocial .soc-i{color:' + a + '}'
+                + '</style>';
+        },
+        card: function (a, ctx) {
+            return '<div class="card-container"><div class="card"><div class="slot"></div>'
+                + '<div class="shead"><img src="' + esc(ctx.logoUrl) + '" alt=""><div class="t">' + esc(ctx.escolaNome) + '</div></div>'
+                + '<div class="sphoto">' + photoTag(a) + '</div>'
+                + '<div class="sbody"><div class="sname">' + esc(nomeOf(a)) + '</div><div class="scargo">' + esc(cargoOf(a)) + '</div>'
+                + '<div class="sval">Válido até<strong>' + esc(validadeOf(a)) + '</strong></div>' + socialRow(ctx, 'ssocial') + '</div></div></div>';
+        }
+    };
+
+    // EXECUTIVE - cabeçalho escuro elegante com linha de destaque, sóbrio.
+    S.executive = {
+        meta: { id: 'executive', nome: 'Executive', descricao: 'Escuro e elegante, com linha de destaque fina.' },
+        css: function (ctx) {
+            var a = accentOf(ctx);
+            return styleOpen(ctx) + sheetCss(ctx)
+                + '.card{width:240px;height:384px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 10px 28px rgba(15,23,42,.18);display:flex;flex-direction:column;align-items:center;box-sizing:border-box}'
+                + '.shead{width:100%;background:#0f172a;color:#fff;display:flex;flex-direction:column;align-items:center;padding:16px 12px;box-sizing:border-box;border-bottom:3px solid ' + a + '}'
+                + '.shead img{height:32px;width:32px;border-radius:50%;background:#fff;padding:2px;object-fit:contain}'
+                + '.shead .t{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;text-align:center;margin-top:6px;line-height:1.3;color:#e2e8f0}'
+                + '.sphoto{width:100px;height:100px;border-radius:12px;border:3px solid #0f172a;overflow:hidden;background:#f1f5f9;display:flex;align-items:center;justify-content:center;margin-top:18px}'
+                + '.sphoto img{width:100%;height:100%;object-fit:cover}'
+                + '.sbody{flex:1;width:100%;text-align:center;padding:14px;box-sizing:border-box}'
+                + '.sname{font-size:15px;font-weight:800;color:#0f172a;line-height:1.15}'
+                + '.scargo{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:' + a + ';margin-top:6px}'
+                + '.sdiv{width:40px;height:2px;background:' + a + ';margin:12px auto}'
+                + '.sval{font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.5px}.sval strong{display:block;color:#0f172a;font-size:12px;margin-top:2px;letter-spacing:0}'
+                + '.ssocial{display:flex;flex-direction:column;gap:3px;align-items:center;margin-top:10px}.ssocial .soc{display:inline-flex;align-items:center;gap:4px;font-size:8px;font-weight:600;color:#334155;white-space:nowrap}.ssocial .soc-i{color:' + a + '}'
+                + '</style>';
+        },
+        card: function (a, ctx) {
+            return '<div class="card-container"><div class="card">'
+                + '<div class="shead"><img src="' + esc(ctx.logoUrl) + '" alt=""><div class="t">' + esc(ctx.escolaNome) + '</div></div>'
+                + '<div class="sphoto">' + photoTag(a) + '</div>'
+                + '<div class="sbody"><div class="sname">' + esc(nomeOf(a)) + '</div><div class="scargo">' + esc(cargoOf(a)) + '</div>'
+                + '<div class="sdiv"></div><div class="sval">Válido até<strong>' + esc(validadeOf(a)) + '</strong></div>' + socialRow(ctx, 'ssocial') + '</div></div></div>';
+        }
+    };
+
+    // SLATE - faixa lateral de destaque a toda a altura, ID monoespaçado.
+    S.slate = {
+        meta: { id: 'slate', nome: 'Slate', descricao: 'Faixa lateral e visual técnico moderno.' },
+        css: function (ctx) {
+            var a = accentOf(ctx), a2 = shade(a, -22), soft = shade(a, 46);
+            return styleOpen(ctx) + sheetCss(ctx)
+                + '.card{width:240px;height:384px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 10px 26px rgba(15,23,42,.16);display:flex;box-sizing:border-box}'
+                + '.sband{width:16px;flex:0 0 16px;background:linear-gradient(180deg,' + a + ',' + a2 + ')}'
+                + '.sin{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0}'
+                + '.shead{width:100%;display:flex;align-items:center;gap:8px;padding:14px 12px 8px;box-sizing:border-box;border-bottom:2px solid ' + soft + '}'
+                + '.shead img{height:28px;width:28px;border-radius:7px;background:' + soft + ';padding:2px;object-fit:contain}'
+                + '.shead .t{font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:' + a2 + ';line-height:1.2}'
+                + '.sphoto{width:104px;height:104px;border-radius:14px;border:3px solid ' + soft + ';overflow:hidden;background:#f1f5f9;display:flex;align-items:center;justify-content:center;margin-top:16px}'
+                + '.sphoto img{width:100%;height:100%;object-fit:cover}'
+                + '.sbody{flex:1;width:100%;text-align:center;padding:12px 14px;box-sizing:border-box}'
+                + '.sname{font-size:15px;font-weight:800;color:#0f172a;line-height:1.15}'
+                + '.scargo{display:inline-block;margin-top:7px;background:' + a + ';color:#fff;font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:3px 12px;border-radius:6px}'
+                + '.sval{margin-top:12px;font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.5px}.sval strong{display:block;color:' + a2 + ';font-size:12px;margin-top:2px;font-family:\'Courier New\',monospace;letter-spacing:0}'
+                + '.ssocial{display:flex;flex-direction:column;gap:3px;align-items:center;margin-top:10px}.ssocial .soc{display:inline-flex;align-items:center;gap:4px;font-size:8px;font-weight:600;color:#334155;white-space:nowrap}.ssocial .soc-i{color:' + a + '}'
+                + '</style>';
+        },
+        card: function (a, ctx) {
+            return '<div class="card-container"><div class="card"><div class="sband"></div><div class="sin">'
+                + '<div class="shead"><img src="' + esc(ctx.logoUrl) + '" alt=""><div class="t">' + esc(ctx.escolaNome) + '</div></div>'
+                + '<div class="sphoto">' + photoTag(a) + '</div>'
+                + '<div class="sbody"><div class="sname">' + esc(nomeOf(a)) + '</div><div class="scargo">' + esc(cargoOf(a)) + '</div>'
+                + '<div class="sval">Válido até<strong>' + esc(validadeOf(a)) + '</strong></div>' + socialRow(ctx, 'ssocial') + '</div></div></div></div>';
+        }
+    };
+
+    function resolveS(id) { return S[id] || S.corporate; }
+    function buildStaffDocument(items, ctx) {
+        ctx = ctx || {};
+        var tpl = resolveS(ctx.template);
+        var list = Array.isArray(items) ? items : [items];
+        var body = '';
+        for (var i = 0; i < list.length; i++) { body += tpl.card(list[i] || {}, ctx); }
+        var title = ctx.batch ? 'Imprimir Crachás' : 'Imprimir Crachá';
+        return '<!doctype html><html><head><meta charset="utf-8"><title>' + esc(title) + '</title>'
+            + tpl.css(ctx) + '</head><body><div class="sheet">' + body + '</div></body></html>';
+    }
+    window.SigeCrachaStaffTemplates = {
+        resolve: resolveS, buildDocument: buildStaffDocument,
+        list: function () { return Object.keys(S).map(function (id) { return S[id].meta; }); },
+        ids: function () { return Object.keys(S); }
+    };
 })();

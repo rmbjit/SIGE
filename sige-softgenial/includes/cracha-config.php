@@ -70,17 +70,21 @@ if (!function_exists('sige_cracha_sanitize_hex')) {
     }
 }
 
-if (!function_exists('sige_cracha_normalize_config')) {
+if (!function_exists('sige_cracha_normalize_generic')) {
     /**
-     * Normaliza/valida uma configuracao crua (de storage ou de input) contra os
-     * defaults e as listas validas. Nunca confia no conteudo bruto.
+     * Núcleo genérico de validação/normalização (partilhado por estudante e equipa).
+     * Valida o modelo contra a lista permitida e sanitiza cor/redes. Nunca confia
+     * no conteúdo bruto.
+     *
+     * @param mixed    $raw       Configuração crua (storage ou input).
+     * @param string[] $valid_ids Ids de modelo permitidos.
+     * @param array    $defaults  Defaults (template/accent/show_social/social).
      */
-    function sige_cracha_normalize_config($raw): array {
-        $defaults = sige_cracha_config_defaults();
+    function sige_cracha_normalize_generic($raw, array $valid_ids, array $defaults): array {
         $raw = is_array($raw) ? $raw : [];
 
         $template = isset($raw['template']) ? sanitize_key((string)$raw['template']) : '';
-        if (!in_array($template, sige_cracha_template_ids(), true)) {
+        if (!in_array($template, $valid_ids, true)) {
             $template = $defaults['template'];
         }
 
@@ -103,6 +107,13 @@ if (!function_exists('sige_cracha_normalize_config')) {
             'show_social' => $show_social,
             'social'      => $social,
         ];
+    }
+}
+
+if (!function_exists('sige_cracha_normalize_config')) {
+    /** Normaliza a configuração do crachá do ESTUDANTE. */
+    function sige_cracha_normalize_config($raw): array {
+        return sige_cracha_normalize_generic($raw, sige_cracha_template_ids(), sige_cracha_config_defaults());
     }
 }
 
@@ -183,5 +194,112 @@ if (!function_exists('sige_ajax_save_cracha_config')) {
 
         $config = sige_cracha_config_save($escola_id, $input);
         wp_send_json_success(['config' => $config, 'msg' => 'Modelo de crachá actualizado.']);
+    }
+}
+
+// ============================================================================
+// CRACHÁ DA EQUIPA (Professores/Funcionários) - conjunto de modelos próprio.
+// Mesma engenharia do estudante, mas modelos e armazenamento separados.
+// ============================================================================
+
+if (!function_exists('sige_cracha_staff_template_ids')) {
+    /** Ids válidos dos modelos de equipa (devem coincidir com o registo JS). @return string[] */
+    function sige_cracha_staff_template_ids(): array {
+        return ['corporate', 'lanyard', 'executive', 'slate'];
+    }
+}
+
+if (!function_exists('sige_cracha_staff_templates_meta')) {
+    function sige_cracha_staff_templates_meta(): array {
+        return [
+            'corporate' => ['nome' => 'Corporate', 'descricao' => 'Cabeçalho sólido e visual corporativo, foto destacada.', 'accent' => '#1e3a8a'],
+            'lanyard'   => ['nome' => 'Lanyard',   'descricao' => 'Estilo crachá de fita/evento, com furo no topo.',       'accent' => '#0f766e'],
+            'executive' => ['nome' => 'Executive', 'descricao' => 'Escuro e elegante, com linha de destaque fina.',        'accent' => '#b45309'],
+            'slate'     => ['nome' => 'Slate',     'descricao' => 'Faixa lateral e visual técnico moderno.',               'accent' => '#475569'],
+        ];
+    }
+}
+
+if (!function_exists('sige_cracha_staff_config_defaults')) {
+    function sige_cracha_staff_config_defaults(): array {
+        return [
+            'template'    => 'corporate',
+            'accent'      => '#1e3a8a', // azul corporativo - distinto do roxo do estudante
+            'show_social' => false,
+            'social'      => ['instagram' => '', 'facebook' => '', 'website' => ''],
+        ];
+    }
+}
+
+if (!function_exists('sige_cracha_staff_config_get')) {
+    function sige_cracha_staff_config_get(?int $escola_id = null): array {
+        if ($escola_id === null) {
+            $escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 0;
+        }
+        $stored = get_option('sige_cracha_staff_config_' . max(0, (int)$escola_id), null);
+        if (is_string($stored) && $stored !== '') {
+            $decoded = json_decode($stored, true);
+            $stored = (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) ? $decoded : null;
+        }
+        return sige_cracha_normalize_generic($stored, sige_cracha_staff_template_ids(), sige_cracha_staff_config_defaults());
+    }
+}
+
+if (!function_exists('sige_cracha_staff_config_save')) {
+    function sige_cracha_staff_config_save(int $escola_id, $input): array {
+        $config = sige_cracha_normalize_generic($input, sige_cracha_staff_template_ids(), sige_cracha_staff_config_defaults());
+        update_option('sige_cracha_staff_config_' . max(0, $escola_id), wp_json_encode($config), false);
+        if (function_exists('sige_log_event')) {
+            sige_log_event('cracha', 'staff_config_saved', ['escola_id' => $escola_id, 'template' => $config['template']], 'info');
+        }
+        return $config;
+    }
+}
+
+if (!function_exists('sige_cracha_staff_config_for_js')) {
+    function sige_cracha_staff_config_for_js(?int $escola_id = null): array {
+        return [
+            'config'    => sige_cracha_staff_config_get($escola_id),
+            'templates' => sige_cracha_staff_templates_meta(),
+            'social'    => sige_cracha_social_fields(),
+        ];
+    }
+}
+
+add_action('wp_ajax_sige_save_cracha_staff_config', 'sige_ajax_save_cracha_staff_config');
+
+if (!function_exists('sige_ajax_save_cracha_staff_config')) {
+    function sige_ajax_save_cracha_staff_config() {
+        if (function_exists('sige_check_nonce_global')) { sige_check_nonce_global(); }
+
+        $can = function_exists('sige_ajax_user_can_permissions_or_caps')
+            ? sige_ajax_user_can_permissions_or_caps(
+                ['rh.equipe_gerir', 'configuracoes.editar'],
+                ['sige_director', 'sige_gestor_rh', 'sige_admin_ti']
+            )
+            : (function_exists('current_user_can') && current_user_can('manage_options'));
+
+        if (!$can) {
+            wp_send_json_error(['msg' => 'Sem permissão para alterar o modelo de crachá da equipa.']);
+        }
+
+        $escola_id = function_exists('sige_get_escola_id') ? (int)sige_get_escola_id() : 0;
+        if ($escola_id <= 0) {
+            wp_send_json_error(['msg' => 'Escola não identificada.']);
+        }
+
+        $input = [
+            'template'    => isset($_POST['template']) ? wp_unslash((string)$_POST['template']) : '',
+            'accent'      => isset($_POST['accent']) ? wp_unslash((string)$_POST['accent']) : '',
+            'show_social' => isset($_POST['show_social']) ? wp_unslash((string)$_POST['show_social']) : '',
+            'social'      => [],
+        ];
+        foreach (sige_cracha_social_fields() as $f) {
+            $key = 'social_' . $f;
+            $input['social'][$f] = isset($_POST[$key]) ? wp_unslash((string)$_POST[$key]) : '';
+        }
+
+        $config = sige_cracha_staff_config_save($escola_id, $input);
+        wp_send_json_success(['config' => $config, 'msg' => 'Modelo de crachá da equipa actualizado.']);
     }
 }
