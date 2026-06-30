@@ -1246,7 +1246,7 @@ body.sige-admin-app.sige-view-turmas .sg-app-content{padding-left:30px!important
 body.sige-admin-app.sige-view-turmas .sg-app-page > .wrap.sige-turmas-page{margin:0!important;max-width:none!important;width:100%!important;padding:0!important;background:transparent!important;min-height:auto!important;font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important;}
 .sige-turmas-page{--sgv2-purple:var(--color-brand-400);--sgv2-purple-dark:var(--color-brand-600);--sgv2-ink:var(--color-black);--sgv2-muted:var(--color-slate-700);--sgv2-soft:var(--color-brand-50);--sgv2-line:rgba(28,32,54,.08);display:grid!important;gap:18px!important;}
 .sige-turmas-page svg{stroke:currentColor!important;color:currentColor!important;fill:none!important;opacity:1!important;}
-.sige-turmas-page .sige-hero{position:relative!important;overflow:hidden!important;display:grid!important;grid-template-columns:minmax(0,1.15fr) minmax(360px,.85fr)!important;gap:28px!important;align-items:center!important;min-height:210px!important;padding:34px 38px!important;margin:0!important;border-radius:var(--radius-xl)!important;background:linear-gradient(135deg,var(--color-white) 0%,var(--color-white) 54%,var(--color-brand-50) 100%)!important;color:var(--sgv2-ink)!important;border:1px solid rgba(109,93,252,.10)!important;box-shadow:var(--shadow-lg);animation:none!important;}
+.sige-turmas-page .sige-hero{position:relative!important;overflow:hidden!important;display:block!important;padding:var(--space-6) var(--space-8)!important;margin:0!important;border-radius:var(--radius-xl)!important;background:linear-gradient(135deg,var(--color-white) 0%,var(--color-white) 54%,var(--color-brand-50) 100%)!important;color:var(--sgv2-ink)!important;border:1px solid rgba(109,93,252,.10)!important;box-shadow:var(--shadow-md);animation:none!important;}
 .sige-turmas-page .sige-hero:before,.sige-turmas-page .sige-hero:after{display:none!important;}
 .sige-turmas-page .sige-hero-content{display:block!important;position:relative!important;z-index:2!important;}
 .sige-turmas-page .sige-hero-text{max-width:720px!important;min-width:0!important;}
@@ -1260,19 +1260,8 @@ body.sige-admin-app.sige-view-turmas .sg-app-page > .wrap.sige-turmas-page{margi
 .sige-turmas-page .sige-btn-hero svg{width:18px!important;height:18px!important;}
 .sige-turmas-page .sige-btn-hero-secondary{background:var(--color-white)!important;color:var(--color-ink-900)!important;border-color:var(--color-ink-100)!important;box-shadow:var(--shadow-sm);}
 .sige-turmas-page .sige-btn-hero:hover{transform:translateY(-1px)!important;box-shadow:var(--shadow-md);}
-.sige-turmas-page .sige-hero-art{position:relative!important;min-height:148px!important;border-radius:var(--radius-xl)!important;background:linear-gradient(135deg,rgba(109,93,252,.08),rgba(109,93,252,.18))!important;overflow:hidden!important;}
-.sige-turmas-page .sige-hero-school{position:absolute!important;right:62px!important;bottom:22px!important;width:230px!important;height:96px!important;color:var(--color-brand-300)!important;}
-.sige-turmas-page .sige-school-roof{position:absolute;left:40px;top:8px;width:150px;height:55px;border-top:9px solid currentColor;border-left:9px solid currentColor;transform:skewX(-18deg);opacity:.85;}
-.sige-turmas-page .sige-school-body{position:absolute;left:36px;bottom:0;width:158px;height:72px;border-radius:12px 14px 8px 8px;background:rgba(109,93,252,.28);box-shadow:inset 0 0 0 2px rgba(109,93,252,.18);}
-.sige-turmas-page .sige-school-body:before{content:"";position:absolute;left:67px;bottom:0;width:28px;height:42px;border-radius:12px 14px 0 0;background:rgba(109,93,252,.42);}
-.sige-turmas-page .sige-school-window{position:absolute;top:18px;left:18px;width:22px;height:18px;border-radius:var(--radius-xs);background:rgba(255,255,255,.54);box-shadow:var(--shadow-lg);}
-.sige-turmas-page .sige-school-flag{position:absolute;left:118px;top:-20px;width:3px;height:42px;background:rgba(109,93,252,.72);}
-.sige-turmas-page .sige-school-flag:after{content:"";position:absolute;left:3px;top:2px;width:34px;height:18px;border-radius:var(--radius-xs);background:rgba(109,93,252,.62);clip-path:polygon(0 0,100% 20%,0 100%);}
-.sige-turmas-page .sige-hero-cloud,.sige-turmas-page .sige-hero-tree,.sige-turmas-page .sige-hero-dot{position:absolute;opacity:.55;}
-.sige-turmas-page .sige-hero-cloud{width:86px;height:28px;border-radius:var(--radius-pill);background:rgba(255,255,255,.58);right:235px;top:30px;box-shadow:var(--shadow-xs);}
-.sige-turmas-page .sige-hero-tree{right:24px;bottom:24px;width:54px;height:72px;border-radius:22px 38px 12px 12px;background:rgba(109,93,252,.28);}
-.sige-turmas-page .sige-hero-tree:after{content:"";position:absolute;left:25px;bottom:-18px;width:4px;height:34px;border-radius:var(--radius-pill);background:rgba(109,93,252,.42);}
-.sige-turmas-page .sige-hero-dot{width:90px;height:90px;border-radius:50%;background:rgba(109,93,252,.16);left:42px;bottom:24px;}
+/* Herói compacto (v12.23.0): faixa única, sem ilustração. Regras de arte
+   (.sige-hero-art/.sige-hero-*/.sige-school-*) removidas com o respectivo HTML. */
 .sige-turmas-page .sige-stats-grid{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:var(--space-4)!important;margin:0!important;animation:none!important;}
 .sige-turmas-page .sige-stat-card,.sige-turmas-page .sige-stat-card.highlight{position:relative!important;overflow:hidden!important;display:grid!important;grid-template-columns:auto minmax(0,1fr)!important;gap:var(--space-4)!important;align-items:center!important;min-height:104px!important;padding:18px 20px!important;border-radius:var(--radius-xl)!important;background:var(--color-white)!important;border:1px solid rgba(28,32,54,.08)!important;box-shadow:var(--shadow-md);color:var(--sgv2-ink)!important;animation:none!important;}
 .sige-turmas-page .sige-stat-card:after{content:""!important;position:absolute!important;right:-28px!important;top:-34px!important;width:92px!important;height:92px!important;border-radius:50%!important;background:var(--kpi-soft,var(--color-brand-50))!important;}
@@ -1354,6 +1343,22 @@ body.sige-admin-app.sige-modal-open{overflow:hidden!important;}
 @media (max-width:1100px){body.sige-admin-app.sige-view-turmas .sg-app-content{padding-left:22px!important;padding-right:22px!important}.sige-turmas-page .sige-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.sige-turmas-page .sige-toolbar{grid-template-columns:1fr!important}.sige-turmas-page .sige-filter-select,.sige-turmas-page .sige-btn-toolbar{width:100%!important}.sige-turmas-page .sige-turma-grid{grid-template-columns:1fr!important}}
 @media (max-width:720px){body.sige-admin-app.sige-view-turmas .sg-app-content{padding-left:16px!important;padding-right:16px!important}.sige-turmas-page .sige-hero{padding:var(--space-6) var(--space-5)!important;border-radius:22px!important}.sige-turmas-page .sige-hero h1{font-size:24px!important}.sige-turmas-page .sige-stats-grid{grid-template-columns:1fr!important}.sige-turmas-page .sige-card-actions{display:grid!important;grid-template-columns:1fr 1fr!important}.sige-turmas-page .sige-btn-card.btn-danger{flex:auto!important}.sige-turmas-page .sige-field-row{grid-template-columns:1fr!important}.sige-turmas-page .sige-modal-content{max-width:calc(100vw - 24px)!important;border-radius:var(--radius-xl)!important;}.sige-turmas-page .sige-modal-footer{display:grid!important;grid-template-columns:1fr!important}.sige-turmas-page .sige-modal-footer button{width:100%!important}}
 
+/* v12.23.0 - Modais acima da barra lateral: .sg-app-content e contexto de
+   empilhamento (z-index:1) abaixo da sidebar; enquanto ha modal aberto
+   (sige-modal-open) elevamos o conteudo. Scoped a esta view. */
+body.sige-admin-app.sige-view-turmas.sige-modal-open .sg-app-content{z-index:10090!important;}
+/* v12.23.0 - Herois sem ilustracao: faixa de uma coluna a toda a largura; botoes
+   compactos numa linha em portateis (largura de conteudo = janela menos a barra
+   lateral), so empilham em ecra estreito. */
+body.sige-admin-app.sige-view-turmas .sige-turmas-page .sige-hero-content{display:block!important;width:100%!important;}
+body.sige-admin-app.sige-view-turmas .sige-turmas-page .sige-hero h1{max-width:none!important;}
+body.sige-admin-app.sige-view-turmas .sige-turmas-page .sige-hero-actions{display:flex!important;flex-wrap:nowrap!important;gap:var(--space-2)!important;}
+body.sige-admin-app.sige-view-turmas .sige-turmas-page .sige-btn-hero{flex:0 1 auto!important;min-width:0!important;padding:0 var(--space-3)!important;gap:var(--space-2)!important;font-size:var(--fs-sm)!important;white-space:nowrap!important;}
+body.sige-admin-app.sige-view-turmas .sige-turmas-page .sige-btn-hero svg{flex:0 0 auto!important;width:16px!important;height:16px!important;}
+@media (max-width:720px){
+    body.sige-admin-app.sige-view-turmas .sige-turmas-page .sige-hero-actions{display:grid!important;grid-template-columns:1fr!important;flex-wrap:wrap!important;}
+    body.sige-admin-app.sige-view-turmas .sige-turmas-page .sige-btn-hero{width:100%!important;font-size:var(--fs-base)!important;white-space:normal!important;}
+}
 </style>
 <div class="wrap sige-turmas-page">
 
@@ -1373,16 +1378,6 @@ body.sige-admin-app.sige-modal-open{overflow:hidden!important;}
                         Imprimir mapa
                     </button>
                 </div>
-            </div>
-        </div>
-        <div class="sige-hero-art" aria-hidden="true">
-            <div class="sige-hero-dot"></div>
-            <div class="sige-hero-cloud"></div>
-            <div class="sige-hero-tree"></div>
-            <div class="sige-hero-school">
-                <div class="sige-school-roof"></div>
-                <div class="sige-school-body"><div class="sige-school-window"></div></div>
-                <div class="sige-school-flag"></div>
             </div>
         </div>
     </section>
@@ -1438,10 +1433,10 @@ body.sige-admin-app.sige-modal-open{overflow:hidden!important;}
     <div class="sige-toolbar">
         <div class="sige-search-box">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="filtro-texto" placeholder="Pesquisar turma, director ou sala..." onkeyup="filtrarTurmas()" autocomplete="off">
+            <input type="text" id="filtro-texto" placeholder="Pesquisar turma, director ou sala..." data-sige-on-keyup="filtrarTurmas()" autocomplete="off">
         </div>
         
-        <select id="filtro-turno" class="sige-filter-select" onchange="filtrarTurmas()">
+        <select id="filtro-turno" class="sige-filter-select" data-sige-on-change="filtrarTurmas()">
             <option value="">Todos os Turnos</option>
             <option value="Manhã">Manhã</option>
             <option value="Tarde">Tarde</option>
@@ -1737,7 +1732,7 @@ body.sige-admin-app.sige-modal-open{overflow:hidden!important;}
             <input type="hidden" id="h-turma-id">
             <div class="sige-horario-controls">
                 <label>Nº de Períodos:</label>
-                <select id="h-periodos" onchange="renderHorario()">
+                <select id="h-periodos" data-sige-on-change="renderHorario()">
                     <option value="5">5 períodos</option>
                     <option value="6" selected>6 períodos</option>
                     <option value="7">7 períodos</option>
@@ -1950,6 +1945,7 @@ function novaTurma() {
     jQuery('#modal-titulo-turma').html('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px;height:22px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nova Turma');
     jQuery('#btn-submit-turma').html('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><polyline points="20 6 9 17 4 12"/></svg> Guardar Turma');
     jQuery('#modal-turma').css('display', 'flex').hide().fadeIn(300);
+    jQuery('body').addClass('sige-modal-open');
 }
 
 function editarTurma(data) {
@@ -1963,6 +1959,7 @@ function editarTurma(data) {
     jQuery('#modal-titulo-turma').html('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px;height:22px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar Turma');
     jQuery('#btn-submit-turma').html('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><polyline points="20 6 9 17 4 12"/></svg> Actualizar Turma');
     jQuery('#modal-turma').css('display', 'flex').hide().fadeIn(300);
+    jQuery('body').addClass('sige-modal-open');
 }
 
 jQuery('#form-turma').on('submit', function(e) {
@@ -1983,6 +1980,7 @@ function alocarProfessores(id, nomeTurma) {
     jQuery('#docentes-turma-nome').html('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px;height:22px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Docentes: <strong>' + nomeTurma + '</strong>');
     jQuery('#lista-disciplinas-prof').html('<div style="text-align: center; padding: 40px; color: var(--sige-slate-400);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:40px;height:40px;animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><p style="margin-top:12px;">A carregar matriz curricular...</p></div>');
     jQuery('#modal-docentes').fadeIn(300).css('display', 'flex');
+    jQuery('body').addClass('sige-modal-open');
     jQuery.post(ajaxurl, {action: 'sige_listar_docentes_turma', turma_id: id, _sige_nonce: sigeAjax.nonce_turmas}, function(res) {
         if (res.success && res.data && res.data.disciplinas && res.data.disciplinas.length > 0) {
             var classe = res.data.classe || '';
@@ -2056,6 +2054,7 @@ function gerirHorario(turmaId) {
     _hTurmaId = turmaId;
     jQuery('#h-turma-id').val(turmaId);
     jQuery('#modal-horario').css('display','flex').hide().fadeIn(300);
+    jQuery('body').addClass('sige-modal-open');
     carregarHorario(turmaId);
 }
 
@@ -2243,6 +2242,7 @@ function verAlunos(turmaId, nome, classe) {
     jQuery('#al-f').text('Fem: -');
     jQuery('#al-wrap').html('<div style="text-align:center;padding:60px;color:var(--sige-slate-400);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:40px;height:40px;animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><p style="margin-top:12px;">A carregar...</p></div>');
     jQuery('#modal-alunos').css('display', 'flex').hide().fadeIn(300);
+    jQuery('body').addClass('sige-modal-open');
     jQuery.post(ajaxurl, {
         action: 'sige_listar_alunos_turma',
         turma_id: turmaId,
@@ -2367,11 +2367,23 @@ function _eh(s) {
 // ========================================
 // EVENT LISTENERS
 // ========================================
+// Fechar modais: alem de esconder, retira a classe sige-modal-open (senao o
+// body fica com overflow:hidden e a pagina deixa de fazer scroll, e o conteudo
+// fica elevado). Cobre ESC, clique fora e o botao X (sigeFecharModalJq).
+function sigeTurmasFecharModais() {
+    jQuery('.sige-modal:visible').fadeOut(200);
+    jQuery('body').removeClass('sige-modal-open');
+    sigeTurmasConfirmCallback = null;
+}
 jQuery(document).on('keydown', function(e) {
-    if (e.key === 'Escape') jQuery('.sige-modal').fadeOut(200);
+    if (e.key === 'Escape') sigeTurmasFecharModais();
 });
-
 jQuery('.sige-modal').on('click', function(e) {
-    if (e.target === this) jQuery(this).fadeOut(200);
+    if (e.target === this) { jQuery(this).fadeOut(200); jQuery('body').removeClass('sige-modal-open'); }
+});
+// O X dos modais usa o despachante partilhado sigeFecharModalJq (so faz fadeOut);
+// aqui garantimos a limpeza da classe nesta view.
+jQuery(document).on('click', '[data-sige-act="sigeFecharModalJq"]', function() {
+    jQuery('body').removeClass('sige-modal-open');
 });
 </script>

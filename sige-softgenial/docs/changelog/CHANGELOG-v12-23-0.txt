@@ -1,0 +1,37 @@
+SIGE SoftGenial v12.23.0 - Turmas: modais acima da sidebar, ESC sem bloquear scroll, heroi compacto
+Data: 2026-06-30
+Tipo: apresentacao + comportamento de UI (Modulo 4 - Turmas). Sem logica de dados.
+
+APLICACAO DAS LICOES ACUMULADAS (tolerancia zero a repetir erros)
+1. EMPILHAMENTO: os modais (turma, docentes, horario, alunos) abriam SEM a classe
+   sige-modal-open (so o confirm a punha), logo ficavam tapados pela barra lateral
+   (.sg-app-content e contexto z-index:1 < sidebar). Agora os 4 modais poem a
+   classe ao abrir e ha regra que eleva o conteudo:
+   body.sige-view-turmas.sige-modal-open .sg-app-content{z-index:10090}.
+2. ESC/FECHO: o ESC fazia fadeOut mas NAO retirava sige-modal-open, deixando
+   body{overflow:hidden} -> a pagina ficava sem scroll depois de fechar. Agora
+   ESC, clique fora e o botao X limpam a classe (e o callback do confirm).
+3. CSP: 3 handlers inline server-rendered passam a data-sige-on-*
+   (onkeyup=filtrarTurmas; onchange=filtrarTurmas; onchange=renderHorario).
+4. HEROI compacto: removida a ilustracao de escola (HTML + CSS), sem min-height,
+   grelha 2-col -> bloco a 100%, box-shadow md, padding var(--space-6)/(--space-8).
+   Botoes compactos numa linha em portateis (largura do CONTEUDO, nao da janela),
+   empilham <=720px. A faixa ja renderizava clara (verificado), nao escura.
+
+ACHADO FUNCIONAL (CSP) - NAO corrigido aqui (exige refactor de JS, a confirmar)
+- Os editores de Horario e de Docentes injectam HTML em runtime com handlers
+  inline (onchange="hSetTempo(...)", salvarDocente(...), onmouseover). Com
+  script-src-attr 'none', estes handlers INJECTADOS sao bloqueados pela CSP, pelo
+  que esses editores provavelmente nao disparam. E pre-existente e fora do ambito
+  de apresentacao; recomenda-se correccao dedicada com teste do fluxo de gravacao.
+
+FRONTEIRA
+- So apresentacao/UI. Sem logica, SQL, $wpdb, nonces, AJAX, name/id, permissoes
+  nem schema. Mapas/cartoes imprimiveis intactos. Gravacoes recarregam a pagina.
+
+VALIDACAO
+- php -l: sem erros. BUILD.json valido. Gate de tokens 1908 (baixou; baseline
+  reposta). 0 handlers inline server-rendered; ilustracao removida.
+- DEPLOY:   docs/deploy/DEPLOY-v12.23.0-turmas.md
+- LIVE-TEST: docs/qa/LIVE-TEST-v12.23.0-turmas.md
+- Portoes:  docs/design-system/MODULO-4-turmas-A-D-v12.23.0.md
