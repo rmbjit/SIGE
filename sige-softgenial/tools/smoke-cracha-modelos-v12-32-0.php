@@ -113,6 +113,7 @@ _p($fails, $js_staff === $php_staff, 'Ids de equipa JS == PHP (' . implode(',', 
 _p($fails, strpos($js, 'window.SigeCrachaStaffTemplates') !== false, 'Registo JS expõe SigeCrachaStaffTemplates (conjunto de equipa)');
 _p($fails, strpos($js, 'function cargoOf(') !== false, 'Modelos de equipa usam o cargo');
 _p($fails, $js_staff !== $php_ids, 'Conjunto de equipa é DIFERENTE do de estudante (diferenciação)');
+_p($fails, strpos($js, 'class="stop"') !== false, 'Lanyard: furo da fita numa faixa dedicada no topo (não sobre o cabeçalho)');
 // Ligação na view de Equipa.
 _p($fails, strpos($equipe, 'readfile($sige_cracha_tpl_file)') !== false, 'Equipa entrega o registo inline (filesystem)');
 _p($fails, strpos($equipe, 'data-sige-act="abrirModeloCrachaStaff"') !== false, 'Botão "Modelo de Crachá" na Equipa');

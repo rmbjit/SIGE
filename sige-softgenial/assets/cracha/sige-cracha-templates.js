@@ -328,12 +328,15 @@
         css: function (ctx) {
             var a = accentOf(ctx), a2 = shade(a, -22), soft = shade(a, 44);
             return styleOpen(ctx) + sheetCss(ctx)
-                + '.card{width:240px;height:384px;background:#ffffff;border-radius:18px;overflow:hidden;box-shadow:0 10px 28px rgba(15,23,42,.16);display:flex;flex-direction:column;align-items:center;box-sizing:border-box;position:relative}'
-                + '.slot{width:54px;height:8px;border-radius:999px;background:rgba(255,255,255,.85);margin:8px auto 0;position:absolute;left:50%;transform:translateX(-50%);top:9px;z-index:3}'
-                + '.shead{width:100%;background:linear-gradient(135deg,' + a + ',' + a2 + ');color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:22px 10px 46px;box-sizing:border-box}'
+                + '.card{width:240px;height:384px;background:#ffffff;border-radius:18px;overflow:hidden;box-shadow:0 10px 28px rgba(15,23,42,.16);display:flex;flex-direction:column;align-items:center;box-sizing:border-box}'
+                /* Faixa branca dedicada no topo para o furo da fita (lanyard), separada
+                   do cabeçalho colorido. A foto fica muito abaixo desta zona. */
+                + '.stop{width:100%;height:26px;flex:0 0 26px;background:#ffffff;display:flex;align-items:center;justify-content:center}'
+                + '.slot{width:48px;height:7px;border-radius:999px;background:#e2e8f0;box-shadow:inset 0 1px 2px rgba(15,23,42,.3)}'
+                + '.shead{width:100%;background:linear-gradient(135deg,' + a + ',' + a2 + ');color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px 10px 46px;box-sizing:border-box}'
                 + '.shead img{height:30px;width:30px;border-radius:50%;background:#fff;padding:2px;object-fit:contain}'
                 + '.shead .t{font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;text-align:center;margin-top:5px;line-height:1.2;padding:0 8px}'
-                + '.sphoto{width:96px;height:96px;border-radius:50%;border:4px solid #fff;background:' + soft + ';overflow:hidden;display:flex;align-items:center;justify-content:center;margin-top:-42px;position:relative;z-index:2;box-shadow:0 4px 12px rgba(15,23,42,.18)}'
+                + '.sphoto{width:96px;height:96px;border-radius:50%;border:4px solid #fff;background:' + soft + ';overflow:hidden;display:flex;align-items:center;justify-content:center;margin-top:-40px;position:relative;z-index:2;box-shadow:0 4px 12px rgba(15,23,42,.18)}'
                 + '.sphoto img{width:100%;height:100%;object-fit:cover}.sphoto .ph{color:' + a2 + '}'
                 + '.sbody{flex:1;width:100%;text-align:center;padding:10px 14px;box-sizing:border-box}'
                 + '.sname{font-size:15px;font-weight:800;color:#0f172a;line-height:1.15}'
@@ -343,7 +346,7 @@
                 + '</style>';
         },
         card: function (a, ctx) {
-            return '<div class="card-container"><div class="card"><div class="slot"></div>'
+            return '<div class="card-container"><div class="card"><div class="stop"><span class="slot"></span></div>'
                 + '<div class="shead"><img src="' + esc(ctx.logoUrl) + '" alt=""><div class="t">' + esc(ctx.escolaNome) + '</div></div>'
                 + '<div class="sphoto">' + photoTag(a) + '</div>'
                 + '<div class="sbody"><div class="sname">' + esc(nomeOf(a)) + '</div><div class="scargo">' + esc(cargoOf(a)) + '</div>'

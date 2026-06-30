@@ -1,0 +1,25 @@
+SIGE SoftGenial v12.33.1 - Crachá da equipa: Lanyard com faixa de fita dedicada
+Data: 2026-06-30
+Tipo: correcção de desenho (modelo Lanyard da equipa). Só apresentação.
+
+REPORTE (com captura)
+- No modelo Lanyard, a foto sobrepunha-se ao espaço do furo da fita: o "slot"
+  estava posicionado de forma absoluta SOBRE o cabeçalho colorido, sem espaço próprio.
+
+CORRECÇÃO (assets/cracha/sige-cracha-templates.js, só o modelo Lanyard)
+- O furo da fita passa a ter uma FAIXA BRANCA dedicada no topo do cartão
+  (.stop, 26px de altura), separada do cabeçalho colorido.
+- O slot é desenhado como um furo real (oblongo cinza com sombra interior),
+  centrado nessa faixa.
+- O cabeçalho colorido começa abaixo da faixa; a foto desceu (sobreposição de
+  -40px) e fica muito abaixo do furo.
+
+VERIFICAÇÃO (Chromium/Playwright)
+- Slot dentro da faixa de topo (fundo ~35px); foto com topo ~113px; folga
+  slot->foto de 78px. Sem sobreposição.
+- node -c (registo) OK; gate design-tokens estável; smoke actualizado
+  (asserção da faixa dedicada do Lanyard) OK.
+
+FRONTEIRA
+- Só o desenho do modelo Lanyard no registo JS. Sem alterar lógica, config,
+  schema, permissões nem os outros modelos.
