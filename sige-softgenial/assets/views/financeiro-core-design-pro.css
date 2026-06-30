@@ -395,3 +395,17 @@ body.sige-view-financeiro-pagamentos .sg-paypro-collapse-chev{ position: absolut
 body.sige-view-financeiro-pagamentos .sg-paypro-operation-card.sg-paypro-collapsed .sg-paypro-collapse-chev{ transform: translateY(-30%) rotate(45deg); }
 /* Quando colapsada, a seccao fica compacta (so o cabecalho). */
 body.sige-view-financeiro-pagamentos .sg-paypro-operation-card.sg-paypro-collapsed{ margin-bottom: 12px !important; }
+
+/* ===========================================================================
+   v12.26.0 - Config (Precos e Servicos): seccoes colapsaveis + modal acima da
+   barra lateral. So apresentacao; comportamento em financeiro-core-design-pro.js.
+   =========================================================================== */
+body.sige-admin-app.sige-view-financeiro-config.sg-fincfg-service-modal-open .sg-app-content,
+body.sige-admin-app.sige-view-financeiro-config.sg-fincfg-modal-open .sg-app-content{ z-index: 10090 !important; }
+
+body.sige-view-financeiro-config .sg-fincfg-collapse-head{ cursor: pointer; user-select: none; position: relative; padding-right: 46px; transition: background-color .15s ease; }
+body.sige-view-financeiro-config .sg-fincfg-collapse-head:hover{ background-color: var(--color-slate-50); }
+body.sige-view-financeiro-config .sg-fincfg-collapse-head:focus-visible{ outline: 2px solid var(--color-brand-300); outline-offset: 2px; }
+body.sige-view-financeiro-config .sg-fincfg-collapse-chev{ position: absolute; right: 18px; top: 50%; width: 11px; height: 11px; border-right: 2px solid var(--color-slate-500); border-bottom: 2px solid var(--color-slate-500); transform: translateY(-70%) rotate(225deg); transition: transform .18s ease; pointer-events: none; }
+body.sige-view-financeiro-config .fc-card.sg-fincfg-collapsed .sg-fincfg-collapse-chev{ transform: translateY(-30%) rotate(45deg); }
+body.sige-view-financeiro-config .fc-card.sg-fincfg-collapsed{ margin-bottom: 12px !important; }

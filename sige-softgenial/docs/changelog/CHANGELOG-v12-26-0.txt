@@ -1,0 +1,43 @@
+SIGE SoftGenial v12.26.0 - Config (Precos e Servicos): seccoes colapsaveis + modal acima da sidebar
+Data: 2026-06-30
+Tipo: apresentacao/UX (view=financeiro-config). Sem logica nem formulas.
+
+CONTEXTO
+- financeiro-config.php NAO e hash-protegido, mas e financeiro. Mantive o PHP da
+  view INTACTO: todo o enriquecimento foi feito nos assets partilhados do
+  financeiro (financeiro-core-design-pro.js/.css), ja carregados nesta view.
+
+MELHORIAS (so visual)
+1. Seccoes colapsaveis: as seccoes de regras (Multa por Atraso, Descontos,
+   Precos da Creche, Localizacao, Transporte) - .fc-card com cabecalho proprio -
+   ganham cabecalho clicavel com seta e comecam FECHADAS -> pagina muito mais
+   curta. A "Lista de Servicos" (conteudo principal) fica ABERTA.
+   - Exclui os .fc-card dentro de modais (ex.: formulario de servico).
+   - Acessivel (role=button, tabindex, Enter/Espaco); ignora cliques em controlos
+     dentro do cabecalho (ex.: botao "Adicionar Servico", filtro de centro).
+   - So mostra/esconde o corpo; nao move nos nem toca em valores/formulas.
+2. Modal acima da barra lateral: o modal de Servico e o de confirmacao
+   (.sg-fincfg-service-modal / .sg-fincfg-modal) ficavam presos atras da sidebar
+   (contexto de .sg-app-content). Passa a elevar-se o conteudo enquanto ha modal
+   aberto (classes sg-fincfg-service-modal-open / sg-fincfg-modal-open).
+
+AUDITORIA (Portao A)
+- Sem :root proprio (nao sombreia tokens globais).
+- 0 handlers inline server-rendered.
+- ESC e classes de modal ja eram bem geridas pela view; so faltava a elevacao.
+- checkboxes "ovo": ja corrigidas na raiz (v12.24.2).
+
+LIMITACAO CONHECIDA (a confirmar)
+- A seccao "Gestao de Periodos" nao tem cabecalho .fc-card-header separado (o
+  titulo esta dentro do corpo), por isso NAO ficou colapsavel (foi ignorada com
+  seguranca). Fica aberta. Se quiser colapsa-la tambem, requer um pequeno ajuste
+  de marcacao no PHP da view (a confirmar).
+
+FRONTEIRA
+- financeiro-config.php INTACTO (git). Sem logica, formulas, SQL, nonces, AJAX,
+  name/id, permissoes nem schema.
+
+VALIDACAO
+- node --check ao JS: OK. BUILD.json valido. Gate de tokens estavel.
+- DEPLOY:   docs/deploy/DEPLOY-v12.26.0-config.md
+- LIVE-TEST: docs/qa/LIVE-TEST-v12.26.0-config.md
