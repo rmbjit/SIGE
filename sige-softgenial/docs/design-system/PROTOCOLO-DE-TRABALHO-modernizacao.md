@@ -17,6 +17,7 @@ Frase que rege tudo: **sempre progresso, nunca regressão. Verificar, não assum
 | Ia "limpar" um arco-íris de cores que já estava neutralizado por outra folha | **Verificar o estado renderizado real** antes de propor correcção |
 | Corrigi "permissoes" na view, mas o texto vinha de `institutional-product-map.php` | Seguir o texto **até à fonte**, não ao primeiro sítio onde aparece |
 | Tratei navegação de Comunicações como "só apresentação"; afinal toca permissões | Se toca gating/permissões, **é lógica**: confirmar e testar, não assumir |
+| Revi o ecrã Equipa e disse "os modais funcionam" sem ver que o modal saía **tapado pela barra lateral**. Causa: `.sg-app-content` é um contexto de empilhamento (`position:relative;z-index:1`) abaixo da sidebar; um modal filho do conteúdo nunca sobe acima dela, por maior que seja o seu `z-index` | "Funciona" inclui **aparecer inteiro e por cima da moldura** (sidebar/topbar). Validar sempre overlays/modais/dropdowns contra o **contexto de empilhamento dos pais**, não só contra o `z-index` próprio. Quando há captura de ecrã, **olhar mesmo para ela** |
 
 ---
 
@@ -83,6 +84,14 @@ toca gating como "precisa de confirmação".
 Assumir que há erros. Reler o que se entregou e procurar activamente:
 - Conflitos de especificidade entre camadas.
 - Layout partido quando a estrutura muda (ex.: remover um filho de um grid).
+- **Empilhamento (z-index/stacking):** abrir cada modal, overlay, dropdown e
+  tooltip e confirmar que aparecem **inteiros e acima da sidebar/topbar**. Um
+  `z-index` alto não escapa de um pai que é contexto de empilhamento
+  (`position`+`z-index`, `transform`, `filter`, `opacity<1`). Padrões já usados na
+  base de código: portar o nó para `document.body` (ex.: inscrições, disciplinas)
+  ou elevar o conteúdo enquanto o modal está aberto (Equipa). Se a estilização do
+  modal depende de um ancestral (ex.: `.sige-rh .field-group`), **portar partiria
+  o estilo** - nesse caso elevar o conteúdo é mais seguro.
 - Menu que mostra links que a rota bloqueia (ou vice-versa).
 - Estados restritos (perfis com poucas permissões) e ecrãs vazios.
 - Mobile/tablet, não só desktop.

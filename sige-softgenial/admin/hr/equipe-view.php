@@ -1408,6 +1408,13 @@ body.sige-admin-app.sige-view-equipe .sg-app-page > .wrap.sige-rh{margin:0!impor
 .sige-rh .table-actions{opacity:1!important;gap:var(--space-2)!important;}
 .sige-rh .btn-action{width:36px!important;height:36px!important;border-radius:var(--radius-md)!important;}
 .sige-rh .sige-modal{background:rgba(31,34,49,.56)!important;backdrop-filter:blur(8px)!important;z-index:999999!important;}
+/* Modal acima da barra lateral: .sg-app-content e um contexto de empilhamento
+   (position:relative;z-index:1) abaixo da sidebar (z-index alto no shell PRO),
+   pelo que um modal filho do conteudo, por mais alto que seja o seu z-index,
+   fica tapado pela barra lateral. Enquanto um modal da Equipa esta aberto,
+   elevamos o conteudo acima da sidebar; o fundo do modal passa a cobrir tambem
+   a barra lateral (UX correcta). Scoped a esta view: nao afecta outros ecrans. */
+body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:10090!important;}
 .sige-rh .modal-content{border-radius:var(--radius-xl)!important;border:1px solid rgba(30,34,60,.08)!important;box-shadow:var(--shadow-lg);max-height:90vh;overflow-y:auto;}
 .sige-rh .modal-header{background:var(--color-white)!important;color:var(--color-black)!important;border-bottom:1px solid var(--color-slate-100)!important;padding:var(--space-6) var(--space-6)!important;}
 .sige-rh .modal-header h3{color:var(--color-black)!important;font-weight:700!important;letter-spacing:-.035em!important;}
@@ -2649,6 +2656,9 @@ function sigeEquipeOpenModal(modal) {
     modal.style.visibility = 'visible';
     modal.style.pointerEvents = 'auto';
     document.body.style.overflow = 'hidden';
+    // Eleva o conteudo acima da barra lateral enquanto o modal esta aberto
+    // (ver regra .sige-rh-modal-open .sg-app-content no <style> da view).
+    document.body.classList.add('sige-rh-modal-open');
 }
 function sigeEquipeCloseModal(modal) {
     if (!modal) return;
@@ -2658,7 +2668,11 @@ function sigeEquipeCloseModal(modal) {
     modal.style.opacity = '0';
     modal.style.visibility = 'hidden';
     modal.style.pointerEvents = 'none';
-    document.body.style.overflow = '';
+    // So restaura o empilhamento normal quando nenhum modal da Equipa fica aberto.
+    if (!document.querySelector('.sige-modal.active')) {
+        document.body.style.overflow = '';
+        document.body.classList.remove('sige-rh-modal-open');
+    }
 }
 function novoFuncionario() {
     document.getElementById('modal-title').textContent = 'Novo colaborador';

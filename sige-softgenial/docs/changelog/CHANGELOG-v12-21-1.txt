@@ -1,0 +1,39 @@
+SIGE SoftGenial v12.21.1 - Equipa: modal acima da barra lateral (hotfix)
+Data: 2026-06-30
+Tipo: correccao de apresentacao (empilhamento/z-index). Sem logica.
+
+PROBLEMA (reportado pelo utilizador, com captura)
+- Ao abrir "Novo colaborador"/"Editar", o modal aparecia parcialmente TAPADO
+  pela barra lateral (rotulos cortados: "ME COMPLETO", "RGO", "LEMOVEL").
+
+CAUSA
+- .sg-app-content e um contexto de empilhamento (position:relative;z-index:1) e
+  fica abaixo da barra lateral (z-index alto no shell PRO, 10070). O modal e
+  filho do conteudo, por isso o seu z-index (1000000) nao consegue subir acima
+  da sidebar: fica preso no contexto do pai. position:fixed nao resolve isto.
+
+CORRECCAO (admin/hr/equipe-view.php, so apresentacao)
+- Enquanto um modal da Equipa esta aberto, o body recebe a classe
+  sige-rh-modal-open e o conteudo e elevado acima da sidebar:
+  body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:10090!important;}
+- sigeEquipeOpenModal adiciona a classe; sigeEquipeCloseModal remove-a apenas
+  quando nenhum modal da Equipa continua aberto. O fundo do modal passa a cobrir
+  tambem a barra lateral (UX correcta: a sidebar fica esbatida atras do modal).
+- Nao se moveu o no para o body (padrao usado noutras views) porque a
+  estilizacao do formulario depende do ancestral .sige-rh; portar partiria o
+  estilo. Elevar o conteudo e o caminho seguro aqui.
+
+ABRANGE
+- Tanto #box-equipa (ficha do colaborador) como #sige-rh-confirm (confirmacoes),
+  pois ambos abrem por sigeEquipeOpenModal.
+
+FRONTEIRA
+- So apresentacao. Sem logica, SQL, nonces, AJAX, name/id, permissoes nem schema.
+- Regra scoped a body.sige-view-equipe: nao afecta outros ecrans.
+
+APRENDIZAGEM
+- docs/design-system/PROTOCOLO-DE-TRABALHO-modernizacao.md: nova licao e novo
+  ponto de auto-revisao sobre empilhamento de modais/overlays vs moldura do shell.
+
+VALIDACAO
+- php -l equipe-view.php: sem erros. BUILD.json valido. Gate de tokens 1914.
