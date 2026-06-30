@@ -388,6 +388,20 @@ $sige_global_data = [
     'logo_url' => $logo_final,
     'ano_lectivo' => $ano_lectivo
 ];
+// v12.32.0 - Modelo de crachá da escola: config + catálogo para o cliente
+// (pré-visualização e impressão partilham o mesmo registo de modelos).
+$sige_global_data['cracha'] = function_exists('sige_cracha_config_for_js')
+    ? sige_cracha_config_for_js()
+    : ['config' => [], 'templates' => [], 'social' => []];
+// Nonce de CSP para o <style> da pré-visualização (iframe herda a CSP da página).
+$sige_global_data['csp_nonce'] = function_exists('sige_csp_nonce') ? sige_csp_nonce() : '';
+// Quem pode mudar o modelo de crachá da escola (mostra/oculta o botão).
+$sige_can_editar_cracha = (function_exists('sige_can') && sige_can('configuracoes.editar'))
+    || (function_exists('sige_is_real_wp_admin_user') && sige_is_real_wp_admin_user())
+    || (function_exists('current_user_can') && (
+        current_user_can('sige_director') || current_user_can('sige_admin_ti')
+        || current_user_can('sige_gestor_rh') || current_user_can('sige_secretaria_geral')
+    ));
 
 // ========================================
 // 1.1 TRANSPORTES (ROTAS) + CAMPOS NOVOS
@@ -6014,7 +6028,14 @@ body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-btn-hero svg{
             Cartões (Lote)
         </button>
         <?php endif; ?>
-        
+
+        <?php if (!empty($sige_can_editar_cracha)): ?>
+        <button type="button" data-sige-act="abrirModeloCracha" data-sige-noargs class="sige-btn-toolbar btn-cracha-modelo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 2a10 10 0 1 0 0 20 1.5 1.5 0 0 0 1.06-2.56A1.5 1.5 0 0 1 14 17.5a1.5 1.5 0 0 1 1.5-1.5H17a5 5 0 0 0 5-5 9 9 0 0 0-10-9z"/></svg>
+            Modelo de Crachá
+        </button>
+        <?php endif; ?>
+
         <?php if ($sige_alunos_can_export): ?>
         <button type="button" data-sige-act="exportarExcelProfissional" data-sige-noargs class="sige-btn-toolbar btn-excel">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
@@ -7075,6 +7096,89 @@ body.sige-admin-app.sige-view-alunos_lista .sige-alunos-page .sige-btn-hero svg{
         </div>
     </div>
 </div>
+
+<?php if (!empty($sige_can_editar_cracha)): ?>
+<style>
+/* Modelo de Crachá da Escola - estilos só com tokens (sem cores/raios mágicos). */
+.sige-cracha-modal{position:fixed;inset:0;z-index:140000;display:none;align-items:center;justify-content:center;padding:var(--space-4);}
+.sige-cracha-modal.is-open{display:flex;}
+.sige-cracha-backdrop{position:absolute;inset:0;background:rgba(15,23,42,.55);}
+.sige-cracha-dialog{position:relative;background:var(--color-white);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);width:min(940px,96vw);max-height:92vh;display:flex;flex-direction:column;overflow:hidden;}
+.sige-cracha-head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);padding:var(--space-5) var(--space-6);border-bottom:1px solid var(--color-ink-100);}
+.sige-cracha-head h2{margin:0;font-size:var(--fs-lg);font-weight:700;color:var(--color-ink-700);}
+.sige-cracha-x{background:none;border:none;font-size:26px;line-height:1;cursor:pointer;color:var(--color-slate-500);padding:0 var(--space-2);}
+.sige-cracha-x:hover{color:var(--color-ink-700);}
+.sige-cracha-body{padding:var(--space-6);overflow-y:auto;min-height:0;}
+.sige-cracha-grid{display:grid;grid-template-columns:1fr 300px;gap:var(--space-6);align-items:start;}
+.sige-cracha-label{margin:0 0 var(--space-3);font-size:var(--fs-sm);font-weight:700;color:var(--color-slate-600);text-transform:uppercase;letter-spacing:.4px;}
+.sige-cracha-templates{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);margin-bottom:var(--space-5);}
+.sige-cracha-tpl{border:1.5px solid var(--color-ink-100);border-radius:var(--radius-md);padding:var(--space-4);cursor:pointer;transition:border-color .15s ease,background .15s ease;}
+.sige-cracha-tpl:hover{border-color:var(--color-brand-300);}
+.sige-cracha-tpl.is-active{border-color:var(--color-brand-500);background:var(--color-brand-50);}
+.sige-cracha-tpl-nome{font-weight:700;color:var(--color-ink-700);font-size:var(--fs-base);}
+.sige-cracha-tpl-desc{font-size:var(--fs-sm);color:var(--color-slate-500);margin-top:var(--space-1);line-height:1.35;}
+.sige-cracha-accent{display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-5);}
+.sige-cracha-accent input[type=color]{width:48px;height:38px;border:1px solid var(--color-ink-200);border-radius:var(--radius-md);background:var(--color-white);cursor:pointer;padding:2px;}
+.sige-cracha-accent input[type=text]{flex:1;height:38px;border:1.5px solid var(--color-ink-200);border-radius:var(--radius-md);padding:0 var(--space-3);font-family:'Courier New',monospace;color:var(--color-ink-700);}
+.sige-cracha-toggle{display:flex;align-items:center;gap:var(--space-3);font-size:var(--fs-base);color:var(--color-ink-700);cursor:pointer;margin-bottom:var(--space-4);}
+.sige-cracha-toggle input{width:18px;height:18px;cursor:pointer;}
+.sige-cracha-social{display:grid;gap:var(--space-3);}
+.sige-cracha-social.is-hidden{display:none;}
+.sige-cracha-social input{height:38px;border:1.5px solid var(--color-ink-200);border-radius:var(--radius-md);padding:0 var(--space-3);color:var(--color-ink-700);font-size:var(--fs-base);}
+.sige-cracha-social input:focus,.sige-cracha-accent input:focus{outline:none;border-color:var(--color-brand-400);}
+.sige-cracha-preview-wrap{position:sticky;top:0;}
+.sige-cracha-frame{width:100%;height:392px;border:1px solid var(--color-ink-100);border-radius:var(--radius-lg);background:var(--color-slate-50);}
+.sige-cracha-foot{display:flex;align-items:center;justify-content:flex-end;gap:var(--space-3);padding:var(--space-4) var(--space-6);border-top:1px solid var(--color-ink-100);}
+.sige-cracha-msg{margin-right:auto;font-size:var(--fs-sm);color:var(--color-success-700);font-weight:600;}
+.sige-cracha-msg.is-error{color:var(--color-danger-500);}
+.sige-cracha-btn-cancel,.sige-cracha-btn-save{height:42px;padding:0 var(--space-6);border-radius:var(--radius-md);font-weight:700;font-size:var(--fs-base);cursor:pointer;border:1.5px solid transparent;}
+.sige-cracha-btn-cancel{background:var(--color-white);border-color:var(--color-ink-200);color:var(--color-ink-700);}
+.sige-cracha-btn-cancel:hover{border-color:var(--color-slate-300);}
+.sige-cracha-btn-save{background:var(--color-brand-500);color:var(--color-white);}
+.sige-cracha-btn-save:hover{background:var(--color-brand-600);}
+.sige-cracha-btn-save[disabled]{opacity:.6;cursor:default;}
+@media(max-width:760px){.sige-cracha-grid{grid-template-columns:1fr;}.sige-cracha-templates{grid-template-columns:1fr;}.sige-cracha-preview-wrap{position:static;}.sige-cracha-frame{height:360px;}}
+</style>
+<div id="sige-cracha-modal" class="sige-cracha-modal" aria-hidden="true">
+    <div class="sige-cracha-backdrop" data-sige-act="fecharModeloCracha" data-sige-noargs></div>
+    <div class="sige-cracha-dialog" role="dialog" aria-modal="true" aria-labelledby="sige-cracha-title">
+        <div class="sige-cracha-head">
+            <h2 id="sige-cracha-title">Modelo de Crachá da Escola</h2>
+            <button type="button" class="sige-cracha-x" data-sige-act="fecharModeloCracha" data-sige-noargs aria-label="Fechar">&times;</button>
+        </div>
+        <div class="sige-cracha-body">
+            <div class="sige-cracha-grid">
+                <div class="sige-cracha-controls">
+                    <p class="sige-cracha-label">Modelo</p>
+                    <div class="sige-cracha-templates" id="sige-cracha-templates"></div>
+                    <p class="sige-cracha-label">Cor de destaque</p>
+                    <div class="sige-cracha-accent">
+                        <input type="color" id="sige-cracha-accent" value="#7c3aed" aria-label="Cor de destaque">
+                        <input type="text" id="sige-cracha-accent-hex" maxlength="7" placeholder="#7c3aed" aria-label="Cor de destaque (hex)">
+                    </div>
+                    <label class="sige-cracha-toggle">
+                        <input type="checkbox" id="sige-cracha-show-social"> Mostrar redes sociais no crachá
+                    </label>
+                    <div class="sige-cracha-social is-hidden" id="sige-cracha-social">
+                        <input type="text" id="sige-cracha-social-instagram" placeholder="Instagram (ex.: @minhaescola)" maxlength="80">
+                        <input type="text" id="sige-cracha-social-facebook" placeholder="Facebook (ex.: /minhaescola)" maxlength="80">
+                        <input type="text" id="sige-cracha-social-website" placeholder="Website (ex.: minhaescola.co.mz)" maxlength="80">
+                    </div>
+                </div>
+                <div class="sige-cracha-preview-wrap">
+                    <p class="sige-cracha-label">Pré-visualização</p>
+                    <iframe id="sige-cracha-preview-frame" class="sige-cracha-frame" title="Pré-visualização do crachá"></iframe>
+                </div>
+            </div>
+        </div>
+        <div class="sige-cracha-foot">
+            <span class="sige-cracha-msg" id="sige-cracha-msg" aria-live="polite"></span>
+            <button type="button" class="sige-cracha-btn-cancel" data-sige-act="fecharModeloCracha" data-sige-noargs>Cancelar</button>
+            <button type="button" class="sige-cracha-btn-save" id="sige-cracha-save" data-sige-act="guardarModeloCracha" data-sige-noargs>Guardar modelo</button>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
 
 <script <?php echo sige_csp_script_attr(); ?>>
 // ========================================
@@ -8650,78 +8754,56 @@ function imprimirDeclaracao(data) {
 // v12.31.0: elimina a duplicacao entre printBatchCards e printSingleCard. Todos os
 // campos dinamicos sao escapados; o QR cai para o numero de processo legivel quando
 // nao pode ser gerado; a impressao espera o carregamento das imagens.
+// Contexto de render do crachá: dados da escola + modelo escolhido pela escola
+// (template/cor/redes) vindos de sigeGlobal.cracha. O mesmo contexto alimenta a
+// pré-visualização e a impressão, garantindo consistência.
 function sigeCardCtx() {
+    var cr = (sigeGlobal && sigeGlobal.cracha && sigeGlobal.cracha.config) ? sigeGlobal.cracha.config : {};
     return {
         escolaNome: (sigeGlobal && sigeGlobal.nome_escola) ? sigeGlobal.nome_escola : 'ESCOLA GERAL',
         logoUrl: (sigeGlobal && sigeGlobal.logo_url) ? sigeGlobal.logo_url : '<?php echo esc_url(SIGE_URL . 'assets/img/avatar-default.svg'); ?>',
-        anoLectivo: (sigeGlobal && sigeGlobal.ano_lectivo) ? sigeGlobal.ano_lectivo : '2026'
+        anoLectivo: (sigeGlobal && sigeGlobal.ano_lectivo) ? sigeGlobal.ano_lectivo : '2026',
+        template: cr.template || 'aurora',
+        accent: cr.accent || '#7c3aed',
+        showSocial: !!cr.show_social,
+        social: cr.social || {},
+        nonce: (sigeGlobal && sigeGlobal.csp_nonce) ? sigeGlobal.csp_nonce : ''
     };
 }
 
-function sigeCardStyles(batch) {
-    return `<style>
-        ${batch ? '@page { size: A4; margin: 10mm; }' : ''}
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-print-color-adjust: exact; margin: 0; padding: 0; background: ${batch ? '#fff' : '#eee'};${batch ? '' : ' display: flex; justify-content: center; align-items: center; min-height: 100vh;'} }
-        .sheet { display: flex; flex-wrap: wrap; gap: 15px; justify-content: ${batch ? 'flex-start' : 'center'}; }
-        .card-container { break-inside: avoid; page-break-inside: avoid; }
-        .card { width: 220px; height: 350px; background: #fff; border: 1px solid #cbd5e1; border-radius: 12px; position: relative; overflow: hidden; box-shadow: 0 4px ${batch ? '6px rgba(0,0,0,0.05)' : '15px rgba(0,0,0,0.1)'}; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; }
-        .card-header { width: 100%; height: 85px; background: #0f172a; color: white; text-align: center; padding-top: 12px; box-sizing: border-box; }
-        .card-header img.logo { height: 36px; width: 36px; border-radius: 50%; background: #fff; padding: 2px; margin-bottom: 4px; object-fit: contain; }
-        .card-header .title { font-size: 7px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2; }
-        .card-photo-wrapper { width: 90px; height: 110px; margin-top: 15px; border-radius: 8px; border: 3px solid #fff; background: #f1f5f9; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .card-photo-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-        .card-body { padding: 12px 10px 10px; text-align: center; width: 100%; box-sizing: border-box; flex: 1; }
-        .card-name { font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 8px; line-height: 1.2; max-height: 31px; overflow: hidden; }
-        .card-role { display: inline-block; background: #10b981; color: #fff; font-size: 8px; font-weight: 700; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.5px; margin-bottom: 12px; text-transform: uppercase; }
-        .card-details { font-size: 10px; color: #475569; line-height: 1.5; }
-        .card-details strong { color: #1e293b; }
-        .card-footer { width: 100%; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 10px 15px; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; }
-        .card-footer .qr { width: 40px; height: 40px; }
-        .card-footer .qr-fallback { font-size: 9px; font-weight: 700; color: #0f172a; font-family: 'Courier New', monospace; letter-spacing: 0.5px; }
-        .card-footer .validity { font-size: 8px; color: #64748b; text-align: left; }
-        .card-footer .validity strong { display: block; color: #0f172a; font-size: 9px; margin-top: 2px; }
-    </style>`;
-}
-
-function sigeCardMarkup(a, ctx) {
-    var esc = sigeAlunoEscapeHtml;
-    var foto = (a && a.foto) ? String(a.foto) : '';
-    var imgTag = foto ? `<img src="${esc(foto)}" alt="">` : `<span style="font-size:10px;color:#94a3b8;font-weight:bold;">FOTO</span>`;
-    var t = (a && a.classe && a.turma_nome) ? `${esc(a.classe)} - ${esc(a.turma_nome)}` : 'S/ Turma';
-    var proc = (a && a.numero_processo) ? String(a.numero_processo) : '';
-    var qr = sigeQrDataUri('Aluno:' + proc);
-    var qrCell = qr ? `<img src="${qr}" class="qr" alt="">` : `<span class="qr-fallback">${esc(proc)}</span>`;
-    return `
-        <div class="card-container">
-            <div class="card">
-                <div class="card-header">
-                    <img src="${esc(ctx.logoUrl)}" class="logo" alt="">
-                    <div class="title">REPÚBLICA DE MOÇAMBIQUE<br>${esc(ctx.escolaNome)}</div>
-                </div>
-                <div class="card-photo-wrapper">
-                    ${imgTag}
-                </div>
-                <div class="card-body">
-                    <div class="card-name">${esc((a && a.nome_completo) ? a.nome_completo : '')}</div>
-                    <div class="card-role">ESTUDANTE</div>
-                    <div class="card-details">
-                        <div><strong>Proc:</strong> ${esc(proc)}</div>
-                        <div><strong>Turma:</strong> ${t}</div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div class="validity">Válido até:<strong>Dezembro ${esc(ctx.anoLectivo)}</strong></div>
-                    ${qrCell}
-                </div>
-            </div>
-        </div>`;
-}
-
+// Documento de impressão: delega no registo de modelos (fonte de verdade única,
+// partilhada com a pré-visualização). Se o registo não tiver carregado, recorre a
+// um cartão simples e funcional (modo degradado), para nunca falhar a impressão.
 function sigeCardsDocument(students, ctx, batch) {
-    var title = batch ? 'Imprimir Cartões' : 'Imprimir Cartão';
+    ctx = ctx || sigeCardCtx();
+    ctx.batch = !!batch;
+    var list = Array.isArray(students) ? students : [students];
+    if (window.SigeCrachaTemplates && typeof window.SigeCrachaTemplates.buildDocument === 'function') {
+        return window.SigeCrachaTemplates.buildDocument(list, ctx);
+    }
+    return sigeCardsDocumentFallback(list, ctx);
+}
+
+function sigeCardsDocumentFallback(list, ctx) {
+    var esc = sigeAlunoEscapeHtml;
+    var n = ctx && ctx.nonce ? ' nonce="' + esc(ctx.nonce) + '"' : '';
     var body = '';
-    for (var i = 0; i < students.length; i++) { body += sigeCardMarkup(students[i] || {}, ctx); }
-    return `<html><head><meta charset="utf-8"><title>${title}</title>${sigeCardStyles(batch)}</head><body><div class="sheet">${body}</div></body></html>`;
+    for (var i = 0; i < list.length; i++) {
+        var a = list[i] || {};
+        var proc = a.numero_processo ? String(a.numero_processo) : '';
+        var qr = sigeQrDataUri('Aluno:' + proc);
+        var qrCell = qr ? '<img src="' + qr + '" class="qr" alt="">' : '<span class="qrf">' + esc(proc) + '</span>';
+        body += '<div class="c"><div class="hd">' + esc(ctx.escolaNome) + '</div>'
+            + '<div class="nm">' + esc(a.nome_completo || '') + '</div>'
+            + '<div class="mt">Estudante &middot; Proc: ' + esc(proc) + '</div>'
+            + '<div class="ft">' + qrCell + '</div></div>';
+    }
+    return '<!doctype html><html><head><meta charset="utf-8"><title>Cartão</title><style' + n + '>'
+        + 'body{font-family:Segoe UI,Arial,sans-serif;margin:0;padding:12px;display:flex;flex-wrap:wrap;gap:12px;color:#475569}'
+        + '.c{width:220px;height:350px;border:1px solid #cbd5e1;border-radius:12px;padding:16px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;text-align:center}'
+        + '.hd{font-size:9px;font-weight:700;text-transform:uppercase}.nm{margin-top:80px;font-size:14px;font-weight:800}'
+        + '.mt{margin-top:8px;font-size:11px}.ft{margin-top:auto}.qr{width:48px;height:48px}.qrf{font-family:monospace;font-weight:700}'
+        + '</style></head><body>' + body + '</body></html>';
 }
 
 // Escreve no popup e imprime SO depois de as imagens carregarem (com salvaguarda
@@ -8771,6 +8853,147 @@ function printSingleCard(a) {
     var w = window.open('', '', 'width=350,height=500');
     sigePrintCardsWindow(w, sigeCardsDocument([a || {}], sigeCardCtx(), false));
 }
+
+// ========================================
+// MODELO DE CRACHÁ DA ESCOLA (seletor + pré-visualização ao vivo + gravação)
+// Pré-visualização e impressão usam o MESMO registo de modelos (SigeCrachaTemplates),
+// por isso o que a escola escolhe é exactamente o que sai impresso.
+// ========================================
+(function () {
+    var SAMPLE = { nome_completo: 'Maria João Sitoe', numero_processo: '2026-0001', classe: '10ª', turma_nome: 'A', foto: '' };
+    function cfg() { return (sigeGlobal && sigeGlobal.cracha) ? sigeGlobal.cracha : { config: {}, templates: {}, social: [] }; }
+    function el(id) { return document.getElementById(id); }
+
+    var modal = null, frame = null, estado = null, inited = false;
+
+    function ctxAtual() {
+        return {
+            escolaNome: (sigeGlobal && sigeGlobal.nome_escola) ? sigeGlobal.nome_escola : 'ESCOLA GERAL',
+            logoUrl: (sigeGlobal && sigeGlobal.logo_url) ? sigeGlobal.logo_url : '',
+            anoLectivo: (sigeGlobal && sigeGlobal.ano_lectivo) ? sigeGlobal.ano_lectivo : '2026',
+            template: estado.template, accent: estado.accent, showSocial: estado.show_social,
+            social: estado.social, batch: false,
+            nonce: (sigeGlobal && sigeGlobal.csp_nonce) ? sigeGlobal.csp_nonce : ''
+        };
+    }
+    function renderPreview() {
+        if (!frame || !window.SigeCrachaTemplates) { return; }
+        frame.srcdoc = window.SigeCrachaTemplates.buildDocument([SAMPLE], ctxAtual());
+    }
+    function marcarTemplate() {
+        Array.prototype.forEach.call(document.querySelectorAll('#sige-cracha-templates .sige-cracha-tpl'), function (n) {
+            n.classList.toggle('is-active', n.getAttribute('data-tpl') === estado.template);
+        });
+    }
+    function renderTemplateOptions() {
+        var wrap = el('sige-cracha-templates'); if (!wrap) { return; }
+        var metas = cfg().templates || {}, html = '';
+        Object.keys(metas).forEach(function (id) {
+            var m = metas[id] || {}, active = (id === estado.template) ? ' is-active' : '';
+            html += '<div class="sige-cracha-tpl' + active + '" data-tpl="' + sigeAlunoEscapeHtml(id) + '" role="button" tabindex="0">'
+                + '<div class="sige-cracha-tpl-nome">' + sigeAlunoEscapeHtml(m.nome || id) + '</div>'
+                + '<div class="sige-cracha-tpl-desc">' + sigeAlunoEscapeHtml(m.descricao || '') + '</div></div>';
+        });
+        wrap.innerHTML = html;
+        Array.prototype.forEach.call(wrap.querySelectorAll('.sige-cracha-tpl'), function (node) {
+            function pick() { estado.template = node.getAttribute('data-tpl'); marcarTemplate(); renderPreview(); }
+            node.addEventListener('click', pick);
+            node.addEventListener('keydown', function (ev) { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); pick(); } });
+        });
+    }
+    function syncSocialVisibility() {
+        var box = el('sige-cracha-social'); if (box) { box.classList.toggle('is-hidden', !estado.show_social); }
+    }
+    function msg(text, isError) {
+        var m = el('sige-cracha-msg'); if (!m) { return; }
+        m.textContent = text || ''; m.classList.toggle('is-error', !!isError);
+    }
+    function lerEstadoDoFormulario() {
+        estado.show_social = el('sige-cracha-show-social').checked;
+        estado.social = {
+            instagram: el('sige-cracha-social-instagram').value || '',
+            facebook: el('sige-cracha-social-facebook').value || '',
+            website: el('sige-cracha-social-website').value || ''
+        };
+    }
+    function init() {
+        if (inited) { return; }
+        modal = el('sige-cracha-modal'); frame = el('sige-cracha-preview-frame');
+        if (!modal) { return; }
+        inited = true;
+        var c = cfg().config || {};
+        estado = {
+            template: c.template || 'aurora',
+            accent: c.accent || '#7c3aed',
+            show_social: !!c.show_social,
+            social: {
+                instagram: (c.social && c.social.instagram) || '',
+                facebook: (c.social && c.social.facebook) || '',
+                website: (c.social && c.social.website) || ''
+            }
+        };
+        el('sige-cracha-accent').value = estado.accent;
+        el('sige-cracha-accent-hex').value = estado.accent;
+        el('sige-cracha-show-social').checked = estado.show_social;
+        el('sige-cracha-social-instagram').value = estado.social.instagram;
+        el('sige-cracha-social-facebook').value = estado.social.facebook;
+        el('sige-cracha-social-website').value = estado.social.website;
+        renderTemplateOptions(); syncSocialVisibility();
+
+        el('sige-cracha-accent').addEventListener('input', function () { estado.accent = this.value; el('sige-cracha-accent-hex').value = this.value; renderPreview(); });
+        el('sige-cracha-accent-hex').addEventListener('input', function () {
+            var v = String(this.value || '').trim();
+            if (/^#?[0-9a-fA-F]{6}$/.test(v)) { if (v[0] !== '#') { v = '#' + v; } estado.accent = v; el('sige-cracha-accent').value = v; renderPreview(); }
+        });
+        el('sige-cracha-show-social').addEventListener('change', function () { estado.show_social = this.checked; syncSocialVisibility(); renderPreview(); });
+        ['instagram', 'facebook', 'website'].forEach(function (f) {
+            el('sige-cracha-social-' + f).addEventListener('input', function () { estado.social[f] = this.value; renderPreview(); });
+        });
+    }
+    window.abrirModeloCracha = function () {
+        init();
+        if (!modal) { sigeAlunoAlert('Seletor de modelo indisponível.', 'Modelo de crachá', 'error'); return; }
+        msg('', false);
+        modal.classList.add('is-open'); modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('sige-modal-open');
+        renderPreview();
+    };
+    window.fecharModeloCracha = function () {
+        if (!modal) { return; }
+        modal.classList.remove('is-open'); modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('sige-modal-open');
+    };
+    window.guardarModeloCracha = function () {
+        init(); if (!modal) { return; }
+        lerEstadoDoFormulario();
+        var btn = el('sige-cracha-save'); if (btn) { btn.setAttribute('disabled', 'disabled'); }
+        msg('A guardar...', false);
+        jQuery.post(ajaxurl, {
+            action: 'sige_save_cracha_config',
+            _sige_nonce: sigeAjax.nonce_alunos,
+            template: estado.template,
+            accent: estado.accent,
+            show_social: estado.show_social ? '1' : '0',
+            social_instagram: estado.social.instagram,
+            social_facebook: estado.social.facebook,
+            social_website: estado.social.website
+        }).done(function (r) {
+            if (r && r.success && r.data && r.data.config) {
+                sigeGlobal.cracha.config = r.data.config; // a impressão passa já a usar o novo modelo
+                estado.template = r.data.config.template; estado.accent = r.data.config.accent;
+                estado.show_social = !!r.data.config.show_social; estado.social = r.data.config.social || estado.social;
+                marcarTemplate(); renderPreview();
+                msg('Modelo guardado para toda a escola.', false);
+            } else {
+                msg((r && r.data && (r.data.msg || r.data)) ? (r.data.msg || r.data) : 'Não foi possível guardar.', true);
+            }
+        }).fail(function () { msg('Falha de ligação ao guardar. Tente novamente.', true); })
+            .always(function () { if (btn) { btn.removeAttribute('disabled'); } });
+    };
+    document.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape' && modal && modal.classList.contains('is-open')) { window.fecharModeloCracha(); }
+    });
+})();
 
 // ========================================
 // REGIME CRECHE: auto-preencher mensalidade

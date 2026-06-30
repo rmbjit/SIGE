@@ -1,0 +1,64 @@
+SIGE SoftGenial v12.32.0 - Modelos de crachá por escola (4 modelos + cor + redes sociais)
+Data: 2026-06-30
+Tipo: nova funcionalidade de apresentação (view=alunos_lista). Sem schema, sem cálculo.
+
+O QUE A ESCOLA GANHA
+- Pode escolher o MODELO do crachá do estudante entre 4 desenhos modernos:
+    * Aurora  - degradê moderno, foto circular, redes sociais em chips.
+    * Clássico - institucional sóbrio (estilo documento oficial).
+    * Vivid   - faixa lateral vibrante, visual ousado.
+    * Minimal - limpo e elegante, linha de destaque fina.
+- Pode definir a COR DE DESTAQUE da escola.
+- Pode activar REDES SOCIAIS no crachá (Instagram, Facebook, Website).
+- Vê uma PRÉ-VISUALIZAÇÃO AO VIVO antes de guardar; a escolha vale para toda a
+  escola e passa a ser usada na impressão (individual e em lote).
+
+ONDE
+- Página Alunos -> barra de ferramentas -> botão "Modelo de Crachá" (visível a
+  quem tem configuracoes.editar / Direcção / Admin TI / Gestor RH / Secretaria).
+
+ENGENHARIA (qualidade, sem remendos)
+1) FONTE DE VERDADE ÚNICA do desenho: assets/cracha/sige-cracha-templates.js.
+   É usada TANTO pela pré-visualização como pela impressão -> o que a escola vê
+   é exactamente o que sai impresso (impossível divergir). Documento de impressão
+   autónomo (janela/iframe), por isso usa cores literais; a cor de destaque vem
+   da escolha da escola. (O gate de tokens não varre .js, por desenho.)
+2) CAMADA DE CONFIGURAÇÃO por escola: includes/cracha-config.php.
+   - Validação total: modelo contra allowlist, cor hex normalizada, redes
+     sanitizadas e limitadas (80 car.), booleano de mostrar redes.
+   - Armazenamento em WP option por escola (sige_cracha_config_{escola_id}).
+     SEM alteração de schema. Tenant-scoped.
+   - AJAX sige_save_cracha_config: nonce global + permissão configuracoes.editar
+     (com fallback de papéis). Nunca confia no input bruto.
+3) Carregada no bootstrap; o asset é enfileirado por ui-kit APENAS no ecrã Alunos.
+4) admin/academic/alunos_lista.php:
+   - Botão + modal (seletor dos 4 modelos, cor, redes, pré-visualização ao vivo).
+   - A pré-visualização usa um iframe; o <style> leva o NONCE de CSP da página
+     (CSP: style-src 'self' 'nonce-...'); nenhum handler on* inline.
+   - A impressão (printSingleCard/printBatchCards) passa a DELEGAR no registo de
+     modelos; se o asset não tiver carregado, há um cartão de FALLBACK degradado
+     (nome + processo + QR) para a impressão nunca falhar.
+
+PARIDADE GARANTIDA
+- Os ids dos modelos no PHP (allowlist) e no registo JS coincidem exactamente,
+  verificado por smoke (se divergirem, falha).
+
+FRONTEIRA / SEGURANÇA
+- NÃO toca em ficheiros protegidos por hash (admin-shell, permissions-layer,
+  finance-core, dashboard-view, etc.). Sem alterar fórmulas, SQL de cálculo,
+  permissões reais nem schema. O contrato QR<->Portaria mantém-se intacto.
+
+VALIDAÇÃO
+- php -l: alunos_lista.php, cracha-config.php, ui-kit.php, sige-softgenial.php -> OK.
+- node -c assets/cracha/sige-cracha-templates.js -> OK.
+- Gates: typography OK; permissoes-aditiva OK; design-tokens 1879 (baixou com a
+  deduplicação do crachá; baseline reposta).
+- Novo smoke tools/smoke-cracha-modelos-v12-32-0.php: funcional (validação) +
+  paridade PHP<->JS dos ids + ligação (bootstrap/ui-kit/view) -> OK.
+- Higiene: removida a fixação de versão literal nos smokes (passam a verificar a
+  SINCRONIA header=const=build, robusta a futuros bumps); removido o smoke
+  v12-31-0 (testava a arquitectura inline agora substituída pelo registo).
+
+EXTENSÃO FUTURA (preparada, não incluída agora)
+- O motor está desenhado para reutilização no crachá do funcionário/professor
+  (Equipa) sem reescrever o registo de modelos.

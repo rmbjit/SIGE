@@ -140,6 +140,21 @@ add_action('admin_enqueue_scripts', function ($hook) {
         }
     }
 
+    // Registo de modelos de crachá do estudante (pre-visualizacao + impressao).
+    // So no ecrã de Alunos, onde os crachás sao escolhidos e impressos.
+    if ($sige_view === 'alunos_lista') {
+        $cracha_js = SIGE_PATH . 'assets/cracha/sige-cracha-templates.js';
+        if (is_file($cracha_js)) {
+            wp_enqueue_script(
+                'sige-cracha-templates',
+                SIGE_URL . 'assets/cracha/sige-cracha-templates.js',
+                [],
+                SIGE_VERSION . '.' . filemtime($cracha_js),
+                true
+            );
+        }
+    }
+
     if ($financeiro_core_active) {
         $financeiro_js = SIGE_PATH . 'assets/views/financeiro-core-design-pro.js';
         if (is_file($financeiro_js)) {

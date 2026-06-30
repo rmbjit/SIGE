@@ -148,10 +148,11 @@ _p($fails, strpos($equipe, "user_can(\$s->ID, 'sige_professor')") !== false && s
 _p($fails, strpos($perm, 'sige_staff_active_profile_user_ids((int) $escola_id)') !== false, 'Permissoes consome sige_staff_active_profile_user_ids');
 _p($fails, strpos($perm, 'AND r.ativo = 1') === false, 'Permissoes ja nao tem a copia local com AND r.ativo = 1');
 
-// Versao alinhada.
-_p($fails, strpos($main, 'Version: 12.30.2') !== false, 'Header do plugin em 12.30.2');
-_p($fails, strpos($main, "define('SIGE_VERSION', '12.30.2')") !== false, 'SIGE_VERSION em 12.30.2');
-_p($fails, is_array($build) && ($build['version'] ?? '') === '12.30.2', 'BUILD.json em 12.30.2');
+// Versoes sincronizadas (sem fixar numero; o literal e validado pelo gate de baseline).
+preg_match('/Version:\s*([0-9.]+)/', $main, $vh);
+preg_match("/define\('SIGE_VERSION',\s*'([0-9.]+)'\)/", $main, $vc);
+$vb = is_array($build) ? (string)($build['version'] ?? '') : '';
+_p($fails, !empty($vh[1]) && ($vh[1] === ($vc[1] ?? '')) && (($vc[1] ?? '') === $vb), 'Versoes sincronizadas (header=const=build)');
 
 // ===========================================================================
 $erros = array_values(array_filter($fails, fn($x) => !$x[0]));
