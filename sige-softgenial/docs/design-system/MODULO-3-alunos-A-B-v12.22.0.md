@@ -52,3 +52,26 @@ apresentação. Gate de tokens não sobe.
 
 ### Risco global
 Baixo nos itens 1-2; médio no 3 por causa das camadas de afinação do herói.
+
+## Portões C/D - implementado (v12.22.0)
+
+CORRECÇÃO DE PRESSUPOSTO (verificar, não assumir): o herói **não** era escuro.
+A definição base `.sige-hero` (linha 910) é navy, mas está **sobreposta** por
+`.sige-alunos-page .sige-hero` (linha 2466, `!important`) que pinta uma **faixa
+clara** (branco -> brand-100) com texto escuro. Logo, o herói já renderizava
+claro (como o Painel/Equipa). A decisão escuro/claro ficou sem efeito.
+
+Implementado:
+1. Empilhamento: `body.sige-view-alunos_lista.{sige-aluno-modal-open|sige-modal-open}
+   .sg-app-content{z-index:10090}`. Cobre os 3 modais e o popup.
+2. CSP: `onkeyup`/`onchange` -> `data-sige-on-keyup`/`data-sige-on-change`.
+3. Herói: removida a ilustração (HTML + CSS base) e o brilho `:before`; sem
+   `min-height`; `box-shadow` md; padding `var(--space-6)/var(--space-8)`;
+   `.sige-hero-content` de grelha 2-col para `block` (evita coluna vazia).
+
+Revisão adversarial: apanhada e corrigida a grelha 2-col do `.sige-hero-content`
+(deixaria coluna vazia sem a arte). Os `!important` responsivos da ilustração
+ficam inertes (apontam para elementos removidos); não foram apagados um a um para
+manter o diff seguro num ficheiro de 9395 linhas.
+
+Validação: `php -l` OK; gate 1911 (baixou; baseline reposta); 0 handlers inline.

@@ -2463,10 +2463,9 @@ body.sige-admin-app.sige-view-alunos_lista .sg-app-page{max-width:none!important
 body.sige-admin-app.sige-view-alunos_lista .sg-app-content{padding-left:30px;padding-right:30px;}
 .sige-alunos-page{--sgv2-purple:var(--color-brand-500);--sgv2-purple-dark:var(--color-brand-700);--sgv2-purple-soft:var(--color-brand-50);--sgv2-ink:var(--color-ink-500);--sgv2-muted:var(--color-slate-500);--sgv2-line:var(--color-ink-100);--sgv2-bg:var(--color-ink-50);--sgv2-green:var(--color-success-700);--sgv2-red:var(--color-danger-500);--sgv2-amber:var(--color-warning-500);--sgv2-blue:var(--color-info-400);font-family:'Poppins','Inter','Segoe UI',system-ui,sans-serif!important;color:var(--sgv2-ink);background:transparent!important;padding:0!important;margin:0!important;display:flex;flex-direction:column;gap:var(--space-5);}
 .sige-alunos-page *{box-sizing:border-box;}
-.sige-alunos-page .sige-hero{position:relative;overflow:hidden;min-height:178px;border-radius:var(--radius-xl);background:linear-gradient(110deg,var(--color-white) 0%,var(--color-white) 46%,var(--color-brand-100) 100%)!important;border:1px solid rgba(92,64,187,.12);box-shadow:var(--shadow-lg);padding:32px 34px!important;margin:0!important;color:var(--sgv2-ink)!important;display:block;}
-.sige-alunos-page .sige-hero:before{content:"";position:absolute;inset:auto -80px -130px auto;width:420px;height:300px;background:radial-gradient(circle,rgba(109,93,252,.18),rgba(109,93,252,0) 67%);pointer-events:none;border-radius:50%;}
+.sige-alunos-page .sige-hero{position:relative;overflow:hidden;border-radius:var(--radius-xl);background:linear-gradient(110deg,var(--color-white) 0%,var(--color-white) 46%,var(--color-brand-100) 100%)!important;border:1px solid rgba(92,64,187,.12);box-shadow:var(--shadow-md);padding:var(--space-6) var(--space-8)!important;margin:0!important;color:var(--sgv2-ink)!important;display:block;}
 .sige-alunos-page .sige-hero:after{display:none!important;}
-.sige-alunos-page .sige-hero-content{position:relative;z-index:1;display:grid!important;grid-template-columns:minmax(0,1.04fr) minmax(340px,.96fr);gap:22px;align-items:center;}
+.sige-alunos-page .sige-hero-content{position:relative;z-index:1;display:block!important;gap:22px;align-items:center;}
 .sige-alunos-page .sige-hero-text{min-width:0;}
 .sige-alunos-page .sige-hero-kicker{display:block;background:transparent!important;border:0!important;padding:0!important;border-radius:0!important;font-size:12px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--sgv2-purple)!important;margin:0 0 10px!important;}
 .sige-alunos-page .sige-hero h1{margin:0!important;font-size:31px!important;line-height:1.08!important;font-weight:700!important;letter-spacing:-.04em!important;color:var(--color-black)!important;}
@@ -2476,19 +2475,8 @@ body.sige-admin-app.sige-view-alunos_lista .sg-app-content{padding-left:30px;pad
 .sige-alunos-page .sige-btn-hero svg{width:18px!important;height:18px!important;stroke:currentColor!important;color:currentColor!important;fill:none!important;opacity:1!important;}
 .sige-alunos-page .sige-btn-hero-secondary{background:var(--color-white)!important;color:var(--color-ink-900)!important;border-color:var(--color-ink-100)!important;box-shadow:var(--shadow-sm);}
 .sige-alunos-page .sige-btn-hero:hover{transform:translateY(-1px);box-shadow:var(--shadow-md);}
-.sige-alunos-page .sige-hero-art{position:relative;min-height:148px;border-radius:var(--radius-xl);background:linear-gradient(135deg,rgba(109,93,252,.08),rgba(109,93,252,.18));overflow:hidden;}
-.sige-alunos-page .sige-hero-school{position:absolute;right:62px;bottom:22px;width:230px;height:96px;color:var(--color-brand-300);}
-.sige-alunos-page .sige-school-roof{position:absolute;left:40px;top:8px;width:150px;height:55px;border-top:9px solid currentColor;border-left:9px solid currentColor;transform:skewX(-18deg);opacity:.85;}
-.sige-alunos-page .sige-school-body{position:absolute;left:36px;bottom:0;width:158px;height:72px;border-radius:12px 14px 8px 8px;background:rgba(109,93,252,.28);box-shadow:inset 0 0 0 2px rgba(109,93,252,.18);}
-.sige-alunos-page .sige-school-body:before{content:"";position:absolute;left:67px;bottom:0;width:28px;height:42px;border-radius:12px 14px 0 0;background:rgba(109,93,252,.42);}
-.sige-alunos-page .sige-school-window{position:absolute;top:18px;left:18px;width:22px;height:18px;border-radius:var(--radius-xs);background:rgba(255,255,255,.54);box-shadow:var(--shadow-lg);}
-.sige-alunos-page .sige-school-flag{position:absolute;left:118px;top:-20px;width:3px;height:42px;background:rgba(109,93,252,.72);}
-.sige-alunos-page .sige-school-flag:after{content:"";position:absolute;left:3px;top:2px;width:34px;height:18px;border-radius:var(--radius-xs);background:rgba(109,93,252,.62);clip-path:polygon(0 0,100% 20%,0 100%);}
-.sige-alunos-page .sige-hero-cloud,.sige-alunos-page .sige-hero-tree,.sige-alunos-page .sige-hero-dot{position:absolute;opacity:.55;}
-.sige-alunos-page .sige-hero-cloud{width:86px;height:28px;border-radius:var(--radius-pill);background:rgba(255,255,255,.58);right:235px;top:30px;box-shadow:var(--shadow-xs);}
-.sige-alunos-page .sige-hero-tree{right:24px;bottom:24px;width:54px;height:72px;border-radius:22px 38px 12px 12px;background:rgba(109,93,252,.28);}
-.sige-alunos-page .sige-hero-tree:after{content:"";position:absolute;left:25px;bottom:-18px;width:4px;height:34px;border-radius:var(--radius-pill);background:rgba(109,93,252,.42);}
-.sige-alunos-page .sige-hero-dot{width:90px;height:90px;border-radius:50%;background:rgba(109,93,252,.16);left:42px;bottom:24px;}
+/* Herói compacto (v12.22.0): faixa única, sem ilustração. Regras de arte
+   (.sige-hero-art/.sige-hero-*/.sige-school-*) removidas com o respectivo HTML. */
 .sige-alunos-page .sige-stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:var(--space-4)!important;margin:0!important;}
 .sige-alunos-page .sige-stat-card{position:relative;overflow:hidden;display:grid!important;grid-template-columns:auto minmax(0,1fr);gap:var(--space-4);align-items:center;min-height:104px;padding:18px 20px!important;border-radius:var(--radius-xl)!important;background:var(--color-white)!important;border:1px solid rgba(28,32,54,.08)!important;box-shadow:var(--shadow-md);color:var(--sgv2-ink)!important;}
 .sige-alunos-page .sige-stat-card:after{content:"";position:absolute;right:-28px;top:-34px;width:92px;height:92px;border-radius:50%;background:var(--kpi-soft,var(--color-brand-50));}
@@ -2539,6 +2527,14 @@ body.sige-admin-app.sige-view-alunos_lista .sg-app-content{padding-left:30px;pad
    Mantém regras e gravação intactas; actualiza apenas a experiência visual.
    ======================================== */
 body.sige-admin-app.sige-view-alunos_lista.sige-aluno-modal-open{overflow:hidden!important;}
+/* Modais/popup acima da barra lateral: .sg-app-content e um contexto de
+   empilhamento (position:relative;z-index:1) abaixo da sidebar (z-index alto no
+   shell PRO), pelo que um modal filho do conteudo fica tapado pela barra lateral
+   por mais alto que seja o seu z-index. Enquanto ha modal/popup aberto, elevamos
+   o conteudo acima da sidebar; o fundo do modal passa a cobrir tambem a barra
+   lateral (UX correcta). Scoped a esta view; nao afecta outros ecrans. */
+body.sige-admin-app.sige-view-alunos_lista.sige-aluno-modal-open .sg-app-content,
+body.sige-admin-app.sige-view-alunos_lista.sige-modal-open .sg-app-content{z-index:10090!important;}
 body.sige-admin-app.sige-view-alunos_lista .sige-aluno-modal-pro{
     z-index:130000!important;
     padding:22px!important;
@@ -5847,16 +5843,6 @@ body.sige-admin-app.sige-view-alunos_lista .sige-actions-trigger[aria-expanded="
                     <?php endif; ?>
                 </div>
             </div>
-            <div class="sige-hero-art" aria-hidden="true">
-                <div class="sige-hero-dot"></div>
-                <div class="sige-hero-cloud"></div>
-                <div class="sige-hero-school">
-                    <div class="sige-school-roof"></div>
-                    <div class="sige-school-body"><span class="sige-school-window"></span></div>
-                    <div class="sige-school-flag"></div>
-                </div>
-                <div class="sige-hero-tree"></div>
-            </div>
         </div>
     </section>
 
@@ -5973,17 +5959,17 @@ body.sige-admin-app.sige-view-alunos_lista .sige-actions-trigger[aria-expanded="
         <?php endforeach; ?>
         <div class="sige-search-box">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" name="filtro_search" id="filtro-texto" placeholder="Pesquisar aluno, processo ou turma" autocomplete="off" value="<?php echo esc_attr($filtro_search); ?>" onkeyup="filtrarAlunosClient()">
+            <input type="text" name="filtro_search" id="filtro-texto" placeholder="Pesquisar aluno, processo ou turma" autocomplete="off" value="<?php echo esc_attr($filtro_search); ?>" data-sige-on-keyup="filtrarAlunosClient()">
         </div>
         
-        <select name="filtro_turma" id="filtro-turma" class="sige-filter-select" onchange="document.getElementById('form-filtros').submit();">
+        <select name="filtro_turma" id="filtro-turma" class="sige-filter-select" data-sige-on-change="document.getElementById('form-filtros').submit();">
             <option value="0">Todas as turmas</option>
             <?php foreach($turmas as $t): ?>
                 <option value="<?php echo (int)$t->id; ?>" <?php selected($filtro_turma, (int)$t->id); ?>><?php echo esc_html($t->classe . ' - ' . $t->nome); ?></option>
             <?php endforeach; ?>
         </select>
         
-        <select name="filtro_status" id="filtro-status" class="sige-filter-select" onchange="document.getElementById('form-filtros').submit();">
+        <select name="filtro_status" id="filtro-status" class="sige-filter-select" data-sige-on-change="document.getElementById('form-filtros').submit();">
             <option value="">Todos os estados</option>
             <option value="activo" <?php selected($filtro_status, 'activo'); ?>>Activos</option>
             <option value="suspenso" <?php selected($filtro_status, 'suspenso'); ?>>Suspensos</option>

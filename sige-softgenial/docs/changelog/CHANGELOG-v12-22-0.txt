@@ -1,0 +1,44 @@
+SIGE SoftGenial v12.22.0 - Alunos: modais acima da sidebar, heroi compacto, form sem inline
+Data: 2026-06-30
+Tipo: apresentacao (Modulo 3 - Alunos e Matriculas, view=alunos_lista). Sem logica.
+
+CONTEXTO
+- Aplicacao das licoes ja corrigidas (Equipa) ao ecra de Alunos, com tolerancia
+  zero a repetir esses erros. Auditoria previa em
+  docs/design-system/MODULO-3-alunos-A-B-v12.22.0.md.
+
+MUDANCAS (admin/academic/alunos_lista.php)
+1. EMPILHAMENTO (o erro a nao repetir): os modais (#modal-aluno, #modal-aluno-360,
+   #modal-import-alunos) e o popup de alerta (#sige-alunos-popup) ficavam tapados
+   pela barra lateral - .sg-app-content e contexto de empilhamento (z-index:1)
+   abaixo da sidebar (10070). Enquanto ha modal/popup aberto, elevamos o conteudo:
+   body.sige-view-alunos_lista.{sige-aluno-modal-open|sige-modal-open} .sg-app-content{z-index:10090}.
+   Cobre as duas classes de estado usadas no ecra.
+2. CSP: 3 handlers inline passam a data-sige-on-*:
+   - pesquisa: onkeyup="filtrarAlunosClient()" -> data-sige-on-keyup
+   - filtros (turma/status): onchange="document.getElementById('form-filtros').submit();" -> data-sige-on-change
+   Hidratados por assets/sige-ui.js; comportamento identico, origem limpa.
+3. HEROI compacto: removida a ilustracao de escola (HTML + definicao CSS base) e o
+   brilho :before; sem min-height; box-shadow md; padding var(--space-6)/var(--space-8).
+   .sige-hero-content passou de grelha 2-col para block (evita coluna vazia agora
+   que a arte saiu). NOTA: a faixa do heroi ja renderizava CLARA (override
+   !important na linha 2466), nao escura como a definicao base sugeria -
+   verificado no estado renderizado antes de agir (licao do protocolo).
+
+REVISAO ADVERSARIAL (apanhado e corrigido antes de entregar)
+- .sige-hero-content era grid de 2 colunas no desktop (>1500px); sem a arte
+  deixaria uma coluna ~340px vazia. Corrigido para block.
+
+NAO TOCADO (contratos protegidos)
+- includes/alunos-performance-contract.php (SELECT/export/payload).
+- includes/aluno-fetch-ajax.php (AJAX da ficha).
+- Hotfix do cabecalho mobile; dados/$wpdb; name/id; permissoes (sigeAlunosCan*).
+- Cartoes/folhas imprimiveis (window.open) - pele propria.
+- includes/admin-shell.php (hash-protegido).
+
+VALIDACAO
+- php -l: sem erros. BUILD.json valido. 0 handlers inline na view.
+- Gate de tokens: 1911 (baixou de 1914; baseline reposta).
+- Modal ja rolava (estrutura flex correcta) - mantido.
+- DEPLOY:   docs/deploy/DEPLOY-v12.22.0-alunos.md
+- LIVE-TEST: docs/qa/LIVE-TEST-v12.22.0-alunos.md
