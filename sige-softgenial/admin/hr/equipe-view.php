@@ -1650,6 +1650,59 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 @media (max-width:1100px){.sige-rh .sg-rh-rep-stats{grid-template-columns:repeat(2,minmax(0,1fr));}.sige-rh .sg-rh-rep-grid{grid-template-columns:1fr;}}
 @media (max-width:720px){.sige-rh .sg-rh-rep-stats{grid-template-columns:1fr;}.sige-rh .sg-rh-bar-row,.sige-rh .sg-rh-qual-row{grid-template-columns:1fr auto;}.sige-rh .sg-rh-bar-track,.sige-rh .sg-rh-qual-track{grid-column:1 / -1;order:3;}.sige-rh .sg-rh-tab{padding:var(--space-3) var(--space-3);font-size:var(--fs-sm);}}
 
+/* ========================================
+   FICHA DO COLABORADOR (perfil 360, só leitura) - v12.36.0
+   ======================================== */
+.sige-rh .btn-action.btn-ficha{background:var(--sg-theme-soft,var(--color-brand-50));color:var(--sg-theme-primary,var(--color-brand-600));}
+.sige-rh .btn-action.btn-ficha:hover{background:var(--sg-theme-primary,var(--color-brand-500));color:var(--color-white);}
+#box-ficha .modal-content{max-width:760px!important;}
+#box-ficha .modal-body{padding:0!important;}
+.sg-ficha{display:flex;flex-direction:column;}
+/* Cabeçalho de identidade */
+.sg-ficha-head{display:flex;align-items:center;gap:var(--space-4);padding:var(--space-6);background:linear-gradient(120deg,var(--sg-theme-soft,var(--color-brand-50)),var(--color-white));border-bottom:1px solid var(--color-ink-100);}
+.sg-ficha-photo{width:72px;height:72px;flex:0 0 auto;border-radius:var(--radius-pill);object-fit:cover;border:3px solid var(--color-white);box-shadow:var(--shadow-md);background:var(--color-ink-100);}
+.sg-ficha-idwrap{min-width:0;flex:1 1 auto;}
+.sg-ficha-name{font-size:var(--fs-lg);font-weight:700;letter-spacing:-.02em;color:var(--color-black);margin:0;}
+.sg-ficha-email{font-size:var(--fs-sm);color:var(--color-slate-500);margin:2px 0 0;word-break:break-all;}
+.sg-ficha-badges{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-2);}
+.sg-ficha-badge{display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-xs);font-weight:700;padding:3px 10px;border-radius:var(--radius-pill);background:var(--color-ink-100);color:var(--color-slate-700);}
+.sg-ficha-badge.is-on{background:var(--color-success-50);color:var(--color-success-700);}
+.sg-ficha-badge.is-off{background:var(--color-slate-100);color:var(--color-slate-600);}
+.sg-ficha-badge .dot{width:7px;height:7px;border-radius:var(--radius-pill);background:currentColor;}
+/* Banner de estado do contrato */
+.sg-ficha-alert{display:flex;align-items:center;gap:var(--space-3);margin:var(--space-5) var(--space-6) 0;padding:var(--space-3) var(--space-4);border-radius:var(--radius-lg);font-size:var(--fs-sm);font-weight:600;}
+.sg-ficha-alert svg{width:18px;height:18px;flex:0 0 auto;}
+.sg-ficha-alert.is-ok{background:var(--color-success-50);color:var(--color-success-700);}
+.sg-ficha-alert.is-aviso{background:var(--color-warning-50);color:var(--color-warning-700);}
+.sg-ficha-alert.is-critico,.sg-ficha-alert.is-expirado{background:var(--color-danger-50);color:var(--color-danger-700);}
+/* Secções */
+.sg-ficha-sections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4);padding:var(--space-5) var(--space-6) var(--space-6);}
+.sg-ficha-sec{background:var(--color-white);border:1px solid var(--color-ink-100);border-radius:var(--radius-lg);padding:var(--space-4) var(--space-5);min-width:0;}
+.sg-ficha-sec.is-wide{grid-column:1 / -1;}
+.sg-ficha-sec h4{display:flex;align-items:center;gap:var(--space-2);margin:0 0 var(--space-3);font-size:var(--fs-sm);font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--color-slate-500);}
+.sg-ficha-sec h4 svg{width:16px;height:16px;color:var(--color-slate-400);}
+.sg-ficha-field{display:flex;justify-content:space-between;gap:var(--space-3);padding:7px 0;border-bottom:1px solid var(--color-ink-50);}
+.sg-ficha-field:last-child{border-bottom:0;}
+.sg-ficha-field .k{font-size:var(--fs-sm);color:var(--color-slate-500);flex:0 0 auto;}
+.sg-ficha-field .v{font-size:var(--fs-sm);font-weight:600;color:var(--color-slate-800);text-align:right;word-break:break-word;}
+.sg-ficha-field .v.is-empty{color:var(--color-slate-400);font-weight:500;font-style:italic;}
+/* Documentos */
+.sg-ficha-docs{display:flex;flex-wrap:wrap;gap:var(--space-2);}
+.sg-ficha-doc{display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-sm);font-weight:600;padding:7px 12px;border-radius:var(--radius-md);background:var(--sg-theme-soft,var(--color-brand-50));color:var(--sg-theme-primary,var(--color-brand-700));text-decoration:none;border:1px solid transparent;}
+.sg-ficha-doc:hover{border-color:var(--sg-theme-primary,var(--color-brand-300));}
+.sg-ficha-doc svg{width:15px;height:15px;}
+.sg-ficha-doc.is-missing{background:var(--color-ink-50);color:var(--color-slate-400);cursor:default;}
+/* Completude */
+.sg-ficha-comp{display:flex;align-items:center;gap:var(--space-3);}
+.sg-ficha-comp-track{position:relative;flex:1 1 auto;height:8px;border-radius:var(--radius-pill);background:var(--color-ink-100);overflow:hidden;}
+.sg-ficha-comp-fill{position:absolute;inset:0 auto 0 0;height:100%;border-radius:var(--radius-pill);background:var(--color-success-500);}
+.sg-ficha-comp-fill.is-warn{background:var(--color-warning-500);}
+.sg-ficha-comp-fill.is-bad{background:var(--color-danger-500);}
+.sg-ficha-comp-val{font-size:var(--fs-sm);font-weight:700;color:var(--color-slate-800);}
+/* Estado de carregamento */
+.sg-ficha-loading{padding:var(--space-8);text-align:center;color:var(--color-slate-400);font-size:var(--fs-sm);}
+@media (max-width:720px){.sg-ficha-sections{grid-template-columns:1fr;}.sg-ficha-field{flex-direction:column;gap:2px;}.sg-ficha-field .v{text-align:left;}}
+
 
 
 /* ========================================
@@ -2369,6 +2422,9 @@ body.sige-admin-app #sige-rh-confirm.sige-modal:not(.active)[aria-hidden="true"]
                         <?php if ($can_manage_equipe): ?>
                         <td>
                             <div class="table-actions">
+                                <button class="btn-action btn-ficha" data-sige-act="sigeExecutarJsonData" data-sige-json-fn="verFichaColaborador" data-sige-json='<?php echo $json_data; ?>' data-tooltip="Ver ficha">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                                </button>
                                 <button class="btn-action btn-cracha" data-sige-act="sigeExecutarJsonData" data-sige-json-fn="gerarCracha" data-sige-json='<?php echo $cracha_data; ?>' data-tooltip="Imprimir Crachá">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
                                 </button>
@@ -2900,6 +2956,36 @@ body.sige-admin-app #sige-rh-confirm.sige-modal:not(.active)[aria-hidden="true"]
         <div class="modal-footer">
             <button type="button" class="btn-modal btn-cancel" id="sige-rh-confirm-cancel">Voltar</button>
             <button type="button" class="btn-modal btn-submit" id="sige-rh-confirm-ok">Confirmar</button>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================
+     MODAL: FICHA DO COLABORADOR (perfil 360, só leitura) - v12.36.0
+     ======================================== -->
+<div class="sige-modal sg-ficha-modal" id="box-ficha" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="ficha-title">
+        <div class="modal-header">
+            <div class="sg-rh-modal-title-wrap">
+                <span class="sg-rh-modal-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </span>
+                <div>
+                    <h3 id="ficha-title">Ficha do colaborador</h3>
+                    <p>Consulta consolidada dos dados de RH. Só leitura.</p>
+                </div>
+            </div>
+            <button type="button" class="modal-close" data-sige-act="fecharFicha" data-sige-noargs aria-label="Fechar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="sg-ficha" id="ficha-conteudo">
+                <div class="sg-ficha-loading">A carregar ficha…</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-modal btn-cancel" data-sige-act="fecharFicha" data-sige-noargs>Fechar</button>
         </div>
     </div>
 </div>
@@ -3835,6 +3921,128 @@ document.getElementById('box-equipa').addEventListener('click', e => {
 });
 
 // v12.11.9.5 - Failsafe: tornar funções explicitamente globais para onclick inline e fluxos do App Shell.
+// ========================================
+// [v12.36.0] FICHA DO COLABORADOR (perfil 360, só leitura)
+// Reutiliza o endpoint autorizado sige_get_staff_secure (mesma fonte do editar),
+// respeitando a minimização de dados: nada sensível fica no DOM da lista.
+// ========================================
+function sgFichaEsc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function sgFichaNum(n) { n = Math.round(parseFloat(n) || 0); return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+function sgFichaMoney(n) { return sgFichaNum(n) + ' ' + ((window.sigeEquipeAjax && sigeEquipeAjax.moeda) || 'MT'); }
+function sgFichaTipoLabel(t) { var m = { efectivo: 'Efectivo (Quadro)', contrato: 'Contrato a Prazo', estagio: 'Estagiário' }; t = String(t || '').trim(); return t ? (m[t] || (t.charAt(0).toUpperCase() + t.slice(1))) : 'Vínculo não definido'; }
+function sgFichaPretty(v) { v = String(v || '').trim(); if (!v || v === '0') return ''; return v.replace(/_/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); }); }
+function sgFichaDateBR(s) { s = String(s || '').trim(); if (!s || s === '0000-00-00') return ''; var p = s.split('-'); return p.length === 3 ? (p[2] + '/' + p[1] + '/' + p[0]) : s; }
+function sgFichaAntiguidade(adm) { adm = String(adm || '').trim(); if (!adm || adm === '0000-00-00') return ''; var d = new Date(adm + 'T00:00:00'); if (isNaN(d.getTime())) return ''; var anos = (Date.now() - d.getTime()) / (365.25 * 864e5); if (anos < 0) return ''; return (Math.round(anos * 10) / 10).toString().replace('.', ',') + ' anos'; }
+function sgFichaContrato(fim) {
+    fim = String(fim || '').trim();
+    if (!fim || fim === '0000-00-00') return null;
+    var d = new Date(fim + 'T00:00:00'); if (isNaN(d.getTime())) return null;
+    var now = new Date(); now.setHours(0, 0, 0, 0);
+    var dias = Math.floor((d.getTime() - now.getTime()) / 864e5);
+    var estado, frase;
+    if (dias < 0) { estado = 'expirado'; frase = (dias === -1 ? 'expirou ontem' : 'expirou há ' + Math.abs(dias) + ' dias'); }
+    else if (dias === 0) { estado = 'critico'; frase = 'expira hoje'; }
+    else if (dias === 1) { estado = 'critico'; frase = 'expira amanhã'; }
+    else if (dias <= 30) { estado = 'critico'; frase = 'faltam ' + dias + ' dias'; }
+    else if (dias <= 90) { estado = 'aviso'; frase = 'faltam ' + dias + ' dias'; }
+    else { estado = 'ok'; frase = 'faltam ' + dias + ' dias'; }
+    return { estado: estado, frase: frase };
+}
+function sgFichaField(k, v) { var empty = (v == null || String(v).trim() === ''); return '<div class="sg-ficha-field"><span class="k">' + sgFichaEsc(k) + '</span><span class="v' + (empty ? ' is-empty' : '') + '">' + (empty ? 'Não informado' : sgFichaEsc(v)) + '</span></div>'; }
+function sgFichaDoc(label, url) {
+    var ic = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
+    if (url) { return '<a class="sg-ficha-doc" href="' + sgFichaEsc(url) + '" target="_blank" rel="noopener">' + ic + sgFichaEsc(label) + '</a>'; }
+    return '<span class="sg-ficha-doc is-missing">' + ic + sgFichaEsc(label) + ' (em falta)</span>';
+}
+function sgFichaRender(d, blob) {
+    d = d || {}; blob = blob || {};
+    var nome = d.nome || blob.nome || 'Colaborador';
+    var foto = d.foto_perfil || (window.sigeEquipeAjax && sigeEquipeAjax.avatarUrl) || '';
+    var activo = parseInt(d.status_ativo != null ? d.status_ativo : (blob.status_ativo != null ? blob.status_ativo : 1), 10) !== 0;
+    var banco = d.banco || {}; var docs = d.docs || {}; var docsSec = d.docs_secure || {};
+    var docUrl = function (k) { return (docsSec && docsSec[k]) ? docsSec[k] : (docs[k] || ''); };
+
+    var html = '';
+    // Cabeçalho de identidade.
+    html += '<div class="sg-ficha-head">';
+    html += '<img class="sg-ficha-photo" src="' + sgFichaEsc(foto) + '" alt="' + sgFichaEsc(nome) + '">';
+    html += '<div class="sg-ficha-idwrap">';
+    html += '<p class="sg-ficha-name">' + sgFichaEsc(nome) + '</p>';
+    html += '<p class="sg-ficha-email">' + sgFichaEsc(d.email || blob.email || '') + '</p>';
+    html += '<div class="sg-ficha-badges">';
+    html += '<span class="sg-ficha-badge ' + (activo ? 'is-on' : 'is-off') + '"><span class="dot"></span>' + (activo ? 'Activo' : 'Inactivo') + '</span>';
+    html += '<span class="sg-ficha-badge">' + sgFichaEsc(sgFichaTipoLabel(d.tipo_contrato)) + '</span>';
+    html += '</div></div></div>';
+
+    // Banner de estado do contrato.
+    var ct = sgFichaContrato(d.fim_contrato);
+    if (ct) {
+        var okIc = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>';
+        var alIc = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+        html += '<div class="sg-ficha-alert is-' + ct.estado + '">' + (ct.estado === 'ok' ? okIc : alIc) + '<span>Contrato ' + ct.frase + ' (termina ' + sgFichaEsc(sgFichaDateBR(d.fim_contrato)) + ').</span></div>';
+    }
+
+    html += '<div class="sg-ficha-sections">';
+    // Identificação & contacto.
+    html += '<div class="sg-ficha-sec"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Identificação &amp; contacto</h4>';
+    html += sgFichaField('E-mail', d.email || blob.email);
+    html += sgFichaField('Telemóvel', d.tel);
+    html += sgFichaField('NUIT', d.nuit);
+    html += sgFichaField('Formação académica', d.formacao);
+    html += '</div>';
+    // Vínculo & carreira.
+    html += '<div class="sg-ficha-sec"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Vínculo &amp; carreira</h4>';
+    html += sgFichaField('Tipo de vínculo', sgFichaTipoLabel(d.tipo_contrato));
+    html += sgFichaField('Regime de trabalho', sgFichaPretty(d.regime_trabalho));
+    html += sgFichaField('Nível de carreira', sgFichaPretty(d.nivel_carreira));
+    html += sgFichaField('Data de admissão', sgFichaDateBR(d.data_admissao));
+    html += sgFichaField('Antiguidade', sgFichaAntiguidade(d.data_admissao));
+    html += sgFichaField('Fim de contrato', sgFichaDateBR(d.fim_contrato) || (String(d.tipo_contrato || '') === 'efectivo' ? 'Sem termo' : ''));
+    html += '</div>';
+    // Remuneração (o endpoint só devolve a quem pode gerir; daí ser seguro aqui).
+    var total = (parseFloat(d.salario_base) || 0) + (parseFloat(d.subsidio) || 0);
+    html += '<div class="sg-ficha-sec"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Remuneração</h4>';
+    html += sgFichaField('Salário base', sgFichaMoney(d.salario_base));
+    html += sgFichaField('Subsídios', sgFichaMoney(d.subsidio));
+    html += sgFichaField('Total mensal', sgFichaMoney(total));
+    html += sgFichaField('Banco', banco.banco_nome);
+    html += sgFichaField('NIB', banco.nib);
+    html += sgFichaField('M-Pesa', banco.mpesa);
+    html += '</div>';
+    // Documentos.
+    html += '<div class="sg-ficha-sec"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg> Documentos</h4>';
+    html += '<div class="sg-ficha-docs">' + sgFichaDoc('BI', docUrl('doc_bi')) + sgFichaDoc('CV', docUrl('doc_cv')) + sgFichaDoc('Certificado', docUrl('doc_cert')) + '</div>';
+    html += '</div>';
+    // Completude da ficha.
+    var campos = [d.tel, d.nuit, d.formacao, d.tipo_contrato, d.data_admissao, d.nivel_carreira, d.regime_trabalho, d.foto_perfil, (d.salario_base > 0 ? '1' : ''), docUrl('doc_bi')];
+    var ok = campos.filter(function (x) { return x != null && String(x).trim() !== ''; }).length;
+    var pct = Math.round(ok / campos.length * 100);
+    var cls = pct >= 80 ? '' : (pct >= 50 ? ' is-warn' : ' is-bad');
+    html += '<div class="sg-ficha-sec is-wide"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Completude da ficha</h4>';
+    html += '<div class="sg-ficha-comp"><span class="sg-ficha-comp-track"><span class="sg-ficha-comp-fill' + cls + '" style="width:' + pct + '%"></span></span><span class="sg-ficha-comp-val">' + pct + '%</span></div>';
+    html += '</div>';
+
+    html += '</div>'; // /sections
+    return html;
+}
+function verFichaColaborador(data) {
+    data = data || {};
+    var modal = document.getElementById('box-ficha');
+    var box = document.getElementById('ficha-conteudo');
+    if (!modal || !box) return;
+    var t = document.getElementById('ficha-title');
+    if (t) t.textContent = 'Ficha de ' + (data.nome || 'colaborador');
+    box.innerHTML = '<div class="sg-ficha-loading">A carregar ficha segura…</div>';
+    sigeEquipeOpenModal(modal);
+    jQuery.post(sigeEquipeAjax.ajaxurl, { action: 'sige_get_staff_secure', id: data.id, _sige_nonce: sigeEquipeAjax.nonce }, function (res) {
+        if (res && res.success) { box.innerHTML = sgFichaRender(res.data || {}, data); }
+        else { box.innerHTML = '<div class="sg-ficha-loading">' + sgFichaEsc((res && res.data) || 'Não foi possível carregar a ficha.') + '</div>'; }
+    }).fail(function () {
+        box.innerHTML = '<div class="sg-ficha-loading">' + sgFichaEsc(sigeEquipeAjaxFailMessage(arguments[0], 'Erro de comunicação ao carregar a ficha.')) + '</div>';
+    });
+}
+function fecharFicha() { sigeEquipeCloseModal(document.getElementById('box-ficha')); }
+
 // [v12.35.0] Abas RH (Equipa / Relatórios). Troca de painel sem recarregar,
 // CSP-safe (despachada por data-sige-act). Sincroniza estado ARIA.
 function sgRhSwitchTab(tab) {
@@ -3871,6 +4079,8 @@ Object.assign(window, {
     mostrarArquivoRh,
     activarTab,
     sgRhSwitchTab,
+    verFichaColaborador,
+    fecharFicha,
     uploadFoto,
     uploadDoc
 });

@@ -1,0 +1,59 @@
+SIGE SoftGenial v12.36.0 - RH (passo 3): Ficha do Colaborador (perfil 360, só leitura)
+Data: 2026-06-30
+Tipo: nova funcionalidade (view=equipe). Só leitura. Sem schema, sem novo endpoint.
+
+PORQUÊ
+- Terceiro passo do módulo de Recursos Humanos. Já havia a lista, os alertas de
+  contrato e os relatórios agregados. Faltava o DRILL-DOWN: olhar para UM
+  colaborador de forma consolidada, sem abrir o formulário de edição.
+
+O QUE FAZ
+- Botão "Ver ficha" em cada linha da Equipa abre um modal SÓ LEITURA com:
+    * Cabeçalho de identidade: foto, nome, e-mail, estado (activo/inactivo) e
+      vínculo.
+    * Banner do estado do contrato (expirado / crítico <=30d / aviso <=90d / ok),
+      com frase humana e data de término.
+    * Secções: Identificação & contacto; Vínculo & carreira (com antiguidade
+      calculada); Remuneração; Documentos (links seguros); Completude da ficha.
+
+ENGENHARIA (limpa, sem remendos)
+- Reutiliza o endpoint autorizado JÁ existente sige_get_staff_secure (o mesmo do
+  botão Editar): com nonce, gated por gestão (sige_ajax_equipe_can_manage),
+  tenant-scoped e auditado. Logo, os dados sensíveis (salário/banco/NUIT) NUNCA
+  ficam no DOM da lista - respeita a minimização de dados já vigente.
+- includes/ajax-handlers.php: o handler passa a devolver, de forma ADITIVA, 3
+  campos não sensíveis já existentes na tabela (data_admissao, nivel_carreira,
+  regime_trabalho), para a ficha mostrar admissão/antiguidade/carreira/regime.
+- admin/hr/equipe-view.php: botão "Ver ficha" (gated, despachado por
+  sigeExecutarJsonData com o mesmo blob mínimo id/nome/email/role/status); modal
+  #box-ficha que faz o fetch seguro e rende o perfil. 100% design system
+  (tokens; zero cores mágicas; larguras inline hidratadas por data-sige-style).
+- SEM impressão nesta etapa (fica como micro-passo seguinte, com tokens
+  embutidos para o documento autónomo - sem cores mágicas).
+
+NOTA DE DEPLOY
+- Esta entrega NÃO inclui ficheiros novos no plugin (só altera 3 ficheiros já
+  existentes: includes/ajax-handlers.php, admin/hr/equipe-view.php,
+  sige-softgenial.php + BUILD.json). O smoke novo vive em tools/.
+
+VALIDAÇÃO
+- php -l (view + ajax-handlers + bootstrap) OK.
+- Gates: design-tokens (1857, sem regressão), typography OK.
+- Novo smoke tools/smoke-rh-ficha-v12-36-0.php: ligação + payload do endpoint +
+  fronteira de segurança (nonce + gating intactos). OK.
+- Render verificado (Chromium): perfil consolidado com secções, banner e barra
+  de completude.
+
+NOTA (dívida pré-existente, NÃO causada por esta versão)
+- O gate tools/check-v12-16-2-baseline-preservation.php continua a acusar hashes
+  desactualizados em admin/system/dashboard-view.php e includes/admin-shell.php
+  (alterados legitimamente em v12.20.0/v12.29.2 sem reconciliar a baseline de
+  v12.19.1). Esta versão NÃO toca nesses ficheiros.
+
+FRONTEIRA
+- Sem alterar fórmulas, schema, permissões reais nem ficheiros protegidos.
+
+PRÓXIMOS PASSOS (roadmap RH)
+- Imprimir/exportar a ficha (micro-passo); depois férias/ausências e assiduidade
+  (precisam tabelas) e processamento de salário (sensível) - cada um com gates
+  e aprovação.

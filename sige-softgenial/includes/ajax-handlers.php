@@ -1040,6 +1040,11 @@ add_action('wp_ajax_sige_get_staff_secure', function () {
         'formacao'      => $rh->formacao_academica ?? '',
         'tipo_contrato' => $rh->tipo_contrato ?? '',
         'fim_contrato'  => $rh->fim_contrato ?? '',
+        // [v12.36.0] Campos da Ficha do Colaborador (não sensíveis, já existentes
+        // na tabela): admissão/antiguidade, nível de carreira e regime de trabalho.
+        'data_admissao'   => $rh->data_admissao ?? '',
+        'nivel_carreira'  => $rh->nivel_carreira ?? '',
+        'regime_trabalho' => $rh->regime_trabalho ?? '',
         'salario_base'  => (float)($rh->salario_base ?? 0),
         'subsidio'      => (float)($rh->subsidio ?? 0),
         'foto_perfil'   => esc_url_raw($rh->foto_perfil ?? ''),
