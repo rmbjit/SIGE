@@ -408,7 +408,10 @@ body.sige-view-dashboard .sg-product-page-head{display:none!important;}
 .sg-v2-btn-secondary:hover{border-color:var(--color-brand-300);color:var(--sgv2-purple);}
 
 /* KPIs */
-.sg-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-4);}
+/* v12.29.2 - auto-fit: com menos de 4 KPIs (perfis sem todas as permissoes) as
+   colunas vazias colapsam e os cards preenchem a linha (sem espaco a sobrar);
+   adapta-se tambem a largura de conteudo do portatil. */
+.sg-kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:var(--space-4);}
 .sg-kpi-card{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--space-4);align-items:center;min-height:96px;padding:var(--space-5);border-radius:var(--radius-lg);background:var(--color-white);border:1px solid var(--color-slate-100);box-shadow:var(--shadow-sm);transition:box-shadow .16s ease,transform .16s ease;}
 .sg-kpi-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px);}
 .sg-kpi-icon{width:48px;height:48px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;background:var(--kpi-soft,var(--color-brand-50));color:var(--kpi-color,var(--sgv2-purple));}

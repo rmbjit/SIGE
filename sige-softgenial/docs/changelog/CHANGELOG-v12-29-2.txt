@@ -1,0 +1,38 @@
+SIGE SoftGenial v12.29.2 - Painel: KPIs em auto-fit (sem colunas vazias)
+Data: 2026-06-30
+Tipo: melhoria de apresentacao (pagina inicial / dashboard). Sem logica.
+
+CONTEXTO
+- Os 4 KPIs do topo do painel (Alunos Activos, Docentes, Pagamentos Hoje,
+  Divida Total) sao renderizados CONDICIONALMENTE conforme as permissoes do
+  perfil. A grelha estava fixa em 4 colunas:
+      .sg-kpi-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+PROBLEMA
+- Num perfil que nao tem as 4 permissoes (ex.: ve so 2 ou 3 KPIs), as colunas
+  fixas deixavam espacos/colunas vazias na linha. Os cartoes presentes ficavam
+  encolhidos e desalinhados em vez de preencher a largura disponivel.
+
+CORRECCAO (admin/system/dashboard-view.php, so CSS da view)
+- .sg-kpi-grid passou a auto-fit:
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr))
+  Com auto-fit, as faixas de grelha vazias COLAPSAM (ao contrario de auto-fill),
+  por isso os cartoes existentes esticam e preenchem a linha, sem espaco a sobrar.
+  Adapta-se ainda a largura de CONTEUDO do portatil (janela menos a sidebar).
+- Media queries existentes mantidas:
+      @media(max-width:1100px) -> 2 colunas
+      @media(max-width:680px)  -> 1 coluna
+
+PORQUE auto-fit E NAO auto-fill
+- auto-fill mantem faixas vazias (reintroduzia o problema); auto-fit colapsa-as.
+
+FRONTEIRA
+- So CSS da view. Sem alterar formulas, SQL, nonces, endpoints AJAX, name/id,
+  permissoes nem schema. A cache (transient HTML por-utilizador/por-tenant,
+  chave md5(user_id|escola_id|ano|SIGE_VERSION)) mantem-se valida; o bump de
+  versao invalida-a naturalmente.
+
+VALIDACAO
+- php -l admin/system/dashboard-view.php -> No syntax errors detected.
+- Gate de tokens: 1906 (baseline 1906) - sem regressao.
+- BUILD.json valido (json_decode OK).
