@@ -691,7 +691,8 @@ foreach($alunos as $a) {
 <script <?php echo sige_csp_script_attr(); ?>>
 /* QR local: gera o codigo QR no proprio navegador (sem servico externo). O numero
    de processo do aluno nunca sai do dispositivo. Se a biblioteca nao estiver
-   disponivel, devolve um pixel transparente para a imagem nunca ficar partida. */
+   disponivel, devolve string vazia -> o construtor do cartao mostra o numero de
+   processo como texto legivel (o porteiro valida pela entrada manual). */
 function sigeQrDataUri(text){
     try {
         if (typeof QRious !== 'undefined') {
@@ -699,7 +700,7 @@ function sigeQrDataUri(text){
             return q.toDataURL('image/png');
         }
     } catch (e) {}
-    return 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+    return '';
 }
 </script>
 
@@ -8645,37 +8646,29 @@ function imprimirDeclaracao(data) {
 // ========================================
 // IMPRESSÃO CARTÕES (NOVO DESIGN VERTICAL - CORRIGIDO)
 // ========================================
-async function printBatchCards() {
-    if (!window.sigeAlunosCanDocuments) { sigeAlunoAlert('O seu perfil não tem permissão para imprimir cartões.', 'Permissão negada', 'warning'); return; }
-    // [12.9.8/v12.11.9.69] fetch on-demand. Os filtros aplicam-se ao conjunto completo com payload mínimo de cartões.
-    var sigeTodosAlunos = await sigeGetTodosAlunos('cards');
-    var visibleStudents = sigeAlunosFiltrarPorFiltrosActuais(sigeTodosAlunos);
-    
-    if (visibleStudents.length === 0) { sigeAlunoAlert('Nenhum aluno encontrado para impressão com os filtros actuais.', 'Sem alunos para imprimir', 'warning'); return; }
-    if (!(await sigeAlunoConfirmAsync('Vai imprimir ' + visibleStudents.length + ' cartões.\n\nRecomenda-se seleccionar uma turma de cada vez para evitar impressão desnecessária.', 'Imprimir cartões de aluno', 'Imprimir cartões', 'warning'))) return;
-    
-    var w = window.open('', '', 'width=900,height=800');
-    var escolaNome = (sigeGlobal && sigeGlobal.nome_escola) ? sigeGlobal.nome_escola : 'ESCOLA GERAL';
-    var logoUrl = (sigeGlobal && sigeGlobal.logo_url) ? sigeGlobal.logo_url : '<?php echo esc_url(SIGE_URL . 'assets/img/avatar-default.svg'); ?>';
-    var anoLectivo = (sigeGlobal && sigeGlobal.ano_lectivo) ? sigeGlobal.ano_lectivo : '2026';
-    
-    var html = `<html><head><title>Imprimir Cartões</title>
-    <style>
-        @page { size: A4; margin: 10mm; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-print-color-adjust: exact; margin: 0; padding: 0; background: #fff; }
-        .sheet { display: flex; flex-wrap: wrap; gap: 15px; justify-content: flex-start; }
+// --- Construtor UNICO do crachá do estudante (partilhado por lote e individual).
+// v12.31.0: elimina a duplicacao entre printBatchCards e printSingleCard. Todos os
+// campos dinamicos sao escapados; o QR cai para o numero de processo legivel quando
+// nao pode ser gerado; a impressao espera o carregamento das imagens.
+function sigeCardCtx() {
+    return {
+        escolaNome: (sigeGlobal && sigeGlobal.nome_escola) ? sigeGlobal.nome_escola : 'ESCOLA GERAL',
+        logoUrl: (sigeGlobal && sigeGlobal.logo_url) ? sigeGlobal.logo_url : '<?php echo esc_url(SIGE_URL . 'assets/img/avatar-default.svg'); ?>',
+        anoLectivo: (sigeGlobal && sigeGlobal.ano_lectivo) ? sigeGlobal.ano_lectivo : '2026'
+    };
+}
+
+function sigeCardStyles(batch) {
+    return `<style>
+        ${batch ? '@page { size: A4; margin: 10mm; }' : ''}
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-print-color-adjust: exact; margin: 0; padding: 0; background: ${batch ? '#fff' : '#eee'};${batch ? '' : ' display: flex; justify-content: center; align-items: center; min-height: 100vh;'} }
+        .sheet { display: flex; flex-wrap: wrap; gap: 15px; justify-content: ${batch ? 'flex-start' : 'center'}; }
         .card-container { break-inside: avoid; page-break-inside: avoid; }
-        .card { width: 220px; height: 350px; background: #fff; border: 1px solid #cbd5e1; border-radius: 12px; position: relative; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; box-sizing: border-box; }
-        
-        /* CORREÇÃO: Fundo azul sólido (Navy) */
+        .card { width: 220px; height: 350px; background: #fff; border: 1px solid #cbd5e1; border-radius: 12px; position: relative; overflow: hidden; box-shadow: 0 4px ${batch ? '6px rgba(0,0,0,0.05)' : '15px rgba(0,0,0,0.1)'}; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; }
         .card-header { width: 100%; height: 85px; background: #0f172a; color: white; text-align: center; padding-top: 12px; box-sizing: border-box; }
-        
         .card-header img.logo { height: 36px; width: 36px; border-radius: 50%; background: #fff; padding: 2px; margin-bottom: 4px; object-fit: contain; }
         .card-header .title { font-size: 7px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2; }
-        
-        /* CORREÇÃO: Removida margem negativa e z-index, adicionada margem positiva para espaçamento */
         .card-photo-wrapper { width: 90px; height: 110px; margin-top: 15px; border-radius: 8px; border: 3px solid #fff; background: #f1f5f9; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        
         .card-photo-wrapper img { width: 100%; height: 100%; object-fit: cover; }
         .card-body { padding: 12px 10px 10px; text-align: center; width: 100%; box-sizing: border-box; flex: 1; }
         .card-name { font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 8px; line-height: 1.2; max-height: 31px; overflow: hidden; }
@@ -8684,110 +8677,99 @@ async function printBatchCards() {
         .card-details strong { color: #1e293b; }
         .card-footer { width: 100%; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 10px 15px; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; }
         .card-footer .qr { width: 40px; height: 40px; }
+        .card-footer .qr-fallback { font-size: 9px; font-weight: 700; color: #0f172a; font-family: 'Courier New', monospace; letter-spacing: 0.5px; }
         .card-footer .validity { font-size: 8px; color: #64748b; text-align: left; }
         .card-footer .validity strong { display: block; color: #0f172a; font-size: 9px; margin-top: 2px; }
-    </style></head><body><div class="sheet">`;
-    
-    visibleStudents.forEach(function(a) {
-        var foto = a.foto || '';
-        var imgTag = foto ? `<img src="${foto}">` : `<span style="font-size:10px;color:#94a3b8;font-weight:bold;">FOTO</span>`;
-        var t = (a.classe && a.turma_nome) ? `${a.classe} - ${a.turma_nome}` : 'S/ Turma';
-        var qr = sigeQrDataUri('Aluno:' + (a.numero_processo || ''));
-        
-        html += `
+    </style>`;
+}
+
+function sigeCardMarkup(a, ctx) {
+    var esc = sigeAlunoEscapeHtml;
+    var foto = (a && a.foto) ? String(a.foto) : '';
+    var imgTag = foto ? `<img src="${esc(foto)}" alt="">` : `<span style="font-size:10px;color:#94a3b8;font-weight:bold;">FOTO</span>`;
+    var t = (a && a.classe && a.turma_nome) ? `${esc(a.classe)} - ${esc(a.turma_nome)}` : 'S/ Turma';
+    var proc = (a && a.numero_processo) ? String(a.numero_processo) : '';
+    var qr = sigeQrDataUri('Aluno:' + proc);
+    var qrCell = qr ? `<img src="${qr}" class="qr" alt="">` : `<span class="qr-fallback">${esc(proc)}</span>`;
+    return `
         <div class="card-container">
             <div class="card">
                 <div class="card-header">
-                    <img src="${logoUrl}" class="logo">
-                    <div class="title">REPÚBLICA DE MOÇAMBIQUE<br>${escolaNome}</div>
+                    <img src="${esc(ctx.logoUrl)}" class="logo" alt="">
+                    <div class="title">REPÚBLICA DE MOÇAMBIQUE<br>${esc(ctx.escolaNome)}</div>
                 </div>
                 <div class="card-photo-wrapper">
                     ${imgTag}
                 </div>
                 <div class="card-body">
-                    <div class="card-name">${(a.nome_completo || '')}</div>
+                    <div class="card-name">${esc((a && a.nome_completo) ? a.nome_completo : '')}</div>
                     <div class="card-role">ESTUDANTE</div>
                     <div class="card-details">
-                        <div><strong>Proc:</strong> ${(a.numero_processo || '')}</div>
+                        <div><strong>Proc:</strong> ${esc(proc)}</div>
                         <div><strong>Turma:</strong> ${t}</div>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <div class="validity">Válido até:<strong>Dezembro ${anoLectivo}</strong></div>
-                    <img src="${qr}" class="qr">
+                    <div class="validity">Válido até:<strong>Dezembro ${esc(ctx.anoLectivo)}</strong></div>
+                    ${qrCell}
                 </div>
             </div>
         </div>`;
+}
+
+function sigeCardsDocument(students, ctx, batch) {
+    var title = batch ? 'Imprimir Cartões' : 'Imprimir Cartão';
+    var body = '';
+    for (var i = 0; i < students.length; i++) { body += sigeCardMarkup(students[i] || {}, ctx); }
+    return `<html><head><meta charset="utf-8"><title>${title}</title>${sigeCardStyles(batch)}</head><body><div class="sheet">${body}</div></body></html>`;
+}
+
+// Escreve no popup e imprime SO depois de as imagens carregarem (com salvaguarda
+// de tempo). Trata o caso de o popup ter sido bloqueado pelo navegador.
+function sigePrintCardsWindow(w, html) {
+    if (!w) {
+        sigeAlunoAlert('O navegador bloqueou a janela de impressão. Permita pop-ups para este site e tente novamente.', 'Pop-up bloqueado', 'warning');
+        return;
+    }
+    try {
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+    } catch (e) {
+        sigeAlunoAlert('Não foi possível preparar a impressão. Tente novamente.', 'Erro de impressão', 'error');
+        return;
+    }
+    var printed = false;
+    function go() { if (printed) return; printed = true; try { w.focus(); w.print(); } catch (e) {} }
+    var imgs = [];
+    try { imgs = Array.prototype.slice.call(w.document.images || []); } catch (e) {}
+    var pending = imgs.filter(function (im) { return !im.complete; });
+    if (pending.length === 0) { setTimeout(go, 200); return; }
+    var left = pending.length;
+    pending.forEach(function (im) {
+        im.addEventListener('load', function () { if (--left <= 0) go(); });
+        im.addEventListener('error', function () { if (--left <= 0) go(); });
     });
-    
-    html += `</div></body></html>`;
-    w.document.write(html);
-    w.document.close();
-    setTimeout(function() { w.focus(); w.print(); }, 1500);
+    setTimeout(go, 6000); // salvaguarda: nunca deixar a impressão pendurada
+}
+
+async function printBatchCards() {
+    if (!window.sigeAlunosCanDocuments) { sigeAlunoAlert('O seu perfil não tem permissão para imprimir cartões.', 'Permissão negada', 'warning'); return; }
+    // [12.9.8/v12.11.9.69] fetch on-demand. Os filtros aplicam-se ao conjunto completo com payload mínimo de cartões.
+    var sigeTodosAlunos = await sigeGetTodosAlunos('cards');
+    var visibleStudents = sigeAlunosFiltrarPorFiltrosActuais(sigeTodosAlunos);
+
+    if (visibleStudents.length === 0) { sigeAlunoAlert('Nenhum aluno encontrado para impressão com os filtros actuais.', 'Sem alunos para imprimir', 'warning'); return; }
+    if (!(await sigeAlunoConfirmAsync('Vai imprimir ' + visibleStudents.length + ' cartões.\n\nRecomenda-se seleccionar uma turma de cada vez para evitar impressão desnecessária.', 'Imprimir cartões de aluno', 'Imprimir cartões', 'warning'))) return;
+
+    var w = window.open('', '', 'width=900,height=800');
+    sigePrintCardsWindow(w, sigeCardsDocument(visibleStudents, sigeCardCtx(), true));
 }
 
 function printSingleCard(a) {
     if (!window.sigeAlunosCanDocuments) { sigeAlunoAlert('O seu perfil não tem permissão para imprimir cartões.', 'Permissão negada', 'warning'); return; }
     var w = window.open('', '', 'width=350,height=500');
-    var escolaNome = (sigeGlobal && sigeGlobal.nome_escola) ? sigeGlobal.nome_escola : 'ESCOLA GERAL';
-    var logoUrl = (sigeGlobal && sigeGlobal.logo_url) ? sigeGlobal.logo_url : '<?php echo esc_url(SIGE_URL . 'assets/img/avatar-default.svg'); ?>';
-    var anoLectivo = (sigeGlobal && sigeGlobal.ano_lectivo) ? sigeGlobal.ano_lectivo : '2026';
-    
-    var foto = (a && a.foto) ? a.foto : '';
-    var imgTag = foto ? `<img src="${foto}">` : `<span style="font-size:10px;color:#94a3b8;font-weight:bold;">FOTO</span>`;
-    var t = (a && a.classe && a.turma_nome) ? `${a.classe} - ${a.turma_nome}` : 'S/ Turma';
-    var qr = sigeQrDataUri('Aluno:' + ((a && a.numero_processo) ? a.numero_processo : ''));
-    
-    var html = `<html><head><title>Imprimir Cartão</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #eee; -webkit-print-color-adjust: exact; margin: 0; }
-        .card { width: 220px; height: 350px; background: #fff; border: 1px solid #cbd5e1; border-radius: 12px; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; box-sizing: border-box; }
-        
-        /* CORREÇÃO: Fundo azul sólido (Navy) */
-        .card-header { width: 100%; height: 85px; background: #0f172a; color: white; text-align: center; padding-top: 12px; box-sizing: border-box; }
-        
-        .card-header img.logo { height: 36px; width: 36px; border-radius: 50%; background: #fff; padding: 2px; margin-bottom: 4px; object-fit: contain; }
-        .card-header .title { font-size: 7px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2; }
-        
-        /* CORREÇÃO: Removida margem negativa e z-index, adicionada margem positiva para espaçamento */
-        .card-photo-wrapper { width: 90px; height: 110px; margin-top: 15px; border-radius: 8px; border: 3px solid #fff; background: #f1f5f9; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        
-        .card-photo-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-        .card-body { padding: 12px 10px 10px; text-align: center; width: 100%; box-sizing: border-box; flex: 1; }
-        .card-name { font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 8px; line-height: 1.2; max-height: 31px; overflow: hidden; }
-        .card-role { display: inline-block; background: #10b981; color: #fff; font-size: 8px; font-weight: 700; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.5px; margin-bottom: 12px; text-transform: uppercase; }
-        .card-details { font-size: 10px; color: #475569; line-height: 1.5; }
-        .card-details strong { color: #1e293b; }
-        .card-footer { width: 100%; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 10px 15px; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; }
-        .card-footer .qr { width: 40px; height: 40px; }
-        .card-footer .validity { font-size: 8px; color: #64748b; text-align: left; }
-        .card-footer .validity strong { display: block; color: #0f172a; font-size: 9px; margin-top: 2px; }
-    </style></head><body>
-    <div class="card">
-        <div class="card-header">
-            <img src="${logoUrl}" class="logo">
-            <div class="title">REPÚBLICA DE MOÇAMBIQUE<br>${escolaNome}</div>
-        </div>
-        <div class="card-photo-wrapper">
-            ${imgTag}
-        </div>
-        <div class="card-body">
-            <div class="card-name">${(a && a.nome_completo) ? a.nome_completo : ''}</div>
-            <div class="card-role">ESTUDANTE</div>
-            <div class="card-details">
-                <div><strong>Proc:</strong> ${(a && a.numero_processo) ? a.numero_processo : ''}</div>
-                <div><strong>Turma:</strong> ${t}</div>
-            </div>
-        </div>
-        <div class="card-footer">
-            <div class="validity">Válido até:<strong>Dezembro ${anoLectivo}</strong></div>
-            <img src="${qr}" class="qr">
-        </div>
-    </div></body></html>`;
-    
-    w.document.write(html);
-    w.document.close();
-    setTimeout(function(){ w.focus(); w.print(); }, 1500);
+    sigePrintCardsWindow(w, sigeCardsDocument([a || {}], sigeCardCtx(), false));
 }
 
 // ========================================

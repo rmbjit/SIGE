@@ -1,0 +1,56 @@
+SIGE SoftGenial v12.31.0 - Cracha do estudante: construtor unico + impressao robusta
+Data: 2026-06-30
+Tipo: correccao/robustez de apresentacao (admin/academic/alunos_lista.php). Cliente/JS.
+
+CONTEXTO
+- Diagnostico 360 da funcao de cracha do estudante (geracao na lista -> QR local
+  -> leitura na Portaria -> validacao no servidor).
+
+DESPISTE (falso-positivo confirmado ANTES de mexer)
+- Suspeita inicial: o lote mostraria sempre "S/ Turma". FALSO. O endpoint
+  includes/aluno-fetch-ajax.php (purpose 'cards') ja faz JOIN as turmas e inclui
+  classe/turma_nome no payload. Nao havia bug ai. (Disciplina: verificar a fonte
+  antes de "corrigir".)
+
+CORRECCOES REAIS
+1) CONSTRUTOR UNICO (cura da duplicacao)
+   - printSingleCard e printBatchCards partilhavam ~80 linhas iguais de CSS+HTML,
+     que ja tinham comecado a divergir. Passam a usar um so construtor:
+     sigeCardCtx() + sigeCardStyles(batch) + sigeCardMarkup(a,ctx) +
+     sigeCardsDocument(students,ctx,batch). Individual = lote de um. Qualquer
+     mudanca futura no design faz-se UMA vez.
+2) IMPRESSAO ESPERA AS IMAGENS (fim do setTimeout fixo)
+   - Antes: setTimeout(print, 1500) - em ligacao lenta ou com muitos cartoes, a
+     impressao disparava antes de a foto/logotipo carregarem (saiam em branco).
+   - Agora: sigePrintCardsWindow espera o evento load/error de todas as imagens e
+     so entao imprime, com salvaguarda de 6s para nunca prender.
+3) POPUP BLOQUEADO TRATADO
+   - window.open pode devolver null (bloqueador). Antes: erro silencioso. Agora:
+     aviso claro ("Pop-up bloqueado, permita pop-ups e tente novamente").
+4) ESCAPE DE TODOS OS CAMPOS
+   - nome, escola, turma, processo e URL da foto passam por sigeAlunoEscapeHtml.
+     Nomes com & < > " deixam de quebrar o layout (e fecham a porta a injeccao
+     de marcacao na janela de impressao).
+5) QR COM FALLBACK LEGIVEL
+   - sigeQrDataUri passa a devolver '' quando nao consegue gerar o QR (em vez de
+     um pixel transparente). Nesse caso o cracha mostra o NUMERO DE PROCESSO em
+     texto, para o porteiro validar pela entrada manual. Nunca fica rodape vazio.
+
+CONTRATO QR <-> PORTARIA (confirmado intacto)
+- O cracha grava "Aluno:<numero_processo>"; sige_ajax_validar_acesso reduz a
+  digitos (preg_replace) e procura o aluno. Compativel.
+- NOTA (melhoria futura, nao alterada agora): se um processo for ALFANUMERICO
+  (ex.: importado "2024/A/123"), o portao reduz a digitos e pode nao encontrar.
+  A geracao automatica e numerica, por isso o caso comum nao e afectado.
+
+FRONTEIRA
+- So cliente/JS de apresentacao. Sem alterar formulas, SQL, nonces, endpoints,
+  name/id, permissoes nem schema. O payload do servidor nao foi alterado.
+
+VALIDACAO
+- php -l admin/academic/alunos_lista.php -> OK.
+- Gate typography -> OK.
+- Gate design-tokens -> 1888 (baixou 18 com a deduplicacao do CSS; baseline
+  reposta para o novo minimo).
+- Novo smoke tools/smoke-cracha-estudante-v12-31-0.php -> OK (23 verificacoes).
+- BUILD.json valido.
