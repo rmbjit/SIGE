@@ -113,33 +113,109 @@ add_action('admin_init', 'sige_rh_assiduidade_migrar', 8);
  * CAMADA DE DADOS (tenant-scoped)
  * ========================================================================== */
 
-if (!function_exists('sige_rh_professor_e_admin_sistema')) {
+if (!function_exists('sige_rh_staff_role_slugs')) {
+    /** Papéis WordPress de staff (o MESMO conjunto usado pela aba Equipa). */
+    function sige_rh_staff_role_slugs(): array {
+        return [
+            'sige_admin_ti', 'sige_director', 'sige_secretaria_geral',
+            'sige_assistente', 'sige_financeiro', 'sige_professor',
+            'sige_educador', 'sige_motorista', 'sige_limpeza',
+            'sige_secretario', 'sige_gestor_rh', 'sige_pedagogico', 'sige_recepcao', 'sige_guarda',
+        ];
+    }
+}
+
+if (!function_exists('sige_rh_colaboradores_escola')) {
     /**
-     * Verdadeiro se a linha de colaborador (sige_professores) pertence ao
-     * administrador WordPress REAL — o "super admin" de manutenção do sistema,
-     * que NÃO faz parte da escola. Serve para o excluir das listagens de
-     * colaboradores (ausências, assiduidade, salários e mapas fiscais), tal como
-     * já é excluído da própria aba Equipa.
+     * FONTE DE VERDADE ÚNICA dos colaboradores de RH de uma escola — a MESMA
+     * lista da aba Equipa, para que Ausências, Assiduidade e Salários nunca
+     * mostrem gente a mais nem a menos.
      *
-     * IMPORTANTE: usa EXACTAMENTE o mesmo critério da aba Equipa — resolve o
-     * utilizador WP pelo email (a chave de ligação do roster RH, pois
-     * sige_professores não tem user_id) e delega em sige_is_real_wp_admin_user().
-     * Assim apanha também o super admin de MULTISITE (guardado numa opção do
-     * site, muitas vezes SEM a role 'administrator'), que uma enumeração por role
-     * deixaria passar. Cache por email durante o pedido.
+     * Porquê: a aba Equipa parte do conjunto CANÓNICO de utilizadores WP (perfil
+     * SIGE activo + meta de escola, menos o admin WP real, menos removidos), ao
+     * passo que as sub-abas liam a tabela sige_professores em bruto — que pode
+     * conter linhas órfãs/antigas que NÃO são staff. Aqui reconstruímos a lista a
+     * partir do MESMO conjunto canónico e ligamos cada pessoa à sua ficha de RH
+     * (sige_professores) por sige_professor_id (meta) ou, em falta, por email —
+     * exactamente a ligação que a Equipa usa. Só quem tem ficha de RH entra
+     * (precisa de professor_id para assiduidade/salário).
+     *
+     * @return array<int,array{professor_id:int,nome:string,nuit:string,salario_base:mixed,subsidio:mixed,email:string}>
      */
-    function sige_rh_professor_e_admin_sistema($email_professor): bool {
-        static $cache = [];
-        $mail = strtolower(trim((string) $email_professor));
-        if ($mail === '') return false;
-        if (array_key_exists($mail, $cache)) return $cache[$mail];
-        $is_admin = false;
-        if (function_exists('get_user_by') && function_exists('sige_is_real_wp_admin_user')) {
-            $u = get_user_by('email', $mail);
-            if ($u && isset($u->ID)) $is_admin = sige_is_real_wp_admin_user((int) $u->ID);
+    function sige_rh_colaboradores_escola(int $escola_id): array {
+        global $wpdb;
+        if ($escola_id <= 0 || !function_exists('get_users')) return [];
+
+        // (A) staff WP scoped por escola + (B) perfil SIGE activo — igual à Equipa.
+        $roles = sige_rh_staff_role_slugs();
+        $ids_meta = array_map('intval', (array) get_users([
+            'role__in' => $roles, 'meta_key' => 'sige_escola_id', 'meta_value' => $escola_id, 'fields' => 'ID',
+        ]));
+        $ids_sige = function_exists('sige_staff_active_profile_user_ids')
+            ? sige_staff_active_profile_user_ids($escola_id) : [];
+        $ids = array_values(array_unique(array_filter(array_merge($ids_meta, $ids_sige))));
+
+        // Carregar as fichas de RH da escola (para ligar e obter salário/NUIT).
+        $tp = $wpdb->prefix . 'sige_professores';
+        $profs = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$tp} WHERE escola_id = %d ORDER BY id ASC", $escola_id));
+        $by_id = []; $by_email = [];
+        foreach ((array) $profs as $p) {
+            $by_id[(int) $p->id] = $p;
+            $em = strtolower(trim((string) ($p->email ?? '')));
+            if ($em !== '') $by_email[$em] = $p; // ORDER BY id ASC -> fica a ficha mais recente
         }
-        $cache[$mail] = $is_admin;
-        return $is_admin;
+
+        // Fallback de migração (só leitura): sem conjunto canónico mas com fichas,
+        // recupera os utilizadores staff cujo email consta em sige_professores.
+        if (empty($ids) && !empty($by_email)) {
+            $cand = get_users(['role__in' => $roles, 'fields' => ['ID', 'user_email']]);
+            foreach ((array) $cand as $u) {
+                if (isset($by_email[strtolower(trim((string) $u->user_email))])) $ids[] = (int) $u->ID;
+            }
+            $ids = array_values(array_unique($ids));
+        }
+        if (empty($ids)) return [];
+
+        $users = get_users(['include' => $ids, 'orderby' => 'display_name', 'order' => 'ASC']);
+
+        $out = []; $seen = [];
+        foreach ((array) $users as $u) {
+            $uid = (int) $u->ID;
+            // Mesma política da Equipa: nunca o admin WP real; nunca removidos (soft delete).
+            if (function_exists('sige_is_real_wp_admin_user') && sige_is_real_wp_admin_user($uid)) continue;
+            if (function_exists('get_user_meta') && !empty(get_user_meta($uid, 'sige_staff_removed_at', true))) continue;
+
+            $pmid = function_exists('get_user_meta') ? (int) get_user_meta($uid, 'sige_professor_id', true) : 0;
+            $p = ($pmid > 0 && isset($by_id[$pmid]))
+                ? $by_id[$pmid]
+                : ($by_email[strtolower(trim((string) $u->user_email))] ?? null);
+            if (!$p) continue; // sem ficha de RH -> sem professor_id -> fora de assiduidade/salário
+            $pid = (int) $p->id;
+            if ($pid <= 0 || isset($seen[$pid])) continue;
+            $seen[$pid] = true;
+
+            $nome = trim((string) ($p->nome_completo ?? ''));
+            if ($nome === '') $nome = trim((string) $u->display_name);
+            $out[] = [
+                'professor_id' => $pid,
+                'nome'         => $nome,
+                'nuit'         => (string) ($p->nuit ?? ''),
+                'salario_base' => $p->salario_base ?? 0,
+                'subsidio'     => $p->subsidio ?? 0,
+                'email'        => (string) ($p->email ?? $u->user_email),
+            ];
+        }
+        usort($out, function ($a, $b) { return strcasecmp($a['nome'], $b['nome']); });
+        return $out;
+    }
+}
+
+if (!function_exists('sige_rh_colaboradores_ids_escola')) {
+    /** Conjunto de professor_id que SÃO staff canónico da escola (para filtrar mapas). */
+    function sige_rh_colaboradores_ids_escola(int $escola_id): array {
+        $ids = [];
+        foreach (sige_rh_colaboradores_escola($escola_id) as $c) { $ids[(int) $c['professor_id']] = true; }
+        return $ids;
     }
 }
 
@@ -171,14 +247,9 @@ if (!function_exists('sige_rh_assiduidade_grelha')) {
         if ($escola_id <= 0 || $data === '' || strtotime($data) === false) return [];
         sige_rh_assiduidade_migrar();
         $ta = sige_rh_assiduidade_table();
-        $tp = $wpdb->prefix . 'sige_professores';
 
-        $profs = $wpdb->get_results($wpdb->prepare(
-            "SELECT id, nome_completo, email FROM {$tp}
-              WHERE escola_id = %d AND (status_ativo IS NULL OR status_ativo = 1)
-              ORDER BY nome_completo ASC",
-            $escola_id
-        ));
+        // MESMA lista da aba Equipa (não a tabela sige_professores em bruto).
+        $colabs = sige_rh_colaboradores_escola($escola_id);
 
         $recs = $wpdb->get_results($wpdb->prepare(
             "SELECT professor_id, estado, minutos_atraso FROM {$ta} WHERE escola_id = %d AND data = %s",
@@ -190,15 +261,10 @@ if (!function_exists('sige_rh_assiduidade_grelha')) {
         $ausmap = sige_rh_assiduidade_ausencias_do_dia($escola_id, $data);
 
         $out = [];
-        $seen = [];
-        foreach ((array) $profs as $p) {
-            $pid = (int) $p->id;
-            if ($pid <= 0 || isset($seen[$pid])) continue;
-            $seen[$pid] = true;
-            // Excluir o administrador WP real (utilizador de manutenção do sistema).
-            if (sige_rh_professor_e_admin_sistema($p->email ?? '')) continue;
-            $nome = trim((string) $p->nome_completo);
-            if ($nome === '') continue;
+        foreach ($colabs as $c) {
+            $pid = (int) $c['professor_id'];
+            $nome = trim((string) $c['nome']);
+            if ($pid <= 0 || $nome === '') continue;
             $rec = $recmap[$pid] ?? null;
             $cov = $ausmap[$pid] ?? '';
             $out[] = [

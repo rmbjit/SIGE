@@ -1,6 +1,18 @@
-SIGE SoftGenial v12.42.1 - RH: super admin fora (por email, inclui multisite) + Ausências + correcção rigorosa do congelamento
+SIGE SoftGenial v12.42.2 - RH: sub-abas alinhadas com a Equipa (lista canónica) + correcção rigorosa do congelamento
 Data: 2026-07-01
 Tipo: correcção. Sem schema novo, sem permissões novas, sem tocar em ficheiros protegidos.
+
+NOTA v12.42.2 (causa-raiz do "aparecem utilizadores a mais")
+- Sintoma: a aba Equipa mostrava o número CERTO de pessoas, mas Ausências,
+  Assiduidade e Salários mostravam gente a mais (o super admin e/ou fichas que
+  não são staff).
+- Causa: essas sub-abas liam a tabela sige_professores EM BRUTO (por escola_id +
+  status_ativo), que contém linhas que não são equipa (admin WP real, fichas
+  órfãs/antigas). A Equipa parte de um conjunto CANÓNICO de utilizadores WP
+  (perfil SIGE activo + meta de escola, menos admin real, menos removidos).
+- Correcção: um resolver único reconstrói EXACTAMENTE a lista da Equipa e é usado
+  por todas as sub-abas — passam a bater sempre certo. (Substitui a abordagem
+  anterior por email/role do v12.42.0/v12.42.1, que só tapava o admin.)
 
 NOTA v12.42.1 (correcção do v12.42.0)
 - No v12.42.0 o super admin AINDA aparecia. Causa: a exclusão enumerava os
@@ -33,19 +45,24 @@ O QUE FAZ
 
 ENGENHARIA
 - includes/rh-assiduidade.php:
-    * NOVO helper único sige_rh_professor_e_admin_sistema(email) — resolve o
-      utilizador WP pelo EMAIL (get_user_by) e delega em
-      sige_is_real_wp_admin_user(); é o MESMO critério da aba Equipa, pelo que
-      apanha também o super admin de MULTISITE. Cache por email no pedido. A
-      ligação é pelo email por o sige_professores não ter user_id.
-    * sige_rh_assiduidade_grelha passa a seleccionar o email e a saltar a linha
-      cujo email pertence ao admin WP real.
+    * NOVO resolver único sige_rh_colaboradores_escola(escola_id) — reconstrói a
+      MESMA lista da aba Equipa: parte do conjunto canónico de utilizadores WP
+      (sige_staff_active_profile_user_ids + get_users por role/meta de escola),
+      exclui o admin WP real (sige_is_real_wp_admin_user) e os removidos (soft
+      delete), e liga cada um à ficha de RH (sige_professores) por
+      sige_professor_id (meta) ou email (fallback). Devolve professor_id, nome,
+      nuit, salario_base, subsidio. + sige_rh_colaboradores_ids_escola() e
+      sige_rh_staff_role_slugs().
+    * sige_rh_assiduidade_grelha passa a ITERAR essa lista (deixa de fazer
+      SELECT directo a sige_professores).
+    * REMOVIDO o helper sige_rh_professor_e_admin_sistema (a exclusão do admin é
+      agora consequência de reutilizar o roster canónico).
 - includes/rh-salarios.php:
-    * sige_rh_salario_preview e sige_rh_salario_mapa_mes aplicam a MESMA exclusão
-      (o preview passa a seleccionar email; o mapa junta p.email para excluir).
+    * sige_rh_salario_preview itera a lista canónica; sige_rh_salario_mapa_mes só
+      conta recibos cujo professor_id pertence ao conjunto canónico (ignora
+      recibos antigos de fichas órfãs / do admin). Só filtra em contexto WP real.
 - admin/hr/equipe-view.php:
-    * o DROPDOWN de colaborador da aba Ausências (lista $_profs_raw) aplica agora
-      a mesma exclusão do admin WP real.
+    * o DROPDOWN de colaborador da aba Ausências passa a usar a lista canónica.
 - admin/hr/equipe-view.php (anti-congelamento):
     * NOVO sigeRhModalAberto() + sigeRhReconciliarShell() — fonte de verdade
       única: o estado do body é derivado de "existe algum modal aberto?"

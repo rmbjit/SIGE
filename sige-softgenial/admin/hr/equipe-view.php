@@ -3350,17 +3350,14 @@ body.sige-admin-app #box-salario-cfg.sige-modal:not(.active){
                     <select id="aus-colab">
                         <option value="">— Seleccionar —</option>
                         <?php
-                        $__aus_seen = [];
-                        foreach ((array) $_profs_raw as $__p) {
-                            if (isset($__p->status_ativo) && !(int) $__p->status_ativo) continue;
-                            $__pid = (int) $__p->id;
-                            if ($__pid <= 0 || isset($__aus_seen[$__pid])) continue;
-                            $__aus_seen[$__pid] = true;
-                            // Excluir o administrador WP real (utilizador de manutenção do sistema).
-                            if (function_exists('sige_rh_professor_e_admin_sistema') && sige_rh_professor_e_admin_sistema($__p->email ?? '')) continue;
-                            $__nome = trim((string) ($__p->nome_completo ?? ''));
-                            if ($__nome === '') continue;
-                            echo '<option value="' . (int) $__pid . '">' . esc_html($__nome) . '</option>';
+                        // MESMA lista da aba Equipa (não a tabela sige_professores em bruto).
+                        $__aus_colabs = function_exists('sige_rh_colaboradores_escola')
+                            ? sige_rh_colaboradores_escola((int) $escola_id) : [];
+                        foreach ((array) $__aus_colabs as $__c) {
+                            $__pid = (int) $__c['professor_id'];
+                            $__nome = trim((string) $__c['nome']);
+                            if ($__pid <= 0 || $__nome === '') continue;
+                            echo '<option value="' . $__pid . '">' . esc_html($__nome) . '</option>';
                         }
                         ?>
                     </select>

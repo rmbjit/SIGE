@@ -1,31 +1,30 @@
-# DEPLOY - SIGE SoftGenial v12.42.1
+# DEPLOY - SIGE SoftGenial v12.42.2
 
-**RH: super admin fora (por email, inclui multisite) + Ausências + correcção rigorosa do congelamento**
+**RH: sub-abas alinhadas com a Equipa (lista canónica) + correcção rigorosa do congelamento**
 Data: 2026-07-01 - Tipo: correcção. Sem schema, sem permissões novas, sem protegidos.
 
-> **v12.42.1 corrige o v12.42.0:** o super admin ainda aparecia porque a versão
-> anterior enumerava admins por *role* e deixava passar o super admin de
-> **multisite**. Agora a exclusão usa o mesmo critério por **email** da aba
-> Equipa (que já exclui bem) e cobre também o **dropdown de Ausências**.
+> **v12.42.2 resolve a causa-raiz:** a Equipa mostrava o número certo, mas
+> Ausências/Assiduidade/Salários mostravam gente a mais porque liam a tabela
+> `sige_professores` **em bruto** (que tem linhas que não são staff: admin WP
+> real, fichas órfãs/antigas). Agora todas as sub-abas usam a **mesma lista
+> canónica da Equipa** — batem sempre certo.
 
 ## O que muda
-- **Super admin fora da escola.** O administrador WordPress real (utilizador de
-  manutenção do sistema) deixa de aparecer nas listagens de colaboradores das
-  abas **Ausências** (dropdown), **Assiduidade** e **Salários** — e, por
-  consequência, nos **mapas fiscais** (INSS/IRPS). Continua excluído da aba
-  Equipa como antes. A exclusão resolve o utilizador pelo email e reutiliza o
-  critério `sige_is_real_wp_admin_user()`, apanhando também super admins de
-  multisite.
+- **Sub-abas de RH alinhadas com a Equipa.** Ausências (dropdown), Assiduidade e
+  Salários — e, por consequência, os **mapas fiscais** (INSS/IRPS) — passam a
+  listar exactamente os mesmos colaboradores que a aba Equipa (conjunto canónico:
+  perfil SIGE activo + meta de escola, **sem** o admin WP real e **sem** fichas
+  órfãs que não são staff).
 - **Congelamento depois de gravar (corrigido).** O estado do "shell" (bloqueio
   de scroll + elevação do conteúdo enquanto há modal) passa a ter uma fonte de
   verdade única e a ser reconciliado ANTES do clique — sem "clique desperdiçado".
 
 ## Ficheiros alterados
 ```
-sige-softgenial/includes/rh-assiduidade.php     (helper de exclusão + grelha)
-sige-softgenial/includes/rh-salarios.php        (preview + mapa aplicam exclusão)
-sige-softgenial/admin/hr/equipe-view.php        (reconciliador único do shell)
-sige-softgenial/sige-softgenial.php             (versão 12.42.0)
+sige-softgenial/includes/rh-assiduidade.php     (resolver canónico + grelha)
+sige-softgenial/includes/rh-salarios.php        (preview + mapa usam lista canónica)
+sige-softgenial/admin/hr/equipe-view.php        (dropdown Ausências + reconciliador do shell)
+sige-softgenial/sige-softgenial.php             (versão 12.42.2)
 sige-softgenial/BUILD.json                       (versão + sumário)
 sige-softgenial/tools/smoke-rh-superadmin-anti-congelamento-v12-42-0.php  (novo)
 sige-softgenial/tools/.consistencia-visual-baseline.json                  (reconciliação)
@@ -40,9 +39,11 @@ sige-softgenial/tools/.consistencia-visual-baseline.json                  (recon
    há alteração de JS.
 
 ## Verificação rápida
-- **Assiduidade** e **Salários**: o utilizador super admin (o vosso, de
-  manutenção) já **não aparece** na grelha nem na lista/mapas. Os colaboradores
-  reais da escola continuam todos presentes.
+- **Ausências** (dropdown), **Assiduidade** e **Salários**: a lista de
+  colaboradores é **exactamente igual** à da aba **Equipa** — o super admin (o
+  vosso, de manutenção) e quaisquer fichas que não sejam staff **não aparecem**;
+  os colaboradores reais continuam todos presentes. Confirme comparando o número
+  de pessoas com a aba Equipa.
 - **Anti-congelamento**: abrir/fechar modais (Novo/Editar, Ficha, Ausência,
   Configurar impostos, confirmação de Processar), **gravar** e depois clicar em
   vários botões — a página responde **ao primeiro clique**, sem precisar de

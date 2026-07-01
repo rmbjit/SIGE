@@ -255,20 +255,11 @@ if (!function_exists('sige_rh_salario_preview')) {
         $out = ['ano' => $ano, 'mes' => $mes, 'dias_uteis' => $du, 'config' => $cfg, 'itens' => [], 'total_liquido' => 0.0];
         if ($escola_id <= 0) return $out;
         sige_rh_salarios_migrar();
-        $tp = $wpdb->prefix . 'sige_professores';
-        $profs = $wpdb->get_results($wpdb->prepare(
-            "SELECT id, nome_completo, nuit, salario_base, subsidio, email FROM {$tp}
-              WHERE escola_id = %d AND (status_ativo IS NULL OR status_ativo = 1)
-              ORDER BY nome_completo ASC",
-            $escola_id
-        ));
-        $seen = [];
-        foreach ((array) $profs as $p) {
-            $pid = (int) $p->id;
-            if ($pid <= 0 || isset($seen[$pid])) continue;
-            $seen[$pid] = true;
-            // Excluir o administrador WP real (utilizador de manutenção do sistema).
-            if (function_exists('sige_rh_professor_e_admin_sistema') && sige_rh_professor_e_admin_sistema($p->email ?? '')) continue;
+        // MESMA lista da aba Equipa (não a tabela sige_professores em bruto).
+        $colabs = function_exists('sige_rh_colaboradores_escola') ? sige_rh_colaboradores_escola($escola_id) : [];
+        foreach ($colabs as $c) {
+            $pid = (int) $c['professor_id'];
+            if ($pid <= 0) continue;
 
             $faltas = 0;
             if (function_exists('sige_rh_assiduidade_resumo_mes')) {
@@ -279,14 +270,14 @@ if (!function_exists('sige_rh_salario_preview')) {
             $outros = $saved ? (float) $saved->outros : 0.0;
 
             $calc = sige_rh_salario_calcular([
-                'salario_base' => $p->salario_base, 'subsidio' => $p->subsidio,
+                'salario_base' => $c['salario_base'], 'subsidio' => $c['subsidio'],
                 'faltas_injustificadas' => $faltas, 'dias_uteis' => $du, 'outros' => $outros, 'dependentes' => 0,
             ], $cfg);
 
             $out['itens'][] = array_merge([
                 'professor_id' => $pid,
-                'nome'         => (string) $p->nome_completo,
-                'nuit'         => (string) ($p->nuit ?? ''),
+                'nome'         => (string) $c['nome'],
+                'nuit'         => (string) ($c['nuit'] ?? ''),
                 'processado'   => $saved ? 1 : 0,
             ], $calc);
             $out['total_liquido'] += (float) $calc['liquido'];
@@ -357,9 +348,13 @@ if (!function_exists('sige_rh_salario_mapa_mes')) {
               ORDER BY p.nome_completo ASC, s.id ASC",
             $escola_id, $ano, $mes
         ));
+        // Só colaboradores que SÃO staff canónico da escola (mesma lista da Equipa);
+        // ignora recibos antigos de linhas órfãs / do admin WP real. Só filtra
+        // quando o roster canónico consegue correr (contexto WordPress real).
+        $validos = (function_exists('get_users') && function_exists('sige_rh_colaboradores_ids_escola'))
+            ? sige_rh_colaboradores_ids_escola($escola_id) : null;
         foreach ((array) $rows as $r) {
-            // Excluir o administrador WP real (utilizador de manutenção do sistema).
-            if (function_exists('sige_rh_professor_e_admin_sistema') && sige_rh_professor_e_admin_sistema($r->email ?? '')) continue;
+            if (is_array($validos) && !isset($validos[(int) $r->professor_id])) continue;
             $inss = (float) $r->inss; $inss_emp = (float) $r->inss_empregador;
             $out['itens'][] = [
                 'professor_id'    => (int) $r->professor_id,

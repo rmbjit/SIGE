@@ -20,6 +20,27 @@ if (!function_exists('add_filter')) { function add_filter(...$a) {} }
 if (!function_exists('current_time')) { function current_time($t) { return '2026-07-06 09:00:00'; } }
 if (!function_exists('update_option')) { function update_option(...$a) { return true; } }
 
+// Conjunto canonico de staff (mesma fonte da aba Equipa): utilizadores 5 (Ana) e
+// 99 (Coberto), ligados as fichas de RH com o mesmo id via sige_professor_id.
+if (!function_exists('get_users')) {
+    function get_users($args = []) {
+        $ana = (object) ['ID' => 5,  'user_email' => 'ana@escola.mz',     'display_name' => 'Ana'];
+        $cob = (object) ['ID' => 99, 'user_email' => 'coberto@escola.mz', 'display_name' => 'Coberto'];
+        if (isset($args['include'])) {
+            $inc = array_map('intval', (array) $args['include']); $r = [];
+            if (in_array(5, $inc, true))  $r[] = $ana;
+            if (in_array(99, $inc, true)) $r[] = $cob;
+            return $r;
+        }
+        if (isset($args['meta_key'])) return [];
+        if (isset($args['fields']) && is_array($args['fields'])) return [$ana, $cob];
+        return [];
+    }
+}
+if (!function_exists('sige_staff_active_profile_user_ids')) { function sige_staff_active_profile_user_ids($e) { return [5, 99]; } }
+if (!function_exists('get_user_meta')) { function get_user_meta($uid, $key, $single = false) { return $key === 'sige_professor_id' ? (int) $uid : ''; } }
+if (!function_exists('sige_is_real_wp_admin_user')) { function sige_is_real_wp_admin_user($uid = null) { return false; } }
+
 require_once $root . '/includes/rh-assiduidade.php';
 
 // ── (1) PURA ─────────────────────────────────────────────────────────────────
@@ -42,7 +63,10 @@ class _SmokeWpdbAssi {
     }
     public function get_results($q) {
         if (strpos($q, 'sige_rh_ausencias') !== false) return [ (object) ['professor_id' => 99, 'tipo' => 'ferias'] ];
-        if (strpos($q, 'sige_professores') !== false) return [ (object) ['id' => 5, 'nome_completo' => 'Ana'], (object) ['id' => 99, 'nome_completo' => 'Coberto'] ];
+        if (strpos($q, 'sige_professores') !== false) return [
+            (object) ['id' => 5,  'nome_completo' => 'Ana',     'email' => 'ana@escola.mz',     'nuit' => '123', 'salario_base' => 30000, 'subsidio' => 0, 'status_ativo' => 1],
+            (object) ['id' => 99, 'nome_completo' => 'Coberto', 'email' => 'coberto@escola.mz', 'nuit' => '999', 'salario_base' => 20000, 'subsidio' => 0, 'status_ativo' => 1],
+        ];
         return []; // registos do dia / resumo
     }
     public function insert($t, $d) { $this->inserts++; return 1; }

@@ -57,7 +57,7 @@ $boot   = (string) @file_get_contents($root . '/sige-softgenial.php');
 $build  = json_decode((string) @file_get_contents($root . '/BUILD.json'), true);
 
 _p($fails, strpos($incl, "wp_ajax_sige_rh_salario_mapa") !== false, 'AJAX do mapa registado');
-_p($fails, strpos($incl, "SELECT id, nome_completo, nuit, salario_base, subsidio") !== false, 'Preview inclui NUIT');
+_p($fails, strpos($incl, "'nuit'         => (string) (\$c['nuit']") !== false, 'Preview inclui NUIT (da lista canonica)');
 _p($fails, strpos($equipe, 'data-sige-act="sgSalMapa" data-sige-arg="inss"') !== false, 'Botão Mapa INSS presente');
 _p($fails, strpos($equipe, 'data-sige-act="sgSalMapa" data-sige-arg="irps"') !== false, 'Botão Mapa IRPS presente');
 _p($fails, strpos($equipe, 'function sgSalMapa(') !== false && strpos($equipe, 'function sgSalMapaDoc(') !== false, 'Funções do mapa presentes');
