@@ -2097,21 +2097,24 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 
 /* v12.11.9.5 - Equipa: failsafe anti-regressão para modais dentro do App Shell.
    O CSS global do App Shell esconde .sige-modal por defeito; este módulo abre por classe
-   e por inline style para garantir que Novo/Editar/Reset/Remover/Desactivar respondem ao clique. */
+   e por inline style para garantir que Novo/Editar/Reset/Remover/Desactivar respondem ao clique.
+   [v12.37.2] A visibilidade passa a depender SÓ de .active (aberto pelas funções
+   open/close, que a gerem atomicamente). Antes dependia também de aria-hidden;
+   se este dessincronizasse de .active, um modal fechado podia ficar VISÍVEL e
+   invisível (opacity 0) mas a CAPTURAR todos os cliques -> a página parecia
+   congelada até dar refresh. Invariante clara agora: com .active mostra; sem
+   .active esconde (e não captura cliques). */
 body.sige-admin-app #box-equipa.sige-modal.active,
-body.sige-admin-app #box-equipa.sige-modal[aria-hidden="false"],
 body.sige-admin-app #sige-rh-confirm.sige-modal.active,
-body.sige-admin-app #sige-rh-confirm.sige-modal[aria-hidden="false"],
-body.sige-admin-app #box-ficha.sige-modal.active,
-body.sige-admin-app #box-ficha.sige-modal[aria-hidden="false"]{
+body.sige-admin-app #box-ficha.sige-modal.active{
     display:flex!important;
     opacity:1!important;
     visibility:visible!important;
     pointer-events:auto!important;
 }
-body.sige-admin-app #box-equipa.sige-modal:not(.active)[aria-hidden="true"],
-body.sige-admin-app #sige-rh-confirm.sige-modal:not(.active)[aria-hidden="true"],
-body.sige-admin-app #box-ficha.sige-modal:not(.active)[aria-hidden="true"]{
+body.sige-admin-app #box-equipa.sige-modal:not(.active),
+body.sige-admin-app #sige-rh-confirm.sige-modal:not(.active),
+body.sige-admin-app #box-ficha.sige-modal:not(.active){
     display:none!important;
     opacity:0!important;
     visibility:hidden!important;
@@ -2384,7 +2387,9 @@ body.sige-admin-app #box-ficha.sige-modal:not(.active)[aria-hidden="true"]{
                         
                         $cracha_data = htmlspecialchars(json_encode([
                             'nome' => $s->display_name, 
-                            'cargo' => ((user_can($s->ID, 'sige_professor') || user_can($s->ID, 'sige_educador')) ? 'DOCENTE' : 'STAFF'),
+                            // [v12.37.2] Cargo REAL do perfil SIGE actual (mesma fonte da lista/badge),
+                            // em vez do genérico "DOCENTE/STAFF". Ex.: Direcção, Gestor RH, Secretaria.
+                            'cargo' => sige_hr_role_label($role_slug),
                             // Minimização de dados: NUIT não fica embutido no DOM dos crachás.
                             'foto' => $foto_url, 'nuit' => '', 'validade' => $validade_show,
                             'escola' => $escola->nome_escola, 'logo' => $logo_final
@@ -3956,11 +3961,12 @@ document.getElementById('box-equipa').addEventListener('click', e => {
 // (quando há um modal aberto, sai logo).
 document.addEventListener('click', function () {
     if (document.querySelector('.sige-modal.active, .is-open')) return;
-    var orfaos = document.querySelectorAll('.sige-modal[aria-hidden="false"]');
+    // Nenhum modal aberto: reconciliar quaisquer modais sem .active que tenham
+    // ficado com aria-hidden dessincronizado e garantir que estão escondidos.
+    var orfaos = document.querySelectorAll('.sige-modal:not(.active)[aria-hidden="false"]');
     if (orfaos.length) {
         Array.prototype.forEach.call(orfaos, function (m) {
             m.setAttribute('aria-hidden', 'true');
-            m.classList.remove('active');
             m.style.display = 'none';
             m.style.opacity = '0';
             m.style.visibility = 'hidden';

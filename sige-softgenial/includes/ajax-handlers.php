@@ -329,7 +329,7 @@ if (!function_exists('sige_ajax_equipe_sanitize_image_url')) {
         // Extensão de imagem permitida (ignora querystring/fragmento).
         $path = (string) wp_parse_url($url, PHP_URL_PATH);
         $ext  = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'svg', 'gif'], true)) {
+        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'svg', 'gif', 'avif'], true)) {
             return '';
         }
 

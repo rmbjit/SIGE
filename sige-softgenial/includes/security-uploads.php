@@ -412,4 +412,16 @@ if (function_exists('add_action')) {
 }
 if (function_exists('add_filter')) {
     add_filter('wp_handle_upload_prefilter', 'sige_uploads_prefilter');
+
+    // [v12.37.2] Permitir imagens AVIF na Biblioteca de Média. O WordPress só
+    // passou a aceitar AVIF por omissão na versão 6.5; em versões anteriores (ou
+    // consoante a configuração) o upload era recusado com "tipo não permitido".
+    // Adicionamos o mime de forma idempotente, sem remover nada do que já existe.
+    // O prefilter de segurança acima continua a validar o conteúdo real.
+    add_filter('upload_mimes', function ($mimes) {
+        if (is_array($mimes) && empty($mimes['avif'])) {
+            $mimes['avif'] = 'image/avif';
+        }
+        return $mimes;
+    });
 }

@@ -1,0 +1,49 @@
+SIGE SoftGenial v12.37.2 - Congelamento (causa-raiz), fotos AVIF e cargo real no crachá
+Data: 2026-07-01
+Tipo: correcção de bugs (seguimento da 12.37.1). Sem schema, sem novo endpoint.
+
+PEDIDO
+- "O congelamento dos botões ainda continua, sobretudo depois de gravar algo:
+  não aceita clicar, tem de se clicar outra vez e só depois funciona."
+- "As fotos de perfil só aceitam PNG e JPG; um ficheiro AVIF não é aceite."
+- "O crachá não respeita o cargo real: mostra um resumo (staff/professor) em vez
+  do nome verdadeiro da direcção/função/perfil que o sistema dá à pessoa."
+
+BUG 1 - CONGELAMENTO (agora a causa-raiz)
+- A 12.37.1 já tinha uma auto-recuperação, mas tratava o sintoma (recuperava no
+  clique seguinte - daí o "clicar outra vez").
+- CAUSA-RAIZ: a regra CSS "failsafe" de exibição dos modais
+  (#box-equipa/#sige-rh-confirm/#box-ficha) fazia a visibilidade depender de
+  .active OU [aria-hidden="false"]. Se o aria-hidden dessincronizasse de .active
+  (podia acontecer ao gravar/fechar), um modal FECHADO ficava display:flex +
+  pointer-events:auto mas opacity:0 -> um overlay INVISÍVEL a capturar TODOS os
+  cliques, e a página parecia congelada até ao refresh.
+- CORRECÇÃO: a visibilidade passa a depender SÓ de .active (gerido de forma
+  atómica pelas funções de abrir/fechar). Invariante: com .active mostra; sem
+  .active esconde e NÃO captura cliques. Elimina a classe do bug. A
+  auto-recuperação da 12.37.1 fica como reforço (agora coerente com .active).
+
+BUG 2 - FOTOS AVIF
+- includes/security-uploads.php: novo filtro upload_mimes (avif => image/avif).
+  O WordPress só aceita AVIF por omissão desde a 6.5; o filtro garante o suporte
+  de forma idempotente. O prefilter de segurança continua a validar o conteúdo.
+- includes/ajax-handlers.php: 'avif' adicionado às extensões aceites pelo
+  validador do URL da foto (sige_ajax_equipe_sanitize_image_url).
+
+BUG 3 - CRACHÁ COM O CARGO REAL
+- admin/hr/equipe-view.php: o crachá deixa de usar o genérico "DOCENTE/STAFF" e
+  passa a usar sige_hr_role_label($role_slug) - o rótulo do PERFIL SIGE actual
+  (Direcção, Gestor RH, Dir. Pedagógico, Secretaria, Tesouraria, etc.), a mesma
+  fonte da lista e do "badge" de cargo.
+
+VALIDAÇÃO
+- php -l (view + ajax-handlers + security-uploads) OK; node --check (JS) OK.
+- Gates: design-tokens 1857 (sem regressão), baseline-preservation OK,
+  typography OK.
+- Novo smoke tools/smoke-fix-freeze-avif-cracha-v12-37-2.php.
+- Smokes anteriores (fotos/botões, ficha, impressão, crachá) sem regressão.
+
+FRONTEIRA
+- Sem alterar fórmulas, schema, permissões reais nem ficheiros protegidos.
+  O upload_mimes passa a permitir AVIF (imagem legítima), mantendo a validação
+  de conteúdo do prefilter de segurança.
