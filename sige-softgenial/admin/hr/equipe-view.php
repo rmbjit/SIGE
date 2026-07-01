@@ -3948,6 +3948,33 @@ document.getElementById('box-equipa').addEventListener('click', e => {
     if (ficha) { ficha.addEventListener('click', function (e) { if (e.target === ficha) fecharFicha(); }); }
 })();
 
+// [v12.37.1] Auto-recuperação anti-"congelamento". Se um handler falhar a meio,
+// um modal podia ficar visível/sem estado a capturar TODOS os cliques, parecendo
+// a página congelada até dar refresh. Em fase de CAPTURA (corre antes de qualquer
+// overlay), se NENHUM modal está legitimamente aberto (sem .active e sem .is-open),
+// fechamos overlays órfãos e libertamos o body. É inócuo no funcionamento normal
+// (quando há um modal aberto, sai logo).
+document.addEventListener('click', function () {
+    if (document.querySelector('.sige-modal.active, .is-open')) return;
+    var orfaos = document.querySelectorAll('.sige-modal[aria-hidden="false"]');
+    if (orfaos.length) {
+        Array.prototype.forEach.call(orfaos, function (m) {
+            m.setAttribute('aria-hidden', 'true');
+            m.classList.remove('active');
+            m.style.display = 'none';
+            m.style.opacity = '0';
+            m.style.visibility = 'hidden';
+            m.style.pointerEvents = 'none';
+        });
+    }
+    if (document.body.classList.contains('sige-rh-modal-open')) {
+        document.body.classList.remove('sige-rh-modal-open');
+    }
+    if (document.body.style.overflow === 'hidden') {
+        document.body.style.overflow = '';
+    }
+}, true);
+
 // v12.11.9.5 - Failsafe: tornar funções explicitamente globais para onclick inline e fluxos do App Shell.
 // ========================================
 // [v12.36.0] FICHA DO COLABORADOR (perfil 360, só leitura)

@@ -1,0 +1,45 @@
+SIGE SoftGenial v12.37.1 - Correcções: foto de perfil não gravava + botões congelavam
+Data: 2026-07-01
+Tipo: correcção de bugs. Sem schema, sem novo endpoint, sem ficheiros protegidos.
+
+PEDIDO
+- "Quando clico, às vezes fica congelado e só depois do refresh volta a
+  funcionar." + "quando carrego fotos para o perfil dos funcionários a foto
+  nunca aparece depois de gravada."
+
+BUG 1 - FOTO DE PERFIL NÃO APARECIA DEPOIS DE GRAVADA
+- Causa-raiz: o validador includes/ajax-handlers.php::sige_ajax_equipe_sanitize_image_url
+  exigia que o HOST do URL da foto fosse EXACTAMENTE igual ao de home_url().
+  Em instalações reais (CDN para uploads, www vs sem-www, proxy do CloudPanel)
+  os hosts diferem, o URL era silenciosamente descartado e foto_perfil gravava
+  vazio - por isso, mesmo após o refresh automático, a foto nunca aparecia.
+- Correcção (robusta e na mesma segura): aceita o URL quando
+    (a) corresponde a um anexo REAL da biblioteca (attachment_url_to_postid); ou
+    (b) está dentro do directório de uploads desta instalação (comparado pelo
+        CAMINHO, tolerante a diferenças de host); ou
+    (c) - recurso - tem o mesmo host do site.
+  Continua a recusar URLs externos arbitrários e a exigir extensão de imagem.
+
+BUG 2 - BOTÕES QUE "CONGELAVAM" ATÉ DAR REFRESH
+- Blindagem em duas camadas:
+  (a) assets/sige-ui.js: o despachante data-sige-act passa a invocar os handlers
+      dentro de try/catch. Uma excepção num handler já não aborta o pipeline de
+      eventos nem deixa a interface a meio; fica registada na consola.
+  (b) admin/hr/equipe-view.php: auto-recuperação em fase de CAPTURA. Se nenhum
+      modal está legitimamente aberto (.active / .is-open) mas ficou um overlay
+      órfão visível (a capturar todos os cliques) ou o body ficou bloqueado
+      (sige-rh-modal-open / overflow:hidden), tudo é libertado no clique
+      seguinte. Inócuo no funcionamento normal (sai imediatamente quando há um
+      modal aberto).
+
+VALIDAÇÃO
+- php -l (ajax-handlers + view) OK; node --check (sige-ui.js + bloco JS) OK.
+- Gates: design-tokens 1857 (sem regressão), baseline-preservation OK,
+  typography OK.
+- Novo smoke tools/smoke-fix-foto-botoes-v12-37-1.php.
+- Smokes anteriores (ficha/impressão/relatórios/alertas) sem regressão.
+
+FRONTEIRA
+- Sem alterar fórmulas, schema, permissões reais nem ficheiros protegidos.
+  A validação da foto ficou mais permissiva para URLs LEGÍTIMOS (anexos/uploads)
+  e continua a bloquear origens externas.

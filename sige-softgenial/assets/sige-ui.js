@@ -240,19 +240,27 @@
         // [data-sige-prevent]: impede a accao por omissao (substitui o "return false"
         // de onclick em <a>, por exemplo abrir o recibo numa janela sem navegar).
         if (alvo.hasAttribute('data-sige-prevent')) { ev.preventDefault(); }
+        // Resolver os argumentos com a mesma semântica de sempre.
+        var args;
         var argsJson = alvo.getAttribute('data-sige-args');
         if (argsJson !== null) {
-            var args;
             try { args = JSON.parse(argsJson); } catch (e) { return; }
             if (!Array.isArray(args)) { args = [args]; }
             if (alvo.hasAttribute('data-sige-self')) { args = args.concat([alvo]); }
-            fn.apply(null, args);
-            return;
+        } else {
+            var arg = alvo.getAttribute('data-sige-arg');
+            if (arg !== null) { args = [arg]; }
+            else if (alvo.hasAttribute('data-sige-noargs')) { args = []; }
+            else { args = [alvo]; }
         }
-        var arg = alvo.getAttribute('data-sige-arg');
-        if (arg !== null) { fn(arg); }
-        else if (alvo.hasAttribute('data-sige-noargs')) { fn(); }
-        else { fn(alvo); }
+        // [v12.37.1] Blindagem: um erro num handler nunca deve "congelar" a UI
+        // (deixar o pipeline de eventos a meio). Capturamos e registamos, em vez
+        // de deixar a excepção propagar e abortar o resto da interacção.
+        try {
+            fn.apply(null, args);
+        } catch (err) {
+            if (window.console && console.error) { console.error('[sige] erro na acção "' + accao + '":', err); }
+        }
     });
 
     // Submissao por TECLADO (Enter num campo) nao passa pelo clique: este

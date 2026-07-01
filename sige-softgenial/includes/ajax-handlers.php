@@ -325,17 +325,41 @@ if (!function_exists('sige_ajax_equipe_sanitize_image_url')) {
     function sige_ajax_equipe_sanitize_image_url($url): string {
         $url = esc_url_raw(wp_unslash((string)$url));
         if ($url === '') return '';
-        $path = (string)parse_url($url, PHP_URL_PATH);
-        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-        if (!in_array($ext, ['jpg','jpeg','png','webp','svg'], true)) {
+
+        // Extensão de imagem permitida (ignora querystring/fragmento).
+        $path = (string) wp_parse_url($url, PHP_URL_PATH);
+        $ext  = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'svg', 'gif'], true)) {
             return '';
         }
+
+        // [v12.37.1] Validação robusta da origem. A versão anterior exigia que o
+        // host do URL fosse EXACTAMENTE igual ao de home_url(); em instalações
+        // reais (CDN para uploads, www vs sem-www, proxy do CloudPanel) os hosts
+        // diferem e a foto era silenciosamente descartada. Agora aceitamos o URL
+        // quando: (1) corresponde a um anexo real da biblioteca de média; ou
+        // (2) está dentro do directório de uploads desta instalação (comparado
+        // pelo CAMINHO, tolerante a diferenças de host); ou (3) — recurso — tem o
+        // mesmo host do site. Continua a recusar URLs externos arbitrários.
+        if (function_exists('attachment_url_to_postid') && attachment_url_to_postid($url) > 0) {
+            return $url;
+        }
+
+        $uploads = function_exists('wp_get_upload_dir') ? wp_get_upload_dir() : [];
+        if (!empty($uploads['baseurl'])) {
+            $base_path = (string) wp_parse_url($uploads['baseurl'], PHP_URL_PATH);
+            if ($base_path !== '' && strpos($path, $base_path) === 0) {
+                return $url;
+            }
+        }
+
         $site_host = wp_parse_url(home_url(), PHP_URL_HOST);
         $url_host  = wp_parse_url($url, PHP_URL_HOST);
-        if ($url_host && $site_host && strtolower($url_host) !== strtolower($site_host)) {
-            return '';
+        if ($url_host && $site_host && strtolower($url_host) === strtolower($site_host)) {
+            return $url;
         }
-        return $url;
+
+        return '';
     }
 }
 
