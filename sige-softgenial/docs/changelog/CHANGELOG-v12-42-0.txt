@@ -1,6 +1,17 @@
-SIGE SoftGenial v12.42.0 - RH: super admin fora de Assiduidade/Salários + correcção rigorosa do congelamento
+SIGE SoftGenial v12.42.1 - RH: super admin fora (por email, inclui multisite) + Ausências + correcção rigorosa do congelamento
 Data: 2026-07-01
 Tipo: correcção. Sem schema novo, sem permissões novas, sem tocar em ficheiros protegidos.
+
+NOTA v12.42.1 (correcção do v12.42.0)
+- No v12.42.0 o super admin AINDA aparecia. Causa: a exclusão enumerava os
+  admins por role (get_users administrator/super_admin), o que DEIXAVA PASSAR o
+  super admin de MULTISITE (guardado numa opção do site, muitas vezes SEM a role
+  'administrator'). Agora sige_rh_professor_e_admin_sistema(email) resolve o
+  utilizador WP pelo EMAIL (get_user_by) e delega em sige_is_real_wp_admin_user()
+  — EXACTAMENTE o mesmo critério que a aba Equipa já usa (e que exclui bem).
+- A exclusão passa também a aplicar-se ao DROPDOWN de colaborador da aba
+  Ausências (não só Assiduidade/Salários/mapas).
+- O anti-congelamento mantém-se igual ao v12.42.0.
 
 O QUE FAZ
 (1) SUPER ADMIN FORA DA ESCOLA
@@ -22,16 +33,19 @@ O QUE FAZ
 
 ENGENHARIA
 - includes/rh-assiduidade.php:
-    * NOVO helper único sige_rh_emails_admin_sistema() — emails (minúsculas) dos
-      administradores WP reais (get_users administrator/super_admin filtrados por
-      sige_is_real_wp_admin_user; os admins são globais, logo cache estático no
-      pedido) + sige_rh_professor_e_admin_sistema(email).
+    * NOVO helper único sige_rh_professor_e_admin_sistema(email) — resolve o
+      utilizador WP pelo EMAIL (get_user_by) e delega em
+      sige_is_real_wp_admin_user(); é o MESMO critério da aba Equipa, pelo que
+      apanha também o super admin de MULTISITE. Cache por email no pedido. A
+      ligação é pelo email por o sige_professores não ter user_id.
     * sige_rh_assiduidade_grelha passa a seleccionar o email e a saltar a linha
-      cujo email pertence ao admin WP real. A ligação é feita pelo email, que é a
-      chave usada em todo o roster RH (sige_professores não tem user_id).
+      cujo email pertence ao admin WP real.
 - includes/rh-salarios.php:
     * sige_rh_salario_preview e sige_rh_salario_mapa_mes aplicam a MESMA exclusão
       (o preview passa a seleccionar email; o mapa junta p.email para excluir).
+- admin/hr/equipe-view.php:
+    * o DROPDOWN de colaborador da aba Ausências (lista $_profs_raw) aplica agora
+      a mesma exclusão do admin WP real.
 - admin/hr/equipe-view.php (anti-congelamento):
     * NOVO sigeRhModalAberto() + sigeRhReconciliarShell() — fonte de verdade
       única: o estado do body é derivado de "existe algum modal aberto?"

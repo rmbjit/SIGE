@@ -113,42 +113,33 @@ add_action('admin_init', 'sige_rh_assiduidade_migrar', 8);
  * CAMADA DE DADOS (tenant-scoped)
  * ========================================================================== */
 
-if (!function_exists('sige_rh_emails_admin_sistema')) {
-    /**
-     * Emails (em minúsculas) dos administradores WordPress REAIS — o "super
-     * admin" de manutenção do sistema, que NÃO faz parte da escola. Serve para
-     * os excluir das listagens de colaboradores (assiduidade, salários), tal
-     * como já são excluídos da própria aba Equipa.
-     *
-     * Os admins são globais (não têm tenant), por isso o resultado é estático
-     * durante o pedido. A ligação a uma linha de sige_professores é feita pelo
-     * email, que é a chave usada em todo o roster RH.
-     *
-     * @return string[] emails em minúsculas (pode ser vazio)
-     */
-    function sige_rh_emails_admin_sistema(): array {
-        static $cache = null;
-        if (is_array($cache)) return $cache;
-        $cache = [];
-        if (!function_exists('get_users') || !function_exists('sige_is_real_wp_admin_user')) return $cache;
-        $admins = get_users(['role__in' => ['administrator', 'super_admin'], 'fields' => ['ID', 'user_email']]);
-        foreach ((array) $admins as $u) {
-            if (!sige_is_real_wp_admin_user((int) $u->ID)) continue;
-            $mail = strtolower(trim((string) $u->user_email));
-            if ($mail !== '') $cache[] = $mail;
-        }
-        $cache = array_values(array_unique($cache));
-        return $cache;
-    }
-}
-
 if (!function_exists('sige_rh_professor_e_admin_sistema')) {
-    /** Verdadeiro se a linha de colaborador pertence ao administrador WP real. */
+    /**
+     * Verdadeiro se a linha de colaborador (sige_professores) pertence ao
+     * administrador WordPress REAL — o "super admin" de manutenção do sistema,
+     * que NÃO faz parte da escola. Serve para o excluir das listagens de
+     * colaboradores (ausências, assiduidade, salários e mapas fiscais), tal como
+     * já é excluído da própria aba Equipa.
+     *
+     * IMPORTANTE: usa EXACTAMENTE o mesmo critério da aba Equipa — resolve o
+     * utilizador WP pelo email (a chave de ligação do roster RH, pois
+     * sige_professores não tem user_id) e delega em sige_is_real_wp_admin_user().
+     * Assim apanha também o super admin de MULTISITE (guardado numa opção do
+     * site, muitas vezes SEM a role 'administrator'), que uma enumeração por role
+     * deixaria passar. Cache por email durante o pedido.
+     */
     function sige_rh_professor_e_admin_sistema($email_professor): bool {
+        static $cache = [];
         $mail = strtolower(trim((string) $email_professor));
         if ($mail === '') return false;
-        $excluir = sige_rh_emails_admin_sistema();
-        return !empty($excluir) && in_array($mail, $excluir, true);
+        if (array_key_exists($mail, $cache)) return $cache[$mail];
+        $is_admin = false;
+        if (function_exists('get_user_by') && function_exists('sige_is_real_wp_admin_user')) {
+            $u = get_user_by('email', $mail);
+            if ($u && isset($u->ID)) $is_admin = sige_is_real_wp_admin_user((int) $u->ID);
+        }
+        $cache[$mail] = $is_admin;
+        return $is_admin;
     }
 }
 

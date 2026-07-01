@@ -1,13 +1,21 @@
-# DEPLOY - SIGE SoftGenial v12.42.0
+# DEPLOY - SIGE SoftGenial v12.42.1
 
-**RH: super admin fora de Assiduidade/Salários + correcção rigorosa do congelamento**
+**RH: super admin fora (por email, inclui multisite) + Ausências + correcção rigorosa do congelamento**
 Data: 2026-07-01 - Tipo: correcção. Sem schema, sem permissões novas, sem protegidos.
+
+> **v12.42.1 corrige o v12.42.0:** o super admin ainda aparecia porque a versão
+> anterior enumerava admins por *role* e deixava passar o super admin de
+> **multisite**. Agora a exclusão usa o mesmo critério por **email** da aba
+> Equipa (que já exclui bem) e cobre também o **dropdown de Ausências**.
 
 ## O que muda
 - **Super admin fora da escola.** O administrador WordPress real (utilizador de
   manutenção do sistema) deixa de aparecer nas listagens de colaboradores das
-  abas **Assiduidade** e **Salários** — e, por consequência, nos **mapas
-  fiscais** (INSS/IRPS). Continua excluído da aba Equipa como antes.
+  abas **Ausências** (dropdown), **Assiduidade** e **Salários** — e, por
+  consequência, nos **mapas fiscais** (INSS/IRPS). Continua excluído da aba
+  Equipa como antes. A exclusão resolve o utilizador pelo email e reutiliza o
+  critério `sige_is_real_wp_admin_user()`, apanhando também super admins de
+  multisite.
 - **Congelamento depois de gravar (corrigido).** O estado do "shell" (bloqueio
   de scroll + elevação do conteúdo enquanto há modal) passa a ter uma fonte de
   verdade única e a ser reconciliado ANTES do clique — sem "clique desperdiçado".

@@ -3356,6 +3356,8 @@ body.sige-admin-app #box-salario-cfg.sige-modal:not(.active){
                             $__pid = (int) $__p->id;
                             if ($__pid <= 0 || isset($__aus_seen[$__pid])) continue;
                             $__aus_seen[$__pid] = true;
+                            // Excluir o administrador WP real (utilizador de manutenção do sistema).
+                            if (function_exists('sige_rh_professor_e_admin_sistema') && sige_rh_professor_e_admin_sistema($__p->email ?? '')) continue;
                             $__nome = trim((string) ($__p->nome_completo ?? ''));
                             if ($__nome === '') continue;
                             echo '<option value="' . (int) $__pid . '">' . esc_html($__nome) . '</option>';
