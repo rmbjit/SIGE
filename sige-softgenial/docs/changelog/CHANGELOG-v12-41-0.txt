@@ -1,0 +1,42 @@
+SIGE SoftGenial v12.41.0 - RH: relatórios fiscais (Mapa INSS/IRPS mensal) + recibo com NUIT
+Data: 2026-07-01
+Tipo: afinação do Processamento de Salário. Só leitura/agregação. Sem schema novo.
+
+O QUE FAZ
+- Na aba "Salários", dois novos botões geram documentos mensais para ENTREGA:
+    * "Mapa INSS" — Mapa de Contribuições (INSS): Nome, NUIT, Remuneração,
+      INSS 3% (trabalhador), INSS 4% (empregador), Total 7%, com totais.
+    * "Mapa IRPS" — Mapa de Retenção na Fonte: Nome, NUIT, Rendimento, IRPS
+      retido, com totais.
+- Ambos usam os recibos JÁ PROCESSADOS do mês; avisa se o mês ainda não foi
+  processado.
+- O recibo de vencimento passa a mostrar o NUIT do colaborador.
+
+ENGENHARIA
+- includes/rh-salarios.php:
+    * sige_rh_salario_mapa_mes(escola, ano, mes) — junta os recibos processados
+      com nome + NUIT (sige_professores) e devolve linhas + totais (bruto, INSS
+      3%, INSS empregador 4%, INSS total 7%, IRPS, líquido). Só leitura.
+    * AJAX sige_rh_salario_mapa (gated por gestão, nonce, tenant-scope,
+      auditoria). O preview passa a incluir o NUIT.
+- admin/hr/equipe-view.php: botões + JS que constrói os documentos como
+  DOCUMENTOS AUTÓNOMOS com tokens lidos da página viva (zero cores mágicas),
+  reutilizando sgRhPrintWindow. Recibo com NUIT.
+- Sem ficheiro novo, sem tabela nova, sem tocar em ficheiros protegidos.
+
+VALIDAÇÃO
+- php -l + node --check OK.
+- Gates: design-tokens 1857 (sem regressão), baseline-preservation OK,
+  typography OK.
+- Novo smoke tools/smoke-rh-mapas-fiscais-v12-41-0.php (mapa com $wpdb stub:
+  totais 3%/4%/7% correctos + ligação + documento sem cores mágicas).
+- Render verificado (Chromium) com a função real: Mapa de INSS com colunas e
+  totais.
+
+FRONTEIRA
+- Sem alterar fórmulas, schema, permissões reais nem ficheiros protegidos.
+
+NOTA
+- Os mapas reflectem o que foi PROCESSADO (aba Salários → Processar mês). As
+  taxas continuam a vir da configuração editável ("Configurar impostos"), que a
+  escola deve manter alinhada com a lei em vigor.

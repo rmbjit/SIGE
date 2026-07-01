@@ -2996,6 +2996,14 @@ body.sige-admin-app #box-salario-cfg.sige-modal:not(.active){
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                     Configurar impostos
                 </button>
+                <button type="button" class="sg-v2-btn sg-v2-btn-secondary" data-sige-act="sgSalMapa" data-sige-arg="inss">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    Mapa INSS
+                </button>
+                <button type="button" class="sg-v2-btn sg-v2-btn-secondary" data-sige-act="sgSalMapa" data-sige-arg="irps">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    Mapa IRPS
+                </button>
                 <button type="button" class="sg-v2-btn sg-v2-btn-primary" data-sige-act="sgSalProcessar" data-sige-noargs>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
                     Processar mês
@@ -5002,7 +5010,7 @@ function sgSalRecibo(a) {
         + '@media print{body{padding:0;}@page{margin:15mm;}}';
     html += '</style></head><body><div class="doc">';
     html += '<div class="hd"><div><div class="t">Recibo de Vencimento</div><div class="s">' + sgFichaEsc((SG_MESES[p.mes] || '') + ' de ' + p.ano) + '</div></div><div class="esc">' + sgFichaEsc(escola) + '</div></div>';
-    html += '<div class="who">' + sgFichaEsc(a.nome || 'Colaborador') + '</div>';
+    html += '<div class="who">' + sgFichaEsc(a.nome || 'Colaborador') + (a.nuit ? ' <span style="font-size:11px;font-weight:600;color:var(--color-slate-500)">· NUIT ' + sgFichaEsc(a.nuit) + '</span>' : '') + '</div>';
     html += '<div class="box">';
     html += sgSalReciboLinha('Vencimento base', sgSalMoney(a.salario_base));
     html += sgSalReciboLinha('Subsídios', sgSalMoney(a.subsidio));
@@ -5020,6 +5028,62 @@ function sgSalRecibo(a) {
     if (!w) { showToast('Pop-up bloqueado', 'Permita pop-ups para imprimir o recibo.', 'warning'); return; }
     try { w.document.write('<!doctype html><meta charset="utf-8"><title>A preparar…</title><body style="font:14px sans-serif;padding:20px">A preparar o recibo…</body>'); } catch (e) {}
     sgRhPrintWindow(w, html);
+}
+// ----- Mapas fiscais mensais (INSS / IRPS) para entrega -----
+function sgSalMapaDoc(tipo, d, p) {
+    var escola = (window.sigeEquipeAjax && sigeEquipeAjax.escola) || '';
+    var n = sgRhLiveNonce(); var natt = n ? ' nonce="' + sgFichaEsc(n) + '"' : '';
+    var isInss = (tipo === 'inss');
+    var titulo = isInss ? 'Mapa de Contribuições — INSS' : 'Mapa de Retenção na Fonte — IRPS';
+    var t = d.totais || {};
+    var head, body = '', foot;
+    if (isInss) {
+        head = '<tr><th class="l">#</th><th class="l">Colaborador</th><th class="l">NUIT</th><th>Remuneração</th><th>INSS 3%</th><th>INSS 4%</th><th>Total 7%</th></tr>';
+        for (var i = 0; i < d.itens.length; i++) { var a = d.itens[i];
+            body += '<tr><td class="l">' + (i + 1) + '</td><td class="l">' + sgFichaEsc(a.nome || '') + '</td><td class="l">' + sgFichaEsc(a.nuit || '—') + '</td><td>' + sgSalMoney(a.bruto) + '</td><td>' + sgSalMoney(a.inss) + '</td><td>' + sgSalMoney(a.inss_empregador) + '</td><td class="b">' + sgSalMoney(a.inss_total) + '</td></tr>';
+        }
+        foot = '<tr class="ft"><td class="l" colspan="3">Totais</td><td>' + sgSalMoney(t.bruto) + '</td><td>' + sgSalMoney(t.inss) + '</td><td>' + sgSalMoney(t.inss_empregador) + '</td><td class="b">' + sgSalMoney(t.inss_total) + '</td></tr>';
+    } else {
+        head = '<tr><th class="l">#</th><th class="l">Colaborador</th><th class="l">NUIT</th><th>Rendimento</th><th>IRPS retido</th></tr>';
+        for (var j = 0; j < d.itens.length; j++) { var b2 = d.itens[j];
+            body += '<tr><td class="l">' + (j + 1) + '</td><td class="l">' + sgFichaEsc(b2.nome || '') + '</td><td class="l">' + sgFichaEsc(b2.nuit || '—') + '</td><td>' + sgSalMoney(b2.bruto) + '</td><td class="b">' + sgSalMoney(b2.irps) + '</td></tr>';
+        }
+        foot = '<tr class="ft"><td class="l" colspan="3">Totais</td><td>' + sgSalMoney(t.bruto) + '</td><td class="b">' + sgSalMoney(t.irps) + '</td></tr>';
+    }
+    var html = '<!doctype html><html lang="pt"><head><meta charset="utf-8"><title>' + sgFichaEsc(titulo) + '</title><style' + natt + '>';
+    html += ':root{' + sgFichaTokenVars() + '}';
+    html += '*{box-sizing:border-box}body{font-family:"Segoe UI",Arial,sans-serif;color:var(--color-slate-800);margin:0;padding:28px;background:var(--color-white);}'
+        + '.doc{max-width:920px;margin:0 auto;}'
+        + '.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;border-bottom:3px solid var(--sg-theme-primary,var(--color-brand-600));padding-bottom:12px;margin-bottom:16px;}'
+        + '.hd .t{font-size:19px;font-weight:800;color:var(--color-black);letter-spacing:-.02em;}.hd .s{font-size:12px;color:var(--color-slate-500);margin-top:3px;}.hd .esc{font-size:13px;font-weight:700;color:var(--sg-theme-primary,var(--color-brand-700));text-align:right;max-width:260px;}'
+        + 'table{width:100%;border-collapse:collapse;font-size:12px;}'
+        + 'th{background:var(--color-ink-50);color:var(--color-slate-600);text-transform:uppercase;font-size:10px;letter-spacing:.04em;padding:7px 8px;text-align:right;border-bottom:1px solid var(--color-ink-100);}'
+        + 'td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--color-ink-50);}'
+        + 'th.l,td.l{text-align:left;}td.b{font-weight:800;color:var(--color-black);}'
+        + 'tr.ft td{border-top:2px solid var(--color-ink-100);background:var(--color-ink-50);font-weight:800;color:var(--color-black);}'
+        + '.ft2{margin-top:24px;padding-top:10px;border-top:1px solid var(--color-ink-100);font-size:10px;color:var(--color-slate-400);display:flex;justify-content:space-between;}'
+        + '.assin{margin-top:40px;font-size:11px;color:var(--color-slate-500);width:280px;text-align:center;border-top:1px solid var(--color-slate-400);padding-top:6px;}'
+        + '@media print{body{padding:0;}@page{margin:12mm landscape;}}';
+    html += '</style></head><body><div class="doc">';
+    html += '<div class="hd"><div><div class="t">' + sgFichaEsc(titulo) + '</div><div class="s">' + sgFichaEsc((SG_MESES[p.mes] || '') + ' de ' + p.ano + ' · ' + d.itens.length + ' colaborador(es)') + '</div></div><div class="esc">' + sgFichaEsc(escola) + '</div></div>';
+    html += '<table><thead>' + head + '</thead><tbody>' + body + '</tbody><tfoot>' + foot + '</tfoot></table>';
+    html += '<div class="assin">Responsável / carimbo</div>';
+    html += '<div class="ft2"><span>Documento gerado pelo SIGE SoftGenial</span><span>' + (isInss ? 'Entrega ao INSS' : 'Entrega à Autoridade Tributária') + '</span></div>';
+    html += '</div></body></html>';
+    return html;
+}
+function sgSalMapa(tipo) {
+    tipo = (tipo === 'irps') ? 'irps' : 'inss';
+    var p = sgSalPeriodo();
+    jQuery.post(sigeEquipeAjax.ajaxurl, { action: 'sige_rh_salario_mapa', _sige_nonce: sigeEquipeAjax.nonce, ano: p.ano, mes: p.mes }, function (res) {
+        if (!(res && res.success)) { showToast('Erro', (res && res.data) || 'Falha ao gerar o mapa.', 'error'); return; }
+        var d = res.data || {};
+        if (!d.itens || !d.itens.length) { showToast('Sem dados', 'Não há recibos processados em ' + (SG_MESES[p.mes] || '') + '. Processe o mês primeiro.', 'warning'); return; }
+        var w = window.open('', '', 'width=980,height=1000');
+        if (!w) { showToast('Pop-up bloqueado', 'Permita pop-ups para imprimir o mapa.', 'warning'); return; }
+        try { w.document.write('<!doctype html><meta charset="utf-8"><title>A preparar…</title><body style="font:14px sans-serif;padding:20px">A preparar o mapa…</body>'); } catch (e) {}
+        sgRhPrintWindow(w, sgSalMapaDoc(tipo, d, p));
+    }).fail(function () { showToast('Erro', sigeEquipeAjaxFailMessage(arguments[0], 'Erro de comunicação.'), 'error'); });
 }
 document.addEventListener('DOMContentLoaded', function () {
     ['sal-mes', 'sal-ano'].forEach(function (id) { var e = document.getElementById(id); if (e) e.addEventListener('change', sgSalCarregar); });
@@ -5062,6 +5126,7 @@ Object.assign(window, {
     sgSalConfigAddEsc,
     sgSalConfigDelEsc,
     sgSalRecibo,
+    sgSalMapa,
     uploadFoto,
     uploadDoc
 });

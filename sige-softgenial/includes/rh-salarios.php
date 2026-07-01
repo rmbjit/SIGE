@@ -257,7 +257,7 @@ if (!function_exists('sige_rh_salario_preview')) {
         sige_rh_salarios_migrar();
         $tp = $wpdb->prefix . 'sige_professores';
         $profs = $wpdb->get_results($wpdb->prepare(
-            "SELECT id, nome_completo, salario_base, subsidio FROM {$tp}
+            "SELECT id, nome_completo, nuit, salario_base, subsidio FROM {$tp}
               WHERE escola_id = %d AND (status_ativo IS NULL OR status_ativo = 1)
               ORDER BY nome_completo ASC",
             $escola_id
@@ -284,6 +284,7 @@ if (!function_exists('sige_rh_salario_preview')) {
             $out['itens'][] = array_merge([
                 'professor_id' => $pid,
                 'nome'         => (string) $p->nome_completo,
+                'nuit'         => (string) ($p->nuit ?? ''),
                 'processado'   => $saved ? 1 : 0,
             ], $calc);
             $out['total_liquido'] += (float) $calc['liquido'];
@@ -328,6 +329,54 @@ if (!function_exists('sige_rh_salario_processar')) {
             $n++;
         }
         return ['ok' => true, 'erro' => '', 'processados' => $n];
+    }
+}
+
+if (!function_exists('sige_rh_salario_mapa_mes')) {
+    /**
+     * Mapa mensal para entrega (INSS/IRPS): lê os recibos JÁ PROCESSADOS do mês,
+     * com nome e NUIT, e devolve linhas + totais. Só leitura.
+     * @return array{ano:int,mes:int,itens:array,totais:array}
+     */
+    function sige_rh_salario_mapa_mes(int $escola_id, int $ano, int $mes): array {
+        global $wpdb;
+        $out = ['ano' => $ano, 'mes' => $mes, 'itens' => [], 'totais' => [
+            'bruto' => 0.0, 'inss' => 0.0, 'inss_empregador' => 0.0, 'inss_total' => 0.0, 'irps' => 0.0, 'liquido' => 0.0,
+        ]];
+        if ($escola_id <= 0) return $out;
+        sige_rh_salarios_migrar();
+        $t  = sige_rh_salarios_table();
+        $tp = $wpdb->prefix . 'sige_professores';
+        $rows = $wpdb->get_results($wpdb->prepare(
+            "SELECT s.*, p.nome_completo AS nome, p.nuit AS nuit
+               FROM {$t} s
+               LEFT JOIN {$tp} p ON p.id = s.professor_id AND p.escola_id = s.escola_id
+              WHERE s.escola_id = %d AND s.ano = %d AND s.mes = %d
+              ORDER BY p.nome_completo ASC, s.id ASC",
+            $escola_id, $ano, $mes
+        ));
+        foreach ((array) $rows as $r) {
+            $inss = (float) $r->inss; $inss_emp = (float) $r->inss_empregador;
+            $out['itens'][] = [
+                'professor_id'    => (int) $r->professor_id,
+                'nome'            => (string) ($r->nome ?? ''),
+                'nuit'            => (string) ($r->nuit ?? ''),
+                'bruto'           => (float) $r->bruto,
+                'inss'            => $inss,
+                'inss_empregador' => $inss_emp,
+                'inss_total'      => round($inss + $inss_emp, 2),
+                'irps'            => (float) $r->irps,
+                'liquido'         => (float) $r->liquido,
+            ];
+            $out['totais']['bruto']           += (float) $r->bruto;
+            $out['totais']['inss']            += $inss;
+            $out['totais']['inss_empregador'] += $inss_emp;
+            $out['totais']['inss_total']      += ($inss + $inss_emp);
+            $out['totais']['irps']            += (float) $r->irps;
+            $out['totais']['liquido']         += (float) $r->liquido;
+        }
+        foreach ($out['totais'] as $k => $v) { $out['totais'][$k] = round($v, 2); }
+        return $out;
     }
 }
 
@@ -398,4 +447,14 @@ add_action('wp_ajax_sige_rh_salario_config_guardar', function () {
         sige_ajax_equipe_audit('rh_salario_config', ['escola_id' => $escola_id, 'resultado' => 'Configuração de impostos actualizada.']);
     }
     wp_send_json_success(['config' => $cfg]);
+});
+
+add_action('wp_ajax_sige_rh_salario_mapa', function () {
+    $escola_id = sige_rh_salario_ajax_guard();
+    list($ano, $mes) = sige_rh_salario_periodo_post();
+    $mapa = sige_rh_salario_mapa_mes($escola_id, $ano, $mes);
+    if (function_exists('sige_ajax_equipe_audit')) {
+        sige_ajax_equipe_audit('rh_salario_mapa', ['ano' => $ano, 'mes' => $mes, 'escola_id' => $escola_id, 'resultado' => 'Mapa fiscal consultado.']);
+    }
+    wp_send_json_success($mapa);
 });
