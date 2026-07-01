@@ -1054,6 +1054,25 @@ add_action('wp_ajax_sige_get_staff_secure', function () {
         'resultado' => 'Detalhe RH carregado por utilizador autorizado.'
     ]);
 
+    // [v12.38.1] Resumo de ausências do ano (Fase 2) para a Ficha. Só leitura/
+    // agregação; formatado com rótulos para o cliente. Degrada em vazio se o
+    // módulo de ausências não estiver carregado.
+    $aus_fmt = ['ano' => (int) (function_exists('wp_date') ? wp_date('Y') : date('Y')), 'total_dias' => 0.0, 'por_tipo' => [], 'ausente_hoje' => null];
+    if (function_exists('sige_rh_ausencia_resumo_professor') && !empty($rh->id)) {
+        $aus_raw = sige_rh_ausencia_resumo_professor($escola_id, (int) $rh->id, $aus_fmt['ano']);
+        $aus_fmt['total_dias'] = (float) $aus_raw['total_dias'];
+        foreach ($aus_raw['por_tipo'] as $__slug => $__dias) {
+            $aus_fmt['por_tipo'][] = ['tipo' => $__slug, 'label' => sige_rh_ausencia_tipo_label($__slug), 'dias' => (float) $__dias];
+        }
+        if (!empty($aus_raw['ausente_hoje'])) {
+            $aus_fmt['ausente_hoje'] = [
+                'tipo'     => $aus_raw['ausente_hoje']['tipo'],
+                'label'    => sige_rh_ausencia_tipo_label($aus_raw['ausente_hoje']['tipo']),
+                'data_fim' => $aus_raw['ausente_hoje']['data_fim'],
+            ];
+        }
+    }
+
     sige_ajax_equipe_send_success([
         'id'            => $user_id,
         'nome'          => $user->display_name,
@@ -1069,6 +1088,7 @@ add_action('wp_ajax_sige_get_staff_secure', function () {
         'data_admissao'   => $rh->data_admissao ?? '',
         'nivel_carreira'  => $rh->nivel_carreira ?? '',
         'regime_trabalho' => $rh->regime_trabalho ?? '',
+        'ausencias'       => $aus_fmt,
         'salario_base'  => (float)($rh->salario_base ?? 0),
         'subsidio'      => (float)($rh->subsidio ?? 0),
         'foto_perfil'   => esc_url_raw($rh->foto_perfil ?? ''),

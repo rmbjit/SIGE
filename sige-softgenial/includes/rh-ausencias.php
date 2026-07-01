@@ -349,6 +349,97 @@ if (!function_exists('sige_rh_ausencia_eliminar')) {
 }
 
 /* ============================================================================
+ * RESUMOS (Fase 2) — leitura/agregação para a Ficha e os Relatórios
+ * ========================================================================== */
+
+if (!function_exists('sige_rh_ausencia_hoje')) {
+    function sige_rh_ausencia_hoje(): string {
+        return function_exists('wp_date') ? wp_date('Y-m-d') : date('Y-m-d');
+    }
+}
+
+if (!function_exists('sige_rh_ausencia_resumo_professor')) {
+    /**
+     * Resumo anual de ausências de UM colaborador (só aprovadas).
+     * @return array{ano:int,total_dias:float,por_tipo:array,ausente_hoje:?array}
+     */
+    function sige_rh_ausencia_resumo_professor(int $escola_id, int $professor_id, int $ano, string $hoje = ''): array {
+        global $wpdb;
+        $out = ['ano' => $ano, 'total_dias' => 0.0, 'por_tipo' => [], 'ausente_hoje' => null];
+        if ($escola_id <= 0 || $professor_id <= 0) return $out;
+        sige_rh_ausencias_migrar();
+        $t = sige_rh_ausencias_table();
+        $hoje = $hoje !== '' ? $hoje : sige_rh_ausencia_hoje();
+
+        $rows = $wpdb->get_results($wpdb->prepare(
+            "SELECT tipo, SUM(dias) AS dias FROM {$t}
+              WHERE escola_id = %d AND professor_id = %d AND estado = 'aprovada' AND YEAR(data_inicio) = %d
+              GROUP BY tipo",
+            $escola_id, $professor_id, $ano
+        ));
+        foreach ((array) $rows as $r) {
+            $out['por_tipo'][(string) $r->tipo] = (float) $r->dias;
+            $out['total_dias'] += (float) $r->dias;
+        }
+
+        $now = $wpdb->get_row($wpdb->prepare(
+            "SELECT tipo, data_fim FROM {$t}
+              WHERE escola_id = %d AND professor_id = %d AND estado = 'aprovada' AND data_inicio <= %s AND data_fim >= %s
+              ORDER BY data_fim DESC LIMIT 1",
+            $escola_id, $professor_id, $hoje, $hoje
+        ));
+        if ($now) {
+            $out['ausente_hoje'] = ['tipo' => (string) $now->tipo, 'data_fim' => (string) $now->data_fim];
+        }
+        return $out;
+    }
+}
+
+if (!function_exists('sige_rh_ausencia_resumo_escola')) {
+    /**
+     * Resumo anual de ausências da ESCOLA (só aprovadas) + quem está ausente hoje.
+     * @return array{ano:int,total_dias:float,por_tipo:array,ausentes_hoje:array}
+     */
+    function sige_rh_ausencia_resumo_escola(int $escola_id, int $ano, string $hoje = ''): array {
+        global $wpdb;
+        $out = ['ano' => $ano, 'total_dias' => 0.0, 'por_tipo' => [], 'ausentes_hoje' => []];
+        if ($escola_id <= 0) return $out;
+        sige_rh_ausencias_migrar();
+        $t  = sige_rh_ausencias_table();
+        $tp = $wpdb->prefix . 'sige_professores';
+        $hoje = $hoje !== '' ? $hoje : sige_rh_ausencia_hoje();
+
+        $rows = $wpdb->get_results($wpdb->prepare(
+            "SELECT tipo, SUM(dias) AS dias, COUNT(*) AS n FROM {$t}
+              WHERE escola_id = %d AND estado = 'aprovada' AND YEAR(data_inicio) = %d
+              GROUP BY tipo",
+            $escola_id, $ano
+        ));
+        foreach ((array) $rows as $r) {
+            $out['por_tipo'][(string) $r->tipo] = ['dias' => (float) $r->dias, 'n' => (int) $r->n];
+            $out['total_dias'] += (float) $r->dias;
+        }
+
+        $aus = $wpdb->get_results($wpdb->prepare(
+            "SELECT a.professor_id, a.tipo, a.data_fim, p.nome_completo AS nome FROM {$t} a
+              LEFT JOIN {$tp} p ON p.id = a.professor_id AND p.escola_id = a.escola_id
+              WHERE a.escola_id = %d AND a.estado = 'aprovada' AND a.data_inicio <= %s AND a.data_fim >= %s
+              ORDER BY p.nome_completo ASC",
+            $escola_id, $hoje, $hoje
+        ));
+        foreach ((array) $aus as $r) {
+            $out['ausentes_hoje'][] = [
+                'professor_id' => (int) $r->professor_id,
+                'nome'         => (string) ($r->nome ?? ''),
+                'tipo'         => (string) $r->tipo,
+                'data_fim'     => (string) $r->data_fim,
+            ];
+        }
+        return $out;
+    }
+}
+
+/* ============================================================================
  * AJAX (gated por gestão, nonce, tenant-scope, auditado)
  * ========================================================================== */
 

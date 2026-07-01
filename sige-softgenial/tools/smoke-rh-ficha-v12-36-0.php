@@ -24,7 +24,7 @@ $build  = json_decode((string) @file_get_contents($root . '/BUILD.json'), true);
 // ── Endpoint seguro: payload aditivo (campos não sensíveis da ficha) ────────────
 $secure_region = '';
 $pos = strpos($ajax, "wp_ajax_sige_get_staff_secure");
-if ($pos !== false) { $secure_region = substr($ajax, $pos, 3000); }
+if ($pos !== false) { $secure_region = substr($ajax, $pos, 5000); }
 _p($fails, $secure_region !== '', 'Handler sige_get_staff_secure encontrado');
 _p($fails, strpos($secure_region, "'data_admissao'") !== false, 'Endpoint devolve data_admissao');
 _p($fails, strpos($secure_region, "'nivel_carreira'") !== false, 'Endpoint devolve nivel_carreira');

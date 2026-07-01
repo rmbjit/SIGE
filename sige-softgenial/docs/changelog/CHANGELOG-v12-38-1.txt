@@ -1,0 +1,48 @@
+SIGE SoftGenial v12.38.1 - RH: Férias & Ausências Fase 2 (resumo na Ficha e nos Relatórios)
+Data: 2026-07-01
+Tipo: nova funcionalidade (leitura/agregação). Sem schema novo, sem novo endpoint.
+
+O QUE FAZ
+- Aproveita a tabela criada na Fase 1 para mostrar o quadro de ausências onde ele
+  é útil:
+    * FICHA DO COLABORADOR: nova secção "Ausências em <ano>" com banner de
+      "ausente hoje" (tipo + até quando), dias por tipo e total no ano.
+    * RELATÓRIOS: novo cartão "Ausências em <ano>" com "Ausentes hoje" (nomes +
+      tipo, com cor) e barras de dias por tipo no ano.
+- Conta apenas ausências APROVADAS (as pendentes/rejeitadas não entram nos totais).
+
+ENGENHARIA (limpa, sem remendos)
+- includes/rh-ausencias.php: novas funções de agregação (só leitura)
+    * sige_rh_ausencia_resumo_professor(escola, professor, ano) -> total, por
+      tipo e ausência actual;
+    * sige_rh_ausencia_resumo_escola(escola, ano) -> total, por tipo e lista de
+      ausentes hoje (com nome).
+- includes/ajax-handlers.php: o endpoint da Ficha (sige_get_staff_secure) passa a
+  devolver, de forma ADITIVA, 'ausencias' (resumo anual formatado com rótulos).
+  Mantém nonce + gating + auditoria.
+- admin/hr/equipe-view.php:
+    * a Ficha (sgFichaRender) ganha a secção de ausências (usa sgFichaField, já
+      estilado na ficha; badges evitados porque a ficha vive fora de .sige-rh);
+    * o painel Relatórios ganha o cartão de ausências (server-side, 1 query
+      agregada; usa .sg-rh-bars e .sg-aus-tipo, que aplicam dentro de .sige-rh).
+- 100% design system (tokens; zero cores mágicas).
+
+NOTA DE DEPLOY
+- SEM ficheiros novos e SEM tabela nova (usa a da Fase 1). Só altera 3 ficheiros
+  existentes (+ versão). Não toca em ficheiros protegidos.
+
+VALIDAÇÃO
+- php -l (include + ajax-handlers + view) OK; node --check (bloco JS) OK.
+- Gates: design-tokens 1857 (sem regressão), baseline-preservation OK,
+  typography OK.
+- Novo smoke tools/smoke-rh-ausencias-fase2-v12-38-1.php (resumo com $wpdb stub +
+  ligação). Smokes anteriores sem regressão (ajustada a janela de leitura do
+  smoke da Ficha, que passou a ler mais do handler por ele ter crescido).
+- Render verificado (Chromium): secção na Ficha e cartão nos Relatórios.
+
+FRONTEIRA
+- Sem alterar fórmulas, schema, permissões reais nem ficheiros protegidos.
+
+PRÓXIMO PASSO (opcional)
+- Fase 3: saldo/direito anual de férias configurável e auto-serviço pelo
+  colaborador (requer aprovação, por acrescentar configuração/portal).

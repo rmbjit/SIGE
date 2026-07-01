@@ -1736,6 +1736,12 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 .sige-rh .sg-aus-acoes .btn-action.is-ok:hover{background:var(--color-success-50);color:var(--color-success-700);border-color:var(--color-success-200);}
 .sige-rh .sg-aus-acoes .btn-action.is-no:hover{background:var(--color-danger-50);color:var(--color-danger-700);border-color:var(--color-danger-200);}
 .sige-rh .sg-aus-empty{padding:var(--space-8) var(--space-4);text-align:center;color:var(--color-slate-400);font-size:var(--fs-sm);}
+/* Cartão de ausências nos Relatórios */
+.sige-rh .sg-aus-hoje{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-2);margin-bottom:var(--space-2);}
+.sige-rh .sg-aus-hoje-lbl{font-size:var(--fs-sm);font-weight:700;color:var(--color-slate-600);margin-right:var(--space-2);}
+.sige-rh .sg-aus-hoje-none{display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-sm);font-weight:600;color:var(--color-success-700);}
+.sige-rh .sg-aus-hoje-none svg{width:16px;height:16px;}
+.sige-rh .sg-aus-bars{margin-top:var(--space-4);}
 /* Modal de registo */
 #box-ausencia .modal-body{padding:var(--space-6)!important;background:linear-gradient(180deg,var(--color-white),var(--color-slate-50))!important;}
 #box-ausencia .sg-aus-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4);}
@@ -2768,6 +2774,43 @@ body.sige-admin-app #box-ausencia.sige-modal:not(.active){
                     </div>
                     <?php endforeach; ?>
                 </div>
+            </div>
+            <?php
+            // [v12.38.1] Cartão de Ausências (Fase 2): ausentes hoje + dias por tipo no ano.
+            $__aus_ano = (int) (function_exists('wp_date') ? wp_date('Y') : date('Y'));
+            $__aus_r = function_exists('sige_rh_ausencia_resumo_escola') ? sige_rh_ausencia_resumo_escola((int) $escola_id, $__aus_ano) : null;
+            ?>
+            <div class="sg-rh-rep-card is-wide">
+                <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Ausências em <?php echo (int) $__aus_ano; ?></h3>
+                <?php if ($__aus_r): $__ah = $__aus_r['ausentes_hoje']; ?>
+                <div class="sg-aus-hoje">
+                    <span class="sg-aus-hoje-lbl">Ausentes hoje</span>
+                    <?php if (empty($__ah)): ?>
+                        <span class="sg-aus-hoje-none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Ninguém ausente hoje</span>
+                    <?php else: foreach ($__ah as $__p): ?>
+                        <span class="sg-aus-tipo t-<?php echo esc_attr($__p['tipo']); ?>"><?php echo esc_html($__p['nome'] !== '' ? $__p['nome'] : 'Colaborador'); ?> &middot; <?php echo esc_html(sige_rh_ausencia_tipo_label($__p['tipo'])); ?></span>
+                    <?php endforeach; endif; ?>
+                </div>
+                <?php
+                    $__pt = $__aus_r['por_tipo'];
+                    if (!empty($__pt)):
+                        $__amax = max(1, max(array_map(fn($x) => (float) $x['dias'], $__pt)));
+                ?>
+                <div class="sg-rh-bars sg-aus-bars">
+                    <?php foreach (sige_rh_ausencia_tipos() as $__slug => $__lbl): if (empty($__pt[$__slug])) continue; $__d = (float) $__pt[$__slug]['dias']; $__w = max(3, (int) round($__d / $__amax * 100)); ?>
+                    <div class="sg-rh-bar-row">
+                        <span class="sg-rh-bar-label"><?php echo esc_html($__lbl); ?></span>
+                        <span class="sg-rh-bar-track"><span class="sg-rh-bar-fill" style="width:<?php echo (int) $__w; ?>%"></span></span>
+                        <span class="sg-rh-bar-val"><?php echo (float) $__d; ?> <small>dia(s)</small></span>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php else: ?>
+                <div class="sg-rh-rep-empty">Sem ausências aprovadas em <?php echo (int) $__aus_ano; ?>.</div>
+                <?php endif; ?>
+                <?php else: ?>
+                <div class="sg-rh-rep-empty">Módulo de ausências indisponível.</div>
+                <?php endif; ?>
             </div>
         </div>
     <?php else: ?>
@@ -4263,6 +4306,23 @@ function sgFichaRender(d, blob) {
     // Documentos.
     html += '<div class="sg-ficha-sec"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg> Documentos</h4>';
     html += '<div class="sg-ficha-docs">' + sgFichaDoc('BI', docUrl('doc_bi')) + sgFichaDoc('CV', docUrl('doc_cv')) + sgFichaDoc('Certificado', docUrl('doc_cert')) + '</div>';
+    html += '</div>';
+    // [v12.38.1] Ausências no ano (Fase 2).
+    var aus = d.ausencias || {};
+    var ausAno = aus.ano || (new Date()).getFullYear();
+    html += '<div class="sg-ficha-sec is-wide"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Ausências em ' + ausAno + '</h4>';
+    if (aus.ausente_hoje) {
+        html += '<div class="sg-ficha-alert is-aviso" style="margin:0 0 var(--space-3)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>Ausente hoje — ' + sgFichaEsc(aus.ausente_hoje.label || '') + ' (até ' + sgFichaEsc(sgFichaDateBR(aus.ausente_hoje.data_fim)) + ').</span></div>';
+    }
+    if (aus.por_tipo && aus.por_tipo.length) {
+        for (var ai = 0; ai < aus.por_tipo.length; ai++) {
+            var it = aus.por_tipo[ai];
+            html += sgFichaField(it.label, it.dias + ' dia(s)');
+        }
+        html += sgFichaField('Total no ano', (aus.total_dias || 0) + ' dia(s)');
+    } else {
+        html += sgFichaField('Ausências aprovadas este ano', '0 dias');
+    }
     html += '</div>';
     // Completude da ficha.
     var campos = [d.tel, d.nuit, d.formacao, d.tipo_contrato, d.data_admissao, d.nivel_carreira, d.regime_trabalho, d.foto_perfil, (d.salario_base > 0 ? '1' : ''), docUrl('doc_bi')];
