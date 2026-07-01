@@ -1,0 +1,60 @@
+SIGE SoftGenial v12.38.0 - RH (passo 5): Férias & Ausências (Fase 1, tabela nova)
+Data: 2026-07-01
+Tipo: nova funcionalidade (view=equipe). PRIMEIRA com tabela própria. Aprovada.
+
+DECISÕES (confirmadas pelo utilizador)
+- Fluxo: "RH regista e decide" (o gestor regista e marca o estado; sem
+  auto-serviço do colaborador).
+- Saldo: só registo + contagem no ano (sem regras de acumulação/direito anual,
+  juridicamente sensíveis em Moçambique).
+- Tipos: Férias, Doença/baixa médica, Licença, Falta justificada, Falta
+  injustificada.
+
+O QUE FAZ
+- Nova aba "Ausências" na Equipa (só para quem gere a equipa), com:
+    * filtros por ano, tipo e estado (recarregam a lista ao mudar);
+    * lista com badges por tipo e por estado, e período/dias (dias úteis);
+    * botão "Registar ausência" e, por linha, aprovar/rejeitar (quando
+      pendente), editar e eliminar;
+    * modal de registo/edição com resumo de dias ao vivo (úteis + corridos).
+
+ENGENHARIA (limpa, sem remendos)
+- NOVO includes/rh-ausencias.php:
+    * TABELA {prefix}sige_rh_ausencias criada POR CÓDIGO de forma idempotente
+      (verifica existência + dbDelta no admin_init) - sem SQL manual, ideal para
+      o pipeline do CloudPanel.
+    * FUNÇÕES PURAS testáveis: contagem de dias corridos + úteis (exclui Sáb/Dom;
+      sem feriados, pois não há tabela), meio-dia, e validação (fim>=início, tipo
+      válido, colaborador obrigatório).
+    * Camada de dados TENANT-SCOPED: listar (filtros), get, guardar (insert/
+      update), definir_estado, eliminar; valida que o professor pertence à escola.
+    * AJAX (listar/guardar/estado/eliminar) gated por sige_ajax_equipe_can_manage,
+      com nonce (sige_equipe_action), tenant-scope e AUDITORIA.
+- NÃO cria permissões novas (não toca no ficheiro protegido permissions-layer.php):
+  reutiliza a permissão de gerir equipa. A aba só aparece a quem pode gerir.
+- admin/hr/equipe-view.php: aba + painel + modal 100% no design system (tokens;
+  o modal partilha o chrome padrão; visibilidade .active-driven; ESC/click-fora).
+  Select de colaboradores renderizado a partir dos professores activos.
+- Carregado no bootstrap (sige-softgenial.php).
+
+NOTA DE DEPLOY (importante)
+- Inclui 1 FICHEIRO NOVO: includes/rh-ausencias.php (pasta existente).
+- CRIA 1 TABELA NOVA (wp_sige_rh_ausencias) automaticamente, por código, no
+  primeiro acesso a uma página de administração do SIGE após o deploy (não é
+  preciso correr SQL). Confirme que o ficheiro novo chegou ao servidor.
+
+VALIDAÇÃO
+- php -l (include + view + bootstrap) OK; node --check (bloco JS) OK.
+- Gates: design-tokens 1857 (sem regressão), baseline-preservation OK,
+  typography OK.
+- Novo smoke tools/smoke-rh-ausencias-v12-38-0.php (funções puras + ligação).
+- Render verificado (Chromium): lista com badges e modal com resumo de dias.
+
+FRONTEIRA
+- Tabela isolada; sem tocar em finanças, notas, permissões reais nem ficheiros
+  protegidos. Rollback: sem o código a tabela fica inerte (dados preservados).
+
+PRÓXIMOS PASSOS
+- Fase 2: resumo por colaborador na Ficha e nos Relatórios (dias por tipo,
+  "ausentes hoje").
+- Fase 3 (opcional): saldo/direito anual configurável e auto-serviço.

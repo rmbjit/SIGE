@@ -1703,13 +1703,62 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 .sg-ficha-loading{padding:var(--space-8);text-align:center;color:var(--color-slate-400);font-size:var(--fs-sm);}
 @media (max-width:720px){.sg-ficha-sections{grid-template-columns:1fr;}.sg-ficha-field{flex-direction:column;gap:2px;}.sg-ficha-field .v{text-align:left;}}
 
+/* ========================================
+   AUSÊNCIAS (Férias & Ausências) - v12.38.0
+   ======================================== */
+.sige-rh .sg-aus-toolbar{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);padding:var(--space-4) var(--space-5);flex-wrap:wrap;}
+.sige-rh .sg-aus-filtros{display:flex;gap:var(--space-3);flex-wrap:wrap;}
+.sige-rh .sg-aus-select{height:40px;padding:0 var(--space-4);border:1px solid var(--color-ink-200);border-radius:var(--radius-md);background:var(--color-white);color:var(--color-slate-700);font-family:inherit;font-size:var(--fs-sm);font-weight:600;cursor:pointer;}
+.sige-rh .sg-aus-select:focus{outline:none;border-color:var(--sg-theme-primary,var(--color-brand-400));box-shadow:0 0 0 3px var(--sg-theme-soft,var(--color-brand-50));}
+.sige-rh .sg-aus-table{width:100%;border-collapse:collapse;}
+.sige-rh .sg-aus-table th{text-align:left;font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:.04em;color:var(--color-slate-500);font-weight:700;padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--color-ink-100);}
+.sige-rh .sg-aus-table td{padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--color-ink-50);font-size:var(--fs-sm);color:var(--color-slate-700);vertical-align:middle;}
+.sige-rh .sg-aus-table tr:last-child td{border-bottom:0;}
+.sige-rh .sg-aus-nome{font-weight:700;color:var(--color-black);}
+.sige-rh .sg-aus-datas{white-space:nowrap;}
+.sige-rh .sg-aus-dias{font-weight:700;color:var(--color-slate-800);}
+.sige-rh .sg-aus-tipo{display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-xs);font-weight:700;padding:3px 10px;border-radius:var(--radius-pill);background:var(--color-ink-100);color:var(--color-slate-700);}
+.sige-rh .sg-aus-tipo.t-ferias{background:var(--sg-theme-soft,var(--color-brand-50));color:var(--sg-theme-primary,var(--color-brand-700));}
+.sige-rh .sg-aus-tipo.t-doenca{background:var(--color-danger-50);color:var(--color-danger-700);}
+.sige-rh .sg-aus-tipo.t-licenca{background:var(--color-info-50);color:var(--color-info-700);}
+.sige-rh .sg-aus-tipo.t-falta_justificada{background:var(--color-warning-50);color:var(--color-warning-700);}
+.sige-rh .sg-aus-tipo.t-falta_injustificada{background:var(--color-danger-50);color:var(--color-danger-700);}
+.sige-rh .sg-aus-estado{display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-xs);font-weight:700;padding:3px 10px;border-radius:var(--radius-pill);}
+.sige-rh .sg-aus-estado .dot{width:7px;height:7px;border-radius:var(--radius-pill);background:currentColor;}
+.sige-rh .sg-aus-estado.e-aprovada{background:var(--color-success-50);color:var(--color-success-700);}
+.sige-rh .sg-aus-estado.e-pendente{background:var(--color-warning-50);color:var(--color-warning-700);}
+.sige-rh .sg-aus-estado.e-rejeitada{background:var(--color-danger-50);color:var(--color-danger-700);}
+.sige-rh .sg-aus-estado.e-cancelada{background:var(--color-ink-100);color:var(--color-slate-500);}
+.sige-rh .sg-aus-acoes{display:flex;gap:6px;justify-content:flex-end;}
+.sige-rh .sg-aus-acoes .btn-action{width:32px;height:32px;border-radius:var(--radius-md);border:1px solid var(--color-ink-100);background:var(--color-white);color:var(--color-slate-600);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;}
+.sige-rh .sg-aus-acoes .btn-action svg{width:15px;height:15px;}
+.sige-rh .sg-aus-acoes .btn-action:hover{background:var(--color-ink-50);color:var(--color-slate-800);}
+.sige-rh .sg-aus-acoes .btn-action.is-ok:hover{background:var(--color-success-50);color:var(--color-success-700);border-color:var(--color-success-200);}
+.sige-rh .sg-aus-acoes .btn-action.is-no:hover{background:var(--color-danger-50);color:var(--color-danger-700);border-color:var(--color-danger-200);}
+.sige-rh .sg-aus-empty{padding:var(--space-8) var(--space-4);text-align:center;color:var(--color-slate-400);font-size:var(--fs-sm);}
+/* Modal de registo */
+#box-ausencia .modal-body{padding:var(--space-6)!important;background:linear-gradient(180deg,var(--color-white),var(--color-slate-50))!important;}
+#box-ausencia .sg-aus-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4);}
+#box-ausencia .sg-aus-fg{display:flex;flex-direction:column;gap:6px;min-width:0;}
+#box-ausencia .sg-aus-fg.is-full{grid-column:1 / -1;}
+#box-ausencia .sg-aus-fg label{font-size:var(--fs-sm);font-weight:600;color:var(--color-slate-700);}
+#box-ausencia .sg-aus-fg input,#box-ausencia .sg-aus-fg select,#box-ausencia .sg-aus-fg textarea{height:42px;padding:0 var(--space-4);border:1px solid var(--color-ink-200);border-radius:var(--radius-md);background:var(--color-white);font-family:inherit;font-size:var(--fs-sm);color:var(--color-slate-800);width:100%;}
+#box-ausencia .sg-aus-fg textarea{height:auto;min-height:72px;padding:var(--space-3) var(--space-4);resize:vertical;}
+#box-ausencia .sg-aus-fg input:focus,#box-ausencia .sg-aus-fg select:focus,#box-ausencia .sg-aus-fg textarea:focus{outline:none;border-color:var(--sg-theme-primary,var(--color-brand-400));box-shadow:0 0 0 3px var(--sg-theme-soft,var(--color-brand-50));}
+#box-ausencia .sg-aus-check{display:flex;align-items:center;gap:var(--space-2);font-size:var(--fs-sm);color:var(--color-slate-700);}
+#box-ausencia .sg-aus-check input{width:auto;height:auto;}
+#box-ausencia .sg-aus-resumo{grid-column:1 / -1;font-size:var(--fs-sm);color:var(--color-slate-600);background:var(--sg-theme-soft,var(--color-brand-50));border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);}
+#box-ausencia .sg-aus-resumo strong{color:var(--sg-theme-primary,var(--color-brand-700));}
+@media (max-width:720px){#box-ausencia .sg-aus-grid{grid-template-columns:1fr;}.sige-rh .sg-aus-toolbar{flex-direction:column;align-items:stretch;}}
+
 
 
 /* ========================================
    RH - Modal de Colaborador V2 alinhado ao Painel Principal
    ======================================== */
 #box-equipa.sige-modal,
-#box-ficha.sige-modal{
+#box-ficha.sige-modal,
+#box-ausencia.sige-modal{
     background:rgba(18,22,40,.54)!important;
     backdrop-filter:blur(14px)!important;
     -webkit-backdrop-filter:blur(14px)!important;
@@ -1734,6 +1783,7 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 /* Cabecalho e separadores nao encolhem; o corpo e que absorve o overflow. */
 #box-equipa .modal-header,
 #box-ficha .modal-header,
+#box-ausencia .modal-header,
 #box-equipa .modal-tabs{flex:0 0 auto!important;}
 /* O formulario ocupa o espaco restante e delega o scroll ao corpo. */
 #box-equipa #form-staff{
@@ -1744,7 +1794,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     overflow:hidden!important;
 }
 #box-equipa .modal-header,
-#box-ficha .modal-header{
+#box-ficha .modal-header,
+#box-ausencia .modal-header{
     position:relative!important;
     overflow:hidden!important;
     min-height:124px!important;
@@ -1754,7 +1805,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     border-bottom:1px solid rgba(30,34,60,.06)!important;
 }
 #box-equipa .modal-header:after,
-#box-ficha .modal-header:after{
+#box-ficha .modal-header:after,
+#box-ausencia .modal-header:after{
     content:'';
     position:absolute;
     right:-110px;
@@ -1766,7 +1818,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     pointer-events:none;
 }
 #box-equipa .sg-rh-modal-title-wrap,
-#box-ficha .sg-rh-modal-title-wrap{
+#box-ficha .sg-rh-modal-title-wrap,
+#box-ausencia .sg-rh-modal-title-wrap{
     position:relative;
     z-index:1;
     display:flex;
@@ -1775,7 +1828,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     min-width:0;
 }
 #box-equipa .sg-rh-modal-icon,
-#box-ficha .sg-rh-modal-icon{
+#box-ficha .sg-rh-modal-icon,
+#box-ausencia .sg-rh-modal-icon{
     width:58px;
     height:58px;
     border-radius:var(--radius-lg);
@@ -1788,9 +1842,11 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     box-shadow:var(--shadow-sm);
 }
 #box-equipa .sg-rh-modal-icon svg,
-#box-ficha .sg-rh-modal-icon svg{width:26px;height:26px;stroke:currentColor;}
+#box-ficha .sg-rh-modal-icon svg,
+#box-ausencia .sg-rh-modal-icon svg{width:26px;height:26px;stroke:currentColor;}
 #box-equipa .modal-header h3,
-#box-ficha .modal-header h3{
+#box-ficha .modal-header h3,
+#box-ausencia .modal-header h3{
     margin:0 0 var(--space-2)!important;
     color:var(--color-black)!important;
     font-family:var(--font-display,'Plus Jakarta Sans',system-ui,sans-serif)!important;
@@ -1800,7 +1856,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     letter-spacing:-.045em!important;
 }
 #box-equipa .modal-header p,
-#box-ficha .modal-header p{
+#box-ficha .modal-header p,
+#box-ausencia .modal-header p{
     margin:0!important;
     max-width:620px;
     color:var(--color-slate-600)!important;
@@ -1809,7 +1866,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     font-weight:600!important;
 }
 #box-equipa .modal-close,
-#box-ficha .modal-close{
+#box-ficha .modal-close,
+#box-ausencia .modal-close{
     position:relative!important;
     z-index:2!important;
     width:46px!important;
@@ -1821,7 +1879,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
     box-shadow:var(--shadow-md);
 }
 #box-equipa .modal-close:hover,
-#box-ficha .modal-close:hover{
+#box-ficha .modal-close:hover,
+#box-ausencia .modal-close:hover{
     background:var(--sg-theme-primary-50,var(--color-brand-50))!important;
     color:var(--sg-theme-primary,var(--color-brand-500))!important;
     transform:none!important;
@@ -2106,7 +2165,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
    .active esconde (e não captura cliques). */
 body.sige-admin-app #box-equipa.sige-modal.active,
 body.sige-admin-app #sige-rh-confirm.sige-modal.active,
-body.sige-admin-app #box-ficha.sige-modal.active{
+body.sige-admin-app #box-ficha.sige-modal.active,
+body.sige-admin-app #box-ausencia.sige-modal.active{
     display:flex!important;
     opacity:1!important;
     visibility:visible!important;
@@ -2114,7 +2174,8 @@ body.sige-admin-app #box-ficha.sige-modal.active{
 }
 body.sige-admin-app #box-equipa.sige-modal:not(.active),
 body.sige-admin-app #sige-rh-confirm.sige-modal:not(.active),
-body.sige-admin-app #box-ficha.sige-modal:not(.active){
+body.sige-admin-app #box-ficha.sige-modal:not(.active),
+body.sige-admin-app #box-ausencia.sige-modal:not(.active){
     display:none!important;
     opacity:0!important;
     visibility:hidden!important;
@@ -2189,6 +2250,12 @@ body.sige-admin-app #box-ficha.sige-modal:not(.active){
                 <span class="sg-rh-tab-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
                 Relatórios
             </button>
+            <?php if ($can_manage_equipe): ?>
+            <button type="button" class="sg-rh-tab" id="sg-rh-tabbtn-ausencias" role="tab" aria-selected="false" aria-controls="sg-rh-panel-ausencias" data-sige-act="sgRhSwitchTab" data-sige-args='["ausencias"]'>
+                <span class="sg-rh-tab-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M9 16l2 2 4-4"/></svg></span>
+                Ausências
+            </button>
+            <?php endif; ?>
         </div>
 
     <!-- ===== PAINEL: EQUIPA (gestão operacional) ===== -->
@@ -2707,6 +2774,50 @@ body.sige-admin-app #box-ficha.sige-modal:not(.active){
         <div class="sg-rh-rep-empty">Relatórios indisponíveis (módulo de RH não carregado).</div>
     <?php endif; ?>
     </div><!-- /#sg-rh-panel-relatorios -->
+
+    <?php if ($can_manage_equipe): ?>
+    <!-- ========================================
+         PAINEL: AUSÊNCIAS (Férias & Ausências - Fase 1)
+         ======================================== -->
+    <div class="sg-rh-tabpanel" id="sg-rh-panel-ausencias" role="tabpanel" aria-labelledby="sg-rh-tabbtn-ausencias" data-rh-panel="ausencias" hidden>
+        <div class="sg-rh-rep-intro">
+            <span class="sg-rh-rep-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+            <div>
+                <h2>Férias &amp; Ausências</h2>
+                <p>Registo de férias, doença, licenças e faltas da equipa. Contagem em dias úteis (exclui fins de semana).</p>
+            </div>
+        </div>
+
+        <div class="sg-aus-toolbar sg-dash-card">
+            <div class="sg-aus-filtros">
+                <select id="aus-f-ano" class="sg-aus-select" aria-label="Ano">
+                    <?php
+                    $__aus_ano = (int) (function_exists('wp_date') ? wp_date('Y') : date('Y'));
+                    for ($__y = $__aus_ano; $__y >= $__aus_ano - 4; $__y--) {
+                        echo '<option value="' . (int) $__y . '">' . (int) $__y . '</option>';
+                    }
+                    ?>
+                </select>
+                <select id="aus-f-tipo" class="sg-aus-select" aria-label="Tipo">
+                    <option value="">Todos os tipos</option>
+                    <?php foreach (sige_rh_ausencia_tipos() as $__k => $__lbl) { echo '<option value="' . esc_attr($__k) . '">' . esc_html($__lbl) . '</option>'; } ?>
+                </select>
+                <select id="aus-f-estado" class="sg-aus-select" aria-label="Estado">
+                    <option value="">Todos os estados</option>
+                    <?php foreach (sige_rh_ausencia_estados() as $__k => $__lbl) { echo '<option value="' . esc_attr($__k) . '">' . esc_html($__lbl) . '</option>'; } ?>
+                </select>
+            </div>
+            <button type="button" class="sg-v2-btn sg-v2-btn-primary" data-sige-act="abrirAusencia" data-sige-noargs>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Registar ausência
+            </button>
+        </div>
+
+        <div class="sige-table-card sg-dash-card">
+            <div id="aus-lista"><div class="sg-aus-empty">A carregar…</div></div>
+        </div>
+    </div>
+    <?php endif; ?>
     </div>
 </div>
 <!-- ========================================
@@ -3012,6 +3123,85 @@ body.sige-admin-app #box-ficha.sige-modal:not(.active){
         </div>
     </div>
 </div>
+
+<?php if ($can_manage_equipe): ?>
+<!-- ========================================
+     MODAL: REGISTAR / EDITAR AUSÊNCIA - v12.38.0
+     ======================================== -->
+<div class="sige-modal sg-ausencia-modal" id="box-ausencia" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="ausencia-title">
+        <div class="modal-header">
+            <div class="sg-rh-modal-title-wrap">
+                <span class="sg-rh-modal-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </span>
+                <div>
+                    <h3 id="ausencia-title">Registar ausência</h3>
+                    <p>Férias, doença, licença ou falta de um colaborador.</p>
+                </div>
+            </div>
+            <button type="button" class="modal-close" data-sige-act="fecharAusencia" data-sige-noargs aria-label="Fechar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="aus-id" value="0">
+            <div class="sg-aus-grid">
+                <div class="sg-aus-fg is-full">
+                    <label for="aus-colab">Colaborador</label>
+                    <select id="aus-colab">
+                        <option value="">— Seleccionar —</option>
+                        <?php
+                        $__aus_seen = [];
+                        foreach ((array) $_profs_raw as $__p) {
+                            if (isset($__p->status_ativo) && !(int) $__p->status_ativo) continue;
+                            $__pid = (int) $__p->id;
+                            if ($__pid <= 0 || isset($__aus_seen[$__pid])) continue;
+                            $__aus_seen[$__pid] = true;
+                            $__nome = trim((string) ($__p->nome_completo ?? ''));
+                            if ($__nome === '') continue;
+                            echo '<option value="' . (int) $__pid . '">' . esc_html($__nome) . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="sg-aus-fg">
+                    <label for="aus-tipo">Tipo</label>
+                    <select id="aus-tipo">
+                        <?php foreach (sige_rh_ausencia_tipos() as $__k => $__lbl) { echo '<option value="' . esc_attr($__k) . '">' . esc_html($__lbl) . '</option>'; } ?>
+                    </select>
+                </div>
+                <div class="sg-aus-fg">
+                    <label for="aus-estado">Estado</label>
+                    <select id="aus-estado">
+                        <?php foreach (sige_rh_ausencia_estados() as $__k => $__lbl) { echo '<option value="' . esc_attr($__k) . '"' . ($__k === 'aprovada' ? ' selected' : '') . '>' . esc_html($__lbl) . '</option>'; } ?>
+                    </select>
+                </div>
+                <div class="sg-aus-fg">
+                    <label for="aus-inicio">Início</label>
+                    <input type="date" id="aus-inicio">
+                </div>
+                <div class="sg-aus-fg">
+                    <label for="aus-fim">Fim</label>
+                    <input type="date" id="aus-fim">
+                </div>
+                <div class="sg-aus-fg is-full">
+                    <label class="sg-aus-check"><input type="checkbox" id="aus-meio"> Meio dia (apenas quando início = fim)</label>
+                </div>
+                <div class="sg-aus-fg is-full">
+                    <label for="aus-motivo">Observação (opcional)</label>
+                    <textarea id="aus-motivo" placeholder="Notas internas sobre a ausência…"></textarea>
+                </div>
+                <div class="sg-aus-resumo" id="aus-resumo">Seleccione as datas para calcular os dias.</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-modal btn-cancel" data-sige-act="fecharAusencia" data-sige-noargs>Cancelar</button>
+            <button type="button" class="btn-modal btn-submit" data-sige-act="guardarAusencia" data-sige-noargs>Guardar</button>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
 
 <!-- ExcelJS para exportação -->
 <?php echo sige_cdn_script("exceljs"); ?>
@@ -4209,6 +4399,132 @@ function sgRhSwitchTab(tab) {
         b.classList.toggle('is-active', on);
         b.setAttribute('aria-selected', on ? 'true' : 'false');
     });
+    // Carrega as ausências à primeira vez que a aba é aberta (lazy).
+    if (target === 'ausencias' && !sgAusLoaded && typeof sgAusCarregar === 'function') {
+        sgAusLoaded = true;
+        sgAusCarregar();
+    }
+}
+
+// ========================================
+// [v12.38.0] FÉRIAS & AUSÊNCIAS (aba de gestão)
+// ========================================
+var sgAusLoaded = false;
+function sgAusVal(id) { var e = document.getElementById(id); return e ? e.value : ''; }
+function sgAusSetVal(id, v) { var e = document.getElementById(id); if (e) e.value = (v == null ? '' : v); }
+function sgAusContarDias(inicio, fim, meio) {
+    var a = new Date(inicio + 'T00:00:00'), b = new Date(fim + 'T00:00:00');
+    if (isNaN(a.getTime()) || isNaN(b.getTime()) || b < a) return { corridos: 0, uteis: 0, efectivos: 0 };
+    var corridos = Math.floor((b.getTime() - a.getTime()) / 864e5) + 1, uteis = 0;
+    for (var t = a.getTime(); t <= b.getTime(); t += 864e5) { var w = new Date(t).getDay(); if (w !== 0 && w !== 6) uteis++; }
+    var ef = (meio && inicio === fim) ? 0.5 : uteis;
+    return { corridos: corridos, uteis: uteis, efectivos: ef };
+}
+function sgAusResumo() {
+    var el = document.getElementById('aus-resumo'); if (!el) return;
+    var i = sgAusVal('aus-inicio'), f = sgAusVal('aus-fim');
+    var meio = !!(document.getElementById('aus-meio') && document.getElementById('aus-meio').checked);
+    if (!i || !f) { el.innerHTML = 'Seleccione as datas para calcular os dias.'; return; }
+    var c = sgAusContarDias(i, f, meio);
+    if (c.corridos <= 0) { el.innerHTML = 'A data de fim não pode ser anterior à de início.'; return; }
+    el.innerHTML = 'Duração: <strong>' + c.efectivos + ' dia(s) úteis</strong> · ' + c.corridos + ' dia(s) corridos.';
+}
+function sgAusRender(itens) {
+    var box = document.getElementById('aus-lista'); if (!box) return;
+    if (!itens || !itens.length) { box.innerHTML = '<div class="sg-aus-empty">Sem registos para os filtros escolhidos.</div>'; return; }
+    var h = '<table class="sg-aus-table"><thead><tr><th>Colaborador</th><th>Tipo</th><th>Período</th><th>Dias</th><th>Estado</th><th></th></tr></thead><tbody>';
+    for (var k = 0; k < itens.length; k++) {
+        var a = itens[k];
+        var json = sgFichaEsc(JSON.stringify(a));
+        var periodo = sgFichaDateBR(a.data_inicio) + (a.data_fim !== a.data_inicio ? ' – ' + sgFichaDateBR(a.data_fim) : '') + (a.meio_dia ? ' (½ dia)' : '');
+        var acoes = '<div class="sg-aus-acoes">';
+        if (a.estado === 'pendente') {
+            acoes += '<button type="button" class="btn-action is-ok" data-tooltip="Aprovar" data-sige-act="aprovarAusencia" data-sige-args="[' + (a.id | 0) + ',&quot;aprovada&quot;]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></button>';
+            acoes += '<button type="button" class="btn-action is-no" data-tooltip="Rejeitar" data-sige-act="aprovarAusencia" data-sige-args="[' + (a.id | 0) + ',&quot;rejeitada&quot;]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';
+        }
+        acoes += '<button type="button" class="btn-action" data-tooltip="Editar" data-sige-act="sigeExecutarJsonData" data-sige-json-fn="abrirAusencia" data-sige-json="' + json + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>';
+        acoes += '<button type="button" class="btn-action is-no" data-tooltip="Eliminar" data-sige-act="eliminarAusencia" data-sige-args="[' + (a.id | 0) + ',&quot;' + sgFichaEsc(a.colaborador || '') + '&quot;]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></button>';
+        acoes += '</div>';
+        h += '<tr>'
+            + '<td><span class="sg-aus-nome">' + sgFichaEsc(a.colaborador || 'Colaborador') + '</span></td>'
+            + '<td><span class="sg-aus-tipo t-' + sgFichaEsc(a.tipo) + '">' + sgFichaEsc(a.tipo_label) + '</span></td>'
+            + '<td class="sg-aus-datas">' + periodo + '</td>'
+            + '<td class="sg-aus-dias">' + a.dias + '</td>'
+            + '<td><span class="sg-aus-estado e-' + sgFichaEsc(a.estado) + '"><span class="dot"></span>' + sgFichaEsc(a.estado_label) + '</span></td>'
+            + '<td>' + acoes + '</td>'
+            + '</tr>';
+    }
+    h += '</tbody></table>';
+    box.innerHTML = h;
+}
+function sgAusCarregar() {
+    var box = document.getElementById('aus-lista'); if (!box) return;
+    box.innerHTML = '<div class="sg-aus-empty">A carregar…</div>';
+    jQuery.post(sigeEquipeAjax.ajaxurl, {
+        action: 'sige_rh_ausencia_listar', _sige_nonce: sigeEquipeAjax.nonce,
+        ano: sgAusVal('aus-f-ano'), tipo: sgAusVal('aus-f-tipo'), estado: sgAusVal('aus-f-estado')
+    }, function (res) {
+        if (res && res.success) { sgAusRender((res.data && res.data.itens) || []); }
+        else { box.innerHTML = '<div class="sg-aus-empty">' + sgFichaEsc((res && res.data) || 'Não foi possível carregar.') + '</div>'; }
+    }).fail(function () { box.innerHTML = '<div class="sg-aus-empty">' + sgFichaEsc(sigeEquipeAjaxFailMessage(arguments[0], 'Erro de comunicação.')) + '</div>'; });
+}
+function abrirAusencia(data) {
+    var isEdit = data && typeof data === 'object' && data.id;
+    var t = document.getElementById('ausencia-title'); if (t) t.textContent = isEdit ? 'Editar ausência' : 'Registar ausência';
+    sgAusSetVal('aus-id', isEdit ? data.id : '0');
+    sgAusSetVal('aus-colab', isEdit ? data.professor_id : '');
+    sgAusSetVal('aus-tipo', isEdit ? data.tipo : 'ferias');
+    sgAusSetVal('aus-estado', isEdit ? data.estado : 'aprovada');
+    sgAusSetVal('aus-inicio', isEdit ? data.data_inicio : '');
+    sgAusSetVal('aus-fim', isEdit ? data.data_fim : '');
+    var meio = document.getElementById('aus-meio'); if (meio) meio.checked = isEdit ? !!data.meio_dia : false;
+    sgAusSetVal('aus-motivo', isEdit ? (data.motivo || '') : '');
+    sgAusResumo();
+    sigeEquipeOpenModal(document.getElementById('box-ausencia'));
+}
+function fecharAusencia() { sigeEquipeCloseModal(document.getElementById('box-ausencia')); }
+// Filtros recarregam a lista ao mudar; datas/meio-dia recalculam o resumo.
+document.addEventListener('DOMContentLoaded', function () {
+    ['aus-f-ano', 'aus-f-tipo', 'aus-f-estado'].forEach(function (id) {
+        var e = document.getElementById(id); if (e) e.addEventListener('change', sgAusCarregar);
+    });
+    ['aus-inicio', 'aus-fim', 'aus-meio'].forEach(function (id) {
+        var e = document.getElementById(id); if (e) e.addEventListener('change', sgAusResumo);
+    });
+});
+function guardarAusencia() {
+    var prof = sgAusVal('aus-colab'), ini = sgAusVal('aus-inicio'), fim = sgAusVal('aus-fim');
+    if (!prof) { showToast('Atenção', 'Seleccione o colaborador.', 'warning'); return; }
+    if (!ini || !fim) { showToast('Atenção', 'Indique as datas de início e fim.', 'warning'); return; }
+    jQuery.post(sigeEquipeAjax.ajaxurl, {
+        action: 'sige_rh_ausencia_guardar', _sige_nonce: sigeEquipeAjax.nonce,
+        id: sgAusVal('aus-id'), professor_id: prof, tipo: sgAusVal('aus-tipo'), estado: sgAusVal('aus-estado'),
+        data_inicio: ini, data_fim: fim, meio_dia: (document.getElementById('aus-meio') && document.getElementById('aus-meio').checked) ? 1 : 0,
+        motivo: sgAusVal('aus-motivo')
+    }, function (res) {
+        if (res && res.success) { showToast('Sucesso', 'Ausência guardada.', 'success'); fecharAusencia(); sgAusCarregar(); }
+        else { showToast('Erro', (res && res.data) || 'Falha ao guardar.', 'error'); }
+    }).fail(function () { showToast('Erro', sigeEquipeAjaxFailMessage(arguments[0], 'Erro de comunicação.'), 'error'); });
+}
+function aprovarAusencia(id, estado) {
+    jQuery.post(sigeEquipeAjax.ajaxurl, { action: 'sige_rh_ausencia_estado', _sige_nonce: sigeEquipeAjax.nonce, id: id, estado: estado }, function (res) {
+        if (res && res.success) { showToast('Actualizado', estado === 'aprovada' ? 'Ausência aprovada.' : 'Ausência rejeitada.', 'success'); sgAusCarregar(); }
+        else { showToast('Erro', (res && res.data) || 'Falha ao actualizar.', 'error'); }
+    }).fail(function () { showToast('Erro', sigeEquipeAjaxFailMessage(arguments[0], 'Erro de comunicação.'), 'error'); });
+}
+function eliminarAusencia(id, nome) {
+    sigeConfirm({
+        title: 'Eliminar registo?',
+        message: 'Confirme se pretende eliminar este registo de ausência.',
+        detail: nome || '',
+        okText: 'Eliminar', cancelText: 'Voltar'
+    }).then(function (ok) {
+        if (!ok) return;
+        jQuery.post(sigeEquipeAjax.ajaxurl, { action: 'sige_rh_ausencia_eliminar', _sige_nonce: sigeEquipeAjax.nonce, id: id }, function (res) {
+            if (res && res.success) { showToast('Eliminado', 'Registo removido.', 'success'); sgAusCarregar(); }
+            else { showToast('Erro', (res && res.data) || 'Falha ao eliminar.', 'error'); }
+        }).fail(function () { showToast('Erro', sigeEquipeAjaxFailMessage(arguments[0], 'Erro de comunicação.'), 'error'); });
+    });
 }
 
 Object.assign(window, {
@@ -4230,6 +4546,13 @@ Object.assign(window, {
     verFichaColaborador,
     fecharFicha,
     imprimirFicha,
+    sgAusCarregar,
+    sgAusResumo,
+    abrirAusencia,
+    fecharAusencia,
+    guardarAusencia,
+    aprovarAusencia,
+    eliminarAusencia,
     uploadFoto,
     uploadDoc
 });

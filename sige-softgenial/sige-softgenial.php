@@ -3,7 +3,7 @@
  * Plugin Name: SIGE SoftGenial - Gestão Escolar Moçambique
  * Plugin URI: https://softgenial.edu.mz
  * Description: Software de Gestão Integrado para Escolas (SaaS Ready). Versão Modularizada.
- * Version: 12.37.2
+ * Version: 12.38.0
  * Author: RMBJ Consultoria
  * Author URI: https://rmbjconsulting.com
  * Text Domain: sige-softgenial
@@ -29,7 +29,7 @@ if (function_exists('date_default_timezone_set')) {
 // ============================================================================
 define('SIGE_PATH', plugin_dir_path(__FILE__));
 define('SIGE_URL', plugin_dir_url(__FILE__));
-define('SIGE_VERSION', '12.37.2');
+define('SIGE_VERSION', '12.38.0');
 define('SIGE_HUB_VERSION', '1.1.1');
 
 
@@ -202,6 +202,13 @@ if (file_exists(SIGE_PATH . 'includes/rh-alertas.php')) {
 // leitura sobre categoria + ficha de sige_professores; sem schema nem writes.
 if (file_exists(SIGE_PATH . 'includes/rh-relatorios.php')) {
     require_once SIGE_PATH . 'includes/rh-relatorios.php';
+}
+
+// [v12.38.0] Recursos Humanos - Ferias & Ausencias (Fase 1). Tabela propria
+// (sige_rh_ausencias) criada por codigo de forma idempotente; gestao pelo RH.
+// Nao cria permissoes novas nem toca em ficheiros protegidos.
+if (file_exists(SIGE_PATH . 'includes/rh-ausencias.php')) {
+    require_once SIGE_PATH . 'includes/rh-ausencias.php';
 }
 
 // [v12.9.6] Page Guard Helper - guarda centralizada baseada na matriz SIGE.

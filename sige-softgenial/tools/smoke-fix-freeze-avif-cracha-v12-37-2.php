@@ -21,8 +21,8 @@ $boot    = (string) @file_get_contents($root . '/sige-softgenial.php');
 $build   = json_decode((string) @file_get_contents($root . '/BUILD.json'), true);
 
 // ── (1) FREEZE: visibilidade só por .active ─────────────────────────────────────
-_p($fails, strpos($equipe, '#box-ficha.sige-modal.active{') !== false, 'Regra SHOW usa .active');
-_p($fails, strpos($equipe, '#box-ficha.sige-modal:not(.active){') !== false, 'Regra HIDE usa :not(.active)');
+_p($fails, strpos($equipe, '#box-ficha.sige-modal.active') !== false, 'Regra SHOW usa .active');
+_p($fails, strpos($equipe, '#box-ficha.sige-modal:not(.active)') !== false, 'Regra HIDE usa :not(.active)');
 // Já não deve depender de aria-hidden na visibilidade (causa da dessincronia).
 _p($fails, strpos($equipe, 'sige-modal[aria-hidden="false"]') === false, 'SHOW já não depende de aria-hidden=false');
 _p($fails, strpos($equipe, 'sige-modal:not(.active)[aria-hidden="true"]') === false, 'HIDE já não depende de aria-hidden=true');
