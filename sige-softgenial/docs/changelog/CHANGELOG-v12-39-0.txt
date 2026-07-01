@@ -1,0 +1,57 @@
+SIGE SoftGenial v12.39.0 - RH (passo 6): Assiduidade / Ponto (Fase 1, tabela nova)
+Data: 2026-07-01
+Tipo: nova funcionalidade (view=equipe). Tabela própria. Aprovada.
+
+DECISÕES (confirmadas pelo utilizador)
+- Marcação DIÁRIA por estado (não ponto por horas).
+- Ausências aprovadas cobrem o dia automaticamente (não são sobrepostas).
+- Estados: Presente, Falta justificada, Falta injustificada, Atraso, Meio dia,
+  Folga, Feriado.
+
+O QUE FAZ
+- Nova aba "Assiduidade" na Equipa (só gestão):
+    * escolher um dia -> grelha da equipa activa -> marcar o estado de cada um ->
+      "Guardar marcações" (em lote);
+    * atalho "Marcar todos presentes";
+    * dias cobertos por ausência aprovada aparecem bloqueados ("Em ausência —
+      <tipo>") e não são sobrepostos nem contam como falta;
+    * no estado "Atraso" abre um campo de minutos.
+
+ENGENHARIA (limpa, sem remendos)
+- NOVO includes/rh-assiduidade.php:
+    * TABELA {prefix}sige_rh_assiduidade criada POR CÓDIGO (idempotente), com
+      UNIQUE (escola_id, professor_id, data) - 1 registo por pessoa/dia.
+    * FUNÇÕES PURAS: sige_rh_dias_uteis_mes (Seg–Sex; sem feriados) e rótulos.
+    * Camada de dados TENANT-SCOPED: grelha do dia (activos + estado + ausência
+      que cobre), guardar_lote (upsert/delete que NÃO sobrepõe dias cobertos por
+      ausência aprovada) e resumo_mes por estado (alimenta o salário).
+    * AJAX (grelha/guardar) gated por sige_ajax_equipe_can_manage, com nonce,
+      tenant-scope e auditoria.
+- NÃO cria permissões novas; NÃO toca em ficheiros protegidos.
+- admin/hr/equipe-view.php: aba + painel + grelha (AJAX, lazy) 100% no design
+  system (reutiliza a tabela/estilos das ausências).
+- Carregado no bootstrap (sige-softgenial.php).
+
+NOTA DE DEPLOY (importante)
+- Inclui 1 FICHEIRO NOVO: includes/rh-assiduidade.php.
+- CRIA 1 TABELA NOVA (wp_sige_rh_assiduidade) automaticamente, por código, no
+  primeiro acesso admin após o deploy (sem SQL manual).
+
+VALIDAÇÃO
+- php -l (include + view + bootstrap) OK; node --check (bloco JS) OK.
+- Gates: design-tokens 1857 (sem regressão), baseline-preservation OK,
+  typography OK.
+- Novo smoke tools/smoke-rh-assiduidade-v12-39-0.php (puras + dados com $wpdb
+  stub, incl. não-sobreposição de ausências + insert/delete; e ligação).
+- Render verificado (Chromium): grelha com selectores, minutos no atraso e
+  linha bloqueada "em ausência".
+
+FRONTEIRA
+- Tabela isolada; sem tocar em finanças, notas, schema existente nem ficheiros
+  protegidos.
+
+PRÓXIMO PASSO (a fechar o módulo)
+- Processamento de Salário, com as regras de Moçambique: INSS (3% trabalhador /
+  4% empregador), IRPS por escalões, subsídios e descontos por falta
+  injustificada (consumindo o resumo de assiduidade). Terá plano próprio para
+  aprovação das taxas antes de calcular dinheiro.

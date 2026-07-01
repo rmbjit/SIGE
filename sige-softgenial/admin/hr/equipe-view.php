@@ -1742,6 +1742,14 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 .sige-rh .sg-aus-hoje-none{display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-sm);font-weight:600;color:var(--color-success-700);}
 .sige-rh .sg-aus-hoje-none svg{width:16px;height:16px;}
 .sige-rh .sg-aus-bars{margin-top:var(--space-4);}
+/* Grelha de assiduidade */
+.sige-rh .sg-assi-datelbl{display:inline-flex;align-items:center;gap:var(--space-2);font-size:var(--fs-sm);font-weight:600;color:var(--color-slate-600);}
+.sige-rh .sg-assi-sel{height:36px;padding:0 var(--space-3);border:1px solid var(--color-ink-200);border-radius:var(--radius-md);background:var(--color-white);font-family:inherit;font-size:var(--fs-sm);font-weight:600;color:var(--color-slate-700);cursor:pointer;min-width:180px;}
+.sige-rh .sg-assi-sel:focus{outline:none;border-color:var(--sg-theme-primary,var(--color-brand-400));box-shadow:0 0 0 3px var(--sg-theme-soft,var(--color-brand-50));}
+.sige-rh .sg-assi-min{width:74px;height:36px;padding:0 var(--space-3);border:1px solid var(--color-ink-200);border-radius:var(--radius-md);font-family:inherit;font-size:var(--fs-sm);}
+.sige-rh .sg-assi-min[hidden]{display:none;}
+.sige-rh .sg-assi-locked{display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-sm);font-weight:700;color:var(--color-slate-500);}
+.sige-rh .sg-assi-cell{display:flex;align-items:center;gap:var(--space-2);}
 /* Modal de registo */
 #box-ausencia .modal-body{padding:var(--space-6)!important;background:linear-gradient(180deg,var(--color-white),var(--color-slate-50))!important;}
 #box-ausencia .sg-aus-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4);}
@@ -2260,6 +2268,10 @@ body.sige-admin-app #box-ausencia.sige-modal:not(.active){
             <button type="button" class="sg-rh-tab" id="sg-rh-tabbtn-ausencias" role="tab" aria-selected="false" aria-controls="sg-rh-panel-ausencias" data-sige-act="sgRhSwitchTab" data-sige-args='["ausencias"]'>
                 <span class="sg-rh-tab-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M9 16l2 2 4-4"/></svg></span>
                 Ausências
+            </button>
+            <button type="button" class="sg-rh-tab" id="sg-rh-tabbtn-assiduidade" role="tab" aria-selected="false" aria-controls="sg-rh-panel-assiduidade" data-sige-act="sgRhSwitchTab" data-sige-args='["assiduidade"]'>
+                <span class="sg-rh-tab-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></span>
+                Assiduidade
             </button>
             <?php endif; ?>
         </div>
@@ -2858,6 +2870,38 @@ body.sige-admin-app #box-ausencia.sige-modal:not(.active){
 
         <div class="sige-table-card sg-dash-card">
             <div id="aus-lista"><div class="sg-aus-empty">A carregar…</div></div>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <?php if ($can_manage_equipe): ?>
+    <!-- ========================================
+         PAINEL: ASSIDUIDADE / PONTO (Fase 1)
+         ======================================== -->
+    <div class="sg-rh-tabpanel" id="sg-rh-panel-assiduidade" role="tabpanel" aria-labelledby="sg-rh-tabbtn-assiduidade" data-rh-panel="assiduidade" hidden>
+        <div class="sg-rh-rep-intro">
+            <span class="sg-rh-rep-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></span>
+            <div>
+                <h2>Assiduidade / Ponto</h2>
+                <p>Marque a assiduidade da equipa por dia. Dias cobertos por ausência aprovada ficam bloqueados.</p>
+            </div>
+        </div>
+
+        <div class="sg-aus-toolbar sg-dash-card">
+            <div class="sg-aus-filtros">
+                <label class="sg-assi-datelbl">Dia
+                    <input type="date" id="assi-data" class="sg-aus-select" value="<?php echo esc_attr(function_exists('wp_date') ? wp_date('Y-m-d') : date('Y-m-d')); ?>">
+                </label>
+                <button type="button" class="sg-v2-btn sg-v2-btn-secondary" data-sige-act="sgAssiTodosPresentes" data-sige-noargs>Marcar todos presentes</button>
+            </div>
+            <button type="button" class="sg-v2-btn sg-v2-btn-primary" data-sige-act="sgAssiGuardar" data-sige-noargs>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Guardar marcações
+            </button>
+        </div>
+
+        <div class="sige-table-card sg-dash-card">
+            <div id="assi-grid"><div class="sg-aus-empty">A carregar…</div></div>
         </div>
     </div>
     <?php endif; ?>
@@ -4464,6 +4508,10 @@ function sgRhSwitchTab(tab) {
         sgAusLoaded = true;
         sgAusCarregar();
     }
+    if (target === 'assiduidade' && !sgAssiLoaded && typeof sgAssiCarregar === 'function') {
+        sgAssiLoaded = true;
+        sgAssiCarregar();
+    }
 }
 
 // ========================================
@@ -4587,6 +4635,89 @@ function eliminarAusencia(id, nome) {
     });
 }
 
+// ========================================
+// [v12.39.0] ASSIDUIDADE / PONTO (marcação diária)
+// ========================================
+var sgAssiLoaded = false;
+var SG_ASSI_ESTADOS = [
+    ['', '— não marcado —'],
+    ['presente', 'Presente'],
+    ['falta_justificada', 'Falta justificada'],
+    ['falta_injustificada', 'Falta injustificada'],
+    ['atraso', 'Atraso'],
+    ['meio_dia', 'Meio dia'],
+    ['folga', 'Folga'],
+    ['feriado', 'Feriado']
+];
+function sgAssiOpts(sel) {
+    var h = '';
+    for (var i = 0; i < SG_ASSI_ESTADOS.length; i++) {
+        var s = SG_ASSI_ESTADOS[i];
+        h += '<option value="' + s[0] + '"' + (s[0] === sel ? ' selected' : '') + '>' + sgFichaEsc(s[1]) + '</option>';
+    }
+    return h;
+}
+function sgAssiRender(itens) {
+    var box = document.getElementById('assi-grid'); if (!box) return;
+    if (!itens || !itens.length) { box.innerHTML = '<div class="sg-aus-empty">Sem colaboradores activos.</div>'; return; }
+    var h = '<table class="sg-aus-table"><thead><tr><th>Colaborador</th><th>Assiduidade</th></tr></thead><tbody>';
+    for (var k = 0; k < itens.length; k++) {
+        var a = itens[k];
+        h += '<tr data-pid="' + (a.professor_id | 0) + '"><td><span class="sg-aus-nome">' + sgFichaEsc(a.nome || 'Colaborador') + '</span></td><td>';
+        if (a.ausencia) {
+            h += '<span class="sg-assi-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Em ausência — ' + sgFichaEsc(a.ausencia.label || '') + '</span>';
+        } else {
+            var isAtraso = a.estado === 'atraso';
+            h += '<div class="sg-assi-cell"><select class="sg-assi-sel">' + sgAssiOpts(a.estado || '') + '</select>'
+               + '<input type="number" min="0" class="sg-assi-min" placeholder="min"' + (isAtraso ? '' : ' hidden') + ' value="' + (a.minutos_atraso ? (a.minutos_atraso | 0) : '') + '"></div>';
+        }
+        h += '</td></tr>';
+    }
+    h += '</tbody></table>';
+    box.innerHTML = h;
+    // Mostrar/ocultar minutos conforme "atraso".
+    box.querySelectorAll('.sg-assi-sel').forEach(function (sel) {
+        sel.addEventListener('change', function () {
+            var min = sel.parentNode.querySelector('.sg-assi-min');
+            if (min) { if (sel.value === 'atraso') { min.hidden = false; } else { min.hidden = true; min.value = ''; } }
+        });
+    });
+}
+function sgAssiCarregar() {
+    var box = document.getElementById('assi-grid'); if (!box) return;
+    var data = sgAusVal('assi-data');
+    box.innerHTML = '<div class="sg-aus-empty">A carregar…</div>';
+    jQuery.post(sigeEquipeAjax.ajaxurl, { action: 'sige_rh_assiduidade_grelha', _sige_nonce: sigeEquipeAjax.nonce, data: data }, function (res) {
+        if (res && res.success) { sgAssiRender((res.data && res.data.itens) || []); }
+        else { box.innerHTML = '<div class="sg-aus-empty">' + sgFichaEsc((res && res.data) || 'Não foi possível carregar.') + '</div>'; }
+    }).fail(function () { box.innerHTML = '<div class="sg-aus-empty">' + sgFichaEsc(sigeEquipeAjaxFailMessage(arguments[0], 'Erro de comunicação.')) + '</div>'; });
+}
+function sgAssiTodosPresentes() {
+    var box = document.getElementById('assi-grid'); if (!box) return;
+    box.querySelectorAll('.sg-assi-sel').forEach(function (sel) {
+        sel.value = 'presente';
+        var min = sel.parentNode.querySelector('.sg-assi-min'); if (min) { min.hidden = true; min.value = ''; }
+    });
+}
+function sgAssiGuardar() {
+    var box = document.getElementById('assi-grid'); if (!box) return;
+    var data = sgAusVal('assi-data');
+    if (!data) { showToast('Atenção', 'Escolha o dia.', 'warning'); return; }
+    var itens = [];
+    box.querySelectorAll('tr[data-pid]').forEach(function (tr) {
+        var sel = tr.querySelector('.sg-assi-sel'); if (!sel) return; // linha bloqueada (ausência)
+        var min = tr.querySelector('.sg-assi-min');
+        itens.push({ professor_id: parseInt(tr.getAttribute('data-pid'), 10) || 0, estado: sel.value, minutos_atraso: (min && !min.hidden) ? (parseInt(min.value, 10) || 0) : 0 });
+    });
+    jQuery.post(sigeEquipeAjax.ajaxurl, { action: 'sige_rh_assiduidade_guardar', _sige_nonce: sigeEquipeAjax.nonce, data: data, itens: JSON.stringify(itens) }, function (res) {
+        if (res && res.success) { showToast('Sucesso', 'Assiduidade guardada (' + (res.data && res.data.guardados || 0) + ' registo(s)).', 'success'); sgAssiCarregar(); }
+        else { showToast('Erro', (res && res.data) || 'Falha ao guardar.', 'error'); }
+    }).fail(function () { showToast('Erro', sigeEquipeAjaxFailMessage(arguments[0], 'Erro de comunicação.'), 'error'); });
+}
+document.addEventListener('DOMContentLoaded', function () {
+    var d = document.getElementById('assi-data'); if (d) d.addEventListener('change', sgAssiCarregar);
+});
+
 Object.assign(window, {
     novoFuncionario,
     fecharForm,
@@ -4613,6 +4744,9 @@ Object.assign(window, {
     guardarAusencia,
     aprovarAusencia,
     eliminarAusencia,
+    sgAssiCarregar,
+    sgAssiGuardar,
+    sgAssiTodosPresentes,
     uploadFoto,
     uploadDoc
 });
