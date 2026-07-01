@@ -237,6 +237,11 @@
         if (!accao) return;
         var fn = resolverAcao ? resolverAcao(accao) : window[accao];
         if (typeof fn !== 'function') return;
+        // Anti-duplo-despacho: uma view pode ter um despachante inline proprio que
+        // trata o clique mais cedo (antes deste ficheiro do rodape carregar). Se
+        // ja o marcou, nao repetir (evitaria, p.ex., gravar duas vezes).
+        if (ev.__sigeAct) return;
+        ev.__sigeAct = true;
         // [data-sige-prevent]: impede a accao por omissao (substitui o "return false"
         // de onclick em <a>, por exemplo abrir o recibo numa janela sem navegar).
         if (alvo.hasAttribute('data-sige-prevent')) { ev.preventDefault(); }

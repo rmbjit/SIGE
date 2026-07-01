@@ -1,6 +1,39 @@
-SIGE SoftGenial v12.42.2 - RH: sub-abas alinhadas com a Equipa (lista canónica) + correcção rigorosa do congelamento
+SIGE SoftGenial v12.42.3 - view=equipe: correcção DEFINITIVA do "click mudo" (despachante inline)
 Data: 2026-07-01
 Tipo: correcção. Sem schema novo, sem permissões novas, sem tocar em ficheiros protegidos.
+
+NOTA v12.42.3 (causa-raiz do "click mudo", verificada no sistema)
+- Sintoma: em view=equipe, TODOS os botões ficavam "mudos"; congelava e só
+  "depois de algum tempo e vários refreshs" aceitava — pior logo após gravar.
+- Causa: 100% da interacção da view (64 data-sige-act + 5 data-sige-json + o
+  submit do formulário) dependia de UM ÚNICO ficheiro no RODAPÉ
+  (assets/sige-ui.js) para ligar o despachante delegado. Esta é a maior view do
+  sistema (>300 KB) e, sobretudo após gravar (que faz location.reload()), há uma
+  janela em que os botões já aparecem mas o script do rodapé ainda não ligou; em
+  ligação lenta/instável pode até falhar a carregar. Por isso só a equipe (a
+  maior) sofria e por isso "tempo + refreshs" resolvia (quando o rodapé chegava).
+- Correcção DEFINITIVA: a view passa a ser AUTOSSUFICIENTE — um despachante
+  INLINE (corre a meio do body, muito antes do rodapé) liga os botões ao PRIMEIRO
+  clique, mesmo que o rodapé atrase ou falhe. De-duplicação por evento garante
+  que nunca há duplo disparo com o despachante global.
+
+ENGENHARIA (v12.42.3)
+- admin/hr/equipe-view.php: novo bloco <script> nonce'd no fim da view (fora do
+  endif de gestão, logo serve também quem só VÊ) com: (a) despachante delegado
+  data-sige-act com a MESMA semântica do global (data-sige-args/arg/noargs/self/
+  prevent); (b) fallback de sigeExecutarJsonData (recibo/mapa); (c) ligação
+  imediata do submit do #form-staff, marcando data-sige-bound-submit=1 para o
+  hidratador global não religar (evita duplo submit).
+- assets/sige-ui.js: o despachante global passa a respeitar e a definir
+  ev.__sigeAct — se um despachante mais cedo (o inline) já tratou o clique, o
+  global ignora. Retrocompatível: outras views nunca marcam a flag.
+- Novo smoke tools/smoke-rh-anti-click-mudo-v12-42-3.php.
+
+────────────────────────────────────────────────────────────────────────────
+HISTÓRICO ANTERIOR DESTA LINHA (v12.42.x)
+────────────────────────────────────────────────────────────────────────────
+
+v12.42.2 - RH: sub-abas alinhadas com a Equipa (lista canónica)
 
 NOTA v12.42.2 (causa-raiz do "aparecem utilizadores a mais")
 - Sintoma: a aba Equipa mostrava o número CERTO de pessoas, mas Ausências,

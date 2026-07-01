@@ -5302,3 +5302,78 @@ document.addEventListener('DOMContentLoaded', function() {
 })();
 </script>
 <?php endif; ?>
+<script <?php echo sige_csp_script_attr(); ?>>
+/* ============================================================================
+ * [v12.42.3] DESPACHANTE INLINE — correcção definitiva do "click mudo"
+ * ----------------------------------------------------------------------------
+ * CAUSA-RAIZ (verificada no sistema, não de memória): TODA a interacção desta
+ * view (64 data-sige-act + 5 data-sige-json + o submit do formulário) dependia
+ * de UM único ficheiro no RODAPÉ (assets/sige-ui.js) para ligar o despachante
+ * delegado. Nesta view — a maior do sistema (>300 KB) — e sobretudo logo após
+ * gravar (que faz location.reload()), há uma janela em que os botões já se veem
+ * mas esse script do rodapé ainda não ligou; numa ligação lenta/instável pode
+ * até falhar a carregar. Resultado: clique "mudo" em TODOS os botões até (e se)
+ * o rodapé chegar — exactamente o sintoma relatado.
+ *
+ * SOLUÇÃO: esta view passa a ser AUTOSSUFICIENTE. Este bloco é INLINE (corre a
+ * meio do body, muito antes do rodapé) e replica a MESMA semântica do
+ * despachante global, com de-duplicação por evento (ev.__sigeAct) para nunca
+ * haver duplo disparo com o assets/sige-ui.js. Assim os botões respondem ao
+ * PRIMEIRO clique, sem esperar pelo rodapé e mesmo que este falhe.
+ * ========================================================================== */
+(function () {
+    if (window.__sigeEquipeDispatch) return;
+    window.__sigeEquipeDispatch = true;
+
+    // Despachante delegado data-sige-act (idêntico ao global; de-dup por evento).
+    document.addEventListener('click', function (ev) {
+        if (ev.__sigeAct) return;
+        var alvo = ev.target && ev.target.closest ? ev.target.closest('[data-sige-act]') : null;
+        if (!alvo) return;
+        var accao = alvo.getAttribute('data-sige-act');
+        if (!accao) return;
+        var fn = window[accao];
+        if (typeof fn !== 'function') return; // se ainda não definido, deixa o global tentar
+        ev.__sigeAct = true;
+        if (alvo.hasAttribute('data-sige-prevent')) { ev.preventDefault(); }
+        var args;
+        var argsJson = alvo.getAttribute('data-sige-args');
+        if (argsJson !== null) {
+            try { args = JSON.parse(argsJson); } catch (e) { return; }
+            if (!Array.isArray(args)) { args = [args]; }
+            if (alvo.hasAttribute('data-sige-self')) { args = args.concat([alvo]); }
+        } else {
+            var arg = alvo.getAttribute('data-sige-arg');
+            if (arg !== null) { args = [arg]; }
+            else if (alvo.hasAttribute('data-sige-noargs')) { args = []; }
+            else { args = [alvo]; }
+        }
+        try { fn.apply(null, args); }
+        catch (err) { if (window.console && console.error) { console.error('[sige] erro na acção "' + accao + '":', err); } }
+    });
+
+    // Fallback do executor data-sige-json (recibo/mapa) caso o rodapé não tenha chegado.
+    if (typeof window.sigeExecutarJsonData !== 'function') {
+        window.sigeExecutarJsonData = function (el) {
+            if (!el) return;
+            var nome = el.getAttribute('data-sige-json-fn') || '';
+            var fn = window[nome];
+            if (typeof fn !== 'function') return;
+            var raw = el.getAttribute('data-sige-json') || '{}';
+            var data;
+            try { data = JSON.parse(raw); } catch (e) { return; }
+            fn(data);
+        };
+    }
+
+    // Submit do formulário principal: ligar já e impedir religação pelo hidratador
+    // global (que só corre no DOMContentLoaded) via a mesma marca data-sige-bound.
+    var f = document.getElementById('form-staff');
+    if (f && f.getAttribute('data-sige-bound-submit') !== '1') {
+        f.setAttribute('data-sige-bound-submit', '1');
+        f.addEventListener('submit', function (ev) {
+            if (typeof window.guardarStaff === 'function') { window.guardarStaff(ev); }
+        });
+    }
+})();
+</script>
