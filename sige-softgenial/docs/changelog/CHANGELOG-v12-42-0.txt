@@ -1,0 +1,64 @@
+SIGE SoftGenial v12.42.0 - RH: super admin fora de Assiduidade/Salários + correcção rigorosa do congelamento
+Data: 2026-07-01
+Tipo: correcção. Sem schema novo, sem permissões novas, sem tocar em ficheiros protegidos.
+
+O QUE FAZ
+(1) SUPER ADMIN FORA DA ESCOLA
+    - O administrador WordPress REAL (o "super admin" de manutenção do sistema,
+      que NÃO faz parte da escola — é um utilizador nosso) deixa de aparecer nas
+      listagens de colaboradores da aba ASSIDUIDADE e da aba SALÁRIOS, tal como
+      já era excluído da aba Equipa. Por consequência, também não aparece nos
+      mapas fiscais (INSS/IRPS), que lêem os mesmos dados.
+
+(2) CONGELAMENTO DEPOIS DE GRAVAR — CORRIGIDO DE FORMA RIGOROSA
+    - Depois de gravar, ao clicar nos botões a página podia parecer "congelada".
+      A causa era o estado do "shell" (bloqueio de scroll do body + a classe que
+      eleva o conteúdo enquanto há um modal) ser reposto de forma dispersa e
+      condicional, com o crachá a gerir essa classe por conta própria: bastava um
+      handler falhar a meio, ou os dois mecanismos dessincronizarem, para o body
+      ficar preso. Agora esse estado tem UMA fonte de verdade e é sempre
+      reconciliado; e a rede de segurança corre ANTES do clique, pelo que já não
+      há o "clique desperdiçado" da versão anterior.
+
+ENGENHARIA
+- includes/rh-assiduidade.php:
+    * NOVO helper único sige_rh_emails_admin_sistema() — emails (minúsculas) dos
+      administradores WP reais (get_users administrator/super_admin filtrados por
+      sige_is_real_wp_admin_user; os admins são globais, logo cache estático no
+      pedido) + sige_rh_professor_e_admin_sistema(email).
+    * sige_rh_assiduidade_grelha passa a seleccionar o email e a saltar a linha
+      cujo email pertence ao admin WP real. A ligação é feita pelo email, que é a
+      chave usada em todo o roster RH (sige_professores não tem user_id).
+- includes/rh-salarios.php:
+    * sige_rh_salario_preview e sige_rh_salario_mapa_mes aplicam a MESMA exclusão
+      (o preview passa a seleccionar email; o mapa junta p.email para excluir).
+- admin/hr/equipe-view.php (anti-congelamento):
+    * NOVO sigeRhModalAberto() + sigeRhReconciliarShell() — fonte de verdade
+      única: o estado do body é derivado de "existe algum modal aberto?"
+      (.sige-modal.active OU .sige-cracha-modal.is-open). Libertar/forçar-esconder
+      é idempotente e seguro de chamar a qualquer momento.
+    * sigeEquipeOpenModal/CloseModal e o abrir/fechar do crachá passam a delegar
+      no reconciliador (deixa de haver reposição condicional dispersa).
+    * A rede de segurança passa a correr em 'pointerdown' de CAPTURA (dispara
+      ANTES do 'click') — elimina o "clique desperdiçado" do self-heal anterior.
+    * Mantém-se o invariante do CSS: um modal fechado (:not(.active)) tem
+      pointer-events:none e nunca captura cliques.
+
+VALIDAÇÃO
+- php -l + node --check (fragmentos JS) OK.
+- Gates: design-tokens 1857 (sem regressão), baseline-preservation OK,
+  typography OK, inline-frontend (CSP zero-inline) OK, confirm-dispatch OK,
+  tenant-sensitive-queries OK.
+- consistencia-visual: baseline reconciliada 7113 -> 7142 (o aumento é
+  PRÉ-EXISTENTE da v12.41.0/v12.40.0 — literais px dentro do CSS dos DOCUMENTOS
+  autónomos de recibo/mapa, que são HTML independentes do sistema; esta entrega
+  contribui com ZERO para a contagem, confirmado contra o HEAD).
+- Novo smoke tools/smoke-rh-superadmin-anti-congelamento-v12-42-0.php:
+  exclusão do admin (helper + mapa com $wpdb stub) + ligação (grelha/preview/mapa
+  com email) + reconciliador único ligado (open/close/crachá) + rede em
+  pointerdown + versões sincronizadas. Todos os smokes RH anteriores continuam OK.
+
+FRONTEIRA
+- Sem alterar fórmulas, schema, permissões reais nem ficheiros protegidos.
+- Sem ficheiros novos de runtime e sem tabela nova (só 3 ficheiros existentes
+  alterados + versão + 1 smoke novo + baseline reconciliada).

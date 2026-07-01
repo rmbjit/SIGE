@@ -257,7 +257,7 @@ if (!function_exists('sige_rh_salario_preview')) {
         sige_rh_salarios_migrar();
         $tp = $wpdb->prefix . 'sige_professores';
         $profs = $wpdb->get_results($wpdb->prepare(
-            "SELECT id, nome_completo, nuit, salario_base, subsidio FROM {$tp}
+            "SELECT id, nome_completo, nuit, salario_base, subsidio, email FROM {$tp}
               WHERE escola_id = %d AND (status_ativo IS NULL OR status_ativo = 1)
               ORDER BY nome_completo ASC",
             $escola_id
@@ -267,6 +267,8 @@ if (!function_exists('sige_rh_salario_preview')) {
             $pid = (int) $p->id;
             if ($pid <= 0 || isset($seen[$pid])) continue;
             $seen[$pid] = true;
+            // Excluir o administrador WP real (utilizador de manutenção do sistema).
+            if (function_exists('sige_rh_professor_e_admin_sistema') && sige_rh_professor_e_admin_sistema($p->email ?? '')) continue;
 
             $faltas = 0;
             if (function_exists('sige_rh_assiduidade_resumo_mes')) {
@@ -348,7 +350,7 @@ if (!function_exists('sige_rh_salario_mapa_mes')) {
         $t  = sige_rh_salarios_table();
         $tp = $wpdb->prefix . 'sige_professores';
         $rows = $wpdb->get_results($wpdb->prepare(
-            "SELECT s.*, p.nome_completo AS nome, p.nuit AS nuit
+            "SELECT s.*, p.nome_completo AS nome, p.nuit AS nuit, p.email AS email
                FROM {$t} s
                LEFT JOIN {$tp} p ON p.id = s.professor_id AND p.escola_id = s.escola_id
               WHERE s.escola_id = %d AND s.ano = %d AND s.mes = %d
@@ -356,6 +358,8 @@ if (!function_exists('sige_rh_salario_mapa_mes')) {
             $escola_id, $ano, $mes
         ));
         foreach ((array) $rows as $r) {
+            // Excluir o administrador WP real (utilizador de manutenção do sistema).
+            if (function_exists('sige_rh_professor_e_admin_sistema') && sige_rh_professor_e_admin_sistema($r->email ?? '')) continue;
             $inss = (float) $r->inss; $inss_emp = (float) $r->inss_empregador;
             $out['itens'][] = [
                 'professor_id'    => (int) $r->professor_id,

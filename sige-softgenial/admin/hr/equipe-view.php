@@ -3615,6 +3615,35 @@ document.addEventListener('input', function(e) {
     }
 });
 
+// [v12.42.0] FONTE DE VERDADE ÚNICA do estado do "shell" enquanto há modais.
+// Antes, cada fecho tentava restaurar o body de forma condicional e o crachá
+// geria a classe por conta própria; bastava um handler falhar a meio (ou os
+// dois mecanismos dessincronizarem) para o body ficar bloqueado (overflow
+// escondido / conteúdo elevado) e a página parecer "congelada" depois de
+// gravar. Agora o estado do body é SEMPRE derivado de "existe algum modal
+// aberto?". É idempotente e seguro de chamar a qualquer momento.
+function sigeRhModalAberto() {
+    return !!document.querySelector('.sige-modal.active, .sige-cracha-modal.is-open');
+}
+function sigeRhReconciliarShell() {
+    if (sigeRhModalAberto()) {
+        document.body.classList.add('sige-rh-modal-open');
+        document.body.style.overflow = 'hidden';
+        return;
+    }
+    // Nenhum modal aberto: libertar o body e garantir que nenhum overlay
+    // fechado fica a capturar cliques (à prova de handlers que falhem a meio).
+    document.body.classList.remove('sige-rh-modal-open');
+    if (document.body.style.overflow === 'hidden') document.body.style.overflow = '';
+    var fechados = document.querySelectorAll('.sige-modal:not(.active)');
+    Array.prototype.forEach.call(fechados, function (m) {
+        if (m.getAttribute('aria-hidden') !== 'true') m.setAttribute('aria-hidden', 'true');
+        m.style.display = 'none';
+        m.style.opacity = '0';
+        m.style.visibility = 'hidden';
+        m.style.pointerEvents = 'none';
+    });
+}
 function sigeEquipeOpenModal(modal) {
     if (!modal) return;
     modal.classList.add('active');
@@ -3623,10 +3652,9 @@ function sigeEquipeOpenModal(modal) {
     modal.style.opacity = '1';
     modal.style.visibility = 'visible';
     modal.style.pointerEvents = 'auto';
-    document.body.style.overflow = 'hidden';
     // Eleva o conteudo acima da barra lateral enquanto o modal esta aberto
     // (ver regra .sige-rh-modal-open .sg-app-content no <style> da view).
-    document.body.classList.add('sige-rh-modal-open');
+    sigeRhReconciliarShell();
 }
 function sigeEquipeCloseModal(modal) {
     if (!modal) return;
@@ -3636,11 +3664,8 @@ function sigeEquipeCloseModal(modal) {
     modal.style.opacity = '0';
     modal.style.visibility = 'hidden';
     modal.style.pointerEvents = 'none';
-    // So restaura o empilhamento normal quando nenhum modal da Equipa fica aberto.
-    if (!document.querySelector('.sige-modal.active')) {
-        document.body.style.overflow = '';
-        document.body.classList.remove('sige-rh-modal-open');
-    }
+    // Estado do body derivado do que ficou realmente aberto (nunca fica preso).
+    sigeRhReconciliarShell();
 }
 function novoFuncionario() {
     document.getElementById('modal-title').textContent = 'Novo colaborador';
@@ -4378,30 +4403,13 @@ document.getElementById('box-equipa').addEventListener('click', e => {
 
 // [v12.37.1] Auto-recuperação anti-"congelamento". Se um handler falhar a meio,
 // um modal podia ficar visível/sem estado a capturar TODOS os cliques, parecendo
-// a página congelada até dar refresh. Em fase de CAPTURA (corre antes de qualquer
-// overlay), se NENHUM modal está legitimamente aberto (sem .active e sem .is-open),
-// fechamos overlays órfãos e libertamos o body. É inócuo no funcionamento normal
-// (quando há um modal aberto, sai logo).
-document.addEventListener('click', function () {
-    if (document.querySelector('.sige-modal.active, .is-open')) return;
-    // Nenhum modal aberto: reconciliar quaisquer modais sem .active que tenham
-    // ficado com aria-hidden dessincronizado e garantir que estão escondidos.
-    var orfaos = document.querySelectorAll('.sige-modal:not(.active)[aria-hidden="false"]');
-    if (orfaos.length) {
-        Array.prototype.forEach.call(orfaos, function (m) {
-            m.setAttribute('aria-hidden', 'true');
-            m.style.display = 'none';
-            m.style.opacity = '0';
-            m.style.visibility = 'hidden';
-            m.style.pointerEvents = 'none';
-        });
-    }
-    if (document.body.classList.contains('sige-rh-modal-open')) {
-        document.body.classList.remove('sige-rh-modal-open');
-    }
-    if (document.body.style.overflow === 'hidden') {
-        document.body.style.overflow = '';
-    }
+// a página congelada até dar refresh. [v12.42.0] A rede de segurança passa a
+// correr em 'pointerdown' de CAPTURA (dispara ANTES do 'click'), pelo que
+// reconcilia o shell a tempo do próprio clique — deixa de haver o "clique
+// desperdiçado" que o self-heal anterior exigia. Delega no reconciliador único
+// (fonte de verdade). É inócuo quando há um modal legitimamente aberto.
+document.addEventListener('pointerdown', function () {
+    if (typeof sigeRhReconciliarShell === 'function') sigeRhReconciliarShell();
 }, true);
 
 // v12.11.9.5 - Failsafe: tornar funções explicitamente globais para onclick inline e fluxos do App Shell.
@@ -5267,8 +5275,8 @@ document.addEventListener('DOMContentLoaded', function() {
         var map = { ig: 'instagram', fb: 'facebook', web: 'website' };
         ['ig', 'fb', 'web'].forEach(function (k) { el('sige-cracha-staff-' + k).addEventListener('input', function () { estado.social[map[k]] = this.value; renderPreview(); }); });
     }
-    window.abrirModeloCrachaStaff = function () { init(); if (!modal) { showToast('Indisponível', 'Seletor de modelo indisponível.', 'error'); return; } msg('', false); modal.classList.add('is-open'); modal.setAttribute('aria-hidden', 'false'); document.body.classList.add('sige-rh-modal-open'); renderPreview(); };
-    window.fecharModeloCrachaStaff = function () { if (!modal) return; modal.classList.remove('is-open'); modal.setAttribute('aria-hidden', 'true'); document.body.classList.remove('sige-rh-modal-open'); };
+    window.abrirModeloCrachaStaff = function () { init(); if (!modal) { showToast('Indisponível', 'Seletor de modelo indisponível.', 'error'); return; } msg('', false); modal.classList.add('is-open'); modal.setAttribute('aria-hidden', 'false'); if (typeof sigeRhReconciliarShell === 'function') { sigeRhReconciliarShell(); } else { document.body.classList.add('sige-rh-modal-open'); } renderPreview(); };
+    window.fecharModeloCrachaStaff = function () { if (!modal) return; modal.classList.remove('is-open'); modal.setAttribute('aria-hidden', 'true'); if (typeof sigeRhReconciliarShell === 'function') { sigeRhReconciliarShell(); } else { document.body.classList.remove('sige-rh-modal-open'); } };
     window.guardarModeloCrachaStaff = function () {
         init(); if (!modal) return; lerForm();
         var btn = el('sige-cracha-staff-save'); if (btn) btn.setAttribute('disabled', 'disabled');
