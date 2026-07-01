@@ -1,0 +1,63 @@
+SIGE SoftGenial v12.40.0 - RH (passo 7, final): Processamento de Salário (INSS/IRPS MZ)
+Data: 2026-07-01
+Tipo: nova funcionalidade (view=equipe). Tabela própria. Fecha o módulo de RH.
+
+O QUE FAZ
+- Nova aba "Salários" na Equipa (só gestão): escolher mês → "Calcular" → tabela
+  com o vencimento de cada colaborador (Bruto, INSS, IRPS, Faltas, Outros
+  editável, Líquido) + totais → "Processar mês" (grava recibos) → "Recibo de
+  vencimento" imprimível/PDF por colaborador.
+- Cálculo: Bruto (base + subsídios) − INSS − IRPS − faltas injustificadas (da
+  Assiduidade) − outros = Líquido.
+
+PRINCÍPIO DE SEGURANÇA FISCAL (importante)
+- NENHUMA taxa presa no código. A taxa do INSS e a TABELA do IRPS ficam numa
+  CONFIGURAÇÃO por escola (editável em "Configurar impostos"), pré-preenchida com
+  o padrão de Moçambique (INSS 3% trabalhador / 4% empregador; escalões de IRPS
+  com parcela a abater) e assinalada como A CONFIRMAR: há um aviso visível e uma
+  marca "confirmado". Quando a lei muda, edita-se a tabela — sem tocar em código.
+- A ESCOLA DEVE validar a tabela em vigor antes do uso real.
+
+ENGENHARIA (limpa, sem remendos)
+- NOVO includes/rh-salarios.php:
+    * Config get/save/normalizar (com clamps e defaults seguros).
+    * FUNÇÕES PURAS testáveis: sige_rh_salario_inss, _irps (escalões + parcela +
+      dependentes), _desconto_faltas (proporcional), _calcular (completo). O IRPS
+      incide, por omissão, sobre (bruto − INSS) — configurável (bruto).
+    * Tabela {prefix}sige_rh_salarios (1 recibo por colaborador/mês, DECIMAL(12,2))
+      criada por código (idempotente).
+    * preview() calcula todos os activos (puxa faltas da Assiduidade) sem gravar;
+      processar() RECALCULA no servidor (não confia nos valores do cliente; só
+      aceita "outros") e faz upsert.
+    * AJAX preview/processar/config_guardar gated por gestão, com nonce,
+      tenant-scope e auditoria.
+- NÃO cria permissões novas; NÃO toca no módulo financeiro existente nem em
+  ficheiros protegidos.
+- admin/hr/equipe-view.php: aba + painel + modal de configuração + RECIBO
+  imprimível (documento autónomo com tokens lidos da página viva -> zero cores
+  mágicas). 100% design system.
+- Carregado no bootstrap.
+
+NOTA DE DEPLOY (importante)
+- 1 FICHEIRO NOVO (includes/rh-salarios.php) + CRIA 1 TABELA NOVA
+  (wp_sige_rh_salarios) por código no 1.º acesso admin (sem SQL manual).
+- Antes do uso real: abrir "Configurar impostos" e CONFIRMAR a tabela de
+  INSS/IRPS em vigor.
+
+VALIDAÇÃO
+- php -l + node --check OK.
+- Gates: design-tokens 1857 (sem regressão), baseline-preservation OK,
+  typography OK.
+- Novo smoke tools/smoke-rh-salarios-v12-40-0.php (cálculo puro: INSS, IRPS por
+  escalões, isenção, base=bruto, faltas, normalização; + ligação; + recibo sem
+  cores mágicas).
+- Render verificado (Chromium): tabela com totais e recibo de vencimento.
+
+FRONTEIRA
+- Tabela isolada; sem tocar em fórmulas financeiras existentes, schema anterior,
+  permissões reais nem ficheiros protegidos.
+
+MÓDULO DE RH — CONCLUÍDO
+- Equipa/KPIs, Consolidação, Crachás, Alertas de contrato, Relatórios, Ficha do
+  colaborador (+ impressão), Férias & Ausências (registo + resumo), Assiduidade
+  e agora Processamento de Salário.

@@ -1750,6 +1750,42 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 .sige-rh .sg-assi-min[hidden]{display:none;}
 .sige-rh .sg-assi-locked{display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-sm);font-weight:700;color:var(--color-slate-500);}
 .sige-rh .sg-assi-cell{display:flex;align-items:center;gap:var(--space-2);}
+/* ========================================
+   SALÁRIOS (Processamento de Salário) - v12.40.0
+   ======================================== */
+.sige-rh .sg-sal-aviso{display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-3) var(--space-4);border-radius:var(--radius-lg);background:var(--color-warning-50);color:var(--color-warning-800);font-size:var(--fs-sm);line-height:1.45;border:1px solid var(--color-warning-200);}
+.sige-rh .sg-sal-aviso svg{width:18px;height:18px;flex:0 0 auto;color:var(--color-warning-600);}
+.sige-rh .sg-sal-actions{display:flex;gap:var(--space-3);flex-wrap:wrap;}
+.sige-rh .sg-sal-table{width:100%;border-collapse:collapse;}
+.sige-rh .sg-sal-table th{text-align:right;font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:.04em;color:var(--color-slate-500);font-weight:700;padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--color-ink-100);white-space:nowrap;}
+.sige-rh .sg-sal-table th:first-child{text-align:left;}
+.sige-rh .sg-sal-table td{padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--color-ink-50);font-size:var(--fs-sm);color:var(--color-slate-700);text-align:right;white-space:nowrap;}
+.sige-rh .sg-sal-table td:first-child{text-align:left;}
+.sige-rh .sg-sal-table tr:last-child td{border-bottom:0;}
+.sige-rh .sg-sal-nome{font-weight:700;color:var(--color-black);}
+.sige-rh .sg-sal-liq{font-weight:800;color:var(--color-success-700);}
+.sige-rh .sg-sal-desc{color:var(--color-danger-600);}
+.sige-rh .sg-sal-outros{width:96px;height:34px;padding:0 var(--space-3);border:1px solid var(--color-ink-200);border-radius:var(--radius-md);font-family:inherit;font-size:var(--fs-sm);text-align:right;}
+.sige-rh .sg-sal-recibo{width:32px;height:32px;border-radius:var(--radius-md);border:1px solid var(--color-ink-100);background:var(--color-white);color:var(--color-slate-600);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;}
+.sige-rh .sg-sal-recibo:hover{background:var(--sg-theme-soft,var(--color-brand-50));color:var(--sg-theme-primary,var(--color-brand-600));}
+.sige-rh .sg-sal-recibo svg{width:15px;height:15px;}
+.sige-rh .sg-sal-foot td{border-top:2px solid var(--color-ink-100);font-weight:800;color:var(--color-black);background:var(--color-ink-50);}
+.sige-rh .sg-sal-badge{display:inline-block;font-size:var(--fs-xs);font-weight:700;padding:2px 8px;border-radius:var(--radius-pill);background:var(--color-success-50);color:var(--color-success-700);}
+/* Modal de configuração de impostos */
+#box-salario-cfg .modal-content{width:min(680px,calc(100vw - 44px))!important;max-width:680px!important;max-height:92vh!important;border-radius:var(--radius-xl)!important;border:1px solid rgba(255,255,255,.86)!important;background:var(--color-white)!important;box-shadow:var(--shadow-lg);overflow:hidden!important;display:flex!important;flex-direction:column!important;}
+#box-salario-cfg .modal-body{padding:var(--space-6)!important;flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;}
+#box-salario-cfg .sg-cfg-row{display:flex;gap:var(--space-4);flex-wrap:wrap;margin-bottom:var(--space-4);}
+#box-salario-cfg .sg-cfg-fg{display:flex;flex-direction:column;gap:6px;flex:1 1 160px;min-width:0;}
+#box-salario-cfg .sg-cfg-fg label{font-size:var(--fs-sm);font-weight:600;color:var(--color-slate-700);}
+#box-salario-cfg .sg-cfg-fg input,#box-salario-cfg .sg-cfg-fg select{height:40px;padding:0 var(--space-3);border:1px solid var(--color-ink-200);border-radius:var(--radius-md);font-family:inherit;font-size:var(--fs-sm);}
+#box-salario-cfg h4{margin:var(--space-5) 0 var(--space-2);font-size:var(--fs-sm);text-transform:uppercase;letter-spacing:.04em;color:var(--color-slate-500);}
+#box-salario-cfg .sg-cfg-esc{width:100%;border-collapse:collapse;}
+#box-salario-cfg .sg-cfg-esc th{font-size:var(--fs-xs);text-transform:uppercase;color:var(--color-slate-500);text-align:left;padding:4px 6px;}
+#box-salario-cfg .sg-cfg-esc td{padding:3px 6px;}
+#box-salario-cfg .sg-cfg-esc input{width:100%;height:34px;padding:0 var(--space-2);border:1px solid var(--color-ink-200);border-radius:var(--radius-md);font-family:inherit;font-size:var(--fs-sm);}
+#box-salario-cfg .sg-cfg-del{border:0;background:var(--color-danger-50);color:var(--color-danger-600);border-radius:var(--radius-md);width:30px;height:30px;cursor:pointer;}
+#box-salario-cfg .sg-cfg-note{font-size:var(--fs-xs);color:var(--color-slate-500);margin-top:6px;}
+@media (max-width:720px){.sige-rh .sg-sal-actions{width:100%;}.sige-rh .sg-sal-table{font-size:var(--fs-xs);}}
 /* Modal de registo */
 #box-ausencia .modal-body{padding:var(--space-6)!important;background:linear-gradient(180deg,var(--color-white),var(--color-slate-50))!important;}
 #box-ausencia .sg-aus-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4);}
@@ -1772,7 +1808,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
    ======================================== */
 #box-equipa.sige-modal,
 #box-ficha.sige-modal,
-#box-ausencia.sige-modal{
+#box-ausencia.sige-modal,
+#box-salario-cfg.sige-modal{
     background:rgba(18,22,40,.54)!important;
     backdrop-filter:blur(14px)!important;
     -webkit-backdrop-filter:blur(14px)!important;
@@ -1798,6 +1835,7 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 #box-equipa .modal-header,
 #box-ficha .modal-header,
 #box-ausencia .modal-header,
+#box-salario-cfg .modal-header,
 #box-equipa .modal-tabs{flex:0 0 auto!important;}
 /* O formulario ocupa o espaco restante e delega o scroll ao corpo. */
 #box-equipa #form-staff{
@@ -1809,7 +1847,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 }
 #box-equipa .modal-header,
 #box-ficha .modal-header,
-#box-ausencia .modal-header{
+#box-ausencia .modal-header,
+#box-salario-cfg .modal-header{
     position:relative!important;
     overflow:hidden!important;
     min-height:124px!important;
@@ -1820,7 +1859,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 }
 #box-equipa .modal-header:after,
 #box-ficha .modal-header:after,
-#box-ausencia .modal-header:after{
+#box-ausencia .modal-header:after,
+#box-salario-cfg .modal-header:after{
     content:'';
     position:absolute;
     right:-110px;
@@ -1833,7 +1873,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 }
 #box-equipa .sg-rh-modal-title-wrap,
 #box-ficha .sg-rh-modal-title-wrap,
-#box-ausencia .sg-rh-modal-title-wrap{
+#box-ausencia .sg-rh-modal-title-wrap,
+#box-salario-cfg .sg-rh-modal-title-wrap{
     position:relative;
     z-index:1;
     display:flex;
@@ -1843,7 +1884,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 }
 #box-equipa .sg-rh-modal-icon,
 #box-ficha .sg-rh-modal-icon,
-#box-ausencia .sg-rh-modal-icon{
+#box-ausencia .sg-rh-modal-icon,
+#box-salario-cfg .sg-rh-modal-icon{
     width:58px;
     height:58px;
     border-radius:var(--radius-lg);
@@ -1857,10 +1899,12 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 }
 #box-equipa .sg-rh-modal-icon svg,
 #box-ficha .sg-rh-modal-icon svg,
-#box-ausencia .sg-rh-modal-icon svg{width:26px;height:26px;stroke:currentColor;}
+#box-ausencia .sg-rh-modal-icon svg,
+#box-salario-cfg .sg-rh-modal-icon svg{width:26px;height:26px;stroke:currentColor;}
 #box-equipa .modal-header h3,
 #box-ficha .modal-header h3,
-#box-ausencia .modal-header h3{
+#box-ausencia .modal-header h3,
+#box-salario-cfg .modal-header h3{
     margin:0 0 var(--space-2)!important;
     color:var(--color-black)!important;
     font-family:var(--font-display,'Plus Jakarta Sans',system-ui,sans-serif)!important;
@@ -1871,7 +1915,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 }
 #box-equipa .modal-header p,
 #box-ficha .modal-header p,
-#box-ausencia .modal-header p{
+#box-ausencia .modal-header p,
+#box-salario-cfg .modal-header p{
     margin:0!important;
     max-width:620px;
     color:var(--color-slate-600)!important;
@@ -1881,7 +1926,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 }
 #box-equipa .modal-close,
 #box-ficha .modal-close,
-#box-ausencia .modal-close{
+#box-ausencia .modal-close,
+#box-salario-cfg .modal-close{
     position:relative!important;
     z-index:2!important;
     width:46px!important;
@@ -1894,7 +1940,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 }
 #box-equipa .modal-close:hover,
 #box-ficha .modal-close:hover,
-#box-ausencia .modal-close:hover{
+#box-ausencia .modal-close:hover,
+#box-salario-cfg .modal-close:hover{
     background:var(--sg-theme-primary-50,var(--color-brand-50))!important;
     color:var(--sg-theme-primary,var(--color-brand-500))!important;
     transform:none!important;
@@ -2180,7 +2227,8 @@ body.sige-admin-app.sige-view-equipe.sige-rh-modal-open .sg-app-content{z-index:
 body.sige-admin-app #box-equipa.sige-modal.active,
 body.sige-admin-app #sige-rh-confirm.sige-modal.active,
 body.sige-admin-app #box-ficha.sige-modal.active,
-body.sige-admin-app #box-ausencia.sige-modal.active{
+body.sige-admin-app #box-ausencia.sige-modal.active,
+body.sige-admin-app #box-salario-cfg.sige-modal.active{
     display:flex!important;
     opacity:1!important;
     visibility:visible!important;
@@ -2189,7 +2237,8 @@ body.sige-admin-app #box-ausencia.sige-modal.active{
 body.sige-admin-app #box-equipa.sige-modal:not(.active),
 body.sige-admin-app #sige-rh-confirm.sige-modal:not(.active),
 body.sige-admin-app #box-ficha.sige-modal:not(.active),
-body.sige-admin-app #box-ausencia.sige-modal:not(.active){
+body.sige-admin-app #box-ausencia.sige-modal:not(.active),
+body.sige-admin-app #box-salario-cfg.sige-modal:not(.active){
     display:none!important;
     opacity:0!important;
     visibility:hidden!important;
@@ -2272,6 +2321,10 @@ body.sige-admin-app #box-ausencia.sige-modal:not(.active){
             <button type="button" class="sg-rh-tab" id="sg-rh-tabbtn-assiduidade" role="tab" aria-selected="false" aria-controls="sg-rh-panel-assiduidade" data-sige-act="sgRhSwitchTab" data-sige-args='["assiduidade"]'>
                 <span class="sg-rh-tab-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></span>
                 Assiduidade
+            </button>
+            <button type="button" class="sg-rh-tab" id="sg-rh-tabbtn-salarios" role="tab" aria-selected="false" aria-controls="sg-rh-panel-salarios" data-sige-act="sgRhSwitchTab" data-sige-args='["salarios"]'>
+                <span class="sg-rh-tab-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+                Salários
             </button>
             <?php endif; ?>
         </div>
@@ -2905,6 +2958,56 @@ body.sige-admin-app #box-ausencia.sige-modal:not(.active){
         </div>
     </div>
     <?php endif; ?>
+
+    <?php if ($can_manage_equipe): ?>
+    <!-- ========================================
+         PAINEL: SALÁRIOS (Processamento de Salário - Fase 1)
+         ======================================== -->
+    <div class="sg-rh-tabpanel" id="sg-rh-panel-salarios" role="tabpanel" aria-labelledby="sg-rh-tabbtn-salarios" data-rh-panel="salarios" hidden>
+        <div class="sg-rh-rep-intro">
+            <span class="sg-rh-rep-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+            <div>
+                <h2>Processamento de Salário</h2>
+                <p>Cálculo mensal: bruto − INSS − IRPS − faltas injustificadas − outros. Taxas configuráveis.</p>
+            </div>
+        </div>
+
+        <div class="sg-sal-aviso" id="sal-aviso" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span>Confirme a tabela de INSS/IRPS em <strong>"Configurar impostos"</strong> antes do uso real — os valores por omissão são o padrão de Moçambique e devem ser validados pela escola.</span>
+        </div>
+
+        <div class="sg-aus-toolbar sg-dash-card">
+            <div class="sg-aus-filtros">
+                <select id="sal-mes" class="sg-aus-select" aria-label="Mês">
+                    <?php
+                    $__meses = ['1'=>'Janeiro','2'=>'Fevereiro','3'=>'Março','4'=>'Abril','5'=>'Maio','6'=>'Junho','7'=>'Julho','8'=>'Agosto','9'=>'Setembro','10'=>'Outubro','11'=>'Novembro','12'=>'Dezembro'];
+                    $__mnow = (int) (function_exists('wp_date') ? wp_date('n') : date('n'));
+                    foreach ($__meses as $__mk => $__mv) { echo '<option value="' . (int) $__mk . '"' . ((int) $__mk === $__mnow ? ' selected' : '') . '>' . esc_html($__mv) . '</option>'; }
+                    ?>
+                </select>
+                <select id="sal-ano" class="sg-aus-select" aria-label="Ano">
+                    <?php $__ynow = (int) (function_exists('wp_date') ? wp_date('Y') : date('Y')); for ($__y = $__ynow; $__y >= $__ynow - 4; $__y--) { echo '<option value="' . (int) $__y . '">' . (int) $__y . '</option>'; } ?>
+                </select>
+                <button type="button" class="sg-v2-btn sg-v2-btn-secondary" data-sige-act="sgSalCarregar" data-sige-noargs>Calcular</button>
+            </div>
+            <div class="sg-sal-actions">
+                <button type="button" class="sg-v2-btn sg-v2-btn-secondary" data-sige-act="sgSalConfigAbrir" data-sige-noargs>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    Configurar impostos
+                </button>
+                <button type="button" class="sg-v2-btn sg-v2-btn-primary" data-sige-act="sgSalProcessar" data-sige-noargs>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                    Processar mês
+                </button>
+            </div>
+        </div>
+
+        <div class="sige-table-card sg-dash-card">
+            <div id="sal-lista"><div class="sg-aus-empty">Escolha o mês e clique em "Calcular".</div></div>
+        </div>
+    </div>
+    <?php endif; ?>
     </div>
 </div>
 <!-- ========================================
@@ -3285,6 +3388,41 @@ body.sige-admin-app #box-ausencia.sige-modal:not(.active){
         <div class="modal-footer">
             <button type="button" class="btn-modal btn-cancel" data-sige-act="fecharAusencia" data-sige-noargs>Cancelar</button>
             <button type="button" class="btn-modal btn-submit" data-sige-act="guardarAusencia" data-sige-noargs>Guardar</button>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
+<?php if ($can_manage_equipe): ?>
+<!-- ========================================
+     MODAL: CONFIGURAR IMPOSTOS (INSS / IRPS) - v12.40.0
+     ======================================== -->
+<div class="sige-modal" id="box-salario-cfg" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="salcfg-title">
+        <div class="modal-header">
+            <div class="sg-rh-modal-title-wrap">
+                <span class="sg-rh-modal-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+                <div><h3 id="salcfg-title">Configurar impostos</h3><p>INSS e tabela de IRPS (retenção na fonte). Valide antes do uso real.</p></div>
+            </div>
+            <button type="button" class="modal-close" data-sige-act="sgSalConfigFechar" data-sige-noargs aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="modal-body">
+            <div class="sg-cfg-row">
+                <div class="sg-cfg-fg"><label for="cfg-inss-t">INSS trabalhador (%)</label><input type="number" id="cfg-inss-t" step="0.01" min="0"></div>
+                <div class="sg-cfg-fg"><label for="cfg-inss-e">INSS empregador (%)</label><input type="number" id="cfg-inss-e" step="0.01" min="0"></div>
+            </div>
+            <div class="sg-cfg-row">
+                <div class="sg-cfg-fg"><label for="cfg-irps-base">Base do IRPS</label><select id="cfg-irps-base"><option value="bruto_menos_inss">Bruto − INSS</option><option value="bruto">Bruto</option></select></div>
+                <div class="sg-cfg-fg"><label for="cfg-dep">Abater por dependente (MT)</label><input type="number" id="cfg-dep" step="0.01" min="0"></div>
+            </div>
+            <h4>Escalões do IRPS (mensal)</h4>
+            <table class="sg-cfg-esc"><thead><tr><th>Até (MT · 0 = sem limite)</th><th>Taxa (%)</th><th>Parcela a abater (MT)</th><th></th></tr></thead><tbody id="cfg-esc-body"></tbody></table>
+            <button type="button" class="sg-v2-btn sg-v2-btn-secondary" data-sige-act="sgSalConfigAddEsc" data-sige-noargs style="margin-top:10px">+ Adicionar escalão</button>
+            <p class="sg-cfg-note">Os valores por omissão são o padrão de Moçambique e <strong>devem ser confirmados/editados</strong> conforme a tabela de retenção em vigor.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-modal btn-cancel" data-sige-act="sgSalConfigFechar" data-sige-noargs>Cancelar</button>
+            <button type="button" class="btn-modal btn-submit" data-sige-act="sgSalConfigGuardar" data-sige-noargs>Guardar configuração</button>
         </div>
     </div>
 </div>
@@ -4512,6 +4650,10 @@ function sgRhSwitchTab(tab) {
         sgAssiLoaded = true;
         sgAssiCarregar();
     }
+    if (target === 'salarios' && !sgSalLoaded && typeof sgSalCarregar === 'function') {
+        sgSalLoaded = true;
+        sgSalCarregar();
+    }
 }
 
 // ========================================
@@ -4718,6 +4860,171 @@ document.addEventListener('DOMContentLoaded', function () {
     var d = document.getElementById('assi-data'); if (d) d.addEventListener('change', sgAssiCarregar);
 });
 
+// ========================================
+// [v12.40.0] PROCESSAMENTO DE SALÁRIO
+// ========================================
+var sgSalLoaded = false;
+var sgSalCfg = null;      // config actual (INSS/IRPS)
+var sgSalItens = [];      // últimos itens calculados (para recibo)
+var SG_MESES = ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+function sgSalMoney(n) {
+    n = Math.round((parseFloat(n) || 0) * 100) / 100;
+    var neg = n < 0; n = Math.abs(n);
+    var s = n.toFixed(2).split('.');
+    s[0] = s[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return (neg ? '-' : '') + s[0] + ',' + s[1] + ' ' + ((window.sigeEquipeAjax && sigeEquipeAjax.moeda) || 'MT');
+}
+function sgSalPeriodo() { return { ano: parseInt(sgAusVal('sal-ano'), 10) || 0, mes: parseInt(sgAusVal('sal-mes'), 10) || 0 }; }
+function sgSalRender(prev) {
+    var box = document.getElementById('sal-lista'); if (!box) return;
+    sgSalItens = (prev && prev.itens) || [];
+    sgSalCfg = (prev && prev.config) || sgSalCfg;
+    var aviso = document.getElementById('sal-aviso');
+    if (aviso) aviso.hidden = !(sgSalCfg && !sgSalCfg.confirmado);
+    if (!sgSalItens.length) { box.innerHTML = '<div class="sg-aus-empty">Sem colaboradores activos.</div>'; return; }
+    var t = { bruto: 0, inss: 0, irps: 0, desc: 0, outros: 0, liq: 0 };
+    var h = '<table class="sg-sal-table"><thead><tr><th>Colaborador</th><th>Bruto</th><th>INSS</th><th>IRPS</th><th>Faltas</th><th>Outros</th><th>Líquido</th><th></th></tr></thead><tbody>';
+    for (var k = 0; k < sgSalItens.length; k++) {
+        var a = sgSalItens[k];
+        t.bruto += +a.bruto; t.inss += +a.inss; t.irps += +a.irps; t.desc += +a.desconto_faltas; t.outros += +a.outros; t.liq += +a.liquido;
+        var json = sgFichaEsc(JSON.stringify(a));
+        h += '<tr data-pid="' + (a.professor_id | 0) + '">'
+            + '<td><span class="sg-sal-nome">' + sgFichaEsc(a.nome || '') + '</span>' + (a.processado ? ' <span class="sg-sal-badge">processado</span>' : '') + '</td>'
+            + '<td>' + sgSalMoney(a.bruto) + '</td>'
+            + '<td class="sg-sal-desc">' + sgSalMoney(a.inss) + '</td>'
+            + '<td class="sg-sal-desc">' + sgSalMoney(a.irps) + '</td>'
+            + '<td class="sg-sal-desc">' + (a.faltas ? (a.faltas + ' · ') : '') + sgSalMoney(a.desconto_faltas) + '</td>'
+            + '<td><input type="number" step="0.01" min="0" class="sg-sal-outros" value="' + (a.outros ? (+a.outros) : '') + '"></td>'
+            + '<td class="sg-sal-liq">' + sgSalMoney(a.liquido) + '</td>'
+            + '<td><button type="button" class="sg-sal-recibo" data-tooltip="Recibo" data-sige-act="sigeExecutarJsonData" data-sige-json-fn="sgSalRecibo" data-sige-json="' + json + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></button></td>'
+            + '</tr>';
+    }
+    h += '</tbody><tfoot><tr class="sg-sal-foot"><td>Totais</td><td>' + sgSalMoney(t.bruto) + '</td><td>' + sgSalMoney(t.inss) + '</td><td>' + sgSalMoney(t.irps) + '</td><td>' + sgSalMoney(t.desc) + '</td><td>' + sgSalMoney(t.outros) + '</td><td>' + sgSalMoney(t.liq) + '</td><td></td></tr></tfoot></table>';
+    box.innerHTML = h;
+    // Recalcular a linha quando "outros" muda (localmente, para feedback imediato).
+    box.querySelectorAll('.sg-sal-outros').forEach(function (inp) {
+        inp.addEventListener('input', function () {
+            var tr = inp.closest('tr'); var pid = parseInt(tr.getAttribute('data-pid'), 10);
+            var it = null; for (var i = 0; i < sgSalItens.length; i++) { if (sgSalItens[i].professor_id === pid) { it = sgSalItens[i]; break; } }
+            if (!it) return;
+            var outros = parseFloat(inp.value) || 0;
+            var liq = (+it.bruto) - (+it.inss) - (+it.irps) - (+it.desconto_faltas) - outros;
+            it.outros = outros; it.liquido = Math.round(liq * 100) / 100;
+            tr.querySelector('.sg-sal-liq').textContent = sgSalMoney(it.liquido);
+        });
+    });
+}
+function sgSalCarregar() {
+    var box = document.getElementById('sal-lista'); if (!box) return;
+    var p = sgSalPeriodo();
+    box.innerHTML = '<div class="sg-aus-empty">A calcular…</div>';
+    jQuery.post(sigeEquipeAjax.ajaxurl, { action: 'sige_rh_salario_preview', _sige_nonce: sigeEquipeAjax.nonce, ano: p.ano, mes: p.mes }, function (res) {
+        if (res && res.success) { sgSalRender(res.data || {}); }
+        else { box.innerHTML = '<div class="sg-aus-empty">' + sgFichaEsc((res && res.data) || 'Não foi possível calcular.') + '</div>'; }
+    }).fail(function () { box.innerHTML = '<div class="sg-aus-empty">' + sgFichaEsc(sigeEquipeAjaxFailMessage(arguments[0], 'Erro de comunicação.')) + '</div>'; });
+}
+function sgSalProcessar() {
+    var p = sgSalPeriodo();
+    var box = document.getElementById('sal-lista'); if (!box) return;
+    var outros = [];
+    box.querySelectorAll('tr[data-pid]').forEach(function (tr) {
+        var inp = tr.querySelector('.sg-sal-outros');
+        outros.push({ professor_id: parseInt(tr.getAttribute('data-pid'), 10) || 0, outros: inp ? (parseFloat(inp.value) || 0) : 0 });
+    });
+    sigeConfirm({ title: 'Processar ' + (SG_MESES[p.mes] || '') + ' ' + p.ano + '?', message: 'Vai gravar os recibos de vencimento deste mês (pode reprocessar depois).', okText: 'Processar', cancelText: 'Voltar' }).then(function (ok) {
+        if (!ok) return;
+        jQuery.post(sigeEquipeAjax.ajaxurl, { action: 'sige_rh_salario_processar', _sige_nonce: sigeEquipeAjax.nonce, ano: p.ano, mes: p.mes, outros: JSON.stringify(outros) }, function (res) {
+            if (res && res.success) { showToast('Processado', (res.data && res.data.processados || 0) + ' recibo(s) de ' + (SG_MESES[p.mes] || '') + '.', 'success'); sgSalCarregar(); }
+            else { showToast('Erro', (res && res.data) || 'Falha ao processar.', 'error'); }
+        }).fail(function () { showToast('Erro', sigeEquipeAjaxFailMessage(arguments[0], 'Erro de comunicação.'), 'error'); });
+    });
+}
+// ----- Configuração de impostos -----
+function sgSalConfigEscRow(e) {
+    e = e || { ate: 0, taxa: 0, abater: 0 };
+    return '<tr><td><input type="number" step="0.01" min="0" class="cfg-ate" value="' + (+e.ate || 0) + '"></td>'
+         + '<td><input type="number" step="0.01" min="0" class="cfg-taxa" value="' + (+e.taxa || 0) + '"></td>'
+         + '<td><input type="number" step="0.01" min="0" class="cfg-abater" value="' + (+e.abater || 0) + '"></td>'
+         + '<td><button type="button" class="sg-cfg-del" data-sige-act="sgSalConfigDelEsc" data-sige-self data-sige-args="[]">&times;</button></td></tr>';
+}
+function sgSalConfigDelEsc(el) { if (el) { var tr = el.closest('tr'); if (tr) tr.remove(); } }
+function sgSalConfigAddEsc() { var b = document.getElementById('cfg-esc-body'); if (b) b.insertAdjacentHTML('beforeend', sgSalConfigEscRow()); }
+function sgSalConfigAbrir() {
+    if (!sgSalCfg) { showToast('Aguarde', 'A carregar a configuração…', 'info'); sgSalCarregar(); return; }
+    sgAusSetVal('cfg-inss-t', sgSalCfg.inss_trabalhador);
+    sgAusSetVal('cfg-inss-e', sgSalCfg.inss_empregador);
+    sgAusSetVal('cfg-irps-base', sgSalCfg.irps_base);
+    sgAusSetVal('cfg-dep', sgSalCfg.irps_dependente_abater);
+    var body = document.getElementById('cfg-esc-body');
+    if (body) { var h = ''; (sgSalCfg.irps_escaloes || []).forEach(function (e) { h += sgSalConfigEscRow(e); }); body.innerHTML = h; }
+    sigeEquipeOpenModal(document.getElementById('box-salario-cfg'));
+}
+function sgSalConfigFechar() { sigeEquipeCloseModal(document.getElementById('box-salario-cfg')); }
+function sgSalConfigGuardar() {
+    var esc = [];
+    document.querySelectorAll('#cfg-esc-body tr').forEach(function (tr) {
+        esc.push({ ate: parseFloat(tr.querySelector('.cfg-ate').value) || 0, taxa: parseFloat(tr.querySelector('.cfg-taxa').value) || 0, abater: parseFloat(tr.querySelector('.cfg-abater').value) || 0 });
+    });
+    var cfg = {
+        inss_trabalhador: parseFloat(sgAusVal('cfg-inss-t')) || 0,
+        inss_empregador: parseFloat(sgAusVal('cfg-inss-e')) || 0,
+        irps_base: sgAusVal('cfg-irps-base'),
+        irps_dependente_abater: parseFloat(sgAusVal('cfg-dep')) || 0,
+        irps_escaloes: esc,
+        confirmado: 1
+    };
+    jQuery.post(sigeEquipeAjax.ajaxurl, { action: 'sige_rh_salario_config_guardar', _sige_nonce: sigeEquipeAjax.nonce, config: JSON.stringify(cfg) }, function (res) {
+        if (res && res.success) { sgSalCfg = res.data.config; showToast('Guardado', 'Configuração de impostos actualizada.', 'success'); sgSalConfigFechar(); sgSalCarregar(); }
+        else { showToast('Erro', (res && res.data) || 'Falha ao guardar.', 'error'); }
+    }).fail(function () { showToast('Erro', sigeEquipeAjaxFailMessage(arguments[0], 'Erro de comunicação.'), 'error'); });
+}
+// ----- Recibo de vencimento (documento autónomo) -----
+function sgSalReciboLinha(k, v, neg) { return '<div class="row"><span class="k">' + sgFichaEsc(k) + '</span><span class="v' + (neg ? ' neg' : '') + '">' + sgFichaEsc(v) + '</span></div>'; }
+function sgSalRecibo(a) {
+    if (!a) return;
+    var p = sgSalPeriodo();
+    var escola = (window.sigeEquipeAjax && sigeEquipeAjax.escola) || '';
+    var n = sgRhLiveNonce(); var natt = n ? ' nonce="' + sgFichaEsc(n) + '"' : '';
+    var html = '<!doctype html><html lang="pt"><head><meta charset="utf-8"><title>Recibo - ' + sgFichaEsc(a.nome || '') + '</title><style' + natt + '>';
+    html += ':root{' + sgFichaTokenVars() + '}';
+    html += '*{box-sizing:border-box}body{font-family:"Segoe UI",Arial,sans-serif;color:var(--color-slate-800);margin:0;padding:32px;background:var(--color-white);}'
+        + '.doc{max-width:640px;margin:0 auto;}'
+        + '.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;border-bottom:3px solid var(--sg-theme-primary,var(--color-brand-600));padding-bottom:14px;margin-bottom:18px;}'
+        + '.hd .t{font-size:20px;font-weight:800;color:var(--color-black);letter-spacing:-.02em;}.hd .s{font-size:11px;color:var(--color-slate-500);margin-top:4px;}.hd .esc{font-size:13px;font-weight:700;color:var(--sg-theme-primary,var(--color-brand-700));text-align:right;max-width:240px;}'
+        + '.who{font-size:15px;font-weight:800;color:var(--color-black);margin-bottom:12px;}'
+        + '.box{border:1px solid var(--color-ink-100);border-radius:var(--radius-lg);padding:10px 14px;}'
+        + '.row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--color-ink-50);font-size:13px;}.row:last-child{border-bottom:0;}'
+        + '.row .k{color:var(--color-slate-600);}.row .v{font-weight:700;color:var(--color-slate-800);}.row .v.neg{color:var(--color-danger-700);}'
+        + '.tot{display:flex;justify-content:space-between;margin-top:12px;padding:12px 14px;border-radius:var(--radius-lg);background:var(--sg-theme-soft,var(--color-brand-50));}'
+        + '.tot .k{font-weight:700;color:var(--sg-theme-primary,var(--color-brand-700));}.tot .v{font-size:18px;font-weight:800;color:var(--color-black);}'
+        + '.ft{margin-top:22px;padding-top:10px;border-top:1px solid var(--color-ink-100);font-size:10px;color:var(--color-slate-400);display:flex;justify-content:space-between;}'
+        + '.assin{margin-top:34px;display:flex;justify-content:space-between;gap:24px;font-size:11px;color:var(--color-slate-500);}.assin div{flex:1;text-align:center;border-top:1px solid var(--color-slate-400);padding-top:6px;}'
+        + '@media print{body{padding:0;}@page{margin:15mm;}}';
+    html += '</style></head><body><div class="doc">';
+    html += '<div class="hd"><div><div class="t">Recibo de Vencimento</div><div class="s">' + sgFichaEsc((SG_MESES[p.mes] || '') + ' de ' + p.ano) + '</div></div><div class="esc">' + sgFichaEsc(escola) + '</div></div>';
+    html += '<div class="who">' + sgFichaEsc(a.nome || 'Colaborador') + '</div>';
+    html += '<div class="box">';
+    html += sgSalReciboLinha('Vencimento base', sgSalMoney(a.salario_base));
+    html += sgSalReciboLinha('Subsídios', sgSalMoney(a.subsidio));
+    html += sgSalReciboLinha('Remuneração bruta', sgSalMoney(a.bruto));
+    html += sgSalReciboLinha('INSS (trabalhador)', '− ' + sgSalMoney(a.inss), true);
+    html += sgSalReciboLinha('IRPS', '− ' + sgSalMoney(a.irps), true);
+    if (+a.desconto_faltas) html += sgSalReciboLinha('Faltas injustificadas (' + (a.faltas || 0) + ')', '− ' + sgSalMoney(a.desconto_faltas), true);
+    if (+a.outros) html += sgSalReciboLinha('Outros descontos', '− ' + sgSalMoney(a.outros), true);
+    html += '</div>';
+    html += '<div class="tot"><span class="k">Líquido a receber</span><span class="v">' + sgFichaEsc(sgSalMoney(a.liquido)) + '</span></div>';
+    html += '<div class="assin"><div>Assinatura do colaborador</div><div>Assinatura / carimbo da escola</div></div>';
+    html += '<div class="ft"><span>INSS empregador (informativo): ' + sgFichaEsc(sgSalMoney(a.inss_empregador)) + '</span><span>Documento interno</span></div>';
+    html += '</div></body></html>';
+    var w = window.open('', '', 'width=720,height=900');
+    if (!w) { showToast('Pop-up bloqueado', 'Permita pop-ups para imprimir o recibo.', 'warning'); return; }
+    try { w.document.write('<!doctype html><meta charset="utf-8"><title>A preparar…</title><body style="font:14px sans-serif;padding:20px">A preparar o recibo…</body>'); } catch (e) {}
+    sgRhPrintWindow(w, html);
+}
+document.addEventListener('DOMContentLoaded', function () {
+    ['sal-mes', 'sal-ano'].forEach(function (id) { var e = document.getElementById(id); if (e) e.addEventListener('change', sgSalCarregar); });
+});
+
 Object.assign(window, {
     novoFuncionario,
     fecharForm,
@@ -4747,6 +5054,14 @@ Object.assign(window, {
     sgAssiCarregar,
     sgAssiGuardar,
     sgAssiTodosPresentes,
+    sgSalCarregar,
+    sgSalProcessar,
+    sgSalConfigAbrir,
+    sgSalConfigFechar,
+    sgSalConfigGuardar,
+    sgSalConfigAddEsc,
+    sgSalConfigDelEsc,
+    sgSalRecibo,
     uploadFoto,
     uploadDoc
 });
